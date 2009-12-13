@@ -1,0 +1,27 @@
+actor.c			This file contains scene actor routines
+animations.c	This file contains 3D actors animations routines
+debug.c			This file contains the main game debug window routines
+debug.grid.c	This file contains grid debug routines
+debug.scene.c	This file contains scenario debug routines
+dialogues.c		This file contains dialogues processing. It contains text and font functions
+filereader.c	This file contains movies routines
+grid.c			This file contains grid manipulation routines
+hqrdepack.c		This file contains High Quality Resource (HQR) decompress routines
+images.c		This file contains image processing
+interface.c		This file contains in-game interface routines
+lbaengine.c		This file contains the main game engine routines
+main.c			This file contains the main engine functions. It also contains configurations file definitions
+menu.c			This file contains main menu create and processing routines
+menuoptions.c	This file contains movies routines
+movies.c		This file contains movies routines
+music.c			This file contains music playing routines
+redraw.c		This file contains engine redraw actions routines
+renderer.c		This file contains 3d models render routines
+resources.c		This file contains the definitions of most used game resources
+scene.c			This file contains main scenario routines
+sdlengine.c		This file contains SDL engine routines
+sound.c			This file contains music playing routines
+shadeangletab.h	This file contains shades angle table values
+
+
+
