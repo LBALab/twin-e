@@ -1,0 +1,19 @@
+all: prequengine
+
+CC=gcc
+SDL_LIBS = -lSDLmain -lSDL -lSDL_mixer
+OBJS=debug.c debug.scene.c debug.grid.c renderer.c redraw.c lbaengine.c actor.c scene.c grid.c dialogues.c resources.c movies.c sdlengine.c hqrdepack.c filereader.c images.c sound.c music.c menuoptions.c menu.c interface.c main.c
+LIBS= -mwindows -lmingw32 $(SDL_LIBS)
+
+prequengine: $(OBJS)
+	$(CC) -o $@ $(OBJS) $(LIBS)
+
+.c.o:
+	$(CC) -c $< -o $@
+
+clean:
+	@del $(OBJS)
+	@del prequengine.exe
+	@del *.bak
+	@del stderr.txt
+	@del stdout.txt

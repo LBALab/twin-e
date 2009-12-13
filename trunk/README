@@ -1,0 +1,51 @@
+Prequengine: a Little Big Adventure engine
+	
+Copyright (C) 2008 Prequengine team
+Copyright (C) 2002-2007 The TwinEngine team
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License 
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+
+# - Brief description -
+
+Welcome to Prequengine project.
+This project allows you to play Little Big Adventure 1 (LBA1 for short) game.
+It will allow other project modifications to build different games using this engine.
+
+To use it, you just need to copy the application engine and lba.cfg file to LBA1 
+(or other projects) game directory to play it. You will need the original game
+to play with this engine and also midi_mi_win.hqr file created by LbaWin project
+so you can play and listening MIDI files.
+
+# compiling:
+
+You need libSDL, libSDL_Mixer and libSDL_ttf in order to properly compile prequengine.
+
+on GNU/Linux:
+
+After installing the libsdl and libsdl_mixer development packages, go to the trunk/src directory and type "make" (without the quotes, off course). This will compile the source code and create a file caller "prequengine". Copy this file to the same place in your system where you have made a copy of the "lba" directory from the LBA1 CDROM. Also copy the "lba.cfg" file to that location. Go to that dir and type "./prequengine"
+
+If you are a Ubuntu user, the procedure should look like this:
+
+sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+cd trunk/src
+make
+cp ./lba.sfg ~/Desktop/lba/
+cp ./prequengine ~/Desktop/lba/
+cd ~/Desktop/lba
+./prequengine
+
+(supposing that you have made a copy of the LBA1 CDROM's "lba" directory in your Desktop)
+
