@@ -25,7 +25,7 @@
 - Explod2.fla	-> Twinsun explosion
 
 - Dragon3.fla	-> Little Big Adventure logo intro.
-- Introd.fla	-> The Twinsen's Dream. (Intro movie)
+- Introd.fla	-> The Twinsens Dream. (Intro movie)
 - LBA.fla	-> LBA label movie from the demo version.
 - The_End.fla	-> End movie with Twinsen and Zoé.
 }}}
