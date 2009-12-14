@@ -46,16 +46,16 @@ This is the place to list all the game flags used by the game.
 
 028:	Quest 1 = Met the cousin of the locksmith
 029:	Quest 2 = Twinsens house destroyed
-030:	Quest 3 = Opened funfrocks safe
-031:	Quest 4 = Placed statue in the first scene of Bu
+030:	Quest 3 = Opened FunFrocks safe
+031:	Quest 4 = Placed statue in the first scene of Bù
 032:	Quest 5 = Lock smith not home
-033:	Quest 6 = Found clover bosx in the bar
-034:	Quest 7 = Got kashes from astromoners chest
-035:	Quest 8 = Escaped through cimney
+033:	Quest 6 = Found clover box in the bar
+034:	Quest 7 = Got kashes from astronomers chest
+035:	Quest 8 = Escaped through chimney
 036:	Quest 9 = Found 25 kashes in the chest near the citadel
-037:	Quest 10 = Cleaned water tower water
+037:	Quest 10 = Cleaned Water Tower water
 038:	Quest 11 = Read the book of the prophecy
-039:	Quest 12 = Aranged crates
+039:	Quest 12 = Arranged crates
 040:	Quest 13 = Telepods destroyed
 041:	Quest 14 = Turned on the museum alarm
 042:	Quest 15 = Gave book to old guy
@@ -64,11 +64,11 @@ This is the place to list all the game flags used by the game.
 045:	Quest 18 = Freed the marked stone
 046:	Quest 19 = Freed the marked stone
 047:	Quest 20 = Reopened the bar
-048:	Quest 21 = ?? found beech side entrance to cave -> 48: !-Twinkel Loin:OK (Twinkel far: OK)
-049:	Quest 22 = Placed statue in first level of Bu
-050:	Quest 23 = 3-Amphora1 Bu2 (??)
+048:	Quest 21 = ?? found beech side entrance to cave -> 48: !-Twinkel far: OK
+049:	Quest 22 = Placed statue in first level of Bù
+050:	Quest 23 = 3-Amphora1 Bù2 (??)
 051:	Quest 24 = Broke seal to the marked stone
-052:	Quest 25 = Access to the secret document section of the library, ?? gets zeroed on port beluga after quest 11
+052:	Quest 25 = Access to the secret document section of the library, ?? gets zeroed on port belooga after quest 11
 053:	Quest 26 = Talked to forger
 054:	Quest 27 = Museum sewer entrance open
 055:	Quest 28 = Tunnel in the rabbibunny village open
@@ -108,7 +108,7 @@ This is the place to list all the game flags used by the game.
 089:	Quest 62 = Arrived on the hamalayi with the rebels
 090:	Quest 63 = Gave away the space guitar
 091:	Quest 64 = Entrance to the secret passage to Dinofly open
-092:	Quest 65 = Information about zoe from the sailor
+092:	Quest 65 = Information about Zoë from the sailor
 093:	Quest 66 = Opened door with the hidden key in the secret passage to Dinofly
 094:	Quest 67 = Took dinofly
 095:	Quest 68 = Sacret carrot is open
@@ -116,9 +116,9 @@ This is the place to list all the game flags used by the game.
 097:	Quest 70 = Attached pirate flag to ship
 098:	Quest 71 = 4-Talked to the forger
 099:	Quest 72 = Info about LeBournes treasure
-100:	Quest 73 = Temple of bu, 2nd scene, finished sub room #1
-101:	Quest 74 = Temple of bu, 2nd scene, finished sub room #2
-102:	Quest 75 = Temple of bu, 2nd scene, finished sub room #3
+100:	Quest 73 = Temple of Bù, 2nd scene, finished sub room #1
+101:	Quest 74 = Temple of Bù, 2nd scene, finished sub room #2
+102:	Quest 75 = Temple of Bù, 2nd scene, finished sub room #3
 103:	Quest 76 = Got a ferry ticket
 104:	Quest 77 = 2-Architect inside
 105:	Quest 78 = Freed the rebel leader
@@ -128,7 +128,7 @@ This is the place to list all the game flags used by the game.
 109:	Quest 82 = 9-Fortress beast killed
 110:	Quest 83 = Opened 1st gate
 111:	Quest 84 = Placed statue in 3rd scene
-112:	Quest 85 = 9-Zoé's door opened
+112:	Quest 85 = 9-Zoës door opened
 113:	Quest 86 = Saved Joe the elf
 114:	Quest 87 = 9-Seal blown up
 115:	Quest 88 = Saved the rabbibunny from the mutant
@@ -139,10 +139,10 @@ This is the place to list all the game flags used by the game.
 120:	Quest 93 = Opened the door in funky town
 121:	Quest 94 = Opened lock on forgers house
 122:	Quest 95 = 9-DigiCode put
-123:	Quest 96 = Funfrok talked
+123:	Quest 96 = FunFrock talked
 124:	Quest 97 = 9-Portal opened
 125:	Quest 98 = 9-Nurse killed
-126:	Quest 99 = 9-RedRabbibunny killed
+126:	Quest 99 = 9-Red rabbibunny killed
 127:	Quest 100 = 9-Painter outside
 128:	Quest 101 = 2-Rabbibunny at brother
 129:	Quest 102 = 11-Sendell seal OK (??)
@@ -150,10 +150,10 @@ This is the place to list all the game flags used by the game.
 131:	Quest 104 = 2-Rabbibunny liberated
 132:	Quest 105 = Clover box in sewer citadel island
 133:	Quest 106 = 11-Portal opened
-134:	Quest 107 = 10-Lapi chef (Rabbibunny boss/chief/leader?) went out
-135:	Quest 108 = 10-Lapi a creus‚
-136:	Quest 109 = 10-Guards' tanks destroyed
-137:	Quest 110 = 11-Funfrock fell
+134:	Quest 107 = 10-Rabbibunny chief went out
+135:	Quest 108 = 10-Rabbibunny digged‚
+136:	Quest 109 = 10-Guards tanks destroyed
+137:	Quest 110 = 11-FunFrock fell
 138:	Quest 111 = Took the boat to the white leaf desert
 139:	Quest 112 = 11-FunFrock killed
 140:	Quest 113 = 6-Kroptman left
@@ -162,17 +162,17 @@ This is the place to list all the game flags used by the game.
 143:	Quest 116 = Information about LeBourne from sailor (to speak with the Old Brug shop keeper)
 144:	Quest 117 = Activated secret grobo statue
 145:	Quest 118 = Found 150 kashes in the secret area of the old burg
-146:	Quest 119 = 11-Zoé talked
+146:	Quest 119 = 11-Zoë talked
 147:	Quest 120 = Opened gate to the shuttle
 148:	Quest 121 = Seb has a small one (??)
-149:	Quest 122 = Found dinofly
+149:	Quest 122 = Found DinoFly
 150:	Quest 123 = To shed clear water run1 (??)
 151:	Quest 124 = To shed clear water run2 (??)
 152:	Quest 125 = Destroyed a mutant
 153:	Quest 126 = Destroyed a mutant
 154:	Quest 127 = Destroyed a mutant
 155:	Quest 128 = Destroyed a mutant
-156:	Quest 129 = 11-Zoé went down
+156:	Quest 129 = 11-Zoë went down
 157:	Quest 130 = Broke seal of the destroyed house on principal island
 158:	Quest 131 = 2-Representative seen
 
@@ -182,7 +182,7 @@ This is the place to list all the game flags used by the game.
 201:	Baffe2.fla	-> Hit, band-aid
 202:	Baffe3.fla	-> Hit, black eye
 203:	Bateau.fla	-> Ferry #1                
-204:	TempleBu.fla	-> Temple of Bu
+204:	TempleBu.fla	-> Temple of Bù
 205:	Flute2.fla	-> White Leaf Desert, flute
 206:	Navette.fla	-> Hamalayi Mountains, chuttle
 207:	Neige2.fla	-> Hamalayi Mountains, storm
