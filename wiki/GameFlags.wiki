@@ -7,260 +7,197 @@ This is the place to list all the game flags used by the game.
 
 = Flags =
 {{{
-0:
-1:
-2:
-3:
-4:  
-5:
-6:
-7:
-8:
-9:
-10:
-11:
-12: 
-13:
-14:
-15:
-16:
-17:
-18:
-19:
-20:
-21:
-22:
-23:
-24:
-25:
-26:
-27:
-28:
-29:
-30:
-31:
-32:
-33:
-34:
-35:
-36:
-37:
-38:
-39:
-40:
-41:
-42:
-43:
-44:
-45:
-46:
-47:
-48:
-49:
-50:
-51:
-52:
-53:
-54:
-55:
-56:
-57:
-58:
-59:
-60:
-61:
-62:
-63:
-64:
-65:
-66:
-67:
-68:
-69:
-70:
-71:
-72:
-73:
-74:
-75:
-76:
-77:
-78:
-79:
-80:
-81:
-82:
-83:
-84:
-85:
-86:
-87:
-88:
-89:
-90:
-91:
-92:
-93:
-94:
-95:
-96:
-97:
-98:
-99:
-100:
-101:
-102:
-103:
-104:
-105:
-106:
-107:
-108:
-109:
-110:
-111:
-112:
-113:
-114:
-115:
-116:
-117:
-118:
-119:
-120:
-121:
-122:
-123:
-124:
-125:
-126:
-127:
-128:
-129:
-130:
-131:
-132:
-133:
-134:
-135:
-136:
-137:
-138:
-139:
-140:
-141:
-142:
-143:
-144:
-145:
-146:
-147:
-148:
-149:
-150:
-151:
-152:
-153:
-154:
-155:
-156:
-157:
-158:
-159:
-160:
-161:
-162:
-163:
-164:
-165:
-166:
-167:
-168:
-169:
-170:
-171:
-172:
-173:
-174:
-175:
-176:
-177:
-178:
-179:
-180:
-181:
-182:
-183: 
-184:
-185:
-186:
-187:
-188:
-189:
-190:
-191:
-192:
-193:
-194:
-195:
-196:
-197:
-198:
-199:
-200:
-201:
-202:
-203:
-204:
-205:
-206:
-207:
-208:
-209:
-210:
-211:
-212:
-213:
-214: 
-215:
-216:
-217:
-218:
-219:
-220: 
-221:
-222:
-223:
-224:
-225:
-226:
-227:
-228:
-229:
-230:
-231:
-232:
-233:
-234:
-235:
-236:
-237:
-238:
-239:
-240:
-241:
-242:
-243:
-244:
-245:
-246:
-247:
-248:
-249:
-250:
-251:
-252:
-253:
-254:
-255:
+	Inventory:
+		\_ 0 - Not in Inventory
+		|_ 1 - In the Inventory
+
+000:	Holomap
+001:	Magic ball
+002:	FunFrocks saber
+003:	Gawleys horn
+004:	Tunic
+005:	Book of Bù
+006:	Sendelss medallion
+007:	Flask of clear water
+008:	Red card
+009:	Blue card
+010:	ID card
+011:	Mr. Mies pass
+012:	Proto-Pack
+013:	Snowboard
+014:	Meca Penguin
+015:	Gas
+016:	Pirate flag
+017:	Magic flute
+018:	Space guitar
+019:	Hair dryer
+020:	Ancesteral key
+021:	Bottle of sirup
+022:	Empty bottle
+023:	Ferry ticket
+024:	Keypad
+025:	Coffee can
+026:	Bonuses list
+027:	Clover leaf
+
+	Quests:
+		\_ 0 - Not maded
+		|_ 1 - Already maded
+
+028:	Quest 1 = Met the cousin of the locksmith
+029:	Quest 2 = Twinsens house destroyed
+030:	Quest 3 = Opened funfrocks safe
+031:	Quest 4 = Placed statue in the first scene of Bu
+032:	Quest 5 = Lock smith not home
+033:	Quest 6 = Found clover bosx in the bar
+034:	Quest 7 = Got kashes from astromoners chest
+035:	Quest 8 = Escaped through cimney
+036:	Quest 9 = Found 25 kashes in the chest near the citadel
+037:	Quest 10 = Cleaned water tower water
+038:	Quest 11 = Read the book of the prophecy
+039:	Quest 12 = Aranged crates
+040:	Quest 13 = Telepods destroyed
+041:	Quest 14 = Turned on the museum alarm
+042:	Quest 15 = Gave book to old guy
+043:	Quest 16 = Password for the marked stone
+044:	Quest 17 = Password for the eclypse stone
+045:	Quest 18 = Freed the marked stone
+046:	Quest 19 = Freed the marked stone
+047:	Quest 20 = Reopened the bar
+048:	Quest 21 = ?? found beech side entrance to cave -> 48: !-Twinkel Loin:OK
+049:	Quest 22 = Placed statue in first level of Bu
+050:	Quest 23 = ?? -> 50: 3-Amphore1 BU2
+051:	Quest 24 = Broke seal to the marked stone
+052:	Quest 25 = Access to the secret document section of the library, ?? gets zeroed on port beluga after quest 11
+053:	Quest 26 = Talked to forger
+054:	Quest 27 = Museum sewer entrance open
+055:	Quest 28 = Tunnel in the rabbibunny village open
+056:	Quest 29 = Broke seal in the white leaf desert
+057:	Quest 30 = Found clover box on the island near peg leg street
+058:	Quest 31 = museum has been robbed
+059:	Quest 32 = Broke sendell seal in citadel island
+060:	Quest 33 = Broke sendell seal in the old burg
+061:	Quest 34 = Found cave beneath house
+062:	Quest 35 = Killed pharmacist
+063:	Quest 36 = Globbered a clone
+064:	Quest 37 = Went through the secret passage to the lock smith
+065:	Quest 38 = Went outside with locksmith
+066:	Quest 39 = Opened gate to upper old burg
+067:	Quest 40 = Spoke with the rebel leader
+068:	Quest 41 = Bought the catamaran
+069:	Quest 42 = Spoke to the rebel in the harbor bunker
+070:	Quest 43 = Inventory disabled
+071:	Quest 44 = Destroyed the radar on the hamalayi
+072:	Quest 45 = First hamalayi scene with the rebel (zeroed on 46)
+073:	Quest 46 = Second hamalayi scene with the rebel (zeroed in the next scene)
+074:	Quest 47 = Third hamalayi scene with the rebel (zeroed in the next scene)
+075:	Quest 48 = New rebel
+076:	Quest 49 = Sacret carrot being opened, zeroed after 68
+077:	Quest 50 = Tank in fort on the Hamalayi
+078:	Quest 51 = Tank in the hamalayi taken
+079:	Quest 52 = Destroyed the mutant eggs
+080:	Quest 53 = Opened door in the mutant factory (middle)
+081:	Quest 54 = Opened door in the mutant factory (lower)
+082:	Quest 55 = Talked with chatter lady on the old burg (Julia)
+083:	Quest 56 = ?? something with clear water -> 83: ?-eau claire verse
+084:	Quest 57 = Sailor wants a drink
+085:	Quest 58 = Took the jeep to the rabbibunny village
+086:	Quest 59 = Received quest to retreive a hairdryer
+087:	Quest 60 = Librarian complaint about the citys tap water
+088:	Quest 61 = Freed the rebel leader
+089:	Quest 62 = Arrived on the hamalayi with the rebels
+090:	Quest 63 = Gave away the space guitar
+091:	Quest 64 = Entrance to the secret passage to Dinofly open
+092:	Quest 65 = Information about zoe from the sailor
+093:	Quest 66 = Opened door with the hidden key in the secret passage to Dinofly
+094:	Quest 67 = Took dinofly
+095:	Quest 68 = Sacret carrot is open
+096:	Quest 69 = Arrived in the middle of white leaf desert, got reset after you freed joe
+097:	Quest 70 = Attached pirate flag to ship
+098:	Quest 71 = ?? -> 8: 4-parl‚ au faussair
+099:	Quest 72 = Info about LeBournes treasure
+100:	Quest 73 = Temple of bu, 2nd scene, finished sub room #1
+101:	Quest 74 = Temple of bu, 2nd scene, finished sub room #2
+102:	Quest 75 = Temple of bu, 2nd scene, finished sub room #3
+103:	Quest 76 = Got a ferry ticket
+104:	Quest 77 = ?? -> 104: 2-archi a l1t‚rieur
+105:	Quest 78 = Freed the rebel leader
+106:	Quest 79 = Broke Sendell seal in secret cave 
+107:	Quest 80 = Killed the groboclone in the closed bar
+108:	Quest 81 = ?? ski piste open -> 108: 9-Vanne pisc ouver
+109:	Quest 82 = ?? -> 109: 9-Bette ftres tuee
+110:	Quest 83 = Opened 1st gate
+111:	Quest 84 = Placed statue in 3rd scene
+112:	Quest 85 = ?? -> 112: 9-Porte zoe ouvert
+113:	Quest 86 = Saved Joe the elf
+114:	Quest 87 = ?? -> 114: 9-Sceau eclater
+115:	Quest 88 = Saved the rabbibunny from the mutant
+116:	Quest 89 = ?? -> 116: 10-FTRES d‚truite
+117:	Quest 90 = Broke seal on Brundle Island
+118:	Quest 91 = Saved Raymond the elf
+119:	Quest 92 = Took hydroglyder
+120:	Quest 93 = Opened the door in funky town
+121:	Quest 94 = Opened lock on forgers house
+122:	Quest 95 = ?? Used keypad -> 122: 9-DigiCode Pos‚
+123:	Quest 96 = ?? -> 123: 11-Funfrok a parl‚
+124:	Quest 97 = ?? -> 124: 9-Portail ouvert
+125:	Quest 98 = ?? -> 125: 9-Infirmier tu‚
+126:	Quest 99 = ?? -> 126: 9-LapiRouge tu‚
+127:	Quest 100 = ?? -> 127: 9-Peintre dehors
+128:	Quest 101 = ?? -> 128: 2-Lapi chez frŠre
+129:	Quest 102 = ?? -> 129: 11-Sceau Sendell ok
+130:	Quest 103 = ?? -> 130: 11-Rochers d‚truits
+131:	Quest 104 = ?? -> 131: 2-Lapi lib‚r‚
+132:	Quest 105 = Clover box in sewer citadel island
+133:	Quest 106 = ?? -> 133: 11-Portail ouvert
+134:	Quest 107 = ?? -> 134: 10-Lapi chef sorti
+135:	Quest 108 = ?? -> 135: 10-Lapi a creus‚
+136:	Quest 109 = ?? -> 136: 10-char&gardes tu‚s
+137:	Quest 110 = ?? -> 137: 11-Funfrock tomb‚
+138:	Quest 111 = Took the boat to the white leaf desert
+139:	Quest 112 = ?? -> 139: 11-FunFrock tu‚
+140:	Quest 113 = ?? -> 140: 6-Kroptman parti
+141:	Quest 114 = Opened clear water lake
+142:	Quest 115 = Spoke with the old man in thw white leaf desert
+143:	Quest 116 = Information about LeBourne from sailor (to speak with the Old Brug shop keeper)
+144:	Quest 117 = Activated secret grobo statue
+145:	Quest 118 = Found 150 kashes in the secret area of the old burg
+146:	Quest 119 = ?? -> 146: 11-Zoe a parl‚
+147:	Quest 120 = Opened gate to the shuttle
+148:	Quest 121 = ?? -> 148: Seb en a une petite
+149:	Quest 122 = Found dinofly
+150:	Quest 123 = ?? -> 150: verser o clair run1
+151:	Quest 124 = ?? -> 151: verser o clair run2
+152:	Quest 125 = Destroyed a mutant
+153:	Quest 126 = Destroyed a mutant
+154:	Quest 127 = Destroyed a mutant
+155:	Quest 128 = Destroyed a mutant
+156:	Quest 129 = ?? -> 156: 11-Zoe descendue
+157:	Quest 130 = Broke seal of the destroyed house on principal island
+158:	Quest 131 = ?? -> 158: 2-Repr‚sentant vu
+
+159..199: unused          
+
+200:	Baffe.fla	-> Hit
+201:	Baffe2.fla	-> Hit, band-aid
+202:	Baffe3.fla	-> Hit, black eye
+203:	Bateau.fla	-> Ferry #1                
+204:	TempleBu.fla	-> Temple of Bu
+205:	Flute2.fla	-> White Leaf Desert, flute
+206:	Navette.fla	-> Hamalayi Mountains, chuttle
+207:	Neige2.fla	-> Hamalayi Mountains, storm
+208:	Surf.fla	-> Hamalayi Mountains, ski lift
+209:	Bateau2.fla	-> Ferry #2
+210:	Capture.fla	-> Fortress, Zoe Clone
+211:	Verser.fla	-> Fortress, Rune stone (cut from the game)
+212:	Verser2.fla	-> Fortress, Rune stone
+213:	Fortress.fla	-> Fortress, explosion
+214:	Sendel2.fla	-> Sendel give powers to Twinsen & Zoé.
+215:	Baffe5.fla	-> Hit, reject
+216:	Explod.fla	-> Twinsun explosion (on top of the well)
+217:	Glass2.fla	-> Clear water lake
+218:	Sendel.fla	-> Twinsen in Well of Sendell
+219:	Explod2.fla	-> Twinsun explosion
+
+220..255: unused
 }}}
