@@ -41,8 +41,8 @@ This is the place to list all the game flags used by the game.
 027:	Clover leaf
 
 	Quests:
-		\_ 0 - Not maded
-		|_ 1 - Already maded
+		\_ 0 - Not made
+		|_ 1 - Already made
 
 028:	Quest 1 = Met the cousin of the locksmith
 029:	Quest 2 = Twinsens house destroyed
@@ -64,9 +64,9 @@ This is the place to list all the game flags used by the game.
 045:	Quest 18 = Freed the marked stone
 046:	Quest 19 = Freed the marked stone
 047:	Quest 20 = Reopened the bar
-048:	Quest 21 = ?? found beech side entrance to cave -> 48: !-Twinkel Loin:OK
+048:	Quest 21 = ?? found beech side entrance to cave -> 48: !-Twinkel Loin:OK (Twinkel far: OK)
 049:	Quest 22 = Placed statue in first level of Bu
-050:	Quest 23 = ?? -> 50: 3-Amphore1 BU2
+050:	Quest 23 = 3-Amphora1 Bu2 (??)
 051:	Quest 24 = Broke seal to the marked stone
 052:	Quest 25 = Access to the secret document section of the library, ?? gets zeroed on port beluga after quest 11
 053:	Quest 26 = Talked to forger
@@ -74,7 +74,7 @@ This is the place to list all the game flags used by the game.
 055:	Quest 28 = Tunnel in the rabbibunny village open
 056:	Quest 29 = Broke seal in the white leaf desert
 057:	Quest 30 = Found clover box on the island near peg leg street
-058:	Quest 31 = museum has been robbed
+058:	Quest 31 = Museum has been robbed
 059:	Quest 32 = Broke sendell seal in citadel island
 060:	Quest 33 = Broke sendell seal in the old burg
 061:	Quest 34 = Found cave beneath house
@@ -99,7 +99,7 @@ This is the place to list all the game flags used by the game.
 080:	Quest 53 = Opened door in the mutant factory (middle)
 081:	Quest 54 = Opened door in the mutant factory (lower)
 082:	Quest 55 = Talked with chatter lady on the old burg (Julia)
-083:	Quest 56 = ?? something with clear water -> 83: ?-eau claire verse
+083:	Quest 56 = Clear water shed
 084:	Quest 57 = Sailor wants a drink
 085:	Quest 58 = Took the jeep to the rabbibunny village
 086:	Quest 59 = Received quest to retreive a hairdryer
@@ -114,67 +114,67 @@ This is the place to list all the game flags used by the game.
 095:	Quest 68 = Sacret carrot is open
 096:	Quest 69 = Arrived in the middle of white leaf desert, got reset after you freed joe
 097:	Quest 70 = Attached pirate flag to ship
-098:	Quest 71 = ?? -> 8: 4-parl‚ au faussair
+098:	Quest 71 = 4-Talked to the forger
 099:	Quest 72 = Info about LeBournes treasure
 100:	Quest 73 = Temple of bu, 2nd scene, finished sub room #1
 101:	Quest 74 = Temple of bu, 2nd scene, finished sub room #2
 102:	Quest 75 = Temple of bu, 2nd scene, finished sub room #3
 103:	Quest 76 = Got a ferry ticket
-104:	Quest 77 = ?? -> 104: 2-archi a l1t‚rieur
+104:	Quest 77 = 2-Architect inside
 105:	Quest 78 = Freed the rebel leader
 106:	Quest 79 = Broke Sendell seal in secret cave 
 107:	Quest 80 = Killed the groboclone in the closed bar
-108:	Quest 81 = ?? ski piste open -> 108: 9-Vanne pisc ouver
-109:	Quest 82 = ?? -> 109: 9-Bette ftres tuee
+108:	Quest 81 = 9-Opened swimming pool gate
+109:	Quest 82 = 9-Fortress beast killed
 110:	Quest 83 = Opened 1st gate
 111:	Quest 84 = Placed statue in 3rd scene
-112:	Quest 85 = ?? -> 112: 9-Porte zoe ouvert
+112:	Quest 85 = 9-Zoé's door opened
 113:	Quest 86 = Saved Joe the elf
-114:	Quest 87 = ?? -> 114: 9-Sceau eclater
+114:	Quest 87 = 9-Seal blown up
 115:	Quest 88 = Saved the rabbibunny from the mutant
-116:	Quest 89 = ?? -> 116: 10-FTRES d‚truite
+116:	Quest 89 = 10-Fortress destroyed
 117:	Quest 90 = Broke seal on Brundle Island
 118:	Quest 91 = Saved Raymond the elf
 119:	Quest 92 = Took hydroglyder
 120:	Quest 93 = Opened the door in funky town
 121:	Quest 94 = Opened lock on forgers house
-122:	Quest 95 = ?? Used keypad -> 122: 9-DigiCode Pos‚
-123:	Quest 96 = ?? -> 123: 11-Funfrok a parl‚
-124:	Quest 97 = ?? -> 124: 9-Portail ouvert
-125:	Quest 98 = ?? -> 125: 9-Infirmier tu‚
-126:	Quest 99 = ?? -> 126: 9-LapiRouge tu‚
-127:	Quest 100 = ?? -> 127: 9-Peintre dehors
-128:	Quest 101 = ?? -> 128: 2-Lapi chez frŠre
-129:	Quest 102 = ?? -> 129: 11-Sceau Sendell ok
-130:	Quest 103 = ?? -> 130: 11-Rochers d‚truits
-131:	Quest 104 = ?? -> 131: 2-Lapi lib‚r‚
+122:	Quest 95 = 9-DigiCode put
+123:	Quest 96 = Funfrok talked
+124:	Quest 97 = 9-Portal opened
+125:	Quest 98 = 9-Nurse killed
+126:	Quest 99 = 9-RedRabbibunny killed
+127:	Quest 100 = 9-Painter outside
+128:	Quest 101 = 2-Rabbibunny at brother
+129:	Quest 102 = 11-Sendell seal OK (??)
+130:	Quest 103 = 11-Rocks destroyed
+131:	Quest 104 = 2-Rabbibunny liberated
 132:	Quest 105 = Clover box in sewer citadel island
-133:	Quest 106 = ?? -> 133: 11-Portail ouvert
-134:	Quest 107 = ?? -> 134: 10-Lapi chef sorti
-135:	Quest 108 = ?? -> 135: 10-Lapi a creus‚
-136:	Quest 109 = ?? -> 136: 10-char&gardes tu‚s
-137:	Quest 110 = ?? -> 137: 11-Funfrock tomb‚
+133:	Quest 106 = 11-Portal opened
+134:	Quest 107 = 10-Lapi chef (Rabbibunny boss/chief/leader?) went out
+135:	Quest 108 = 10-Lapi a creus‚
+136:	Quest 109 = 10-Guards' tanks destroyed
+137:	Quest 110 = 11-Funfrock fell
 138:	Quest 111 = Took the boat to the white leaf desert
-139:	Quest 112 = ?? -> 139: 11-FunFrock tu‚
-140:	Quest 113 = ?? -> 140: 6-Kroptman parti
+139:	Quest 112 = 11-FunFrock killed
+140:	Quest 113 = 6-Kroptman left
 141:	Quest 114 = Opened clear water lake
 142:	Quest 115 = Spoke with the old man in thw white leaf desert
 143:	Quest 116 = Information about LeBourne from sailor (to speak with the Old Brug shop keeper)
 144:	Quest 117 = Activated secret grobo statue
 145:	Quest 118 = Found 150 kashes in the secret area of the old burg
-146:	Quest 119 = ?? -> 146: 11-Zoe a parl‚
+146:	Quest 119 = 11-Zoé talked
 147:	Quest 120 = Opened gate to the shuttle
-148:	Quest 121 = ?? -> 148: Seb en a une petite
+148:	Quest 121 = Seb has a small one (??)
 149:	Quest 122 = Found dinofly
-150:	Quest 123 = ?? -> 150: verser o clair run1
-151:	Quest 124 = ?? -> 151: verser o clair run2
+150:	Quest 123 = To shed clear water run1 (??)
+151:	Quest 124 = To shed clear water run2 (??)
 152:	Quest 125 = Destroyed a mutant
 153:	Quest 126 = Destroyed a mutant
 154:	Quest 127 = Destroyed a mutant
 155:	Quest 128 = Destroyed a mutant
-156:	Quest 129 = ?? -> 156: 11-Zoe descendue
+156:	Quest 129 = 11-Zoé went down
 157:	Quest 130 = Broke seal of the destroyed house on principal island
-158:	Quest 131 = ?? -> 158: 2-Repr‚sentant vu
+158:	Quest 131 = 2-Representative seen
 
 159..199: unused          
 
