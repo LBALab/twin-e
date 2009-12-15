@@ -28,6 +28,7 @@
 #ifndef ANIMATIONS_H
 #define ANIMATIONS_H
 
+#include "sys.h"
 #include "actor.h"
 
 /** Total number of animations allowed in the game */
@@ -36,38 +37,38 @@
 #define ANIM_STANDING 0
 
 /** Table with all loaded animations */
-unsigned char* animTable[NUM_ANIMS];
+uint8* animTable[NUM_ANIMS];
 /** Table with all loaded animations sizes */
-unsigned int   animSizeTable[NUM_ANIMS];
+uint32   animSizeTable[NUM_ANIMS];
 
 ActorStruct *processActorVar1; // actor pointer
-short int processActorVar2; // X
-short int processActorVar3; // Y
-short int processActorVar4; // Z
-short int processActorVar5;
-short int processActorVar6;
-short int processActorSub2Var0;
-short int processActorSub2Var1;
-short int currentlyProcessedActorNum;
+int16 processActorVar2; // X
+int16 processActorVar3; // Y
+int16 processActorVar4; // Z
+int16 processActorVar5;
+int16 processActorVar6;
+int16 processActorSub2Var0;
+int16 processActorSub2Var1;
+int16 currentlyProcessedActorNum;
 
-unsigned char *keyFramePtr;
-unsigned char *lastKeyFramePtr;
+uint8 *keyFramePtr;
+uint8 *lastKeyFramePtr;
 
-unsigned char *animVar1;
-short int animVar4;
+uint8 *animVar1;
+int16 animVar4;
 
-unsigned char *animBuffer1;
-unsigned char *animBuffer2;
+uint8 *animBuffer1;
+uint8 *animBuffer2;
 
 
 void preload_animations();
-int set_anim_at_keyframe(int keyframeIdx, unsigned char *anim, unsigned char *body, AnimTimerDataStruct* animTimerDataPtr);
-int get_num_keyframes(unsigned char *ptr);
-int get_start_keyframe(unsigned char *ptr);
-int set_model_animation(int animState, unsigned char *animData, unsigned char *body, AnimTimerDataStruct* animTimerDataPtr);
-int get_body_anim_index(int anim, short int actorNumber);
-int init_anim(char newAnim, short int arg_4, unsigned char arg_8, short int actorNum);
-int verify_anim_at_keyframe(int animPos, unsigned char *animData, unsigned char *body, AnimTimerDataStruct* animTimerDataPtr);
-void process_actor_animations(int actorIdx);
+int32 set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
+int32 get_num_keyframes(uint8 *ptr);
+int32 get_start_keyframe(uint8 *ptr);
+int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
+int32 get_body_anim_index(int32 anim, int16 actorNumber);
+int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum);
+int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
+void process_actor_animations(int32 actorIdx);
 
 #endif

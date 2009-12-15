@@ -48,18 +48,18 @@
 /** SDL CD variable interface */
 SDL_CD *cdrom;
 /** CD drive letter */
-const char *cdname;
+const int8 *cdname;
 
 /** SDL_Mixer track variable interface */
 Mix_Music *current_track;
 
 /** Auxiliar midi pointer to  */
-unsigned char * midiPtr;
+uint8 * midiPtr;
 
 
 /** Music volume
 	@param current volume number */
-void music_volume(int volume)
+void music_volume(int32 volume)
 {
 	// div 2 because LBA use 255 range and SDL_mixer use 128 range
 	Mix_VolumeMusic(volume/2);
@@ -67,14 +67,14 @@ void music_volume(int volume)
 
 /** Fade music in 
 	@param loops number of*/
-void music_fade_in(int loops, int ms)
+void music_fade_in(int32 loops, int32 ms)
 {
 	Mix_FadeInMusic(current_track, loops, ms);
 }
 
 /** Fade music out
 	@param ms number of miliseconds to fade*/
-void music_fade_out(int ms)
+void music_fade_out(int32 ms)
 {
 	while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
 		SDL_Delay(100);
@@ -85,7 +85,7 @@ void music_fade_out(int ms)
 
 /** Play CD music
 	@param track track number to play */
-void play_track_music_cd(int track)
+void play_track_music_cd(int32 track)
 {
 	if(cdrom->numtracks == 10)
 	{
@@ -114,9 +114,9 @@ void stop_track_music_cd()
 
 /** Play MP3 music
 	@param track track number to play */
-void play_track_music_mp3(int track)
+void play_track_music_mp3(int32 track)
 {
-	char musfile[256];
+	int8 musfile[256];
 	if(cfgfile.UseMP3)
 		sprintf(musfile, MUSIC_FOLDER "//%d.mp3",track);
 	else
@@ -154,7 +154,7 @@ void stop_track_music_mp3()
 
 /** Generic play music, according with settings it plays CD or MP3 instead
 	@param track track number to play */
-void play_track_music(int track)
+void play_track_music(int32 track)
 {
 	if(!cfgfile.NoSound)
 	{
@@ -189,12 +189,12 @@ void stop_track_music()
 
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
-void play_midi_music(int midiIdx, int loop)
+void play_midi_music(int32 midiIdx, int32 loop)
 {
 	if(!cfgfile.NoSound)
 	{
-		int midiSize;
-		char filename[256];
+		int32 midiSize;
+		int8 filename[256];
 		SDL_RWops *rw;	
 
 		stop_track_music();
@@ -271,8 +271,8 @@ int init_cdrom()
 {
 	if(!cfgfile.NoSound)
 	{
-		int numOfCDROM;
-		int cdNum;
+		int32 numOfCDROM;
+		int32 cdNum;
 
 		numOfCDROM = SDL_CDNumDrives();
 		if(cfgfile.Debug)

@@ -28,6 +28,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#include "sys.h"
 #include "main.h"
 
 /** Screen top limit to display the texts */
@@ -39,14 +40,14 @@
 /** Screen bottom limit to display the texts */
 #define SCREEN_TEXTLIMIT_BOTTOM	SCREEN_HEIGHT-1
 
-int textWindowTop;
-int textWindowTopSave;
-int textWindowLeft;
-int textWindowLeftSave;
-int textWindowRight;
-int textWindowRightSave;
-int textWindowBottom;
-int textWindowBottomSave;
+int32 textWindowTop;
+int32 textWindowTopSave;
+int32 textWindowLeft;
+int32 textWindowLeftSave;
+int32 textWindowRight;
+int32 textWindowRightSave;
+int32 textWindowBottom;
+int32 textWindowBottomSave;
 
 /** Draw button line
 	@param startWidth width value where the line starts
@@ -54,7 +55,8 @@ int textWindowBottomSave;
 	@param endWidth width value where the line ends
 	@param endHeight height value where the line ends
 	@param lineColor line color in the current palette */
-void draw_line(int startWidth, int startHeight, int endWidth, int endHeight, int lineColor);
+void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor);
+
 /** Blit button box from working buffer to front buffer
 	@param left start width to draw the button
 	@param top start height to draw the button
@@ -64,18 +66,19 @@ void draw_line(int startWidth, int startHeight, int endWidth, int endHeight, int
 	@param leftDest start width to draw the button in destination buffer
 	@param topDest start height to draw the button in destination buffer
 	@dest destination screen buffer, in this case front buffer */
-void blit_box(int left, int top, int right, int bottom, char *source, int leftDest, int topDest, char *dest);
+void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest);
+
 /** Draws inside buttons transparent area
 	@param left start width to draw the button
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int left, int top, int right, int bottom, int colorAdj);
+void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
 
-void draw_splitted_box(int left, int top, int right, int bottom, unsigned char e);
+void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e);
 
-void set_clip(int left, int top, int right, int bottom);
+void set_clip(int32 left, int32 top, int32 right, int32 bottom);
 void save_clip(); // saveTextWindow
 void reset_clip();
 

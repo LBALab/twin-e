@@ -29,6 +29,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "sys.h"
 #include "actor.h"
 
 #define NUM_SCENES_ENTRIES	120
@@ -38,37 +39,37 @@
 #define NUM_MAX_ZONES		100
 #define NUM_MAX_TRACKS		100
 
-int needChangeScene;
-int currentSceneIdx;
+int32 needChangeScene;
+int32 currentSceneIdx;
 
-unsigned char *spriteBoundingBoxPtr;
+uint8 *spriteBoundingBoxPtr;
 
-int currentGameOverScene;
-int alphaLight;
-int betaLight;
+int32 currentGameOverScene;
+int32 alphaLight;
+int32 betaLight;
 
 typedef struct SceneSamplesStruct
 {
-	short int info0;
-	short int info1;
-	short int info2;
-	short int info3;
+	int16 info0;
+	int16 info1;
+	int16 info2;
+	int16 info3;
 } SceneSamplesStruct;
 
 SceneSamplesStruct sampleAmbience;
 SceneSamplesStruct sampleRepeat;
 SceneSamplesStruct sampleRound;
 
-short int sampleMinDelay;
-short int sampleMinDelayRnd;
-short int sceneMusic;
+int16 sampleMinDelay;
+int16 sampleMinDelayRnd;
+int16 sceneMusic;
 
-short int sceneHeroX;
-short int sceneHeroY;
-short int sceneHeroZ;
+int16 sceneHeroX;
+int16 sceneHeroY;
+int16 sceneHeroZ;
 
 // ACTORS
-int sceneNumActors;
+int32 sceneNumActors;
 ActorStruct sceneActors[NUM_MAX_ACTORS];
 ActorStruct *sceneHero;
 
@@ -76,65 +77,65 @@ ActorStruct *sceneHero;
 
 typedef struct ScenePoint
 {
-	short int X;
-	short int Y;
-	short int Z;
+	int16 X;
+	int16 Y;
+	int16 Z;
 } ScenePoint;
 
 typedef struct ZoneBox
 {
 	ScenePoint bottomLeft;
 	ScenePoint topRight;
-	short int type;
-	short int info0;
-	short int info1;
-	short int info2;
-	short int info3;
-	short int snap;
+	int16 type;
+	int16 info0;
+	int16 info1;
+	int16 info2;
+	int16 info3;
+	int16 snap;
 	union
 	{
 		struct
 		{
-			short int newRoomNumber;
-			short int positionX;
-			short int positionY;
-			short int positionZ;
+			int16 newRoomNumber;
+			int16 positionX;
+			int16 positionY;
+			int16 positionZ;
 		} ChangeRoom;
 		struct
 		{
-			short int dummy;
-			short int newCameraX;
-			short int newCameraY;
-			short int newCameraZ;
+			int16 dummy;
+			int16 newCameraX;
+			int16 newCameraY;
+			int16 newCameraZ;
 		} ForceCamera;
 		struct
 		{
-			short int zoneNumber;
+			int16 zoneNumber;
 		} SetActorZone;
 		struct
 		{
-			short int newGrid;
+			int16 newGrid;
 		} PatchGrid;
 		struct
 		{
-			short int textIndex;
-			short int textColor;
+			int16 textIndex;
+			int16 textColor;
 		} DisplayText;
 	} infoData;
 } ZoneBox;
 
-int sceneNumZones;
+int32 sceneNumZones;
 ZoneBox sceneZones[NUM_MAX_ZONES];
 
 
 // TRACKS
 
-int sceneNumTracks;
+int32 sceneNumTracks;
 ScenePoint sceneTracks[NUM_MAX_TRACKS];
 
 
 // TODO: check what is this
-short int changeRoomVar10;
+int16 changeRoomVar10;
 
 void change_scene();
 

@@ -32,19 +32,19 @@
 #include "hqrdepack.h"
 #include "filereader.h"
 
-filereader fr;
+FileReader fr;
 
 /** Decompress entry based in Yaz0r and Zink decompression code
 	@param dst destination pointer where will be the decompressed entry
 	@param src compressed data pointer
 	@decompsize real file size after decompression
 	@mode compression mode used */
-void hqr_decompress_entry(unsigned char * dst, unsigned char * src, int decompsize, int mode)
+void hqr_decompress_entry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode)
 {
-	unsigned char b;
-	int lenght, d,i;
- 	unsigned short int offset;
-	unsigned char *ptr;
+	uint8 b;
+	int32 lenght, d,i;
+ 	uint16 offset;
+	uint8 *ptr;
 
 	do{
 		b = *(src++);
@@ -52,7 +52,7 @@ void hqr_decompress_entry(unsigned char * dst, unsigned char * src, int decompsi
 		{
 			if(!(b & (1 << d)))
 			{
-				offset = *(unsigned short int*)(src);
+				offset = *(uint16*)(src);
 				src+=2;
 				lenght = (offset & 0x0F) + (mode+1);
 				ptr = dst - (offset >> 4) - 1;
@@ -76,21 +76,21 @@ void hqr_decompress_entry(unsigned char * dst, unsigned char * src, int decompsi
 	@param src compressed data pointer
 	@decompsize real file size after decompression
 	@mode compression mode used */
-void hqr_decompress_lz_entry(unsigned char * dst, unsigned char * src, int decompsize, int mode)
+void hqr_decompress_lz_entry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode)
 {
-	unsigned short int offset;
-	int lenght;
-	unsigned char *ptr;
+	uint16 offset;
+	int32 lenght;
+	uint8 *ptr;
 
 	while( decompsize > 0 )
 	{
-       unsigned char bits;
-       unsigned char type = *(src++);
+       uint8 bits;
+       uint8 type = *(src++);
        for( bits=1; bits!=0; bits<<=1 )
        {
            if(!(type&bits))
            {
-				offset = *(unsigned short int*)(src);
+				offset = *(uint16*)(src);
 				src+=2;
 				lenght = (offset & 0x0F) + (mode+1);
 				ptr = dst - (offset >> 4) - 1;
@@ -99,8 +99,8 @@ void hqr_decompress_lz_entry(unsigned char * dst, unsigned char * src, int decom
 				}
 				else {
 					if ((ptr+lenght) >= dst ) {
-						signed long n;
-						unsigned char *tmp = dst;
+						int32 n;
+						uint8 *tmp = dst;
 						for(n=0; n < lenght; n++)
 							*tmp++ = *ptr++;
 					}
@@ -127,13 +127,13 @@ void hqr_decompress_lz_entry(unsigned char * dst, unsigned char * src, int decom
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size*/
-int hqr_get_entry(unsigned char * ptr, char *filename, int index)
+int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index)
 {
-	unsigned int headerSize;
-	unsigned int offsetToData;
-	unsigned int realSize;
-	unsigned int compSize;
-	unsigned short int mode;
+	uint32 headerSize;
+	uint32 offsetToData;
+	uint32 realSize;
+	uint32 compSize;
+	uint16 mode;
 
 	if (!filename)
 		return 0;
@@ -143,7 +143,7 @@ int hqr_get_entry(unsigned char * ptr, char *filename, int index)
  
 	frread(&fr,&headerSize,4);
 
-	if((unsigned int)index >= headerSize/4)
+	if((uint32)index >= headerSize/4)
 	{
 		printf("\nHQR WARNING: Invalid entry index!!\n");
 		frclose(&fr);
@@ -159,7 +159,7 @@ int hqr_get_entry(unsigned char * ptr, char *filename, int index)
 	frread(&fr,&mode,2);
 
 	if(!ptr)
-		ptr =(unsigned char*)malloc(realSize);
+		ptr =(uint8*)malloc(realSize);
 
 	if(!ptr)
 	{
@@ -176,8 +176,8 @@ int hqr_get_entry(unsigned char * ptr, char *filename, int index)
 	// compressed: modes (1 & 2)
 	else 
 	{
-		unsigned char* compDataPtr=0;
-		compDataPtr=(unsigned char*)malloc(compSize);
+		uint8* compDataPtr=0;
+		compDataPtr=(uint8*)malloc(compSize);
 		frread(&fr,compDataPtr,compSize);
 		hqr_decompress_entry(ptr,compDataPtr,realSize,mode);
 		free(compDataPtr);
@@ -192,12 +192,11 @@ int hqr_get_entry(unsigned char * ptr, char *filename, int index)
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int hqr_entry_size(char *filename, int index)
+int hqr_entry_size(int8 *filename, int32 index)
 {
-	unsigned int headerSize;
-	unsigned int offsetToData;
-	unsigned int realSize;
-	//FILE *fd;
+	uint32 headerSize;
+	uint32 offsetToData;
+	uint32 realSize;
 
 	if (!filename)
 		return 0;
@@ -209,10 +208,9 @@ int hqr_entry_size(char *filename, int index)
  
 	frread(&fr,&headerSize,4);
  
-	if((unsigned int)index >= headerSize/4)
+	if((uint32)index >= headerSize/4)
 	{
 		printf("\nHQR WARNING: Invalid entry index!!\n");
-		//fclose(fd);
 		frclose(&fr);
 		return 0;
 	}
@@ -231,9 +229,9 @@ int hqr_entry_size(char *filename, int index)
 /** Get a HQR total number of entries
 	@param filename HQR file name
 	@return total number of entries */
-int hqr_num_entries(char *filename)
+int hqr_num_entries(int8 *filename)
 {
-	unsigned int headerSize;
+	uint32 headerSize;
 
 	if (!filename)
 		return 0;
@@ -253,13 +251,13 @@ int hqr_num_entries(char *filename)
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int hqr_getalloc_entry(unsigned char ** ptr, char *filename, int index)
+int32 hqr_getalloc_entry(uint8 ** ptr, int8 *filename, int32 index)
 {
-	int size;
+	int32 size;
 	size = hqr_entry_size(filename,index);
 	//if(*ptr)
 		//free(ptr);
-	*ptr = (unsigned char*)malloc(size*sizeof(unsigned char));
+	*ptr = (uint8*)malloc(size*sizeof(uint8));
 	if(!*ptr)
 	{
 		printf("HQR WARNING: unable to allocate entry memory!!\n");

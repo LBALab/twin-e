@@ -28,29 +28,30 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "sys.h"
 
-extern int isUsingOrhoProjection;
+extern int32 isUsingOrhoProjection;
 
-extern int orthoProjX; // setSomethingVar1
-extern int orthoProjY; // setSomethingVar2
-extern int orthoProjZ; // setSomethingVar2
+extern int32 orthoProjX; // setSomethingVar1
+extern int32 orthoProjY; // setSomethingVar2
+extern int32 orthoProjZ; // setSomethingVar2
 
-extern int destX;
-extern int destY;
-extern int destZ;
+extern int32 destX;
+extern int32 destY;
+extern int32 destZ;
 
-void set_light_vector(int angleX, int angleY, int angleZ);
+void set_light_vector(int32 angleX, int32 angleY, int32 angleZ);
 
-void prepare_iso_model(unsigned char *bodyPtr); // loadGfxSub
+void prepare_iso_model(uint8 *bodyPtr); // loadGfxSub
 
-int project_position_on_screen(int cX, int cY, int cZ);
-void set_camera_position( int X, int Y, int cX, int cY, int cZ );
-void set_base_translation(int X, int Y, int Z);
-void set_base_rotation(int X, int Y, int Z);
-void set_ortho_projection(int X, int Y, int Z);
+int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ);
+void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
+void set_base_translation(int32 X, int32 Y, int32 Z);
+void set_base_rotation(int32 X, int32 Y, int32 Z);
+void set_ortho_projection(int32 X, int32 Y, int32 Z);
 
-int render_iso_model(int X, int Y, int Z, int angleX, int angleY, int angleZ, unsigned char *bodyPtr);
+int32 render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr);
 
-void copy_actor_intern_anim(unsigned char *bodyPtrSrc, unsigned char *bodyPtrDest);
+void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest);
 
 #endif

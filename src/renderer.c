@@ -59,196 +59,196 @@
 
 typedef struct renderTabEntry
 {
-  short int depth;
-  short int renderType;
-  unsigned char *dataPtr;
+  int16 depth;
+  int16 renderType;
+  uint8 *dataPtr;
 } renderTabEntry;
 
 typedef struct pointTab
 {
-	short int X;
-	short int Y;
-	short int Z;
+	int16 X;
+	int16 Y;
+	int16 Z;
 } pointTab;
 
 typedef struct elementEntry
 {
-	short int firstPoint;		// data1
-	short int numOfPoints;		// data2
-	short int basePoint;		// data3
-	short int baseElement;		// param
-	short int flag;
-	short int rotateZ;
-	short int rotateY;
-	short int rotateX;
-	int numOfShades;			// field_10
-	int field_14;
-	int field_18;
-	int Y;
-	int field_20;
-	short int field_24;
+	int16 firstPoint;		// data1
+	int16 numOfPoints;		// data2
+	int16 basePoint;		// data3
+	int16 baseElement;		// param
+	int16 flag;
+	int16 rotateZ;
+	int16 rotateY;
+	int16 rotateX;
+	int32 numOfShades;			// field_10
+	int32 field_14;
+	int32 field_18;
+	int32 Y;
+	int32 field_20;
+	int16 field_24;
 } elementEntry;
 
 typedef struct lineCoordinates
 {
-	int data;
-	short int x1;
-	short int y1;
-	short int x2;
-	short int y2;
+	int32 data;
+	int16 x1;
+	int16 y1;
+	int16 x2;
+	int16 y2;
 } lineCoordinates;
 
 
 typedef struct lineData
 {
-	int data;
-	short int p1;
-	short int p2;
+	int32 data;
+	int16 p1;
+	int16 p2;
 } lineData;
 
 typedef struct polyHeader
 {
-	unsigned char renderType; //FillVertic_AType
-	unsigned char numOfVertex;
-	short int colorIndex;
+	uint8 renderType; //FillVertic_AType
+	uint8 numOfVertex;
+	int16 colorIndex;
 } polyHeader;
 
 typedef struct polyVertexHeader
 {
-	short int shadeEntry;
-	short int dataOffset;
+	int16 shadeEntry;
+	int16 dataOffset;
 } polyVertexHeader;
 
 
 typedef struct computedVertex
 {
-	short int shadeValue;
-	short int x;
-	short int y;
+	int16 shadeValue;
+	int16 x;
+	int16 y;
 } computedVertex;
 
 typedef struct bodyHeaderStruct
 {
-  short int bodyFlag;     
-  short int unk0;         
-  short int unk1;         
-  short int unk2;         
-  short int unk3;         
-  short int unk4;         
-  short int unk5;         
-  short int offsetToData; 
-  char *ptrToKeyFrame;
-  int keyFrameTime;
+  int16 bodyFlag;     
+  int16 unk0;         
+  int16 unk1;         
+  int16 unk2;         
+  int16 unk3;         
+  int16 unk4;         
+  int16 unk5;         
+  int16 offsetToData; 
+  int8 *ptrToKeyFrame;
+  int32 keyFrameTime;
 } bodyHeaderStruct;
 
 // ---- variables ----
 
-int isUsingOrhoProjection;
+int32 isUsingOrhoProjection;
 
-int baseMatrixRotationX;
-int baseMatrixRotationY;
-int baseMatrixRotationZ;
+int32 baseMatrixRotationX;
+int32 baseMatrixRotationY;
+int32 baseMatrixRotationZ;
 
-int orthoProjX; // setSomethingVar1
-int orthoProjY; // setSomethingVar2
-int orthoProjZ; // setSomethingVar2
+int32 orthoProjX; // setSomethingVar1
+int32 orthoProjY; // setSomethingVar2
+int32 orthoProjZ; // setSomethingVar2
 
-int baseTransPosX; // setSomething2Var1
-int baseTransPosY; // setSomething2Var2
-int baseTransPosZ; // setSomething2Var3
+int32 baseTransPosX; // setSomething2Var1
+int32 baseTransPosY; // setSomething2Var2
+int32 baseTransPosZ; // setSomething2Var3
 
-int baseRotPosX; // setSomething3Var12
-int baseRotPosY; // setSomething3Var14
-int baseRotPosZ; // setSomething3Var16
+int32 baseRotPosX; // setSomething3Var12
+int32 baseRotPosY; // setSomething3Var14
+int32 baseRotPosZ; // setSomething3Var16
 
-int cameraPosX; // cameraVar1
-int cameraPosY; // cameraVar2
-int cameraPosZ; // cameraVar3
+int32 cameraPosX; // cameraVar1
+int32 cameraPosY; // cameraVar2
+int32 cameraPosZ; // cameraVar3
 
 // ---
 
-short int *shadeAngleTab1; // tab1
-short int *shadeAngleTab2; // tab2
-short int *shadeAngleTab3; // tab3
+int16 *shadeAngleTab1; // tab1
+int16 *shadeAngleTab2; // tab2
+int16 *shadeAngleTab3; // tab3
 
-int renderAngleX; // _angleX
-int renderAngleY; // _angleY
-int renderAngleZ; // _angleZ
+int32 renderAngleX; // _angleX
+int32 renderAngleY; // _angleY
+int32 renderAngleZ; // _angleZ
 
-int renderX; // _X
-int renderY; // _Y
-int renderZ; // _Z
+int32 renderX; // _X
+int32 renderY; // _Y
+int32 renderZ; // _Z
 
-int destX;
-int destY;
-int destZ;
+int32 destX;
+int32 destY;
+int32 destZ;
 
 // --- 
 
-int baseMatrix[3*3];
+int32 baseMatrix[3*3];
 
-int numOfPrimitives;
+int32 numOfPrimitives;
 
-int numOfPoints;
-int numOfElements;
-unsigned char *pointsPtr;
-unsigned char *elementsPtr;
-unsigned char *elementsPtr2;
+int32 numOfPoints;
+int32 numOfElements;
+uint8 *pointsPtr;
+uint8 *elementsPtr;
+uint8 *elementsPtr2;
 
-unsigned char *pri2Ptr2;
+uint8 *pri2Ptr2;
 
-int matricesTable[271];
-unsigned char *currentMatrixTableEntry;
+int32 matricesTable[271];
+uint8 *currentMatrixTableEntry;
 
-int *shadePtr;
-int shadeMatrix[9];
-int lightX;
-int lightY;
-int lightZ;
+int32 *shadePtr;
+int32 shadeMatrix[9];
+int32 lightX;
+int32 lightY;
+int32 lightZ;
 
 pointTab computedPoints[800];		// _projectedPointTable
 pointTab flattenPoints[800];	// _flattenPointTable
-short int shadeTable[500];
+int16 shadeTable[500];
 
-short int primitiveCounter;
+int16 primitiveCounter;
 renderTabEntry *renderTabEntryPtr;
 renderTabEntry *renderTabEntryPtr2;
 renderTabEntry *renderTabSortedPtr;
 
 renderTabEntry renderTab[1000];
 renderTabEntry renderTabSorted[1000];
-unsigned char renderTab7[10000];
+uint8 renderTab7[10000];
 
-short int polyRenderType; //FillVertic_AType; 
-unsigned char *renderV19;   // RECHECK THIS
-int numOfVertex;
-short int vertexCoordinates[193];
+int16 polyRenderType; //FillVertic_AType; 
+uint8 *renderV19;   // RECHECK THIS
+int32 numOfVertex;
+int16 vertexCoordinates[193];
 
 // render polygon vars
-short int pRenderV3[96];
-short int *pRenderV1;
-short int *pRenderV2;
-short int numOfVertexRemaining;
-short int polyCropped;
+int16 pRenderV3[96];
+int16 *pRenderV1;
+int16 *pRenderV2;
+int16 numOfVertexRemaining;
+int16 polyCropped;
 
-short int vleft;
-short int vtop;
-short int vright;
-short int vbottom;
+int16 vleft;
+int16 vtop;
+int16 vright;
+int16 vbottom;
 
-unsigned char oldVertexParam;
-unsigned char vertexParam1;
-unsigned char vertexParam2;
+uint8 oldVertexParam;
+uint8 vertexParam1;
+uint8 vertexParam2;
 
-short int polyTab[960];
-short int polyTab2[960];
-int renderLoop;
+int16 polyTab[960];
+int16 polyTab2[960];
+int32 renderLoop;
 // end render polygon vars
 
 
 
 
-int project_position_on_screen(int cX, int cY, int cZ)
+int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ)
 {
 	if(!isUsingOrhoProjection)
 	{
@@ -258,7 +258,7 @@ int project_position_on_screen(int cX, int cY, int cZ)
 		
 		if(cZ >= 0)
 		{
-			int posZ = cZ + cameraPosX;
+			int32 posZ = cZ + cameraPosX;
 
 			if(posZ < 0)
 				posZ = 0x7FFF;
@@ -286,7 +286,7 @@ int project_position_on_screen(int cX, int cY, int cZ)
 	return 1;
 }
 
-void set_camera_position( int X, int Y, int cX, int cY, int cZ )
+void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ)
 {
 	orthoProjX = X;
 	orthoProjY = Y;
@@ -298,14 +298,14 @@ void set_camera_position( int X, int Y, int cX, int cY, int cZ )
 	isUsingOrhoProjection = 0;
 }
 
-void set_base_translation(int X, int Y, int Z)
+void set_base_translation(int32 X, int32 Y, int32 Z)
 {
 	baseTransPosX = X;
 	baseTransPosY = Y;
 	baseTransPosZ = Z;
 }
 
-void set_ortho_projection(int X, int Y, int Z)
+void set_ortho_projection(int32 X, int32 Y, int32 Z)
 {
 	orthoProjX = X;
 	orthoProjY = Y;
@@ -314,25 +314,25 @@ void set_ortho_projection(int X, int Y, int Z)
 	isUsingOrhoProjection = 1;
 }
 
-void get_base_rotation_position(int X, int Y, int Z)
+void get_base_rotation_position(int32 X, int32 Y, int32 Z)
 {
 	destX = (baseMatrix[0] * X + baseMatrix[1] * Y + baseMatrix[2] * Z)>>14;
 	destY = (baseMatrix[3] * X + baseMatrix[4] * Y + baseMatrix[5] * Z)>>14;
 	destZ = (baseMatrix[6] * X + baseMatrix[7] * Y + baseMatrix[8] * Z)>>14;
 }
 
-void set_base_rotation(int X, int Y, int Z)
+void set_base_rotation(int32 X, int32 Y, int32 Z)
 { 
-	int angleXCos;
-	int angleXSin;
+	int32 angleXCos;
+	int32 angleXSin;
 
-	int angleYCos;
-	int angleYSin;
+	int32 angleYCos;
+	int32 angleYSin;
 
-	int angleZCos;
-	int angleZSin;
+	int32 angleZCos;
+	int32 angleZSin;
   
-	int matrixElem;
+	int32 matrixElem;
 
 	shadeAngleTab1 = &shadeAngleTable[0];
 	shadeAngleTab2 = &shadeAngleTable[256];
@@ -378,14 +378,14 @@ void set_base_rotation(int X, int Y, int Z)
 	baseRotPosZ = destZ;
 }
 
-void get_camera_angle_positions(int X, int Y, int Z)
+void get_camera_angle_positions(int32 X, int32 Y, int32 Z)
 {
 	destX = (baseMatrix[0] * X + baseMatrix[3] * Y + baseMatrix[6] * Z)>>14;
 	destY = (baseMatrix[1] * X + baseMatrix[4] * Y + baseMatrix[7] * Z)>>14;
 	destZ = (baseMatrix[2] * X + baseMatrix[5] * Y + baseMatrix[8] * Z)>>14;
 }
 
-void set_camera_angle(int transPosX, int transPosY, int transPosZ, int rotPosX, int rotPosY, int rotPosZ, int param6)
+void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6)
 {
 	baseTransPosX = transPosX;
 	baseTransPosY = transPosY;
@@ -404,13 +404,13 @@ void set_camera_angle(int transPosX, int transPosY, int transPosZ, int rotPosX, 
 
 // ------------------------------------------------------------------------------------------------------
 
-void apply_rotation(int *tempMatrix, int *currentMatrix)
+void apply_rotation(int32 *tempMatrix, int32 *currentMatrix)
 {
-	int angleVar1;    // esi
-	int angleVar2;    // ecx
+	int32 angleVar1;    // esi
+	int32 angleVar2;    // ecx
 
-	int matrix1[9];
-	int matrix2[9];
+	int32 matrix1[9];
+	int32 matrix2[9];
 
 	if (renderAngleX)
 	{
@@ -430,7 +430,7 @@ void apply_rotation(int *tempMatrix, int *currentMatrix)
 	}
 	else
 	{
-		int i;
+		int32 i;
 
 		for(i=0;i<9;i++)
 		    matrix1[i]=currentMatrix[i];
@@ -454,7 +454,7 @@ void apply_rotation(int *tempMatrix, int *currentMatrix)
 	}
 	else
 	{
-		int i;
+		int32 i;
 
 		for(i=0;i<9;i++)
 		    matrix2[i]=matrix1[i];
@@ -486,21 +486,21 @@ void apply_rotation(int *tempMatrix, int *currentMatrix)
 	}
 }
 
-void apply_points_rotation(unsigned char *firstPointsPtr, int numPoints, pointTab * destPoints, int *rotationMatrix)
+void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *rotationMatrix)
 {
-	short int tmpX;
-	short int tmpY;
-	short int tmpZ;
+	int16 tmpX;
+	int16 tmpY;
+	int16 tmpZ;
 
-	short int *tempPtr;
+	int16 *tempPtr;
 
-	int numOfPoints = numPoints;
-	unsigned char *pointsPtr;
+	int32 numOfPoints = numPoints;
+	uint8 *pointsPtr;
 
 	do
 	{
 		pointsPtr = firstPointsPtr;
-		tempPtr = (short int *) (firstPointsPtr);
+		tempPtr = (int16 *) (firstPointsPtr);
 
 		tmpX = tempPtr[0];
 		tmpY = tempPtr[1];
@@ -515,13 +515,13 @@ void apply_points_rotation(unsigned char *firstPointsPtr, int numPoints, pointTa
 	}while (--numOfPoints);
 }
 
-void process_rotated_element(int rotZ, int rotY, int rotX, elementEntry *elemPtr) // unsigned char * elemPtr) // loadPart
+void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *elemPtr) // unsigned char * elemPtr) // loadPart
 {
-	int *currentMatrix;
-	short int baseElement;
+	int32 *currentMatrix;
+	int16 baseElement;
 
-	int firstPoint = elemPtr->firstPoint;
-	int numOfPoints = elemPtr->numOfPoints;
+	int32 firstPoint = elemPtr->firstPoint;
+	int32 numOfPoints = elemPtr->numOfPoints;
 
 	renderAngleX = rotX;
 	renderAngleY = rotY;
@@ -547,39 +547,39 @@ void process_rotated_element(int rotZ, int rotY, int rotX, elementEntry *elemPtr
 	}
 	else
 	{
-		int pointIdx = (elemPtr->basePoint)/6;
-		currentMatrix = (int *) ((unsigned char *)matricesTable + baseElement);
+		int32 pointIdx = (elemPtr->basePoint)/6;
+		currentMatrix = (int32 *) ((uint8 *)matricesTable + baseElement);
 
 		destX = computedPoints[pointIdx].X;
 		destY = computedPoints[pointIdx].Y;
 		destZ = computedPoints[pointIdx].Z;
 	}
 
-	apply_rotation((int *) currentMatrixTableEntry, currentMatrix);
+	apply_rotation((int32 *) currentMatrixTableEntry, currentMatrix);
 
 	if(!numOfPoints)
 	{
 		printf("RENDER WARNING: No points in this model!\n");
 	}
 
-	apply_points_rotation(pointsPtr + firstPoint, numOfPoints, &computedPoints[firstPoint / 6], (int *) currentMatrixTableEntry);
+	apply_points_rotation(pointsPtr + firstPoint, numOfPoints, &computedPoints[firstPoint / 6], (int32 *) currentMatrixTableEntry);
 }
 
-void apply_points_translation(unsigned char *firstPointsPtr, int numPoints, pointTab * destPoints, int *translationMatrix)
+void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *translationMatrix)
 {
-	short int tmpX;
-	short int tmpY;
-	short int tmpZ;
+	int16 tmpX;
+	int16 tmpY;
+	int16 tmpZ;
 
-	short int *tempPtr;
+	int16 *tempPtr;
 
-	int numOfPoints = numPoints;
-	unsigned char *pointsPtr;
+	int32 numOfPoints = numPoints;
+	uint8 *pointsPtr;
 
 	do
 	{
 		pointsPtr = firstPointsPtr;
-		tempPtr = (short int *) (firstPointsPtr);
+		tempPtr = (int16 *) (firstPointsPtr);
 
 		tmpX = tempPtr[0] + renderAngleZ;
 		tmpY = tempPtr[1] + renderAngleY;
@@ -594,10 +594,10 @@ void apply_points_translation(unsigned char *firstPointsPtr, int numPoints, poin
 	}while (--numOfPoints);
 }
 
-void process_translated_element(int rotX, int rotY, int rotZ, elementEntry *elemPtr)
+void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry *elemPtr)
 {
-	int *dest;
-	int *source;
+	int32 *dest;
+	int32 *source;
 
 	renderAngleX = rotX;
 	renderAngleY = rotY;
@@ -605,25 +605,27 @@ void process_translated_element(int rotX, int rotY, int rotZ, elementEntry *elem
 
 	if (elemPtr->baseElement == -1) // base point
 	{
-		int i;
+		int32 i;
+
 		destX = 0;
 		destY = 0;
 		destZ = 0;
 
-		dest = (int *) currentMatrixTableEntry;
+		dest = (int32 *) currentMatrixTableEntry;
 
 		for(i=0;i<9;i++)
 		    dest[i]=baseMatrix[i];
 	}
 	else      // dependent
 	{
-		int i;
+		int32 i;
+
 		destX = computedPoints[(elemPtr->basePoint) / 6].X;
 		destY = computedPoints[(elemPtr->basePoint) / 6].Y;
 		destZ = computedPoints[(elemPtr->basePoint) / 6].Z;
 
-		source = (int *) ((unsigned char *)matricesTable + elemPtr->baseElement);
-		dest = (int *) currentMatrixTableEntry;
+		source = (int32 *) ((uint8 *)matricesTable + elemPtr->baseElement);
+		dest = (int32 *) currentMatrixTableEntry;
 
 		for(i=0;i<9;i++)
 		    dest[i]=source[i];
@@ -632,13 +634,13 @@ void process_translated_element(int rotX, int rotY, int rotZ, elementEntry *elem
 	apply_points_translation(pointsPtr + elemPtr->firstPoint, elemPtr->numOfPoints, &computedPoints[elemPtr->firstPoint / 6], (int *) currentMatrixTableEntry);
 }
 
-void translate_group(short int ax, short int bx, short int cx)
+void translate_group(int16 ax, int16 bx, int16 cx)
 {
-	int ebp;
-	int ebx;
-	int ecx;
-	int eax;
-	int edi;
+	int32 ebp;
+	int32 ebx;
+	int32 ecx;
+	int32 eax;
+	int32 edi;
 	
 	ebp = ax;
 	ebx = bx;
@@ -676,7 +678,7 @@ void translate_group(short int ax, short int bx, short int cx)
 	destZ = eax; // TODO: recheck Y
 }
 
-void set_light_vector(int angleX, int angleY, int angleZ)
+void set_light_vector(int32 angleX, int32 angleY, int32 angleZ)
 {
 	shadeAngleTab1 = &shadeAngleTable[0];
 	shadeAngleTab2 = &shadeAngleTable[256];
@@ -703,18 +705,18 @@ void set_light_vector(int angleX, int angleY, int angleZ)
 
 int compute_polygons()
 {
-	short int vertexX, vertexY;
-	short int *ptr1, *ptr3;
-	int i;
-	short int push1, push2;
-	char direction = 1;
-	int echange;
-	short int oldVertexX, oldVertexY;
-	short int currentVertexX, currentVertexY;
-	short int size;
-	int temp2, temp4, temp5, temp6;
-	int step;
-	float vfloat, vfloat2;
+	int16 vertexX, vertexY;
+	int16 *ptr1, *ptr3;
+	int32 i;
+	int16 push1, push2;
+	int8 direction = 1;
+	int32 echange;
+	int16 oldVertexX, oldVertexY;
+	int16 currentVertexX, currentVertexY;
+	int16 size;
+	int32 temp2, temp4, temp5, temp6;
+	int32 step;
+	int64 vfloat, vfloat2;
 
 	pRenderV1 = vertexCoordinates;
 	pRenderV2 = pRenderV3;
@@ -817,12 +819,12 @@ int compute_polygons()
 				temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
 				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
 
-				vfloat = ((float) (oldVertexX - currentVertexX)) / ((float) oldVertexY);
+				vfloat = ((int64) (oldVertexX - currentVertexX)) / ((int64) oldVertexY);
 
 				temp6 >>= 1;
 				temp6 += 0x7FFF;
 
-				step = (unsigned short) temp5;  // retrieve the size of a step
+				step = (uint16) temp5;  // retrieve the size of a step
 
 				// temp7 = (((unsigned short)temp6) | ((oldVertexX & 0xFFFF)<<16));
 				vfloat2 = oldVertexX;
@@ -835,7 +837,7 @@ int compute_polygons()
 				{
 					// *(ptr3)=((temp7&0xFFFF0000)>>16);
 					if((ptr3-polyTab) < 960)
-						*(ptr3) = (short int) vfloat2;
+						*(ptr3) = (int16) vfloat2;
 					ptr3 += direction;
 					// temp7+=step;
 					vfloat2 -= vfloat;
@@ -843,7 +845,7 @@ int compute_polygons()
 
 				if (polyRenderType >= 7) // we must compute the color progression
 				{
-					short int* ptr3 = &polyTab2[temp2 + 480];
+					int16* ptr3 = &polyTab2[temp2 + 480];
 
 					temp4 = (vertexParam2 - oldVertexParam); // compute the color difference
 
@@ -853,20 +855,20 @@ int compute_polygons()
 						{
 							struct
 							{
-								unsigned char al;
-								unsigned char ah;
+								uint8 al;
+								uint8 ah;
 							} bit;
-							unsigned short int temp;
+							uint16 temp;
 						}test;
 
 						union
 						{
 							struct
 							{
-								unsigned char al;
-								unsigned char ah;
+								uint8 al;
+								uint8 ah;
 							} bit;
-							unsigned short int temp;
+							uint16 temp;
 						}reste;
   
 						test.bit.al = oldVertexParam;
@@ -901,20 +903,20 @@ int compute_polygons()
 						{
 							struct
 							{
-								unsigned char al;
-								unsigned char ah;
+								uint8 al;
+								uint8 ah;
 							} bit;
-							unsigned short int temp;
+							uint16 temp;
 						}test;
 
 						union
 						{
 							struct
 							{
-								unsigned char al;
-								unsigned char ah;
+								uint8 al;
+								uint8 ah;
 							} bit;
-							unsigned short int temp;
+							uint16 temp;
 						}reste;
 
 						test.bit.al = oldVertexParam;
@@ -982,12 +984,12 @@ int compute_polygons()
 				temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
 				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
 
-				vfloat = ((float) (currentVertexX - oldVertexX)) / ((float) oldVertexY);
+				vfloat = ((int64) (currentVertexX - oldVertexX)) / ((int64) oldVertexY);
 
 				temp6 >>= 1;
 				temp6 += 0x7FFF;
 
-				step = (unsigned short) temp5;  // retrieve the size of a step
+				step = (uint16) temp5;  // retrieve the size of a step
 
 				// temp7 = (((unsigned short)temp6) | ((oldVertexX & 0xFFFF)<<16));
 				vfloat2 = oldVertexX;
@@ -1000,7 +1002,7 @@ int compute_polygons()
 				{
 					// *(ptr3)=((temp7&0xFFFF0000)>>16);
 					if((ptr3-polyTab) < 960)
-						*(ptr3) = (short int) vfloat2;
+						*(ptr3) = (int16) vfloat2;
 					ptr3 += direction;
 					// temp7+=step;
 					vfloat2 += vfloat;
@@ -1008,7 +1010,7 @@ int compute_polygons()
 
 				if (polyRenderType >= 7)
 				{
-					short int* ptr3 = &polyTab2[temp2];
+					int16* ptr3 = &polyTab2[temp2];
 
 					temp4 = ((vertexParam2 - oldVertexParam)); // compute the color difference
 
@@ -1018,122 +1020,122 @@ int compute_polygons()
 						{
 							struct
 							{
-								unsigned char al;
-								unsigned char ah;
+								uint8 al;
+								uint8 ah;
 							} bit;
-							unsigned short int temp;
+							uint16 temp;
 						}test;
 
 						union
 						{
-						struct
+							struct
+							{
+								uint8 al;
+								uint8 ah;
+							} bit;
+							uint16 temp;
+						}reste;
+
+						test.bit.al = oldVertexParam;
+						test.bit.ah = vertexParam2;
+
+						test.bit.ah -= test.bit.al;
+
+						test.bit.al = 0;
+
+						reste.temp = test.temp % oldVertexX;
+
+						test.temp /= oldVertexX;
+
+						reste.bit.al >>=1;
+						reste.bit.al += 0x7F;
+
+						reste.bit.ah = oldVertexParam;
+
+						oldVertexX+=2;
+
+						for (i = 0; i < oldVertexX; i++)
 						{
-							unsigned char al;
-							unsigned char ah;
-						} bit;
-						unsigned short int temp;
-					}reste;
-
-					test.bit.al = oldVertexParam;
-					test.bit.ah = vertexParam2;
-
-					test.bit.ah -= test.bit.al;
-
-					test.bit.al = 0;
-
-					reste.temp = test.temp % oldVertexX;
-
-					test.temp /= oldVertexX;
-
-					reste.bit.al >>=1;
-					reste.bit.al += 0x7F;
-
-					reste.bit.ah = oldVertexParam;
-
-					oldVertexX+=2;
-
-					for (i = 0; i < oldVertexX; i++)
+							if((ptr3-polyTab2) < 960)
+								*(ptr3) = reste.temp;
+							ptr3 += direction;
+							reste.temp += test.temp;
+						}
+					}
+					else
 					{
-						if((ptr3-polyTab2) < 960)
-							*(ptr3) = reste.temp;
-						ptr3 += direction;
-						reste.temp += test.temp;
+						union
+						{
+							struct
+							{
+								uint8 al;
+								uint8 ah;
+							} bit;
+							uint16 temp;
+						}test;
+
+						union
+						{
+							struct
+							{
+								uint8 al;
+								uint8 ah;
+							}	bit;
+							uint16 temp;
+						}reste;
+
+						test.bit.al = oldVertexParam;
+						test.bit.ah = vertexParam2;
+
+						test.bit.ah -= test.bit.al;
+						test.bit.ah = -test.bit.ah;
+
+						test.bit.al = 0;
+
+						reste.temp = test.temp % (oldVertexX);
+
+						test.temp /= oldVertexX;
+
+						reste.bit.al >>=1;
+						reste.bit.al = -reste.bit.al;
+						reste.bit.al += 0x7F;
+
+						reste.bit.ah = oldVertexParam;
+
+						for (i = 0; i <= oldVertexX; i++)
+						{
+							if((ptr3-polyTab2) < 960)
+								*(ptr3) = reste.temp;
+							ptr3 += direction;
+							reste.temp -= test.temp;
+						}
 					}
 				}
-				else
-				{
-					union
-					{
-						struct
-						{
-							unsigned char al;
-							unsigned char ah;
-						} bit;
-						unsigned short int temp;
-					}test;
-
-					union
-					{
-						struct
-						{
-							unsigned char al;
-							unsigned char ah;
-						}	bit;
-						unsigned short int temp;
-					}reste;
-
-					test.bit.al = oldVertexParam;
-					test.bit.ah = vertexParam2;
-
-					test.bit.ah -= test.bit.al;
-					test.bit.ah = -test.bit.ah;
-
-					test.bit.al = 0;
-
-					reste.temp = test.temp % (oldVertexX);
-
-					test.temp /= oldVertexX;
-
-					reste.bit.al >>=1;
-					reste.bit.al = -reste.bit.al;
-					reste.bit.al += 0x7F;
-
-					reste.bit.ah = oldVertexParam;
-
-					for (i = 0; i <= oldVertexX; i++)
-					{
-						if((ptr3-polyTab2) < 960)
-							*(ptr3) = reste.temp;
-						ptr3 += direction;
-						reste.temp -= test.temp;
-					}
-				}
+				direction = 1;
+				oldVertexY = push2;
+				oldVertexX = push1;
 			}
-			direction = 1;
-			oldVertexY = push2;
-			oldVertexX = push1;
 		}
-	}
 	}while (--numOfVertexRemaining);
 
 	return (1);
 }
 
-void render_polygons(int ecx, int edi)
+void render_polygons(int32 ecx, int32 edi)
 {
-	unsigned char *out, *out2;
-	short int *ptr1;
-	short int *ptr2;
-	int vsize, hsize;
-	int color;
-	int j;
-	int currentLine;
+	uint8 *out, *out2;
+	int16 *ptr1;
+	int16 *ptr2;
+	int32 vsize, hsize;
+	int32 color;
+	int32 j;
+	int32 currentLine;
 
-	short int start, stop;
+	int16 start, stop;
 
-	float varf2;
-	float varf3;
-	float varf4;
+	int64 varf2;
+	int64 varf3;
+	int64 varf4;
 
  /* if (vtop <= 0 || vbottom <= 0)
     return;
@@ -1214,11 +1216,11 @@ void render_polygons(int ecx, int edi)
 
 					if(hsize>=0)
 					{
-						unsigned short int mask = 0x43DB;
-						unsigned short int dx;
-						int startCopy;
+						uint16 mask = 0x43DB;
+						uint16 dx;
+						int32 startCopy;
           
-						dx = (unsigned char)color;
+						dx = (uint8)color;
 						dx |= 0x300;
 
 						hsize++;
@@ -1228,7 +1230,7 @@ void render_polygons(int ecx, int edi)
 						for(j = startCopy; j< hsize+startCopy; j++)
 						{
 							start += mask;
-							start = (start &0xFF00) | ((start&0xFF) & (unsigned char)(dx>>8)) ;
+							start = (start &0xFF00) | ((start&0xFF) & (uint8)(dx>>8)) ;
 							start = (start &0xFF00) | ((start&0xFF) + (dx&0xFF));
 							if(j>=0 && j<640)
 							{
@@ -1314,9 +1316,9 @@ void render_polygons(int ecx, int edi)
 						hsize/=2;
 						if(hsize>1)
 						{
-							unsigned short int ax;
+							uint16 ax;
 							bh ^= 1;
-							ax = *((unsigned short int*)out2);
+							ax = *((uint16*)out2);
 							ax &= 1;
 							if(ax ^ bh)
 							{
@@ -1325,7 +1327,7 @@ void render_polygons(int ecx, int edi)
 
 							for (j = 0; j < hsize; j++)
 							{
-								*(out2) = (unsigned char)color;
+								*(out2) = (uint8)color;
 								out2+=2;
 							}
 						}
@@ -1345,10 +1347,10 @@ void render_polygons(int ecx, int edi)
 			{
 				if(currentLine >=0 && currentLine <480)
 				{
-					unsigned short int startColor = ptr2[0];
-					unsigned short int stopColor = ptr2[480];
+					uint16 startColor = ptr2[0];
+					uint16 stopColor = ptr2[480];
 
-					short int colorSize = stopColor - startColor;
+					int16 colorSize = stopColor - startColor;
 
 					stop = ptr1[480];  // stop
 					start = ptr1[0]; // start
@@ -1362,7 +1364,7 @@ void render_polygons(int ecx, int edi)
 
 					ptr2++;
 
-					varf4 = (float)((int)varf2 - (int)varf3);
+					varf4 = (int64)((int32)varf2 - (int32)varf3);
 
 					if (hsize == 0)
 					{
@@ -1449,9 +1451,9 @@ void render_polygons(int ecx, int edi)
 
 					if(hsize>=0)
 					{
-						unsigned short int startColor = ptr2[0];
-						unsigned short int stopColor = ptr2[480];
-						int currentXPos = start;
+						uint16 startColor = ptr2[0];
+						uint16 stopColor = ptr2[480];
+						int32 currentXPos = start;
 
 						out2 = start + out;
 						ptr2++;
@@ -1459,14 +1461,14 @@ void render_polygons(int ecx, int edi)
 						if(hsize==0)
 						{
 							if(currentXPos>=0 && currentXPos<640)
-								*(out2)=(unsigned char)(((startColor + stopColor)/2)>>8);
+								*(out2)=(uint8)(((startColor + stopColor)/2)>>8);
 						}
 						else
 						{
-							short int colorSize = stopColor - startColor;
+							int16 colorSize = stopColor - startColor;
 							if(hsize==1)
 							{
-								unsigned short int currentColor = startColor;
+								uint16 currentColor = startColor;
 								hsize++;
 								hsize/=2;
 
@@ -1486,7 +1488,7 @@ void render_polygons(int ecx, int edi)
 							}
 							else if(hsize==2)
 							{
-								unsigned short int currentColor = startColor;
+								uint16 currentColor = startColor;
 								hsize++;
 								hsize/=2;
                               
@@ -1518,7 +1520,7 @@ void render_polygons(int ecx, int edi)
 							}
 							else
 							{
-								unsigned short int currentColor = startColor;
+								uint16 currentColor = startColor;
 								colorSize/=hsize;
 								hsize++;
                 
@@ -1575,9 +1577,9 @@ void render_polygons(int ecx, int edi)
 	};
 }
 
-void circle_fill(int x,int y, int radius, char color)
+void circle_fill(int32 x, int32 y, int32 radius, int8 color)
 {
-	int currentLine;
+	int32 currentLine;
 
 	radius+=1;
 
@@ -1587,7 +1589,7 @@ void circle_fill(int x,int y, int radius, char color)
 
 		if(abs(currentLine) != radius)
 		{
-			width = sin(acos((float)currentLine/(float)radius));
+			width = sin(acos((int64)currentLine/(int64)radius));
 		}
 		else
 		{
@@ -1599,44 +1601,44 @@ void circle_fill(int x,int y, int radius, char color)
 		if(width < 0)
 			width = - width;
 
-		draw_line((int)(x-width),currentLine + y, (int)(x+width), currentLine+y, color);
+		draw_line((int32)(x-width),currentLine + y, (int32)(x+width), currentLine+y, color);
 	}
 }
 
-int render_model_elements(unsigned char *esi)
+int32 render_model_elements(uint8 *esi)
 {
-	unsigned char *edi;
-	short int temp;
-	int eax, ecx;
+	uint8 *edi;
+	int16 temp;
+	int32 eax, ecx;
 
-	short int counter;
-	short int type;
-	short int color;
+	int16 counter;
+	int16 type;
+	int16 color;
 
 	lineData *lineDataPtr;
 	lineCoordinates *lineCoordinatesPtr;
 
-	int point1;
+	int32 point1;
 
-	int point2;
+	int32 point2;
 
-	int depth;
-	int bestDepth;
-	int currentDepth;
-	short int bestZ;
-	int j;
-	int bestPoly = 0;
-	short int shadeEntry;
-	short int shadeValue;
+	int32 depth;
+	int32 bestDepth;
+	int32 currentDepth;
+	int16 bestZ;
+	int32 j;
+	int32 bestPoly = 0;
+	int16 shadeEntry;
+	int16 shadeValue;
 
-	short int ax, bx, cx;
+	int16 ax, bx, cx;
 
-	unsigned char *destPtr;
-	int i;
+	uint8 *destPtr;
+	int32 i;
 
-	unsigned char *render23;
-	unsigned char *render24;
-	int render25;
+	uint8 *render23;
+	uint8 *render24;
+	int32 render25;
 
 	polyVertexHeader *currentPolyVertex;
 	polyHeader *currentPolyHeader;
@@ -1648,7 +1650,7 @@ int render_model_elements(unsigned char *esi)
 	// prepare polygons
 
 	edi = renderTab7;			// renderTab7 coordinates buffer
-	temp = *((short int*)esi);  // we read the number of polygones
+	temp = *((int16*)esi);  // we read the number of polygones
 	esi += 2;
 
 	if (temp)
@@ -1659,7 +1661,7 @@ int render_model_elements(unsigned char *esi)
 		{
 			render23 = edi;
 			currentPolyHeader = (polyHeader *) esi;
-			ecx = *((int*)esi);
+			ecx = *((int32*)esi);
 			esi += 2;
 			polyRenderType = currentPolyHeader->renderType;
 
@@ -1714,11 +1716,11 @@ int render_model_elements(unsigned char *esi)
 
 				color = currentPolyHeader->colorIndex;
 
-				shadeEntry = *((short int*)(esi+2));
+				shadeEntry = *((int16*)(esi+2));
 			
 				esi += 4;
 
-				*((short int*)(edi+2)) = color + shadeTable[shadeEntry];
+				*((int16*)(edi+2)) = color + shadeTable[shadeEntry];
 
 				edi += 4;
 				renderV19 = edi;
@@ -1727,7 +1729,7 @@ int render_model_elements(unsigned char *esi)
 
 				do
 				{
-					eax = *((short int*)esi);
+					eax = *((int16*)esi);
 					esi += 2;
 
 					currentVertex = &flattenPoints[eax / 6];
@@ -1763,7 +1765,7 @@ int render_model_elements(unsigned char *esi)
 
 				do
 				{
-					eax = *((short int*)esi);
+					eax = *((int16*)esi);
 					esi += 2;
 
 					currentVertex = &flattenPoints[eax / 6];
@@ -1787,22 +1789,22 @@ int render_model_elements(unsigned char *esi)
 
 			render25 = bestDepth;
 
-			ax = *((short int*)(edi + 4));
-			bx = *((short int*)(edi + 8));
+			ax = *((int16*)(edi + 4));
+			bx = *((int16*)(edi + 8));
 
-			ax -= *((short int*)(edi + 16));
-			bx -= *((short int*)(edi + 2));
+			ax -= *((int16*)(edi + 16));
+			bx -= *((int16*)(edi + 2));
 
 			ax *= bx;
 
 			bestDepth = ax;
 			bx = currentDepth;
 
-			ax = *((short int*)(edi + 2));
-			cx = *((short int*)(edi + 10));
+			ax = *((int16*)(edi + 2));
+			cx = *((int16*)(edi + 10));
 
-			ax -= *((short int*)(edi + 14));
-			cx -= *((short int*)(edi + 4));
+			ax -= *((int16*)(edi + 14));
+			cx -= *((int16*)(edi + 4));
 
 			ax *= cx;
 
@@ -1829,31 +1831,31 @@ int render_model_elements(unsigned char *esi)
 
 	// prepare lines
 
-	temp = *((short int*)esi);
+	temp = *((int16*)esi);
 	esi += 2;
 	if (temp)
 	{
 		numOfPrimitives += temp;
 		do
 		{
-			int param;
+			int32 param;
 			lineDataPtr = (lineData *) esi;
 			lineCoordinatesPtr = (lineCoordinates *) edi;
 
-			if (*((short int*)&lineDataPtr->p1) % 6 != 0 || *((short int*)&lineDataPtr->p2) % 6 != 0)
+			if (*((int16*)&lineDataPtr->p1) % 6 != 0 || *((int16*)&lineDataPtr->p2) % 6 != 0)
 			{
 				printf("RENDER ERROR: lineDataPtr reference is malformed !\n");
 				exit(1);
 			}
 
-			point1 = *((short int*)&lineDataPtr->p1) / 6;
-			point2 = *((short int*)&lineDataPtr->p2) / 6;
-			param = *((int*)&lineDataPtr->data);
-			*((int*)&lineCoordinatesPtr->data) = param;
-			*((short int*)&lineCoordinatesPtr->x1) = flattenPoints[point1].X;
-			*((short int*)&lineCoordinatesPtr->y1) = flattenPoints[point1].Y;
-			*((short int*)&lineCoordinatesPtr->x2) = flattenPoints[point2].X;
-			*((short int*)&lineCoordinatesPtr->y2) = flattenPoints[point2].Y;
+			point1 = *((int16*)&lineDataPtr->p1) / 6;
+			point2 = *((int16*)&lineDataPtr->p2) / 6;
+			param = *((int32*)&lineDataPtr->data);
+			*((int32*)&lineCoordinatesPtr->data) = param;
+			*((int16*)&lineCoordinatesPtr->x1) = flattenPoints[point1].X;
+			*((int16*)&lineCoordinatesPtr->y1) = flattenPoints[point1].Y;
+			*((int16*)&lineCoordinatesPtr->x2) = flattenPoints[point2].X;
+			*((int16*)&lineCoordinatesPtr->y2) = flattenPoints[point2].Y;
 			bestDepth = flattenPoints[point1].Z;
 			depth = flattenPoints[point2].Z;
 
@@ -1872,21 +1874,21 @@ int render_model_elements(unsigned char *esi)
 
 	// prepare spheres
 
-	temp = *((short int*)esi);
+	temp = *((int16*)esi);
 	esi += 2;
 	if (temp)     
 	{
 		numOfPrimitives+=temp;
 		do
 		{
-			unsigned char color = *(esi+1);
-			short int center = *((unsigned short int*)(esi+6));
-			short int size = *((unsigned short int*)(esi+4));
+			uint8 color = *(esi+1);
+			int16 center = *((uint16*)(esi+6));
+			int16 size = *((uint16*)(esi+4));
 
-			*(unsigned char*)edi = color;
-			*((short int*)(edi+1)) = flattenPoints[center/6].X;
-			*((short int*)(edi+3)) = flattenPoints[center/6].Y;
-			*((short int*)(edi+5)) = size;
+			*(uint8*)edi = color;
+			*((int16*)(edi+1)) = flattenPoints[center/6].X;
+			*((int16*)(edi+3)) = flattenPoints[center/6].Y;
+			*((int16*)(edi+5)) = size;
 
 			renderTabEntryPtr->depth = flattenPoints[center/6].Z;
 			renderTabEntryPtr->renderType = 2;
@@ -1939,18 +1941,18 @@ int render_model_elements(unsigned char *esi)
 			{
 				case RENDERTYPE_DRAWLINE: // draw a line
 				{
-					unsigned int x1;
-					unsigned int y1;
-					unsigned int x2;
-					unsigned int y2;
+					uint32 x1;
+					uint32 y1;
+					uint32 x2;
+					uint32 y2;
 
 					lineCoordinatesPtr = (lineCoordinates *) esi;
-					color = (*((int*)&lineCoordinatesPtr->data) & 0xFF00) >> 8;
+					color = (*((int32*)&lineCoordinatesPtr->data) & 0xFF00) >> 8;
 			  
-					x1 = *((short int*)(unsigned short int*)&lineCoordinatesPtr->x1);
-					y1 = *((short int*)(unsigned short int*)&lineCoordinatesPtr->y1);
-					x2 = *((short int*)(unsigned short int*)&lineCoordinatesPtr->x2);
-					y2 = *((short int*)(unsigned short int*)&lineCoordinatesPtr->y2);
+					x1 = *((int16*)(uint16*)&lineCoordinatesPtr->x1);
+					y1 = *((int16*)(uint16*)&lineCoordinatesPtr->y1);
+					x2 = *((int16*)(uint16*)&lineCoordinatesPtr->x2);
+					y2 = *((int16*)(uint16*)&lineCoordinatesPtr->y2);
 			  
 					draw_line(x1,y1,x2,y2,color);
 					break;
@@ -1964,11 +1966,11 @@ int render_model_elements(unsigned char *esi)
 					numOfVertex = (eax & 0xFF00) >> 8;
 					color = (eax & 0xFF0000) >> 16;
 
-					destPtr = (unsigned char *) vertexCoordinates;
+					destPtr = (uint8 *) vertexCoordinates;
 
 					for (i = 0; i < (numOfVertex * 3); i++)
 					{
-						*((short int*)destPtr) = *((short int*)esi);
+						*((int16*)destPtr) = *((int16*)esi);
 						destPtr += 2;
 						esi += 2;
 					}
@@ -1982,22 +1984,22 @@ int render_model_elements(unsigned char *esi)
 				}
 				case RENDERTYPE_DRAWSPHERE: // draw a sphere
 				{
-					int circleParam1;
-					//int circleParam2;
-					int circleParam3;
-					int circleParam4;
-					int circleParam5;
+					int32 circleParam1;
+					//int32 circleParam2;
+					int32 circleParam3;
+					int32 circleParam4;
+					int32 circleParam5;
 
 					eax = *(int*) esi;
 
-					circleParam1 = *(unsigned char*)esi;
-					circleParam4 = *((short int*)(esi+1));
-					circleParam5 = *((short int*)(esi+3));
-					circleParam3 = *((short int*)(esi+5));
+					circleParam1 = *(uint8*)esi;
+					circleParam4 = *((int16*)(esi+1));
+					circleParam5 = *((int16*)(esi+3));
+					circleParam3 = *((int16*)(esi+5));
 
 					if(!isUsingOrhoProjection)
 					{
-						circleParam3 = (circleParam3 * cameraPosY) / (cameraPosX + *(short int*)esi);
+						circleParam3 = (circleParam3 * cameraPosY) / (cameraPosX + *(int16*)esi);
 					}
 					else
 					{
@@ -2044,30 +2046,30 @@ int render_model_elements(unsigned char *esi)
 	return (0);
 }
 
-int render_animated_model(unsigned char *bodyPtr)
+int32 render_animated_model(uint8 *bodyPtr)
 {
 	elementEntry *elemEntryPtr;
 	pointTab *pointPtr;
 	pointTab *pointPtrDest;
-	int coX;
-	int coY;
-	int coZ;
-	unsigned char *tmpElemPtr;
-	int *tmpLightMatrix;
-	unsigned char *tmpShadePtr;
-	int numOfShades;
+	int32 coX;
+	int32 coY;
+	int32 coZ;
+	uint8 *tmpElemPtr;
+	int32 *tmpLightMatrix;
+	uint8 *tmpShadePtr;
+	int32 numOfShades;
 
-	numOfPoints = *((unsigned short int*)bodyPtr);
+	numOfPoints = *((uint16*)bodyPtr);
 	bodyPtr += 2;
 	pointsPtr = bodyPtr;
 
 	bodyPtr += numOfPoints * 6;
 
-	numOfElements = *((unsigned short int*)bodyPtr);
+	numOfElements = *((uint16*)bodyPtr);
 	bodyPtr += 2;
 	elementsPtr = elementsPtr2 = bodyPtr;
 
-	currentMatrixTableEntry = (unsigned char *) matricesTable;
+	currentMatrixTableEntry = (uint8 *) matricesTable;
 
 	process_rotated_element(renderAngleX, renderAngleY, renderAngleZ, (elementEntry *) elementsPtr);
 
@@ -2078,7 +2080,7 @@ int render_animated_model(unsigned char *bodyPtr)
 	if (numOfElements - 1 != 0)
 	{
 		numOfPrimitives = numOfElements - 1;
-		currentMatrixTableEntry = (unsigned char *) &matricesTable[9];
+		currentMatrixTableEntry = (uint8 *) &matricesTable[9];
 
 		do
 		{
@@ -2189,20 +2191,20 @@ int render_animated_model(unsigned char *bodyPtr)
 		}while (--numOfPrimitives);
 	}
 
-	shadePtr = (int *) elementsPtr;
+	shadePtr = (int32 *) elementsPtr;
 
-	numOfShades = *((unsigned short int*)shadePtr);
+	numOfShades = *((uint16*)shadePtr);
 
-	shadePtr = (int *) (((unsigned char *) shadePtr) + 2);
+	shadePtr = (int32 *) (((uint8 *) shadePtr) + 2);
 
 	if (numOfShades)     // process normal data
 	{
-		int color;
-		int shade;
+		int32 color;
+		int32 shade;
 
-		unsigned char *currentShadeDestination = (unsigned char *) shadeTable;
-		int *lightMatrix = matricesTable;
-		unsigned char *pri2Ptr2;
+		uint8 *currentShadeDestination = (uint8 *) shadeTable;
+		int32 *lightMatrix = matricesTable;
+		uint8 *pri2Ptr2;
 
 		numOfPrimitives = numOfElements;
 
@@ -2212,11 +2214,11 @@ int render_animated_model(unsigned char *bodyPtr)
 
 		do // for each element
 		{
-			numOfShades = *((unsigned short int*)tmpElemPtr);
+			numOfShades = *((uint16*)tmpElemPtr);
 			
 			if (numOfShades)
 			{
-				int numShades = numOfShades;
+				int32 numShades = numOfShades;
 
 				shadeMatrix[0] = (*lightMatrix) * lightX;
 				shadeMatrix[1] = (*(lightMatrix + 1)) * lightX;
@@ -2232,17 +2234,17 @@ int render_animated_model(unsigned char *bodyPtr)
 
 				do  // for each normal
 				{
-					short int col1;
-					short int col2;
-					short int col3;
+					int16 col1;
+					int16 col2;
+					int16 col3;
 
-					short int *colPtr;
+					int16 *colPtr;
 
-					colPtr = (short int *) shadePtr;
+					colPtr = (int16 *) shadePtr;
 					
-					col1 = *((short int*)colPtr++);
-					col2 = *((short int*)colPtr++);
-					col3 = *((short int*)colPtr++);
+					col1 = *((int16*)colPtr++);
+					col2 = *((int16*)colPtr++);
+					col3 = *((int16*)colPtr++);
 
 					color =  shadeMatrix[0] * col1 + shadeMatrix[1] * col2 + shadeMatrix[2] * col3;
 					color += shadeMatrix[3] * col1 + shadeMatrix[4] * col2 + shadeMatrix[5] * col3;
@@ -2253,12 +2255,12 @@ int render_animated_model(unsigned char *bodyPtr)
 					if (color > 0)
 					{
 						color >>= 14;
-						tmpShadePtr = (unsigned char *) shadePtr;
-						color /= *((unsigned short int*)(tmpShadePtr+6));
-						shade = (unsigned short int) color;
+						tmpShadePtr = (uint8 *) shadePtr;
+						color /= *((uint16*)(tmpShadePtr+6));
+						shade = (uint16) color;
 					}
 
-					*((unsigned short int*)currentShadeDestination) = shade;				
+					*((uint16*)currentShadeDestination) = shade;				
 					currentShadeDestination += 2;
 					shadePtr += 2;
 
@@ -2271,21 +2273,21 @@ int render_animated_model(unsigned char *bodyPtr)
 		}while (--numOfPrimitives);
 	}
 
-	return render_model_elements((unsigned char *) shadePtr);
+	return render_model_elements((uint8 *) shadePtr);
 }
 
-void prepare_iso_model(unsigned char *bodyPtr) // loadGfxSub
+void prepare_iso_model(uint8 *bodyPtr) // loadGfxSub
 {
 	bodyHeaderStruct *bodyHeader;
-	short int offsetToData;
-	unsigned char *bodyDataPtr;
-	short int numOfElement1;
-	short int numOfPoint;
-	unsigned char *ptrToKeyData;
-	int i;
-	int bp = 36;
-	int bx = 38;
-	unsigned char *ptr2;
+	int16 offsetToData;
+	uint8 *bodyDataPtr;
+	int16 numOfElement1;
+	int16 numOfPoint;
+	uint8 *ptrToKeyData;
+	int32 i;
+	int32 bp = 36;
+	int32 bx = 38;
+	uint8 *ptr2;
 
 	bodyHeader = (bodyHeaderStruct *)bodyPtr;
 
@@ -2298,24 +2300,24 @@ void prepare_iso_model(unsigned char *bodyPtr) // loadGfxSub
 
 	bodyDataPtr = bodyPtr + offsetToData + 16;
 
-	numOfElement1 = *((short int*)bodyDataPtr);
+	numOfElement1 = *((int16*)bodyDataPtr);
 	ptr2 = bodyDataPtr + 2 + numOfElement1 * 6;
 
-	numOfPoint = *((short int*)ptr2);
+	numOfPoint = *((int16*)ptr2);
 
 	ptrToKeyData = ptr2 + 2;
 
 	for (i = 0; i < numOfPoint; i++)
 	{
 		ptrToKeyData += 38;
-		*((short int*)(ptrToKeyData + 6)) = (*((short int*)(ptrToKeyData + 6)) * bp) / bx;
+		*((int16*)(ptrToKeyData + 6)) = (*((int16*)(ptrToKeyData + 6)) * bp) / bx;
 	}
 }
 
-int render_iso_model(int X, int Y, int Z, int angleX, int angleY, int angleZ, unsigned char *bodyPtr) // AffObjetIso
+int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr) // AffObjetIso
 {
-	unsigned char *ptr;
-	short int bodyHeader;
+	uint8 *ptr;
+	int16 bodyHeader;
 
 	shadeAngleTab1 = &shadeAngleTable[0];
 	shadeAngleTab2 = &shadeAngleTable[256];
@@ -2352,10 +2354,10 @@ int render_iso_model(int X, int Y, int Z, int angleX, int angleY, int angleZ, un
 	// restart at the beginning of the renderTable
 	renderTabEntryPtr = renderTab;  
 
-	bodyHeader = *((unsigned short int*)bodyPtr);
+	bodyHeader = *((uint16*)bodyPtr);
 
 	// jump after the header
-	ptr = bodyPtr + 16 + *((unsigned short*)(bodyPtr + 14)); 
+	ptr = bodyPtr + 16 + *((uint16*)(bodyPtr + 14)); 
 
 	if (bodyHeader & 2) // if animated
 	{
@@ -2371,44 +2373,44 @@ int render_iso_model(int X, int Y, int Z, int angleX, int angleY, int angleZ, un
 	return (0);
 }
 
-void copy_actor_intern_anim(unsigned char *bodyPtrSrc, unsigned char *bodyPtrDest)
+void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest)
 {
-	short int cx;
-	short int ax;
-	int i;
+	int16 cx;
+	int16 ax;
+	int32 i;
 
 	// check if both characters allow animation
-	if(!(*((short int*)bodyPtrSrc)&2))
+	if(!(*((int16*)bodyPtrSrc)&2))
 		return;
 
-	if(!(*((short int*)bodyPtrDest)&2))
+	if(!(*((int16*)bodyPtrDest)&2))
 		return;
 
 	// skip header
 	bodyPtrSrc+=16; 
 	bodyPtrDest+=16;
 
-	*((unsigned int*)bodyPtrDest) = *((unsigned int*)bodyPtrSrc);
-	*((unsigned int*)(bodyPtrDest+4)) = *((unsigned int*)(bodyPtrSrc+4));
+	*((uint32*)bodyPtrDest) = *((uint32*)bodyPtrSrc);
+	*((uint32*)(bodyPtrDest+4)) = *((uint32*)(bodyPtrSrc+4));
 
-	bodyPtrSrc=bodyPtrSrc+*((short int*)(bodyPtrSrc-2));
-	bodyPtrSrc=bodyPtrSrc+(*((short int*)bodyPtrSrc))*6+2;
-	cx=*((short int*)bodyPtrSrc);
+	bodyPtrSrc=bodyPtrSrc+*((int16*)(bodyPtrSrc-2));
+	bodyPtrSrc=bodyPtrSrc+(*((int16*)bodyPtrSrc))*6+2;
+	cx=*((int16*)bodyPtrSrc);
 
-	bodyPtrDest=bodyPtrDest+*((short int*)(bodyPtrDest-2));
-	bodyPtrDest=bodyPtrDest+(*((short int*)bodyPtrDest))*6+2;
-	ax=*((short int*)bodyPtrDest);
+	bodyPtrDest=bodyPtrDest+*((int16*)(bodyPtrDest-2));
+	bodyPtrDest=bodyPtrDest+(*((int16*)bodyPtrDest))*6+2;
+	ax=*((int16*)bodyPtrDest);
 
 	if(cx>ax)
-	cx=ax;
+		cx=ax;
 
 	bodyPtrSrc+=10;
 	bodyPtrDest+=10;
 
 	for(i=0;i<cx;i++)
 	{
-		*((unsigned int*)bodyPtrDest) = *((unsigned int*)bodyPtrSrc);
-		*((unsigned int*)(bodyPtrDest+4)) = *((unsigned int*)(bodyPtrSrc+4));
+		*((uint32*)bodyPtrDest) = *((uint32*)bodyPtrSrc);
+		*((uint32*)(bodyPtrDest+4)) = *((uint32*)(bodyPtrSrc+4));
 
 		bodyPtrDest+=30;
 		bodyPtrSrc+=30;

@@ -49,7 +49,7 @@ void adeline_logo()
 }
 
 /** Load and display Main Menu image */
-void load_menu_image( short int fade_in )
+void load_menu_image(int16 fade_in)
 {
 	hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
 	copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -64,7 +64,7 @@ void load_menu_image( short int fade_in )
 }
 
 /** Load a custom palette */
-void load_custom_palette(int index)
+void load_custom_palette(int32 index)
 {	
 	hqr_get_entry(palette, HQR_RESS_FILE, index);
 	convert_pal_2_RGBA(palette, paletteRGBACustom);
@@ -72,7 +72,7 @@ void load_custom_palette(int index)
 
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect
 	@param index \a RESS.HQR entry index (starting from 0) */
-void load_image(int index, short int fade_in)
+void load_image(int32 index, int16 fade_in)
 {
 	hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, index);
 	copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -90,7 +90,7 @@ void load_image(int index, short int fade_in)
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect and delay
 	@param index \a RESS.HQR entry index (starting from 0)
 	@param time number of seconds to delay */
-void load_image_delay(int index, int time)
+void load_image_delay(int32 index, int32 time)
 {
 	load_image(index, 1);
 	delay(1000*time);
@@ -100,7 +100,7 @@ void load_image_delay(int index, int time)
 /** Converts in-game palette to SDL palette
 	@param palSource palette source with RGB
 	@param palDest palette destination with RGBA */
-void convert_pal_2_RGBA(unsigned char * palSource, unsigned char * palDest)
+void convert_pal_2_RGBA(uint8 * palSource, uint8 * palDest)
 {
   int i;
 
@@ -116,7 +116,7 @@ void convert_pal_2_RGBA(unsigned char * palSource, unsigned char * palDest)
 
 /** Fade image in
 	@param palette current palette to fade in */
-void fade_in(unsigned char * palette)
+void fade_in(uint8 * palette)
 {
 	if(cfgfile.CrossFade)
 		cross_fade(frontVideoBuffer, palette);
@@ -128,7 +128,7 @@ void fade_in(unsigned char * palette)
 
 /** Fade image out
 	@param palette current palette to fade out */
-void fade_out(unsigned char * palette)
+void fade_out(uint8 * palette)
 {
 	/*if(cfgfile.CrossFade)
 		cross_fade(frontVideoBuffer, palette);
@@ -144,7 +144,7 @@ void fade_out(unsigned char * palette)
 	@param param unknown
 	@param intensity intensity value to adjust
 	@return new color component*/
-int cross_dot(int modifier, int color, int param, int intensity)
+int cross_dot(int32 modifier, int32 color, int32 param, int32 intensity)
 {
 	if (!param)
 		return (color);
@@ -157,17 +157,17 @@ int cross_dot(int modifier, int color, int param, int intensity)
 	@param B blue component of color
 	@param palette palette to adjust
 	@param intensity intensity value to adjust */
-void adjust_palette(unsigned char R, unsigned char G, unsigned char B, unsigned char * palette, int intensity)
+void adjust_palette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity)
 {
-	unsigned char localPalette[NUMOFCOLORS*4];
-	unsigned char *newR;
-	unsigned char *newG;
-	unsigned char *newB;
-	unsigned char *newA;
+	uint8 localPalette[NUMOFCOLORS*4];
+	uint8 *newR;
+	uint8 *newG;
+	uint8 *newB;
+	uint8 *newA;
 
-	int local;
-	int counter = 0;
-	int i;
+	int32 local;
+	int32 counter = 0;
+	int32 i;
 
 	local = intensity;
 
@@ -196,15 +196,15 @@ void adjust_palette(unsigned char R, unsigned char G, unsigned char B, unsigned 
 
 /** Fade image to black
 	@param palette current palette to fade */
-void fade_2_black(unsigned char *palette)
+void fade_2_black(uint8 *palette)
 {
-	int i = 0;
+	int32 i = 0;
 
 	if (palReseted == 0)
 	{
 		for (i = 100; i >= 0; i -= 3)
 		{
-			adjust_palette(0, 0, 0, (unsigned char *) palette, i);
+			adjust_palette(0, 0, 0, (uint8 *) palette, i);
 			fps_cycles(50); //TODO: adjust frames per second using cfgfile.Fps value
 		}
 	}
@@ -214,17 +214,17 @@ void fade_2_black(unsigned char *palette)
 
 /** Fade image with another palette source
 	@param palette current palette to fade */
-void fade_2_pal(unsigned char *palette)
+void fade_2_pal(uint8 *palette)
 {
-	int i = 100;
+	int32 i = 100;
 
 	for (i = 0; i <= 100; i += 3)
 	{
-		adjust_palette(0, 0, 0, (unsigned char *) palette, i);
+		adjust_palette(0, 0, 0, (uint8 *) palette, i);
 		fps_cycles(50); //TODO: adjust frames per second using cfgfile.Fps value
 	}
 
-	set_palette( (unsigned char*)palette );
+	set_palette( (uint8*)palette );
 
 	palReseted = 0;
 
@@ -233,8 +233,8 @@ void fade_2_pal(unsigned char *palette)
 /** Fade black palette to with palette */
 void black_2_white()
 {
-	unsigned char palette[NUMOFCOLORS*4];
-	int i;
+	uint8 palette[NUMOFCOLORS*4];
+	int32 i;
 
 	i = 256;
 	for (i = 0; i < NUMOFCOLORS; i += 3)
@@ -259,9 +259,10 @@ void set_back_pal()
 /** Copy a determinate screen buffer to another
 	@param source screen buffer
 	@param destination screen buffer */
-void copy_screen(unsigned char * source, unsigned char * destination)
+void copy_screen(uint8 * source, uint8 * destination)
 {
-	int w,h;
+	int32 w,h;
+
 	if(SCALE==1)
 		memcpy(destination, source, SCREEN_WIDTH*SCREEN_HEIGHT);
 	else if (SCALE==2)

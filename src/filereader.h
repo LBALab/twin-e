@@ -32,47 +32,49 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "sys.h"
+
 /** Number of sector in the buffer */
 #define SECTORS_IN_BUFFER (3)
 /** Buffer size */
 #define BUFFER_SIZE (2048*SECTORS_IN_BUFFER)
 
 /** File reader structure */
-typedef struct filereader
+typedef struct FileReader
 {
 	/** File descriptor */
 	FILE* fd;
 	/** Content buffer */
-	unsigned char buffer[BUFFER_SIZE];
+	uint8 buffer[BUFFER_SIZE];
 	/** Current position in the buffer */
-	unsigned long int bufferPos;
+	uint32 bufferPos;
 	/** Current sector in the buffer */
-	unsigned long int currSector;
-} filereader;
+	uint32 currSector;
+} FileReader;
 
 /** Feed buffer from file
-	@param fr filereader pointer */
-void frfeed(filereader* fr);
+	@param fr FileReader pointer */
+void frfeed(FileReader* fr);
 
 /** Read file
-	@param fr filereader pointer 
+	@param fr FileReader pointer 
 	@param destPtr content destination pointer
 	@param size size of read characters */
-void frread(filereader* fr, void* destPtr, unsigned long int size);
+void frread(FileReader* fr, void* destPtr, uint32 size);
 
 /** Seek file
-	@param fr filereader pointer 
+	@param fr FileReader pointer 
 	@param seekPosition position to seek */
-void frseek(filereader* fr, unsigned long int seekPosition);
+void frseek(FileReader* fr, uint32 seekPosition);
 
 /** Open file
-	@param fr filereader pointer 
+	@param fr FileReader pointer 
 	@param filename file path
 	@return true if file open and false if error occurred */
-int fropen(filereader* fr, const char* filename);
+int32 fropen(FileReader* fr, const int8* filename);
 
 /** Close file
-	@param fr filereader pointer */
-void frclose(filereader* fr);
+	@param fr FileReader pointer */
+void frclose(FileReader* fr);
 
 #endif

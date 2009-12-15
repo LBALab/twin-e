@@ -28,6 +28,7 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 
+#include "sys.h"
 #include "hqrdepack.h"
 
 /** RESS.HQR FILE */
@@ -63,7 +64,7 @@
 #define RESSHQR_EAPAL 53
 
 #define FLA_DRAGON3 "dragon3"
-#define FLA_INTROD "introd"
+#define FLA_INTROD  "introd"
 
 #define FILE3DHQR_HERONORMAL 0
 #define FILE3DHQR_HEROATHLETIC 1
@@ -71,21 +72,21 @@
 #define FILE3DHQR_HERODISCRETE 3
 #define FILE3DHQR_HEROPROTOPACK 4
 
-extern char * HQR_RESS_FILE;
-extern char * HQR_TEXT_FILE;
-extern char * HQR_FLASAMP_FILE;
-extern char * HQR_MIDI_MI_WIN_FILE;
-extern char * HQR_MIDI_MI_WIN_MP3_FILE;
-extern char * HQR_MIDI_MI_WIN_OGG_FILE;
-extern char * HQR_SAMPLES_FILE;
-extern char * HQR_LBA_GRI_FILE;
-extern char * HQR_LBA_BLL_FILE;
-extern char * HQR_LBA_BRK_FILE;
-extern char * HQR_SCENE_FILE;
-extern char * HQR_SPRITES_FILE;
-extern char * HQR_FILE3D_FILE;
-extern char * HQR_BODY_FILE;
-extern char * HQR_ANIM_FILE;
+extern int8 * HQR_RESS_FILE;
+extern int8 * HQR_TEXT_FILE;
+extern int8 * HQR_FLASAMP_FILE;
+extern int8 * HQR_MIDI_MI_WIN_FILE;
+extern int8 * HQR_MIDI_MI_WIN_MP3_FILE;
+extern int8 * HQR_MIDI_MI_WIN_OGG_FILE;
+extern int8 * HQR_SAMPLES_FILE;
+extern int8 * HQR_LBA_GRI_FILE;
+extern int8 * HQR_LBA_BLL_FILE;
+extern int8 * HQR_LBA_BRK_FILE;
+extern int8 * HQR_SCENE_FILE;
+extern int8 * HQR_SPRITES_FILE;
+extern int8 * HQR_FILE3D_FILE;
+extern int8 * HQR_BODY_FILE;
+extern int8 * HQR_ANIM_FILE;
 
 //HQREntity* RESSentity;
 

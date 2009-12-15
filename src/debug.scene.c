@@ -33,8 +33,8 @@
 #include "interface.h"
 #include "renderer.h"
 
-int showingZones=0;
-int typeZones=127; // all zones on as default
+int32 showingZones=0;
+int32 typeZones=127; // all zones on as default
 
 void draw_bounding_box_project_points(ScenePoint* pPoint3d, ScenePoint* pPoint3dProjected)
 {
@@ -57,7 +57,7 @@ void draw_bounding_box_project_points(ScenePoint* pPoint3d, ScenePoint* pPoint3d
 		renderBottom = projPosY;
 }
 
-int check_zone_type(int type)
+int32 check_zone_type(int32 type)
 {
 	switch(type)
 	{
@@ -96,7 +96,7 @@ int check_zone_type(int type)
 	return 0;
 }
 
-void display_zones(short int pKey)
+void display_zones(int16 pKey)
 {
 	if(showingZones==1)
 	{
@@ -132,7 +132,7 @@ void display_zones(short int pKey)
 				ScenePoint backTopLeftPoint2D;
 				ScenePoint backTopRightPoint2D;
 			    
-				unsigned char color;
+				uint8 color;
 
 				// compute the points in 3D
 

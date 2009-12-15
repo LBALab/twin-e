@@ -45,8 +45,8 @@
 #endif
 
 
-int isTimeFreezed=0;
-int saveFreezedTime=0;
+int32 isTimeFreezed=0;
+int32 saveFreezedTime=0;
 
 
 void freeze_time()
@@ -65,10 +65,10 @@ void unfreeze_time()
 
 /** Game engine main loop
 	@return true if we want to show credit sequence */
-int run_game_engine() // mainLoopInteration
+int32 run_game_engine() // mainLoopInteration
 {
-	int a;
-	short int pKey; // current pressed key
+	int32 a;
+	int16 pKey; // current pressed key
 	read_keys();
 
 	pKey = skipIntro;
@@ -106,9 +106,9 @@ int run_game_engine() // mainLoopInteration
 
 /** Game engine main loop
 	@return true if we want to show credit sequence */
-int game_engine_loop() // mainLoop
+int32 game_engine_loop() // mainLoop
 {
-	unsigned int start;
+	uint32 start;
 
 	quitGame = 1;
 	//requestBackgroundRedraw = 1;
@@ -130,7 +130,7 @@ int game_engine_loop() // mainLoop
 	return 0;
 }
 
-void init_engine_vars(int save) // reinitAll
+void init_engine_vars(int32 save) // reinitAll
 {
 	alphaLight = 896;
 	betaLight = 950;

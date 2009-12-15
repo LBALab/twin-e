@@ -37,45 +37,45 @@
 typedef struct FLAHeaderStruct
 {
 	/** FLA version */
-	char version[6];
+	int8 version[6];
 	/** Number of frames */
-	int numOfFrames;
+	int32 numOfFrames;
 	/** Frames per second */
-	char speed;
+	int8 speed;
 	/** Unknown var1 */
-	char var1;
+	int8 var1;
 	/** Frame width */
-	short int xsize;
+	int16 xsize;
 	/** Frame height */
-	short int ysize;
+	int16 ysize;
 } FLAHeaderStruct;
 
 /** FLA movie frame structure */
 typedef struct FLAFrameDataStruct
 {
 	/** Current frame size */
-	char videoSize;
+	int8 videoSize;
 	/** Dummy variable */
-	char dummy;
+	int8 dummy;
 	/** Unknown frameVar0 */
-	int frameVar0;
+	int32 frameVar0;
 } FLAFrameDataStruct;
 
 /** FLA movie sample structure */
 typedef struct FLASampleStruct
 {
 	/** Number os samples */
-	short int sampleNum;
+	int16 sampleNum;
 	/** Sample frequency */
-	short int freq;
+	int16 freq;
 	/** Numbers of time to repeat */
-	short int repeat;
+	int16 repeat;
 	/** Dummy variable */
-	char dummy;
+	int8 dummy;
 	/** Unknown x */
-	unsigned char x;
+	uint8 x;
 	/** Unknown y */
-	unsigned char y;
+	uint8 y;
 } FLASampleStruct;
 
 /** FLA movie file buffer */
@@ -83,6 +83,6 @@ unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
 
 /** General function to play movies
 	@param movie - movie file path */
-void play_movie(char *movie);
+void play_movie(int8 *movie);
 
 #endif

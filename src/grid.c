@@ -53,28 +53,28 @@
 #define CELLING_GRIDS_START_INDEX	120
 
 /** Table with all loaded bricks */
-unsigned char* brickTable[NUM_BRICKS];
+uint8* brickTable[NUM_BRICKS];
 /** Table with all loaded bricks masks */
-unsigned char* brickMaskTable[NUM_BRICKS];
+uint8* brickMaskTable[NUM_BRICKS];
 /** Table with all loaded bricks sizes */
-unsigned int   brickSizeTable[NUM_BRICKS];
+uint32   brickSizeTable[NUM_BRICKS];
 /** Table with all loaded bricks usage */
-unsigned char  brickUsageTable[NUM_BRICKS];
+uint8  brickUsageTable[NUM_BRICKS];
 
 /** Current grid pointer */
-unsigned char *currentGrid;
+uint8 *currentGrid;
 /** Current block library pointer */
-unsigned char *currentBll;
+uint8 *currentBll;
 /** Number of block libraries */
-int numberOfBll;
+int32 numberOfBll;
 
 /** Block fragment entry */
 struct BlockEntry 
 {
 	/** Block library index */
-	unsigned char blockIdx; 
+	uint8 blockIdx; 
 	/** Brick index inside the block library */
-	unsigned char brickBlockIdx; 
+	uint8 brickBlockIdx; 
 };
 /** Grid block entry types */
 typedef struct BlockEntry blockMap[64][64][25]; 
@@ -83,57 +83,57 @@ typedef struct BlockEntry blockMap[64][64][25];
 typedef struct BrickEntry
 {
 	/** Brick X position in screen */
-	short int x; //z
+	int16 x; //z
 	/** Brick Y position in screen */
-	short int y;
+	int16 y;
 	/** Brick Z position in screen */
-	short int z; // x
+	int16 z; // x
 	/** Brick pixel X position */
-	short int posX;
+	int16 posX;
 	/** Brick pixel Y position */
-	short int posY;
+	int16 posY;
 	/** Brick index */
-	short int index;
+	int16 index;
 	/** Brick shape type */
-	unsigned char shape;
+	uint8 shape;
 	/** Brick sound type */
-	unsigned char sound;
+	uint8 sound;
 } BrickEntry;
 
 /** Brick data buffer */
 BrickEntry bricksDataBuffer[28][150];
 /** Brick info buffer */
-short int brickInfoBuffer[28];
+int16 brickInfoBuffer[28];
 
 /** Current brick pixel X position */
-int brickPixelPosX;
+int32 brickPixelPosX;
 /** Current brick pixel Y position */
-int brickPixelPosY;
+int32 brickPixelPosY;
 
 /** Copy grid mask to allow actors to display over the bricks
 	@param index current brick index
 	@param x grid X coordinate
 	@param y grid Y coordinate
 	@param buffer work video buffer */
-void copy_grid_mask(int index, int x, int y, unsigned char *buffer)
+void copy_grid_mask(int32 index, int32 x, int32 y, uint8 *buffer)
 {
-	unsigned char *ptr;
-	int top;
-	int bottom;
-	int left;
-	int right;
-	unsigned char *outPtr;
-	unsigned char *inPtr;
-	int offset;
-	int vc3;
+	uint8 *ptr;
+	int32 top;
+	int32 bottom;
+	int32 left;
+	int32 right;
+	uint8 *outPtr;
+	uint8 *inPtr;
+	int32 offset;
+	int32 vc3;
 
-	int temp;
-	int j;
+	int32 temp;
+	int32 j;
 
-	int absX;
-	int absY;
+	int32 absX;
+	int32 absY;
 
-	int vSize;
+	int32 vSize;
 
 	ptr = brickMaskTable[index];
 
@@ -233,12 +233,12 @@ void copy_grid_mask(int index, int x, int y, unsigned char *buffer)
 	@param X actor X coordinate
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
-void draw_over_model_actor(int X, int Y, int Z)
+void draw_over_model_actor(int32 X, int32 Y, int32 Z)
 {
-	int CopyBlockPhysLeft;
-	int CopyBlockPhysRight;
-	int i;
-	int j;
+	int32 CopyBlockPhysLeft;
+	int32 CopyBlockPhysRight;
+	int32 i;
+	int32 j;
 	BrickEntry *currBrickEntry;
 
 	CopyBlockPhysLeft = ((textWindowLeft + 24) / 24 ) - 1;
@@ -265,12 +265,12 @@ void draw_over_model_actor(int X, int Y, int Z)
 	@param X actor X coordinate
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
-void draw_over_sprite_actor(int X, int Y, int Z)
+void draw_over_sprite_actor(int32 X, int32 Y, int32 Z)
 {
-	int CopyBlockPhysLeft;
-	int CopyBlockPhysRight;
-	int i;
-	int j;
+	int32 CopyBlockPhysLeft;
+	int32 CopyBlockPhysRight;
+	int32 i;
+	int32 j;
 	BrickEntry *currBrickEntry;
 
 	CopyBlockPhysLeft = ((textWindowLeft + 24) / 24) - 1;
@@ -301,24 +301,24 @@ void draw_over_sprite_actor(int X, int Y, int Z)
 /** Process brick masks to allow actors to display over the bricks 
 	@param buffer brick pointer buffer
 	@param ptr brick mask pointer buffer */
-int process_grid_mask(unsigned char *buffer, unsigned char *ptr)
+int process_grid_mask(uint8 *buffer, uint8 *ptr)
 {
-	unsigned int *ptrSave = (unsigned int *)ptr;
-	unsigned char *ptr2;
-	unsigned char *esi;
-	unsigned char *edi;
-	unsigned char iteration, ch, numOfBlock, ah, bl, al, bh;
-	int ebx;
+	uint32 *ptrSave = (uint32 *)ptr;
+	uint8 *ptr2;
+	uint8 *esi;
+	uint8 *edi;
+	uint8 iteration, ch, numOfBlock, ah, bl, al, bh;
+	int32 ebx;
 
-	ebx = *((unsigned int *)buffer); // brick flag
+	ebx = *((uint32 *)buffer); // brick flag
 	buffer+=4;
-	*((unsigned int *)ptr) = ebx;
+	*((uint32 *)ptr) = ebx;
 	ptr+=4;
 
 	bh = (ebx & 0x0000FF00) >> 8;
 
-	esi = (unsigned char *) buffer;
-	edi = (unsigned char *) ptr;
+	esi = (uint8 *) buffer;
+	edi = (uint8 *) ptr;
 
 	iteration = 0;
 	ch = 0;
@@ -380,13 +380,13 @@ int process_grid_mask(unsigned char *buffer, unsigned char *ptr)
 		*ptr2 = numOfBlock;
 	}while (--bh > 0);
 
-	return ((int) ((unsigned char *) edi - (unsigned char *) ptrSave));
+	return ((int) ((uint8 *) edi - (uint8 *) ptrSave));
 }
 
 /** Create grid masks to allow display actors over the bricks */
 void create_grid_mask()
 {
-	int b;
+	int32 b;
 
 	for(b=0; b<NUM_BRICKS; b++)
 	{
@@ -394,7 +394,7 @@ void create_grid_mask()
 		{
 			if(brickMaskTable[b])
 				free(brickMaskTable[b]);
-			brickMaskTable[b] = (unsigned char*)malloc(brickSizeTable[b]);
+			brickMaskTable[b] = (uint8*)malloc(brickSizeTable[b]);
 			process_grid_mask(brickTable[b], brickMaskTable[b]);
 		}
 	}
@@ -405,9 +405,9 @@ void create_grid_mask()
 	@param width sprite width size
 	@param height sprite height size
 	@param spritePtr sprite buffer pointer */
-void get_sprite_size(int offset, int *width, int *height, unsigned char *spritePtr)
+void get_sprite_size(int32 offset, int32 *width, int32 *height, uint8 *spritePtr)
 {
-	spritePtr += *((int *)(spritePtr + offset * 4));
+	spritePtr += *((int32 *)(spritePtr + offset * 4));
 
 	*width = *spritePtr;
 	*height = *(spritePtr + 1);
@@ -416,14 +416,14 @@ void get_sprite_size(int offset, int *width, int *height, unsigned char *spriteP
 /** Load grid bricks according with block librarie usage
 	@param gridSize size of the current grid
 	@return true if everything went ok*/
-int load_grid_bricks(int gridSize)
+int32 load_grid_bricks(int32 gridSize)
 {
-	unsigned int firstBrick = 60000;
-	unsigned int lastBrick = 0;
-	unsigned char* ptrToBllBits;
-	unsigned int i;
-	unsigned int j;
-	unsigned int currentBllEntryIdx = 0;
+	uint32 firstBrick = 60000;
+	uint32 lastBrick = 0;
+	uint8* ptrToBllBits;
+	uint32 i;
+	uint32 j;
+	uint32 currentBllEntryIdx = 0;
   
 	memset(brickTable, 0, sizeof(brickTable));
 	memset(brickSizeTable, 0, sizeof(brickSizeTable));
@@ -435,25 +435,25 @@ int load_grid_bricks(int gridSize)
 	// for all bits under the 32bytes (256bits)
 	for(i=1; i<256; i++)
 	{
-		unsigned char currentBitByte = *(ptrToBllBits + (i/8));
-		unsigned char currentBitMask = 1 << (7-(i&7));
+		uint8 currentBitByte = *(ptrToBllBits + (i/8));
+		uint8 currentBitMask = 1 << (7-(i&7));
 	
 		if(currentBitByte & currentBitMask)
 		{
-			unsigned int currentBllOffset = *((unsigned int *)(currentBll + currentBllEntryIdx));
-			unsigned char* currentBllPtr = currentBll + currentBllOffset;
+			uint32 currentBllOffset = *((uint32 *)(currentBll + currentBllEntryIdx));
+			uint8* currentBllPtr = currentBll + currentBllOffset;
 
-			unsigned int bllSizeX = currentBllPtr[0];
-			unsigned int bllSizeY = currentBllPtr[1];
-			unsigned int bllSizeZ = currentBllPtr[2];
+			uint32 bllSizeX = currentBllPtr[0];
+			uint32 bllSizeY = currentBllPtr[1];
+			uint32 bllSizeZ = currentBllPtr[2];
 	  
-			unsigned int bllSize = bllSizeX * bllSizeY * bllSizeZ;
+			uint32 bllSize = bllSizeX * bllSizeY * bllSizeZ;
 
-			unsigned char* bllDataPtr = currentBllPtr + 5;
+			uint8* bllDataPtr = currentBllPtr + 5;
 	         
 			for(j=0; j<bllSize; j++)
 			{
-				unsigned int brickIdx = *((short int*)(bllDataPtr));
+				uint32 brickIdx = *((int16*)(bllDataPtr));
 		
 				if(brickIdx)
 				{
@@ -487,15 +487,15 @@ int load_grid_bricks(int gridSize)
 /** Create grid Y column in block buffer
 	@param gridEntry current grid index
 	@param dest destination block buffer */
-void create_grid_column(unsigned char *gridEntry, unsigned char *dest)
+void create_grid_column(uint8 *gridEntry, uint8 *dest)
 {
-	int blockCount;
-	int brickCount;
-	int flag;
-	int gridIdx;
-	int i;
-	unsigned short int *gridBuffer;
-	unsigned short int *blockByffer;
+	int32 blockCount;
+	int32 brickCount;
+	int32 flag;
+	int32 gridIdx;
+	int32 i;
+	uint16 *gridBuffer;
+	uint16 *blockByffer;
 
 	brickCount = *(gridEntry++);
 
@@ -505,8 +505,8 @@ void create_grid_column(unsigned char *gridEntry, unsigned char *dest)
 
 		blockCount = (flag & 0x3F) + 1;
 
-		gridBuffer = (unsigned short int *) gridEntry;
-		blockByffer = (unsigned short int *) dest;
+		gridBuffer = (uint16 *) gridEntry;
+		blockByffer = (uint16 *) dest;
 
 		if (!(flag & 0xC0))
 		{
@@ -525,8 +525,8 @@ void create_grid_column(unsigned char *gridEntry, unsigned char *dest)
 				*(blockByffer++) = gridIdx;
 		}
 
-		gridEntry = (unsigned char *) gridBuffer;
-		dest = (unsigned char *) blockByffer;
+		gridEntry = (uint8 *) gridBuffer;
+		dest = (uint8 *) blockByffer;
 
 	}while (--brickCount);
 }
@@ -534,15 +534,15 @@ void create_grid_column(unsigned char *gridEntry, unsigned char *dest)
 /** Create grid Y column in block buffer
 	@param gridEntry current grid index
 	@param dest destination block buffer */
-void create_celling_grid_column(unsigned char *gridEntry, unsigned char *dest)
+void create_celling_grid_column(uint8 *gridEntry, uint8 *dest)
 {
-	int blockCount;
-	int brickCount;
-	int flag;
-	int gridIdx;
-	int i;
-	unsigned short int *gridBuffer;
-	unsigned short int *blockByffer;
+	int32 blockCount;
+	int32 brickCount;
+	int32 flag;
+	int32 gridIdx;
+	int32 i;
+	uint16 *gridBuffer;
+	uint16 *blockByffer;
 
 	brickCount = *(gridEntry++);
 
@@ -552,8 +552,8 @@ void create_celling_grid_column(unsigned char *gridEntry, unsigned char *dest)
 
 		blockCount = (flag & 0x3F) + 1;
 
-		gridBuffer = (unsigned short int *) gridEntry;
-		blockByffer = (unsigned short int *) dest;
+		gridBuffer = (uint16*) gridEntry;
+		blockByffer = (uint16 *) dest;
 
 		if (!(flag & 0xC0))
 		{
@@ -572,8 +572,8 @@ void create_celling_grid_column(unsigned char *gridEntry, unsigned char *dest)
 				*(blockByffer++) = gridIdx;
 		}
 
-		gridEntry = (unsigned char *) gridBuffer;
-		dest = (unsigned char *) blockByffer;
+		gridEntry = (uint8 *) gridBuffer;
+		dest = (uint8 *) blockByffer;
 
 	}while (--brickCount);
 }
@@ -581,10 +581,10 @@ void create_celling_grid_column(unsigned char *gridEntry, unsigned char *dest)
 /** Create grid map from current grid to block library buffer */
 void create_grid_map()
 {
-	int currOffset = 0;
-	int blockOffset;
-	int gridIdx;
-	int x,z;
+	int32 currOffset = 0;
+	int32 blockOffset;
+	int32 gridIdx;
+	int32 x,z;
 
 	for(z=0; z<GRID_SIZE_Z; z++)
 	{
@@ -593,7 +593,7 @@ void create_grid_map()
 
 		for(x=0; x<GRID_SIZE_X; x++)
 		{
-			int gridOffset = *((unsigned short int *)(currentGrid + 2 * (x + gridIdx)));
+			int32 gridOffset = *((uint16 *)(currentGrid + 2 * (x + gridIdx)));
 			create_grid_column(currentGrid+gridOffset, blockBuffer + blockOffset);
 			blockOffset += 50;
 		}
@@ -603,13 +603,13 @@ void create_grid_map()
 
 /** Create celling grid map from celling grid to block library buffer
 	@param gridPtr celling grid buffer pointer */
-void create_celling_grid_map(unsigned char* gridPtr)
+void create_celling_grid_map(uint8* gridPtr)
 {
-	int currGridOffset=0;
-	int currOffset=0;
-	int blockOffset;
-	int z,x;
-	unsigned char* tempGridPtr;
+	int32 currGridOffset=0;
+	int32 currOffset=0;
+	int32 blockOffset;
+	int32 z,x;
+	uint8* tempGridPtr;
 
 	for(z=0; z<GRID_SIZE_Z; z++)
 	{
@@ -618,7 +618,7 @@ void create_celling_grid_map(unsigned char* gridPtr)
 
 		for(x=0; x<GRID_SIZE_X; x++)
 		{
-			int gridOffset = *((unsigned short int *)tempGridPtr); tempGridPtr+=2;
+			int gridOffset = *((uint16 *)tempGridPtr); tempGridPtr+=2;
 			create_celling_grid_column(gridPtr + gridOffset, blockBuffer + blockOffset);
 			blockOffset += 50;
 		}
@@ -629,11 +629,11 @@ void create_celling_grid_map(unsigned char* gridPtr)
 
 /** Initialize grid (background scenearios)
 	@param index grid index number */
-int init_grid(int index)
+int32 init_grid(int32 index)
 {
-	int gridSize;
-	int bllSize;
-	int brickSize;
+	int32 gridSize;
+	int32 bllSize;
+	int32 brickSize;
 
 	// load grids from file
 	gridSize = hqr_getalloc_entry(&currentGrid,HQR_LBA_GRI_FILE,index);
@@ -644,7 +644,7 @@ int init_grid(int index)
 
 	create_grid_mask();
 	
-	numberOfBll = (*((unsigned int *)currentBll) >> 2);
+	numberOfBll = (*((uint32 *)currentBll) >> 2);
 
 	create_grid_map();
 
@@ -653,10 +653,10 @@ int init_grid(int index)
 
 /** Initialize celling grid (background scenearios)
 	@param index grid index number */
-int init_celling_grid(int index)
+int32 init_celling_grid(int32 index)
 {
-	int gridSize;
-	unsigned char* gridPtr;
+	int32 gridSize;
+	uint8* gridPtr;
 
 	// load grids from file
 	gridSize = hqr_getalloc_entry(&gridPtr, HQR_LBA_GRI_FILE, index+CELLING_GRIDS_START_INDEX);
@@ -675,7 +675,7 @@ int init_celling_grid(int index)
 	@param index brick index to draw 
 	@param posX brick X position to draw 
 	@param posY brick Y position to draw */
-void draw_brick(int index, int posX, int posY)
+void draw_brick(int32 index, int32 posX, int32 posY)
 {
 	draw_brick_sprite(index, posX, posY, brickTable[index],0);
 }
@@ -685,7 +685,7 @@ void draw_brick(int index, int posX, int posY)
 	@param posX sprite X position to draw 
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw */
-void draw_sprite(int index, int posX, int posY, unsigned char *ptr)
+void draw_sprite(int32 index, int32 posX, int32 posY, uint8 *ptr)
 {
 	draw_brick_sprite(index, posX, posY, ptr, 1);
 }
@@ -697,28 +697,28 @@ void draw_sprite(int index, int posX, int posY, unsigned char *ptr)
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw
 	@param isSprite allows to identify if the sprite to display is brick or a single sprite */
-void draw_brick_sprite(int index, int posX, int posY, unsigned char *ptr, int isSprite)
+void draw_brick_sprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSprite)
 {
 	//unsigned char *ptr;
-	int top;
-	int bottom;
-	int left;
-	int right;
-	unsigned char *outPtr;
-	int offset;
-	int c1;
-	int c2;
-	int vc3;
+	int32 top;
+	int32 bottom;
+	int32 left;
+	int32 right;
+	uint8 *outPtr;
+	int32 offset;
+	int32 c1;
+	int32 c2;
+	int32 vc3;
 
-	int temp;
-	int iteration;
-	int i;
+	int32 temp;
+	int32 iteration;
+	int32 i;
 
-	int x;
-	int y;
+	int32 x;
+	int32 y;
 
 	if(isSprite==1)
-		ptr = ptr + *((unsigned int *)(ptr + index * 4));
+		ptr = ptr + *((uint32 *)(ptr + index * 4));
 
 	left = posX + *(ptr + 2);
 	top = posY + *(ptr + 3);
@@ -790,17 +790,17 @@ void draw_brick_sprite(int index, int posX, int posY, unsigned char *ptr, int is
 /** Get block library
 	@param index block library index
 	@return pointer to the current block index */
-unsigned char* get_block_library(int index) 
+uint8* get_block_library(int32 index) 
 {
-	int offset = *((unsigned int *)(currentBll + 4 * index));
-	return (unsigned char *)(currentBll + offset);
+	int32 offset = *((uint32 *)(currentBll + 4 * index));
+	return (uint8 *)(currentBll + offset);
 }
 
 /** Get brick position in the screen
 	@param x column x position in the current camera
 	@param y column y position in the current camera
 	@param z column z position in the current camera */
-void get_brick_pos(int x, int y, int z)
+void get_brick_pos(int32 x, int32 y, int32 z)
 {
 	brickPixelPosX = (x - z) * 24 + 288; // x pos
 	brickPixelPosY = ((x + z)*12) - (y * 15) + 215;  // y pos
@@ -812,20 +812,20 @@ void get_brick_pos(int x, int y, int z)
 	@param x column x position
 	@param y column y position
 	@param z column z position */
-void draw_column_grid(int blockIdx, int brickBlockIdx, int x, int y, int z)
+void draw_column_grid(int32 blockIdx, int32 brickBlockIdx, int32 x, int32 y, int32 z)
 {
-	unsigned char *blockPtr;
-	unsigned short int brickIdx;
-	unsigned char brickShape;
-	unsigned char brickSound;
-	int brickBuffIdx;
+	uint8 *blockPtr;
+	uint16 brickIdx;
+	uint8 brickShape;
+	uint8 brickSound;
+	int32 brickBuffIdx;
 	BrickEntry *currBrickEntry;
 
 	blockPtr = get_block_library(blockIdx) + 3 + brickBlockIdx * 4;
 	
-	brickShape = *((unsigned char *)(blockPtr));
-	brickSound = *((unsigned char *)(blockPtr+1));
-	brickIdx = *((unsigned short int *)(blockPtr+2));
+	brickShape = *((uint8 *)(blockPtr));
+	brickSound = *((uint8 *)(blockPtr+1));
+	brickIdx = *((uint16 *)(blockPtr+2));
 
 	if (!brickIdx)
 		return;
@@ -870,8 +870,8 @@ void draw_column_grid(int blockIdx, int brickBlockIdx, int x, int y, int z)
 /** Redraw grid background */
 void redraw_grid()
 {
-	int i, x, y, z;
-	unsigned char blockIdx;
+	int32 i, x, y, z;
+	uint8 blockIdx;
 	blockMap* map = (blockMap*)blockBuffer;
 
 	cameraX = newCameraX << 9;

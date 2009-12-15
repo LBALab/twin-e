@@ -28,17 +28,21 @@
 #ifndef SOUND_H
 #define SOUND_H
 
+#include "sys.h"
+
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */
-void sample_volume(int channel, int volume);
+void sample_volume(int32 channel, int32 volume);
+
 /** Play FLA movie samples
 	@param index sample index under flasamp.hqr file
 	@param frequency frequency used to play the sample
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
 	@param y unknown y variable*/
-void play_fla_sample(int index,int frequency, int repeat, int x, int y);
+void play_fla_sample(int32 index,int32 frequency, int32 repeat, int32 x, int32 y);
+
 /** Stop samples */
 void stop_sample();
 

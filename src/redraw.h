@@ -28,19 +28,21 @@
 #ifndef REDRAW_H
 #define REDRAW_H
 
+#include "sys.h"
+
 /** Auxiliar object render left position on screen */
-int renderLeft;
+int32 renderLeft;
 /** Auxiliar object render right position on screen */
-int renderRight;
+int32 renderRight;
 /** Auxiliar object render top position on screen */
-int renderTop;
+int32 renderTop;
 /** Auxiliar object render bottom position on screen */
-int renderBottom;
+int32 renderBottom;
 
 //short int drawInGameTransBox;
 
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int bgRedraw);
+void redraw_engine_actions(int32 bgRedraw);
 
 #endif

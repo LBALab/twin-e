@@ -28,14 +28,16 @@
 #ifndef GRIDDEBUG_H
 #define GRIDDEBUG_H
 
-extern int useFreeCamera;
-extern int canChangeScenes;
+#include "sys.h"
+
+extern int32 useFreeCamera;
+extern int32 canChangeScenes;
 
 /** Change scenario camera positions */
-void change_grid_camera(short int pKey);
+void change_grid_camera(int16 pKey);
 /** Change grid index */
-void change_grid(short int pKey);
+void change_grid(int16 pKey);
 /** Apply and change disappear celling grid */
-void apply_celling_grid(short int pKey);
+void apply_celling_grid(int16 pKey);
 
 #endif

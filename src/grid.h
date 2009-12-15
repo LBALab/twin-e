@@ -29,61 +29,63 @@
 #ifndef GRID_H
 #define GRID_H
 
+#include "sys.h"
+
 /** New grid camera X coordinates */
-int newCameraX;
+int32 newCameraX;
 /** New grid camera Y coordinates */
-int newCameraY;
+int32 newCameraY;
 /** New grid camera Z coordinates */
-int newCameraZ;
+int32 newCameraZ;
 
 /** Current grid camera X coordinates */
-int cameraX;
+int32 cameraX;
 /** Current grid camera Y coordinates */
-int cameraY;
+int32 cameraY;
 /** Current grid camera Z coordinates */
-int cameraZ;
+int32 cameraZ;
 
 /** Celling grid brick block buffer */
-unsigned char *blockBuffer;
+uint8 *blockBuffer;
 
 
 /** Flag to know if the engine is using celling grids */
-short int useCellingGrid;
+int16 useCellingGrid;
 /** Current celling grid index */
-short int cellingGridIdx;
+int16 cellingGridIdx;
 
 
 /** Draw 3D actor over bricks
 	@param X actor X coordinate
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
-void draw_over_model_actor(int X, int Y, int Z);
+void draw_over_model_actor(int32 X, int32 Y, int32 Z);
 
 /** Draw sprite actor over bricks
 	@param X actor X coordinate
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
-void draw_over_sprite_actor(int X, int Y, int Z);
+void draw_over_sprite_actor(int32 X, int32 Y, int32 Z);
 
 /** Get sprite width and height sizes
 	@param offset sprite pointer offset 
 	@param width sprite width size
 	@param height sprite height size
 	@param spritePtr sprite buffer pointer */
-void get_sprite_size(int offset, int *width, int *height, unsigned char *spritePtr);
+void get_sprite_size(int32 offset, int32 *width, int32 *height, uint8 *spritePtr);
 
 /** Draw brick sprite in the screen
 	@param index brick index to draw 
 	@param posX brick X position to draw 
 	@param posY brick Y position to draw */
-void draw_brick(int index, int posX, int posY);
+void draw_brick(int32 index, int32 posX, int32 posY);
 
 /** Draw sprite in the screen
 	@param index sprite index to draw 
 	@param posX sprite X position to draw 
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw */
-void draw_sprite(int index, int posX, int posY, unsigned char *spritePtr);
+void draw_sprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr);
 
 /** Draw sprite or bricks in the screen according with the type
 	@param index sprite index to draw 
@@ -91,23 +93,23 @@ void draw_sprite(int index, int posX, int posY, unsigned char *spritePtr);
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw
 	@param isSprite allows to identify if the sprite to display is brick or a single sprite */
-void draw_brick_sprite(int index, int posX, int posY, unsigned char *spritePtr, int isSprite);
+void draw_brick_sprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr, int32 isSprite);
 
 /** Get block library
 	@param index block library index
 	@return pointer to the current block index */
-unsigned char* get_block_library(int index);
+uint8* get_block_library(int32 index);
 
 /** Create grid map from current grid to block library buffer */
 void create_grid_map();
 
 /** Initialize grid (background scenearios)
 	@param index grid index number */
-int init_grid(int index);
+int32 init_grid(int32 index);
 
 /** Initialize celling grid (background scenearios)
 	@param index grid index number */
-int init_celling_grid(int index);
+int32 init_celling_grid(int32 index);
 
 /** Redraw grid background */
 void redraw_grid();

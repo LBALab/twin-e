@@ -35,16 +35,16 @@
 	@param endWidth width value where the line ends
 	@param endHeight height value where the line ends
 	@param lineColor line color in the current palette */
-void draw_line(int startWidth, int startHeight, int endWidth, int endHeight, int lineColor)
+void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor)
 {
-	int temp;
-	short int flag;
-	int flag2;
-	unsigned char *out;
-	short int color;
-	short int var2;
-	short int xchg;
-	int currentLineColor = lineColor;
+	int32 temp;
+	int16 flag;
+	int32 flag2;
+	uint8 *out;
+	int16 color;
+	int16 var2;
+	int16 xchg;
+	int32 currentLineColor = lineColor;
 
 	// draw line from left to right
 	if (startWidth > endWidth) 
@@ -126,7 +126,7 @@ void draw_line(int startWidth, int startHeight, int endWidth, int endHeight, int
 		endWidth++;
 		do
 		{
-			*out = (unsigned char) color;
+			*out = (uint8) color;
 			startHeight -= endHeight;
 			if (startHeight > 0)
 			{
@@ -148,7 +148,7 @@ void draw_line(int startWidth, int startHeight, int endWidth, int endHeight, int
 		endWidth++;
 		do
 		{
-			*out = (unsigned char) color;
+			*out = (uint8) color;
 			out++;
 			startHeight -= endHeight;
 			if (startHeight < 0)
@@ -169,16 +169,16 @@ void draw_line(int startWidth, int startHeight, int endWidth, int endHeight, int
 	@param leftDest start width to draw the button in destination buffer
 	@param topDest start height to draw the button in destination buffer
 	@dest destination screen buffer, in this case front buffer */
-void blit_box(int left, int top, int right, int bottom, char *source, int leftDest, int topDest, char *dest)
+void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest)
 {
-	int width;
-	int height;
-	char *s;
-	char *d;
-	int insideLine;
-	int temp3;
-	int i;
-	int j;
+	int32 width;
+	int32 height;
+	int8 *s;
+	int8 *d;
+	int32 insideLine;
+	int32 temp3;
+	int32 i;
+	int32 j;
 
 	s = screenLockupTable[top] + source + left;
 	d = screenLockupTable[topDest] + dest + leftDest;
@@ -210,17 +210,17 @@ void blit_box(int left, int top, int right, int bottom, char *source, int leftDe
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int left, int top, int right, int bottom, int colorAdj)
+void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj)
 {
-    unsigned char *pos;
-    int width;
-    int height;
-    int height2;
-    int temp;
-    int localMode;
-    int var1;
-    char color;
-    char color2;
+    uint8 *pos;
+    int32 width;
+    int32 height;
+    int32 height2;
+    int32 temp;
+    int32 localMode;
+    int32 var1;
+    int8 color;
+    int8 color2;
 
 	if (left > SCREEN_TEXTLIMIT_RIGHT)
 		return;
@@ -272,14 +272,14 @@ void draw_transparent_box(int left, int top, int right, int bottom, int colorAdj
     while (height2 > 0);
 }
 
-void draw_splitted_box(int left, int top, int right, int bottom, unsigned char e)
+void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e)
 {
-	unsigned char *ptr;
+	uint8 *ptr;
 
-    int offset;
+    int32 offset;
 
-    int x;
-    int y;
+    int32 x;
+    int32 y;
 
     if (left > SCREEN_TEXTLIMIT_RIGHT)
 		return;
@@ -305,7 +305,7 @@ void draw_splitted_box(int left, int top, int right, int bottom, unsigned char e
 	}
 }
 
-void set_clip(int left, int top, int right, int bottom)
+void set_clip(int32 left, int32 top, int32 right, int32 bottom)
 {
 	if (left < 0)
 		left = 0;

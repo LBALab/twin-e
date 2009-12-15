@@ -28,18 +28,18 @@
 #include "filereader.h"
 
 /** Feed buffer from file
-	@param fr filereader pointer */
-void frfeed(filereader* fr)
+	@param fr FileReader pointer */
+void frfeed(FileReader* fr)
 {
 	fread(fr->buffer, BUFFER_SIZE, 1, fr->fd);
 	fr->bufferPos = 0;
 }
 
 /** Read file
-	@param fr filereader pointer 
+	@param fr FileReader pointer 
 	@param destPtr content destination pointer
 	@param size size of read characters */
-void frread(filereader* fr, void* destPtr, unsigned long int size)
+void frread(FileReader* fr, void* destPtr, uint32 size)
 {
 	if(BUFFER_SIZE-fr->bufferPos >= size)
 	{
@@ -49,7 +49,7 @@ void frread(filereader* fr, void* destPtr, unsigned long int size)
 	else
 	{
 		// feed what we can
-		char* tempPtr = (char*)destPtr;
+		int8* tempPtr = (int8*)destPtr;
 		memcpy( tempPtr, &fr->buffer[fr->bufferPos], BUFFER_SIZE-fr->bufferPos );
 		tempPtr+=BUFFER_SIZE-fr->bufferPos;
 		size-=BUFFER_SIZE-fr->bufferPos;
@@ -76,11 +76,11 @@ void frread(filereader* fr, void* destPtr, unsigned long int size)
 }
 
 /** Seek file
-	@param fr filereader pointer 
+	@param fr FileReader pointer 
 	@param seekPosition position to seek */
-void frseek(filereader* fr, unsigned long int seekPosition)
+void frseek(FileReader* fr, uint32 seekPosition)
 {
-	unsigned long int sectorToSeek;
+	uint32 sectorToSeek;
 
 	sectorToSeek = seekPosition / 2048;
 
@@ -92,12 +92,12 @@ void frseek(filereader* fr, unsigned long int seekPosition)
 }
 
 /** Open file
-	@param fr filereader pointer 
+	@param fr FileReader pointer 
 	@param filename file path
 	@return true if file open and false if error occurred */
-int fropen(filereader* fr, const char* filename)
+int32 fropen(FileReader* fr, const int8* filename)
 {
-	fr->fd = fopen((const char*)filename,"rb");
+	fr->fd = fopen((const int8*)filename,"rb");
 
 	if(fr->fd)
 	{
@@ -110,8 +110,8 @@ int fropen(filereader* fr, const char* filename)
 }
 
 /** Close file
-	@param fr filereader pointer */
-void frclose(filereader* fr)
+	@param fr FileReader pointer */
+void frclose(FileReader* fr)
 {
 	fclose(fr->fd);
 }
