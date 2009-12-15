@@ -49,7 +49,7 @@
 #include "animations.h"
 
 /** Engine current version */
-const char* ENGINE_VERSION = "0.1.0";
+const int8* ENGINE_VERSION = "0.1.0";
 
 /** Definition for European version */
 #define EUROPE_VERSION 0
@@ -60,7 +60,7 @@ const char* ENGINE_VERSION = "0.1.0";
 
 
 /** Engine configuration filename */
-const char* CONFIG_FILENAME = "lba.cfg";
+const int8* CONFIG_FILENAME = "lba.cfg";
 
 /** Engine install setup filename
 
@@ -68,14 +68,14 @@ const char* CONFIG_FILENAME = "lba.cfg";
 	This is only used for original games. For mod games project you can 
 	used \a lba.cfg file \b Version tag. If this tag is set for original game
 	it will be used instead of \a setup.lst file. */
-const char* SETUP_FILENAME = "setup.lst";
+const int8* SETUP_FILENAME = "setup.lst";
 
 /** Configuration types at \a lba.cfg file
 
 	Fill this with all needed configurations at \a lba.cfg file. 
 	This engine version allows new type of configurations. 
 	Check new config lines at \a lba.cfg file after the first game execution */
-char CFGList[][18]=
+int8 CFGList[][18]=
 {
 	"Language:",
 	"LanguageCD:",
@@ -121,10 +121,10 @@ char CFGList[][18]=
 /** Allocate video memory, both front and back buffers */
 void allocate_video_memory()
 {
-	int i, j, k;
+	int32 i, j, k;
 
-	workVideoBuffer = (unsigned char *) malloc((SCREEN_WIDTH*SCREEN_HEIGHT) * sizeof(unsigned char));
-	frontVideoBuffer = frontVideoBufferbis = (unsigned char *) malloc(sizeof(unsigned char) * SCREEN_WIDTH*SCREEN_HEIGHT);
+	workVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH*SCREEN_HEIGHT) * sizeof(uint8));
+	frontVideoBuffer = frontVideoBufferbis = (uint8 *) malloc(sizeof(uint8) * SCREEN_WIDTH*SCREEN_HEIGHT);
 	init_screen_buffer(frontVideoBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	j = 0;
@@ -142,11 +142,11 @@ void allocate_video_memory()
 /** Gets configuration type index from lba.cfg config file 
 	@param lineBuffer buffer with config line
 	@return config type index */
-int get_config_type_index(char* lineBuffer)
+int get_config_type_index(int8* lineBuffer)
 {
-    int i;
-    char buffer[256];
-    char* ptr;
+    int32 i;
+    int8 buffer[256];
+    int8* ptr;
 
     strcpy(buffer,lineBuffer);
 
@@ -174,8 +174,8 @@ int get_config_type_index(char* lineBuffer)
 void init_configurations()
 {
 	FILE *fd;
-	char buffer[256];
-	int cfgtype=-1;
+	int8 buffer[256];
+	int32 cfgtype=-1;
 
 	fd = fopen(CONFIG_FILENAME, "rb");
 	if(!fd)
@@ -360,7 +360,7 @@ void init_keymap()
 /** Initialize resource pointers */
 void init_resources()
 {
-	int size=0;
+	int32 size=0;
 
 	// Menu and in-game palette
 	init_palettes();
@@ -422,9 +422,9 @@ void init_vars()
 /** Initialize all needed stuffs at first time running engine */
 void init_all()
 {
-	blockBuffer = (unsigned char *)malloc(204800);  // 204800 = 64*64*25*2
+	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
 
-	animBuffer1 = animBuffer2 = (unsigned char *)malloc(5000);
+	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
 
 	// Init engine keymap
 	init_keymap();

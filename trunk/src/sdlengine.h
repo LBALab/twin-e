@@ -30,36 +30,37 @@
 
 #include <SDL/SDL.h>
 
+#include "sys.h"
 #include "debug.h"
 
 /** Work video buffer */
-unsigned char *workVideoBuffer;
+uint8 *workVideoBuffer;
 /** Main game video buffer */
-unsigned char *frontVideoBuffer;
+uint8 *frontVideoBuffer;
 /** Auxiliar game video buffer */
-unsigned char *frontVideoBufferbis;
+uint8 *frontVideoBufferbis;
 
 /** temporary screen table */
-int screenLockupTable[2000];
+int32 screenLockupTable[2000];
 
 /** Pressed key map - scanCodeTab1 */
-unsigned char pressedKeyMap[29];
+uint8 pressedKeyMap[29];
 /** Pressed key char map - scanCodeTab2 */
-unsigned short int pressedKeyCharMap[31];
+uint16 pressedKeyCharMap[31];
 
 /** Skipped key - key1 */
-extern short int skipedKey;
+extern int16 skipedKey;
 /** Pressed key - printTextVar12 */
-extern short int pressedKey;
+extern int16 pressedKey;
 /** Skip intro variable */
-extern short int skipIntro;
+extern int16 skipIntro;
 /** Current key value */
-extern short int currentKey;
+extern int16 currentKey;
 /** Auxiliar key value */
-extern short int key;
+extern int16 key;
 
-short int leftMouse;
-short int rightMouse;
+int16 leftMouse;
+int16 rightMouse;
 
 /** Main SDL screen surface buffer */
 extern SDL_Surface *screen;
@@ -72,15 +73,15 @@ void sdl_close();
 int sdl_initialize();
 
 /** Frames per second sdl delay */
-void fps_cycles(int fps);
+void fps_cycles(int32 fps);
 
 /** Deplay certain seconds till proceed 
 	@param time time in seconds to delay */
-void delay(unsigned int time);
+void delay(uint32 time);
 
 /** Set a new palette in the SDL screen buffer
 	@param palette palette to set */
-void set_palette(unsigned char * palette);
+void set_palette(uint8 * palette);
 
 /** Fade screen from black to white */
 void fade_black_2_white();
@@ -93,18 +94,18 @@ void flip();
 	@param top top position to start copy
 	@param right right position to start copy
 	@param bottom bottom position to start copy */
-void copy_block_phys(int left, int top, int right, int bottom);
+void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom);
 
 /** Create SDL screen surface
 	@param buffer screen buffer to blit surface
 	@param width screen width size
 	@param height screen height size */
-void init_screen_buffer(unsigned char *buffer, int width, int height);
+void init_screen_buffer(uint8 *buffer, int32 width, int32 height);
 
 /** Cross fade feature
 	@param buffer screen buffer
 	@param palette new palette to cross fade*/
-void cross_fade(unsigned char *buffer, unsigned char *palette);
+void cross_fade(uint8 *buffer, uint8 *palette);
 
 /** Switch between window and fullscreen modes */
 void toggle_fullscreen();
@@ -117,7 +118,7 @@ void read_keys();
 	@param Y Y coordinate in screen
 	@param string text to display
 	@param center if the text should be centered accoding with the giving positions */
-void ttf_draw_text(int X, int Y, char *string, int center);
+void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center);
 
 /** Gets SDL mouse positions
 	@param mouseData structure that contains mouse position info */

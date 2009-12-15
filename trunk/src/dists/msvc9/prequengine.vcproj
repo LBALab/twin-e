@@ -357,6 +357,10 @@
 			RelativePath="..\..\sound.h"
 			>
 		</File>
+		<File
+			RelativePath="..\..\sys.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

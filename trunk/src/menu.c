@@ -90,7 +90,7 @@
 /** Main Menu Settings
 
 	Used to create the game main menu. */
-short int MainMenuSettings[]={
+int16 MainMenuSettings[]={
 	0,          // Current loaded button (button number)
 	4,          // Num of buttons
 	200,        // Buttons box height ( is used to calc the height where the first button will appear )
@@ -108,7 +108,7 @@ short int MainMenuSettings[]={
 /** Give Up Menu Settings
 
 	Used to create the in-game menu. */
-short int GiveUpMenuSettings[]={
+int16 GiveUpMenuSettings[]={
 	0,			// Current loaded button (button number)
 	2,			// Num of buttons
 	240,		// Buttons box height ( is used to calc the height where the first button will appear )
@@ -122,7 +122,7 @@ short int GiveUpMenuSettings[]={
 /** Give Up Menu Settings
 
 	Used to create the in-game menu. This menu have one extra item to save the game */
-short int GiveUpMenuSettingsWithSave[]={
+int16 GiveUpMenuSettingsWithSave[]={
 	0,			// Current loaded button (button number)
 	3,			// Num of buttons
 	240,		// Buttons box height ( is used to calc the height where the first button will appear )
@@ -138,10 +138,10 @@ short int GiveUpMenuSettingsWithSave[]={
 /** Options Menu Settings
 
 	Used to create the options menu. */
-short int OptionsMenuSettings[]={
+int16 OptionsMenuSettings[]={
 	0,			// Current loaded button (button number)
 	4,			// Num of buttons
-	0,		// Buttons box height ( is used to calc the height where the first button will appear )
+	0,			// Buttons box height ( is used to calc the height where the first button will appear )
 	0,			// unused
 	0,
 	24,			// return to previous menu
@@ -156,7 +156,7 @@ short int OptionsMenuSettings[]={
 /** Advanced Options Menu Settings
 
 	Used to create the advanced options menu. */
-short int AdvOptionsMenuSettings[]={
+int16 AdvOptionsMenuSettings[]={
 	0,			// Current loaded button (button number)
 	5,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -176,7 +176,7 @@ short int AdvOptionsMenuSettings[]={
 /** Save Game Management Menu Settings
 
 	Used to create the save game management menu. */
-short int SaveManageMenuSettings[]={
+int16 SaveManageMenuSettings[]={
 	0,			// Current loaded button (button number)
 	3,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -192,7 +192,7 @@ short int SaveManageMenuSettings[]={
 /** Volume Menu Settings
 
 	Used to create the volume menu. */
-short int VolumeMenuSettings[]={
+int16 VolumeMenuSettings[]={
 	0,			// Current loaded button (button number)
 	7,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -215,23 +215,23 @@ short int VolumeMenuSettings[]={
 
 
 /** Plasma Effect pointer to file content: RESS.HQR:51 */
-unsigned char *plasmaEffectPtr;
+uint8 *plasmaEffectPtr;
 /** Plasma Effect variables 1 */
-unsigned char *plasmaEffectVar1;
+uint8 *plasmaEffectVar1;
 /** Plasma Effect variables 2 */
-unsigned char *plasmaEffectVar2;
+uint8 *plasmaEffectVar2;
 
 
 /** Plasma Effect Initialization */
 void plasma_effect_init()
 {
-	unsigned char *temp1 = 0;
-	unsigned char *temp2 = 0;
-	char *temp2bis = 0;
-	short int temp4 = 0;
-	int i = 0;
-	unsigned int *copy1 = 0;
-	unsigned int *copy2 = 0;
+	uint8  *temp1 = 0;
+	uint8  *temp2 = 0;
+	int8   *temp2bis = 0;
+	int16  temp4 = 0;
+	int32  i = 0;
+	uint32 *copy1 = 0;
+	uint32 *copy2 = 0;
 
 	plasmaEffectVar1 = plasmaEffectPtr;
 	plasmaEffectVar2 = plasmaEffectPtr + 16000;
@@ -267,17 +267,17 @@ void plasma_effect_init()
 		}
 
 		temp1++;
-		*temp2 = (unsigned char) temp4;
+		*temp2 = (uint8) temp4;
 		temp2++;
 	}
 
-	copy1 = (unsigned int *) plasmaEffectVar1;
-	copy2 = (unsigned int *) (plasmaEffectVar2 + 320);  // pass to the next line
+	copy1 = (uint32 *) plasmaEffectVar1;
+	copy2 = (uint32 *) (plasmaEffectVar2 + 320);  // pass to the next line
 
 	for (i = 0; i < 3840; i++)
 		*(copy1++) = *(copy2++);  // copy current frame buffer with 1 line
 
-	temp2bis = (char *) plasmaEffectVar2 + 12480; // pointer with 11 last lines
+	temp2bis = (int8 *) plasmaEffectVar2 + 12480; // pointer with 11 last lines
 
 	for (i = 1600; i >= 0; i--) // prepare next frame
 	{
@@ -293,13 +293,13 @@ void plasma_effect_init()
 /** Process the plasma effect
 	@param top top height where the effect will be draw in the front buffer
 	@param color plasma effect start color */
-void process_plasma_effect(int top, int color)
+void process_plasma_effect(int32 top, int32 color)
 {
-	unsigned char *temp;
-	unsigned char *out;
-	int i, j;
-	unsigned char temp3;
-	unsigned char bh, bl;
+	uint8 *temp;
+	uint8 *out;
+	int32 i, j;
+	uint8 temp3;
+	uint8 bh, bl;
 
 	plasma_effect_init();
 	
@@ -336,7 +336,7 @@ void process_plasma_effect(int top, int color)
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_button_box(int left, int top, int right, int bottom)
+void draw_button_box(int32 left, int32 top, int32 right, int32 bottom)
 {
     draw_line(left, top, right, top, 79);			// top line
     draw_line(left, top, left, bottom, 79);			// left line
@@ -350,20 +350,20 @@ void draw_button_box(int left, int top, int right, int bottom)
 	@param id current button identification from menu settings
 	@param value current button key pressed value
 	@param mode flag to know if should draw as a hover button or not */
-void draw_button_gfx(int width, int topheight, int id, int value, int mode)
+void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 mode)
 {
-	int right;
-    int top;
-    int left;
-    int bottom2;
-    int bottom;
+	int32 right;
+    int32 top;
+    int32 left;
+    int32 bottom2;
+    int32 bottom;
    /*
     * int CDvolumeRemaped; int musicVolumeRemaped; int masterVolumeRemaped; int lineVolumeRemaped;
     * int waveVolumeRemaped;
     */
     
-	char dialText[256];
-    int textSize;
+	int8 dialText[256];
+    int32 textSize;
 
     left = width - MAINMENU_BUTTONSPAN / 2;
     right = width + MAINMENU_BUTTONSPAN / 2;
@@ -376,7 +376,7 @@ void draw_button_gfx(int width, int topheight, int id, int value, int mode)
 	{
 		if (id <= 5 && id >= 1)
 		{
-			int newWidth=0;
+			int32 newWidth=0;
 
 			switch (id)
 			{
@@ -450,7 +450,7 @@ void draw_button_gfx(int width, int topheight, int id, int value, int mode)
 	}
     else
 	{
-		blit_box(left, top, right, bottom, (char *) workVideoBuffer, left, top,(char *) frontVideoBuffer);
+		blit_box(left, top, right, bottom, (int8 *) workVideoBuffer, left, top,(int8 *) frontVideoBuffer);
 		draw_transparent_box(left, top, right, bottom2, 4);
 	}
 
@@ -469,15 +469,15 @@ void draw_button_gfx(int width, int topheight, int id, int value, int mode)
 /** Process the menu button draw
 	@param data menu settings array
 	@param mode flag to know if should draw as a hover button or not */
-void draw_button(short int *menuSettings, int mode)
+void draw_button(int16 *menuSettings, int32 mode)
 {
-	int buttonNumber;
-    int maxButton;
-    short int *localData = menuSettings;
-    int topHeight;
-    unsigned char menuItemId;
-    unsigned short menuItemValue; // applicable for sound menus, to save the volume/sound bar
-    char currentButton;
+	int32  buttonNumber;
+    int32  maxButton;
+    int16  *localData = menuSettings;
+    int32  topHeight;
+    uint8  menuItemId;
+    uint16 menuItemValue; // applicable for sound menus, to save the volume/sound bar
+    int8   currentButton;
 	
     buttonNumber = *localData;
     localData += 1;
@@ -505,7 +505,7 @@ void draw_button(short int *menuSettings, int mode)
     do
 	{
 		// get menu item settings
-		menuItemId = (unsigned char) *localData;
+		menuItemId = (uint8) *localData;
 		localData += 1;
 		menuItemValue = *localData;
 		localData += 1;
@@ -540,17 +540,17 @@ void draw_button(short int *menuSettings, int mode)
 /** Where the main menu options are processed
 	@param menuSettings menu settings array with the information to build the menu options
 	@return pressed menu button identification */
-int process_menu(short int * menuSettings)
+int process_menu(int16 * menuSettings)
 {
-	int localTime;
-    int numEntry;
-    int buttonNeedRedraw;
-    int maxButton;
-    short int *localData = menuSettings;
-    short int currentButton;
-    short int id;
-    int musicChanged;
-    int buttonReleased = 1;
+	int32 localTime;
+    int32 numEntry;
+    int32 buttonNeedRedraw;
+    int32 maxButton;
+    int16 *localData = menuSettings;
+    int16 currentButton;
+    int16 id;
+    int32 musicChanged;
+    int32 buttonReleased = 1;
 
     musicChanged = 0;
 
@@ -589,7 +589,7 @@ int process_menu(short int * menuSettings)
 		{
 			key = pressedKey;
 
-			if (((unsigned char) key & 2)) // on arrow key down
+			if (((uint8) key & 2)) // on arrow key down
 			{
 				currentButton++;
 				if (currentButton == numEntry) // if current button is the last, than next button is the first
@@ -600,7 +600,7 @@ int process_menu(short int * menuSettings)
 				buttonReleased = 0;
 			}
 
-			if (((unsigned char) key & 1)) // on arrow key up
+			if (((uint8) key & 1)) // on arrow key up
 			{
 				currentButton--;
 				if (currentButton < 0) // if current button is the first, than previous button is the last
@@ -619,11 +619,11 @@ int process_menu(short int * menuSettings)
 				{
 					case MUSICVOLUME:
 						{
-							if (((unsigned char) key & 4)) // on arrow key left
+							if (((uint8) key & 4)) // on arrow key left
 							{
 								cfgfile.MusicVolume-=4;
 							}
-							if (((unsigned char) key & 8)) // on arrow key right
+							if (((uint8) key & 8)) // on arrow key right
 							{
 								cfgfile.MusicVolume+=4;
 							}
@@ -632,11 +632,11 @@ int process_menu(short int * menuSettings)
 						}
 					case SOUNDVOLUME:
 						{
-							if (((unsigned char) key & 4)) // on arrow key left
+							if (((uint8) key & 4)) // on arrow key left
 							{
 								cfgfile.WaveVolume-=4;
 							}
-							if (((unsigned char) key & 8)) // on arrow key right
+							if (((uint8) key & 8)) // on arrow key right
 							{
 								cfgfile.WaveVolume+=4;
 							}
@@ -645,11 +645,11 @@ int process_menu(short int * menuSettings)
 						}
 					case CDVOLUME:
 						{
-							if (((unsigned char) key & 4)) // on arrow key left
+							if (((uint8) key & 4)) // on arrow key left
 							{
 								cfgfile.CDVolume-=4;
 							}
-							if (((unsigned char) key & 8)) // on arrow key right
+							if (((uint8) key & 8)) // on arrow key right
 							{
 								cfgfile.CDVolume+=4;
 							}
@@ -657,11 +657,11 @@ int process_menu(short int * menuSettings)
 						}
 					case LINEVOLUME:
 						{
-							if (((unsigned char) key & 4)) // on arrow key left
+							if (((uint8) key & 4)) // on arrow key left
 							{
 								cfgfile.LineVolume-=4;
 							}
-							if (((unsigned char) key & 8)) // on arrow key right
+							if (((uint8) key & 8)) // on arrow key right
 							{
 								cfgfile.LineVolume+=4;
 							}
@@ -669,11 +669,11 @@ int process_menu(short int * menuSettings)
 						}
 					case MASTERVOLUME:
 						{
-							if (((unsigned char) key & 4)) // on arrow key left
+							if (((uint8) key & 4)) // on arrow key left
 							{
 								cfgfile.MasterVolume-=4;
 							}
-							if (((unsigned char) key & 8)) // on arrow key right
+							if (((uint8) key & 8)) // on arrow key right
 							{
 								cfgfile.MasterVolume+=4;
 							}
@@ -727,7 +727,7 @@ int process_menu(short int * menuSettings)
 /** Used to run the advanced options menu */
 int advoptions_menu()
 {
-    int ret = 0;
+    int32 ret = 0;
 
     copy_screen(workVideoBuffer, frontVideoBuffer);
 
@@ -756,7 +756,7 @@ int advoptions_menu()
 /** Used to run the save game management menu */
 int savemanage_menu()
 {
-    int ret = 0;
+    int32 ret = 0;
 
     copy_screen(workVideoBuffer, frontVideoBuffer);
 
@@ -785,7 +785,7 @@ int savemanage_menu()
 /** Used to run the volume menu */
 int volume_menu()
 {
-    int ret = 0;
+    int32 ret = 0;
 
     copy_screen(workVideoBuffer, frontVideoBuffer);
 
@@ -814,7 +814,7 @@ int volume_menu()
 /** Used to run the options menu */
 int options_menu()
 {
-    int ret = 0;
+    int32 ret = 0;
 
     copy_screen(workVideoBuffer, frontVideoBuffer);
 
@@ -917,12 +917,12 @@ void main_menu()
 	}
 }
 
-/** Used to run the in-game give-up menu */
+/** Used to process give up menu while playing game */
 int giveup_menu()
 {
-    //int saveLangue=0;
-    int menuId;
-	short * localMenu;
+    //int32 saveLangue=0;
+    int32 menuId;
+	int16 * localMenu;
 
     copy_screen(frontVideoBuffer, workVideoBuffer);
 	//TODO: halt samples
@@ -954,6 +954,8 @@ int giveup_menu()
 	return 0;
 }
 
+/** Used to process options menu while playing game
+	@param pKey pressed key */
 int process_giveup_menu()
 {
 	if(skipIntro == 1)// && twinsen->life > 0 && twinsen->costumeIndex != -1 && !twinsen->staticFlagsBF.bNoDisplay)
@@ -979,7 +981,7 @@ int process_giveup_menu()
 	return 0;
 }
 
-void process_options_menu(short int pKey)
+void process_options_menu(int16 pKey)
 {
 	// Press F6
 	if(pKey == 0x40)
