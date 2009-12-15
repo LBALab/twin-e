@@ -28,9 +28,11 @@
 #ifndef SCENE_DEBUG_H
 #define SCENE_DEBUG_H
 
-extern int showingZones;
-extern int typeZones;
+#include "sys.h"
 
-void display_zones(short int pKey);
+extern int32 showingZones;
+extern int32 typeZones;
+
+void display_zones(int16 pKey);
 
 #endif

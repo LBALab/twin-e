@@ -46,10 +46,10 @@
 
 typedef struct RedrawStruct
 {
-  unsigned short int left;
-  unsigned short int top;
-  unsigned short int right;
-  unsigned short int bottom;
+  uint16 left;
+  uint16 top;
+  uint16 right;
+  uint16 bottom;
 } RedrawStruct;
 
 RedrawStruct currentRedrawList[300];
@@ -57,38 +57,38 @@ RedrawStruct nextRedrawList[300];
 
 typedef struct DrawListStruct
 {
-  short int posValue;
-  unsigned short int index; // field_2
-  unsigned short int X;
-  unsigned short int Y;
-  unsigned short int Z;
-  unsigned short int field_A;
-  unsigned short int field_C;
-  unsigned short int field_E;
-  unsigned short int field_10;
+  int16  posValue;
+  uint16 index; // field_2
+  uint16 X;
+  uint16 Y;
+  uint16 Z;
+  uint16 field_A;
+  uint16 field_C;
+  uint16 field_E;
+  uint16 field_10;
 } DrawListStruct;
 
 /** Draw list array to grab the necessary */
 DrawListStruct drawList[150];
 
 /** Current number of redraw regions in the screen */
-int currNumOfRedrawBox; // fullRedrawVar8
+int32 currNumOfRedrawBox; // fullRedrawVar8
 /** Number of redraw regions in the screen */
-int numOfRedrawBox;
+int32 numOfRedrawBox;
 
 /** Add a certain region to the current redraw list array
 	@param left start width to redraw the region
 	@param top start height to redraw the region
 	@param right end width to redraw the region
 	@param bottom end height to redraw the region */
-void add_redraw_current_area(int left, int top, int right, int bottom)
+void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom)
 {
-	int area;
-	int i = 0;
-	int leftValue;
-	int rightValue;
-	int topValue;
-	int bottomValue;
+	int32 area;
+	int32 i = 0;
+	int32 leftValue;
+	int32 rightValue;
+	int32 topValue;
+	int32 bottomValue;
 
 	area = (right - left) * (bottom - top);
 
@@ -145,7 +145,7 @@ void add_redraw_current_area(int left, int top, int right, int bottom)
 	@param top start height to redraw the region
 	@param right end width to redraw the region
 	@param bottom end height to redraw the region */
-void add_redraw_area(int left, int top, int right, int bottom)
+void add_redraw_area(int32 left, int32 top, int32 right, int32 bottom)
 {
 	if (left < 0)
 		left = 0;
@@ -172,7 +172,7 @@ void add_redraw_area(int left, int top, int right, int bottom)
 /** Move next regions to the current redraw list */
 void move_next_areas()
 {
-	int i;
+	int32 i;
 
 	numOfRedrawBox = 0;
 
@@ -187,7 +187,7 @@ void move_next_areas()
 	This only updates small areas in the screen so few CPU processor is used */
 void flip_redraw_areas()
 {
-	int i;
+	int32 i;
 
 	for (i = 0; i < numOfRedrawBox; i++) // redraw areas on screen
 	{
@@ -205,13 +205,13 @@ void flip_redraw_areas()
 /** Blit/Update all screen regions in the currentRedrawList */
 void blit_background_areas()
 {
-	int i;
+	int32 i;
 	RedrawStruct* currentArea;
 	currentArea = currentRedrawList;
 
 	for (i = 0; i < numOfRedrawBox; i++)
 	{
-		blit_box(currentArea->left, currentArea->top, currentArea->right, currentArea->bottom, (char *) workVideoBuffer, currentArea->left, currentArea->top, (char *) frontVideoBuffer);
+		blit_box(currentArea->left, currentArea->top, currentArea->right, currentArea->bottom, (int8 *) workVideoBuffer, currentArea->left, currentArea->top, (int8 *) frontVideoBuffer);
 		currentArea++;
 	}
 }
@@ -219,10 +219,10 @@ void blit_background_areas()
 /** Sort drawing list struct ordered as the first objects appear in the top left corner of the screen
 	@param list drawing list variable which contains information of the drawing objects
 	@param listSize number of drawing objects in the list */
-void sort_drawing_list(DrawListStruct *list, int listSize)
+void sort_drawing_list(DrawListStruct *list, int32 listSize)
 {
-	int i;
-	int j;
+	int32 i;
+	int32 j;
 
 	DrawListStruct tempStruct;
 
@@ -242,13 +242,13 @@ void sort_drawing_list(DrawListStruct *list, int listSize)
 
 /** Process what objects must the drawn in the screen
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-int process_actors_drawlist(int bgRedraw)
+int process_actors_drawlist(int32 bgRedraw)
 {
-	int tmpVal;
-	int modelActorPos;  // arg_1A
-	int spriteActorPos; // top6
-	int shadowActorPos; // top2
-	int drawListPos;    // a12
+	int32 tmpVal;
+	int32 modelActorPos;  // arg_1A
+	int32 spriteActorPos; // top6
+	int32 shadowActorPos; // top2
+	int32 drawListPos;    // a12
 	ActorStruct *localActor;
 
 	modelActorPos = 0;
@@ -262,7 +262,7 @@ int process_actors_drawlist(int bgRedraw)
 		localActor = &sceneActors[modelActorPos];		
 		localActor->dynamicFlags.bIsVisible = 0; // reset visible state
 
-		if((useCellingGrid==-1) || localActor->Y <= (*(short int*)(cellingGridIdx*24 + (char *)sceneZones+8)))
+		if((useCellingGrid==-1) || localActor->Y <= (*(int16 *)(cellingGridIdx*24 + (int8 *)sceneZones+8)))
 		{
 			// no redraw required
 			if(localActor->staticFlags.bIsBackgrounded && bgRedraw==0)
@@ -348,22 +348,22 @@ int process_actors_drawlist(int bgRedraw)
 
 	Objects like 3D actors, sprite actors, extra bonus and shadows
 	@param numDrawingList number of drawing actors in the current screen*/
-void process_drawing(int numDrawingList)
+void process_drawing(int32 numDrawingList)
 {
-	int drawListPos = 0;
+	int32 drawListPos = 0;
 
 	// if has something to draw
 	if(numDrawingList > 0)
 	{
-		unsigned int flags;
-		int actorIdx;
+		uint32 flags;
+		int32 actorIdx;
 		ActorStruct *localActor;
 
 		do
 		{
 			actorIdx = drawList[drawListPos].index & 0x3FF;
 			localActor = &sceneActors[actorIdx];
-			flags = ((unsigned int) drawList[drawListPos].index) & 0xFC00;
+			flags = ((uint32) drawList[drawListPos].index) & 0xFC00;
 		
 			// Drawing actors
 			if (flags < 0xC00)
@@ -395,9 +395,9 @@ void process_drawing(int numDrawingList)
 
 						if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom)
 						{
-							int tempX;
-							int tempY;
-							int tempZ;
+							int32 tempX;
+							int32 tempY;
+							int32 tempZ;
 
 							localActor->dynamicFlags.bIsVisible = 1;
 
@@ -429,9 +429,9 @@ void process_drawing(int numDrawingList)
 			// Drawing sprite actors
 			else if(flags == 0x1000)
 			{
-				int spriteWidth, spriteHeight;
+				int32 spriteWidth, spriteHeight;
 				//int spriteSize = spriteSizeTable[localActor->entity];
-				unsigned char *spritePtr = spriteTable[localActor->entity];
+				uint8 *spritePtr = spriteTable[localActor->entity];
 
 				// get actor position on screen
 				project_position_on_screen(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ);
@@ -439,8 +439,8 @@ void process_drawing(int numDrawingList)
 				get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
 
 				// calculate sprite position on screen
-				renderLeft = projPosX + *(short int *) (spriteBoundingBoxPtr + localActor->entity * 16);
-				renderTop = projPosY + *(short int *) (spriteBoundingBoxPtr + localActor->entity * 16 + 2);
+				renderLeft = projPosX + *(int16 *) (spriteBoundingBoxPtr + localActor->entity * 16);
+				renderTop = projPosY + *(int16 *) (spriteBoundingBoxPtr + localActor->entity * 16 + 2);
 				renderRight = renderLeft + spriteWidth;
 				renderBottom = renderTop + spriteHeight;
 
@@ -496,11 +496,11 @@ void process_drawing(int numDrawingList)
 
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int bgRedraw) // fullRedraw
+void redraw_engine_actions(int32 bgRedraw) // fullRedraw
 {
-	short int tmpProjPosX;
-	short int tmpProjPosY;
-	int numDrawingList;
+	int16 tmpProjPosX;
+	int16 tmpProjPosY;
+	int32 numDrawingList;
 
 	tmpProjPosX = projPosXScreen;
 	tmpProjPosY = projPosYScreen;

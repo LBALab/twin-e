@@ -41,6 +41,8 @@ typedef signed   short int16;
 typedef unsigned int uint32;
 typedef signed   int int32;
 
+typedef float int64;
+
 // ENDIAN
 
 #define FORCEINLINE __forceinline

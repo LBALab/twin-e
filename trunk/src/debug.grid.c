@@ -35,11 +35,11 @@
 #include "scene.h"
 #include "main.h"
 
-int useFreeCamera=0;
-int canChangeScenes=0;
+int32 useFreeCamera=0;
+int32 canChangeScenes=0;
 
 /** Change scenario camera positions */
-void change_grid_camera(short int pKey)
+void change_grid_camera(int16 pKey)
 {
 	if(useFreeCamera)
 	{
@@ -74,7 +74,7 @@ void change_grid_camera(short int pKey)
 }
 
 /** Change grid index */
-void change_grid(short int pKey)
+void change_grid(int16 pKey)
 {
 	if(canChangeScenes)
 	{
@@ -104,7 +104,7 @@ void change_grid(short int pKey)
 }
 
 /** Apply and change disappear celling grid */
-void apply_celling_grid(short int pKey)
+void apply_celling_grid(int16 pKey)
 {
 	// Increase celling grid index
 	if(pKey == 'g')

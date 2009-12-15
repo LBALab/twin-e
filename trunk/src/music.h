@@ -28,34 +28,36 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
+#include "sys.h"
+
 /** Track number of the current playing music */
-int currentMusic;
+int32 currentMusic;
 
 /** Music volume
 	@param current volume number */
-void music_volume(int volume);
+void music_volume(int32 volume);
 /** Play CD music
 	@param track track number to play */
-void play_track_music_cd(int track);
+void play_track_music_cd(int32 track);
 /** Stop CD music */
 void stop_track_music_cd();
 /** Play MP3 music
 	@param track track number to play */
-void play_track_music_mp3(int track);
+void play_track_music_mp3(int32 track);
 /** Stop MP3 music */
 void stop_track_music_mp3();
 /** Generic play music, according with settings it plays CD or high quality sounds instead
 	@param track track number to play*/
-void play_track_music(int track);
+void play_track_music(int32 track);
 /** Generic stop music according with settings */
 void stop_track_music();
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
-void play_midi_music(int midiIdx, int loop);
+void play_midi_music(int32 midiIdx, int32 loop);
 /** Stop MIDI music */
 void stop_midi_music();
 
 /** Initialize CD-Rom */
-int init_cdrom();
+int32 init_cdrom();
 
 #endif

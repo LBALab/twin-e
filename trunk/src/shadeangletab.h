@@ -29,7 +29,7 @@
 #ifndef SHADEANGLETAB_H
 #define SHADEANGLETAB_H
 
-short int shadeAngleTable[1024] = {
+int16 shadeAngleTable[1024] = {
   0,		// tab1
   101,
   201,

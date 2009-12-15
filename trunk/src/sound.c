@@ -36,14 +36,14 @@
 
 
 /** SDL_Mixer channels */
-int channel;
+int32 channel;
 /** Samples chunk variable */
 Mix_Chunk *sample;
 
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */
-void sample_volume(int channel, int volume)
+void sample_volume(int32 channel, int32 volume)
 {
 	Mix_Volume(channel,volume/2);
 }
@@ -54,14 +54,14 @@ void sample_volume(int channel, int volume)
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
 	@param y unknown y variable*/
-void play_fla_sample(int index,int frequency, int repeat, int x, int y)
+void play_fla_sample(int32 index,int32 frequency, int32 repeat, int32 x, int32 y)
 {
 	if(!cfgfile.NoSound)
 	{
-		int sampSize = 0;
-		char sampfile[256];
+		int32 sampSize = 0;
+		int8 sampfile[256];
 		SDL_RWops *rw;
-		unsigned char* sampPtr;
+		uint8* sampPtr;
 		
 		sprintf(sampfile, FLA_DIR "//%s",HQR_FLASAMP_FILE);
 

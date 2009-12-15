@@ -28,29 +28,31 @@
 #ifndef HQRDEPACK_H
 #define HQRDEPACK_H
 
+#include "sys.h"
+
 /** Get a HQR entry pointer
 	@param ptr pointer to save the entry
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int hqr_get_entry(unsigned char * ptr, char *filename, int index);
+int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index);
 
 /** Get a HQR entry pointer
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int hqr_entry_size(char *filename, int index);
+int32 hqr_entry_size(int8 *filename, int32 index);
 
 /** Get a HQR total number of entries
 	@param filename HQR file name
 	@return total number of entries */
-int hqr_num_entries(char *filename);
+int32 hqr_num_entries(int8 *filename);
 
 /** Get a HQR entry pointer with memory allocation
 	@param ptr pointer to save the entry
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int hqr_getalloc_entry(unsigned char ** ptr, char *filename, int index);
+int32 hqr_getalloc_entry(uint8 ** ptr, int8 *filename, int32 index);
 
 #endif

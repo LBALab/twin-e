@@ -60,16 +60,16 @@
 #define KEY_FRAME		7
 
 /** Auxiliar FLA fade out variable */
-int fadeOut;
+int32 fadeOut;
 /** Auxiliar FLA fade out variable to count frames between the fade */
-int fadeOutFrames;
+int32 fadeOutFrames;
 
 /** FLA movie sample auxiliar table */
-int flaSampleTable[100];
+int32 flaSampleTable[100];
 /** Number of samples in FLA movie */
-int samplesInFla;
+int32 samplesInFla;
 /** Auxiliar work video buffer */
-unsigned char* workVideoBufferCopy;
+uint8* workVideoBufferCopy;
 /** Auxiliar scale buffer */
 //unsigned char workVideoBufferNonScale[(SCREEN_WIDTH*SCREEN_HEIGHT)/(SCALE*SCALE)];
 /** FLA movie pointer */
@@ -79,19 +79,19 @@ FLAHeaderStruct flaHeaderData;
 /** FLA movie header data */
 FLAFrameDataStruct frameData;
 
-filereader frFla;
+FileReader frFla;
 
 /** FLA movie draw key frame
 	@param ptr FLA frame buffer pointer 
 	@param width FLA movie width
 	@param height FLA movie height */
-void draw_key_frame(unsigned char * ptr, int width, int height)
+void draw_key_frame(uint8 * ptr, int32 width, int32 height)
 {
-	int a, b;
-	unsigned char * destPtr = (unsigned char *)flaBuffer;
-	unsigned char * startOfLine = destPtr;
-	char flag1;
-	char flag2;
+	int32 a, b;
+	uint8 * destPtr = (uint8 *)flaBuffer;
+	uint8 * startOfLine = destPtr;
+	int8 flag1;
+	int8 flag2;
 
 	do
 	{
@@ -129,21 +129,21 @@ void draw_key_frame(unsigned char * ptr, int width, int height)
 /** FLA movie draw delta frame
 	@param ptr FLA frame buffer pointer 
 	@param width FLA movie width */
-void draw_delta_frame(unsigned char * ptr, int width)
+void draw_delta_frame(uint8 * ptr, int32 width)
 {
-	int a,b;
-	unsigned short int skip;
-	unsigned char * destPtr;
-	unsigned char * startOfLine;
-	int height;
+	int32 a,b;
+	uint16 skip;
+	uint8 * destPtr;
+	uint8 * startOfLine;
+	int32 height;
 
-	char flag1;
-	char flag2;
+	int8 flag1;
+	int8 flag2;
 
-	skip = *((unsigned short int*)ptr); ptr+=2;
+	skip = *((uint16*)ptr); ptr+=2;
 	skip *= width;
-	startOfLine = destPtr = (unsigned char *)flaBuffer+skip;
-	height = *((signed short int*)ptr); ptr+=2;
+	startOfLine = destPtr = (uint8 *)flaBuffer+skip;
+	height = *((int16*)ptr); ptr+=2;
 	
 	do
 	{
@@ -185,9 +185,9 @@ void draw_delta_frame(unsigned char * ptr, int width)
 	to fullscreen or preserve it and use top and button black bars */
 void scale_fla_2x()
 {
-	int i,j;
-	unsigned char* source=(unsigned char*)flaBuffer;
-	unsigned char* dest=(unsigned char*)workVideoBuffer;
+	int32 i,j;
+	uint8* source=(uint8*)flaBuffer;
+	uint8* dest=(uint8*)workVideoBuffer;
 
 	if(cfgfile.FLAwide)
 	{
@@ -237,10 +237,10 @@ void scale_fla_2x()
 void process_frame()
 {
 	FLASampleStruct sample;
-	unsigned int opcodeBlockSize;
-	unsigned char opcode;
-	int aux=0;
-	unsigned char * ptr;
+	uint32 opcodeBlockSize;
+	uint8 opcode;
+	int32 aux=0;
+	uint8 * ptr;
 
 	frread(&frFla,&frameData.videoSize,1);
 	frread(&frFla,&frameData.dummy,1);
@@ -248,22 +248,22 @@ void process_frame()
 
 	frread(&frFla,workVideoBufferCopy,frameData.frameVar0);
 
-	if((int)frameData.videoSize<=0)
+	if((int32)frameData.videoSize<=0)
 		return;
 
 	ptr = workVideoBufferCopy;
 
 	do
 	{
-		opcode = *((unsigned char*)ptr); ptr+=2;
-		opcodeBlockSize = *((unsigned short int*)ptr); ptr+=2;
+		opcode = *((uint8*)ptr); ptr+=2;
+		opcodeBlockSize = *((uint16*)ptr); ptr+=2;
 
 		switch(opcode-1)
 		{
 			case LOAD_PALETTE:
 			{
-				short int numOfColor = *((short int*)ptr);
-				short int startColor = *((short int*)(ptr+2));
+				int16 numOfColor = *((int16*)ptr);
+				int16 startColor = *((int16*)(ptr+2));
 				memcpy((palette+(startColor*3)),(ptr+4),numOfColor*3);
 				break;
 			}
@@ -311,17 +311,17 @@ void process_frame()
 		aux++;
 		ptr += opcodeBlockSize;
 
-	}while(aux < (int)frameData.videoSize);
+	}while(aux < (int32)frameData.videoSize);
 	//free(workVideoBufferCopy);
 }
 
 /** Play FLA movies
 	@param filname FLA movie file name */
-void play_fla_movie(char *filename)
+void play_fla_movie(int8 *filename)
 {
-	int i;
-	int quit = 0;
-	int currentFrame;
+	int32 i;
+	int32 quit = 0;
+	int32 currentFrame;
 
 	fadeOut = -1;
 	fadeOutFrames = 0;
@@ -351,9 +351,9 @@ void play_fla_movie(char *filename)
 
 	for(i=0; i<samplesInFla; i++)
 	{
-		//flaSampleTable[i] = *((short int *)flaPtr); flaPtr+=4;
-		short int var0;
-		short int var1;   
+		//flaSampleTable[i] = *((int16 *)flaPtr); flaPtr+=4;
+		int16 var0;
+		int16 var1;   
 		frread(&frFla,&var0,2);
 		frread(&frFla,&var1,2);
 		flaSampleTable[i] = var0;
@@ -371,7 +371,6 @@ void play_fla_movie(char *filename)
 					quit=1;
 				else 
 				{
-					//process_frame(flaPtr);
 					process_frame();
 					scale_fla_2x();
 					copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -420,18 +419,18 @@ void play_fla_movie(char *filename)
 
 /** Generic play movies, according with the settings
 	@param movie - movie file path */
-void play_movie(char *movie)
+void play_movie(int8 *movie)
 {
 	if(cfgfile.UseAVI)
 	{
-		char fileBuf[256];
+		int8 fileBuf[256];
 		sprintf(fileBuf,MOVIES_DIR);
 		strcat(fileBuf,movie);
 		strcat(fileBuf,MOVIES_EXT);
 	}
 	else // play FLA movies
 	{
-		char fileBuf[256];
+		int8 fileBuf[256];
 		sprintf(fileBuf,FLA_DIR);
 		strcat(fileBuf,movie);
 		strcat(fileBuf,FLA_EXT);

@@ -29,28 +29,30 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
-int quitGame;
-volatile int lbaTime;
+#include "sys.h"
+
+int32 quitGame;
+volatile int32 lbaTime;
 /** Request background redraw */
-short int reqBgRedraw;
+int16 reqBgRedraw;
 
-short int projPosXScreen; // fullRedrawVar1
-short int projPosYScreen; // fullRedrawVar2
-short int projPosZScreen; // fullRedrawVar3
-short int projPosX;
-short int projPosY;
-short int projPosZ;
+int16 projPosXScreen; // fullRedrawVar1
+int16 projPosYScreen; // fullRedrawVar2
+int16 projPosZScreen; // fullRedrawVar3
+int16 projPosX;
+int16 projPosY;
+int16 projPosZ;
 
-short int currentlyFollowedActor;
+int16 currentlyFollowedActor;
 
-unsigned char gameFlags[256];
+uint8 gameFlags[256];
 
 void freeze_time();
 void unfreeze_time();
 
-int game_engine_loop();
+int32 game_engine_loop();
 
-void init_engine_vars(int save);
+void init_engine_vars(int32 save);
 void init_engine_projections();
 
 #endif

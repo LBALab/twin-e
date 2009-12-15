@@ -39,10 +39,10 @@
 #include "music.h"
 #include "renderer.h"
 
-unsigned char* currentScene;
+uint8* currentScene;
 
 
-void set_actor_staticflags(int actorIdx, unsigned short int staticFlags)
+void set_actor_staticflags(int32 actorIdx, uint16 staticFlags)
 {
 	if(staticFlags & 0x1)
     {
@@ -113,60 +113,60 @@ void set_actor_staticflags(int actorIdx, unsigned short int staticFlags)
 
 void load_scene()
 {
-	int i;
-	int scriptSize=0;
-	unsigned char* localScene = currentScene;
+	int32 i;
+	int32 scriptSize=0;
+	uint8* localScene = currentScene;
 
 	// load scene ambience properties
 	currentTextBank = *(localScene++);
 	currentGameOverScene = *(localScene++);
 	localScene+=4;
 
-	alphaLight = *((unsigned short int*)localScene); localScene+=2;
-	betaLight = *((unsigned short int*)localScene);  localScene+=2;
+	alphaLight = *((uint16*)localScene); localScene+=2;
+	betaLight = *((uint16*)localScene);  localScene+=2;
 
-	sampleAmbience.info0 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRepeat.info0 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRound.info0 = *((unsigned short int*)localScene);  localScene+=2;
+	sampleAmbience.info0 = *((uint16*)localScene);  localScene+=2;
+	sampleRepeat.info0 = *((uint16*)localScene);  localScene+=2;
+	sampleRound.info0 = *((uint16*)localScene);  localScene+=2;
 
-	sampleAmbience.info1 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRepeat.info1 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRound.info1 = *((unsigned short int*)localScene);  localScene+=2;
+	sampleAmbience.info1 = *((uint16*)localScene);  localScene+=2;
+	sampleRepeat.info1 = *((uint16*)localScene);  localScene+=2;
+	sampleRound.info1 = *((uint16*)localScene);  localScene+=2;
 
-	sampleAmbience.info2 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRepeat.info2 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRound.info2 = *((unsigned short int*)localScene);  localScene+=2;
+	sampleAmbience.info2 = *((uint16*)localScene);  localScene+=2;
+	sampleRepeat.info2 = *((uint16*)localScene);  localScene+=2;
+	sampleRound.info2 = *((uint16*)localScene);  localScene+=2;
 
-	sampleAmbience.info3 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRepeat.info3 = *((unsigned short int*)localScene);  localScene+=2;
-	sampleRound.info3 = *((unsigned short int*)localScene);  localScene+=2;
+	sampleAmbience.info3 = *((uint16*)localScene);  localScene+=2;
+	sampleRepeat.info3 = *((uint16*)localScene);  localScene+=2;
+	sampleRound.info3 = *((uint16*)localScene);  localScene+=2;
 	
-	sampleMinDelay = *((unsigned short int*)localScene);  localScene+=2;
-	sampleMinDelayRnd = *((unsigned short int*)localScene);  localScene+=2;
+	sampleMinDelay = *((uint16*)localScene);  localScene+=2;
+	sampleMinDelayRnd = *((uint16*)localScene);  localScene+=2;
 
 	sceneMusic = *(localScene++);
 
 	// load hero properties
-	sceneHeroX = *((unsigned short int*)localScene);  localScene+=2;
-	sceneHeroY = *((unsigned short int*)localScene);  localScene+=2;
-	sceneHeroZ = *((unsigned short int*)localScene);  localScene+=2;
+	sceneHeroX = *((uint16*)localScene);  localScene+=2;
+	sceneHeroY = *((uint16*)localScene);  localScene+=2;
+	sceneHeroZ = *((uint16*)localScene);  localScene+=2;
 
-	scriptSize = *((unsigned short int*)localScene);  localScene+=2;
+	scriptSize = *((uint16*)localScene);  localScene+=2;
 	sceneHero->moveScript = localScene;
 	localScene+=scriptSize;
 
-	scriptSize = *((unsigned short int*)localScene);  localScene+=2;
+	scriptSize = *((uint16*)localScene);  localScene+=2;
 	sceneHero->lifeScript = localScene;
 	localScene+=scriptSize;
 
-	sceneNumActors = *((unsigned short int*)localScene);  localScene+=2;
+	sceneNumActors = *((uint16*)localScene);  localScene+=2;
 
 	for(i=1; i < sceneNumActors; i++)
 	{
-		unsigned short int staticFlags = *((unsigned short int*)localScene);  localScene+=2;	
+		uint16 staticFlags = *((uint16*)localScene);  localScene+=2;	
 		set_actor_staticflags(i, staticFlags);
 
-		sceneActors[i].entity = *((unsigned short int*)localScene);  localScene+=2;
+		sceneActors[i].entity = *((uint16*)localScene);  localScene+=2;
 
 		if(!sceneActors[i].staticFlags.bIsSpriteActor)
 		{
@@ -175,71 +175,71 @@ void load_scene()
 
 		sceneActors[i].body = *(localScene++);
 		sceneActors[i].anim = *(localScene++);
-		sceneActors[i].sprite = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].X = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].Y = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].Z = *((unsigned short int*)localScene);  localScene+=2;
+		sceneActors[i].sprite = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].X = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].Y = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].Z = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].strengthOfHit = *(localScene++);
-		sceneActors[i].bonusParameter = *((unsigned short int*)localScene);  localScene+=2;
+		sceneActors[i].bonusParameter = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].bonusParameter &= 0xFE;
-		sceneActors[i].angle = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].speed = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].comportement = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].info0 = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].info1 = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].info2 = *((unsigned short int*)localScene);  localScene+=2;
-		sceneActors[i].info3 = *((unsigned short int*)localScene);  localScene+=2;
+		sceneActors[i].angle = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].speed = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].comportement = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].info0 = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].info1 = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].info2 = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].info3 = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].followedActor = sceneActors[i].info3;
 		sceneActors[i].bonusAmount = *(localScene++);
 		sceneActors[i].talkColor = *(localScene++);
 		sceneActors[i].armor = *(localScene++);
 		sceneActors[i].life = *(localScene++);
 
-		scriptSize = *((unsigned short int*)localScene);  localScene+=2;
+		scriptSize = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].moveScript = localScene;
 		localScene+=scriptSize;
 
-		scriptSize = *((unsigned short int*)localScene);  localScene+=2;
+		scriptSize = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].lifeScript = localScene;
 		localScene+=scriptSize;
 	}
 
-	sceneNumZones = *((unsigned short int*)localScene);  localScene+=2;
+	sceneNumZones = *((uint16*)localScene);  localScene+=2;
 
 	for(i=0; i < sceneNumZones; i++)
 	{
-		sceneZones[i].bottomLeft.X = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].bottomLeft.Y = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].bottomLeft.Z = *((unsigned short int*)localScene);  localScene+=2;
+		sceneZones[i].bottomLeft.X = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].bottomLeft.Y = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].bottomLeft.Z = *((uint16*)localScene);  localScene+=2;
 
-		sceneZones[i].topRight.X = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].topRight.Y = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].topRight.Z = *((unsigned short int*)localScene);  localScene+=2;
+		sceneZones[i].topRight.X = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].topRight.Y = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].topRight.Z = *((uint16*)localScene);  localScene+=2;
 
-		sceneZones[i].type = *((unsigned short int*)localScene);  localScene+=2;
+		sceneZones[i].type = *((uint16*)localScene);  localScene+=2;
 
-		sceneZones[i].info0 = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].info1 = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].info2 = *((unsigned short int*)localScene);  localScene+=2;
-		sceneZones[i].info3 = *((unsigned short int*)localScene);  localScene+=2;
+		sceneZones[i].info0 = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].info1 = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].info2 = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].info3 = *((uint16*)localScene);  localScene+=2;
 
-		sceneZones[i].snap = *((unsigned short int*)localScene);  localScene+=2;
+		sceneZones[i].snap = *((uint16*)localScene);  localScene+=2;
 	}
 
-	sceneNumTracks = *((unsigned short int*)localScene);  localScene+=2;
+	sceneNumTracks = *((uint16*)localScene);  localScene+=2;
 
 	for(i=0; i < sceneNumTracks; i++)
 	{
-		sceneTracks[i].X = *((unsigned short int*)localScene);  localScene+=2;
-		sceneTracks[i].Y = *((unsigned short int*)localScene);  localScene+=2;
-		sceneTracks[i].Z = *((unsigned short int*)localScene);  localScene+=2;
+		sceneTracks[i].X = *((uint16*)localScene);  localScene+=2;
+		sceneTracks[i].Y = *((uint16*)localScene);  localScene+=2;
+		sceneTracks[i].Z = *((uint16*)localScene);  localScene+=2;
 	}
 }
 
 
-int init_scene(int index)
+int32 init_scene(int32 index)
 {
-	int sceneSize;
+	int32 sceneSize;
 
 	// load scene from file
 	sceneSize = hqr_getalloc_entry(&currentScene, HQR_SCENE_FILE, index);
@@ -251,7 +251,7 @@ int init_scene(int index)
 
 void change_scene()
 {
-	int previousSceneIdx, a;
+	int32 previousSceneIdx, a;
 	// change twinsen house destroyed hard-coded
 	if (needChangeScene == 4 && gameFlags[30] != 0)
 		needChangeScene = 118;

@@ -65,43 +65,43 @@ enum WindowType
 
 typedef struct DebugButtonStruct
 {
-	int left;
-	int top;
-	int right;
-	int bottom;
-	char *text;
-	int textLeft;
-	int textTop;
-	int isActive;
-	int color;
-	int activeColor;
-	int submenu;
-	int type;
+	int32 left;
+	int32 top;
+	int32 right;
+	int32 bottom;
+	int8  *text;
+	int32 textLeft;
+	int32 textTop;
+	int32 isActive;
+	int32 color;
+	int32 activeColor;
+	int32 submenu;
+	int32 type;
 } DebugButtonStruct;
 
 typedef struct DebugWindowStruct
 {
-	int left;
-	int top;
-	int right;
-	int bottom;
-	int alpha;
-	int isActive;
-	int numLines;
-	char *text[20];
-	int numButtons;
+	int32 left;
+	int32 top;
+	int32 right;
+	int32 bottom;
+	int32 alpha;
+	int32 isActive;
+	int32 numLines;
+	int8  *text[20];
+	int32 numButtons;
 	DebugButtonStruct debugButtons[50];
 } DebugWindowStruct;
 
 DebugWindowStruct debugWindows[10];
-int numDebugWindows=0;
+int32 numDebugWindows=0;
 
 
-void debug_fill_button(int X, int Y, int width, int height, char color)
+void debug_fill_button(int32 X, int32 Y, int32 width, int32 height, int8 color)
 {
-	int i, j;
-	unsigned char *ptr;
-	int offset;
+	int32 i, j;
+	uint8 *ptr;
+	int32 offset;
 
 	ptr = frontVideoBuffer + screenLockupTable[Y] + X;
 	offset = 640 - (width);
@@ -116,7 +116,7 @@ void debug_fill_button(int X, int Y, int width, int height, char color)
 	}
 }
 
-void debug_draw_button(int left, int top, int right, int bottom, char *text, int textLeft, int textRight, int isActive, char color)
+void debug_draw_button(int32 left, int32 top, int32 right, int32 bottom, int8 *text, int32 textLeft, int32 textRight, int32 isActive, int8 color)
 {
 	debug_fill_button(left+1,top+1,right-left-1,bottom-top-1,color);
 	draw_button_box(left,top,right,bottom);
@@ -124,27 +124,28 @@ void debug_draw_button(int left, int top, int right, int bottom, char *text, int
 	copy_block_phys(left,top,right,bottom);
 }
 
-void debug_draw_window_box(int left, int top, int right, int bottom, int alpha)
+void debug_draw_window_box(int32 left, int32 top, int32 right, int32 bottom, int32 alpha)
 {
 	draw_transparent_box(left,top,right,bottom,alpha);
 	draw_button_box(left,top,right,bottom);
 	//copy_block_phys(left,top,right,bottom);
 }
 
-void debug_draw_window_buttons(int w)
+void debug_draw_window_buttons(int32 w)
 {
-	int b;
+	int32 b;
+
 	for(b=0; b < debugWindows[w].numButtons; b++)
 	{
-		int left = debugWindows[w].debugButtons[b].left;
-		int top = debugWindows[w].debugButtons[b].top;
-		int right = debugWindows[w].debugButtons[b].right;
-		int bottom = debugWindows[w].debugButtons[b].bottom;
-		char *text = debugWindows[w].debugButtons[b].text;
-		int textLeft = debugWindows[w].debugButtons[b].textLeft;
-		int textTop = debugWindows[w].debugButtons[b].textTop;
-		int isActive = debugWindows[w].debugButtons[b].isActive;
-		char color = debugWindows[w].debugButtons[b].color;
+		int32 left = debugWindows[w].debugButtons[b].left;
+		int32 top = debugWindows[w].debugButtons[b].top;
+		int32 right = debugWindows[w].debugButtons[b].right;
+		int32 bottom = debugWindows[w].debugButtons[b].bottom;
+		int8  *text = debugWindows[w].debugButtons[b].text;
+		int32 textLeft = debugWindows[w].debugButtons[b].textLeft;
+		int32 textTop = debugWindows[w].debugButtons[b].textTop;
+		int32 isActive = debugWindows[w].debugButtons[b].isActive;
+		int8  color = debugWindows[w].debugButtons[b].color;
 		if(isActive>0)
 			color = debugWindows[w].debugButtons[b].activeColor;
 		
@@ -152,19 +153,20 @@ void debug_draw_window_buttons(int w)
 	}
 }
 
-void debug_draw_window(int w)
+void debug_draw_window(int32 w)
 {
-	int left = debugWindows[w].left;
-	int top = debugWindows[w].top;
-	int right = debugWindows[w].right;
-	int bottom = debugWindows[w].bottom;
-	int alpha = debugWindows[w].alpha;
+	int32 left = debugWindows[w].left;
+	int32 top = debugWindows[w].top;
+	int32 right = debugWindows[w].right;
+	int32 bottom = debugWindows[w].bottom;
+	int32 alpha = debugWindows[w].alpha;
 
 	debug_draw_window_box(left,top,right,bottom,alpha);
 
 	if(debugWindows[w].numLines>0)
 	{
-		int l;
+		int32 l;
+
 		for(l=0; l < debugWindows[w].numLines; l++)
 		{
 			ttf_draw_text(left+10,top+l*20+5,debugWindows[w].text[l],0);
@@ -176,9 +178,10 @@ void debug_draw_window(int w)
 	debug_draw_window_buttons(w);
 }
 
-int debug_type_use_menu(int type)
+int32 debug_type_use_menu(int32 type)
 {
-	int w,b;
+	int32 w,b;
+
 	for(w=0; w < numDebugWindows; w++)
 	{
 		if(debugWindows[w].isActive>0)
@@ -214,9 +217,10 @@ void debug_reset_buttons_state()
 	}
 }
 
-void debug_refresh_buttons(int type)
+void debug_refresh_buttons(int32 type)
 {
-	int w,b;
+	int32 w,b;
+
 	for(w=0; w < numDebugWindows; w++)
 	{
 		if(debugWindows[w].isActive>0)
@@ -225,15 +229,15 @@ void debug_refresh_buttons(int type)
 			{
 				if(debugWindows[w].debugButtons[b].type==type)
 				{
-					int left = debugWindows[w].debugButtons[b].left;
-					int top = debugWindows[w].debugButtons[b].top;
-					int right = debugWindows[w].debugButtons[b].right;
-					int bottom = debugWindows[w].debugButtons[b].bottom;
-					char *text = debugWindows[w].debugButtons[b].text;
-					int textLeft = debugWindows[w].debugButtons[b].textLeft;
-					int textTop = debugWindows[w].debugButtons[b].textTop;
-					char color = debugWindows[w].debugButtons[b].color;
-					int isActive = debugWindows[w].debugButtons[b].isActive = !debugWindows[w].debugButtons[b].isActive;
+					int32 left = debugWindows[w].debugButtons[b].left;
+					int32 top = debugWindows[w].debugButtons[b].top;
+					int32 right = debugWindows[w].debugButtons[b].right;
+					int32 bottom = debugWindows[w].debugButtons[b].bottom;
+					int8  *text = debugWindows[w].debugButtons[b].text;
+					int32 textLeft = debugWindows[w].debugButtons[b].textLeft;
+					int32 textTop = debugWindows[w].debugButtons[b].textTop;
+					int8  color = debugWindows[w].debugButtons[b].color;
+					int32 isActive = debugWindows[w].debugButtons[b].isActive = !debugWindows[w].debugButtons[b].isActive;
 					
 					if(isActive>0)
 						color = debugWindows[w].debugButtons[b].activeColor;
@@ -250,7 +254,8 @@ void debug_refresh_buttons(int type)
 
 void debug_draw_windows()
 {
-	int w;
+	int32 w;
+
 	for(w=0; w < numDebugWindows; w++)
 	{
 		if(debugWindows[w].isActive>0)
@@ -260,9 +265,10 @@ void debug_draw_windows()
 	}
 }
 
-void debug_reset_button(int type)
+void debug_reset_button(int32 type)
 {
-	int w,b;
+	int32 w,b;
+
 	for(w=0; w < numDebugWindows; w++)
 	{
 		if(debugWindows[w].isActive>0)
@@ -292,9 +298,10 @@ void debug_redraw_screen()
 	debug_draw_windows();
 }
 
-int debug_get_actions_state(int type)
+int32 debug_get_actions_state(int32 type)
 {
-	int state=0;
+	int32 state=0;
+
 	switch(type)
 	{
 		case FREE_CAMERA:
@@ -321,7 +328,7 @@ int debug_get_actions_state(int type)
 	return state;
 }
 
-void debug_set_actions(int type)
+void debug_set_actions(int32 type)
 {
 	switch(type)
 	{
@@ -426,9 +433,9 @@ void debug_set_actions(int type)
 	}
 }
 
-void debug_add_button(int window, int left, int top, int right, int bottom, char * text, int textLeft, int textTop, int isActive, int color, int activeColor, int submenu, int type)
+void debug_add_button(int32 window, int32 left, int32 top, int32 right, int32 bottom, int8 * text, int32 textLeft, int32 textTop, int32 isActive, int32 color, int32 activeColor, int32 submenu, int32 type)
 {
-	int button = debugWindows[window].numButtons;
+	int32 button = debugWindows[window].numButtons;
 	debugWindows[window].debugButtons[button].left = left;
 	debugWindows[window].debugButtons[button].top = top;
 	debugWindows[window].debugButtons[button].right = right;
@@ -444,14 +451,14 @@ void debug_add_button(int window, int left, int top, int right, int bottom, char
 	debugWindows[window].numButtons++;
 }
 
-void debug_add_window_text(int window, char *text)
+void debug_add_window_text(int32 window, int8 *text)
 {
-	int line = debugWindows[window].numLines;
+	int32 line = debugWindows[window].numLines;
 	debugWindows[window].text[line] = text;
 	debugWindows[window].numLines++;
 }
 
-void debug_add_window(int left, int top, int right, int bottom, int alpha, int isActive)
+void debug_add_window(int32 left, int32 top, int32 right, int32 bottom, int32 alpha, int32 isActive)
 {
 	debugWindows[numDebugWindows].left = left;
 	debugWindows[numDebugWindows].top = top;
@@ -501,10 +508,10 @@ void debug_left_menu()
 	debug_add_button(ZONES_MENU,205,244,350,264,"Ladder Zones",215,249,7,87,119,0,SHOW_ZONE_LADDER);
 }
 
-int debug_process_button(int X, int Y)
+int32 debug_process_button(int32 X, int32 Y)
 {
-	int i;
-	int j;
+	int32 i;
+	int32 j;
 
 	for (i = 0; i < numDebugWindows; i++)
 	{
@@ -523,9 +530,9 @@ int debug_process_button(int X, int Y)
 	return 0;
 }
 
-void debug_plasma_window(char *text, int color)
+void debug_plasma_window(int8 *text, int32 color)
 {
-	int textSize;
+	int32 textSize;
 	process_plasma_effect(5, color);
 	if (!(rand() % 5))
 	{
@@ -541,11 +548,11 @@ void debug_process_window()
 {
 	if(rightMouse)
 	{
-		int quit=0;
-		char * text = "Game Debug Window";
-		int color = 64;
-		int colorIdx = 4;
-		int count = 0;
+		int32 quit=0;
+		int8 * text = "Game Debug Window";
+		int32 color = 64;
+		int32 colorIdx = 4;
+		int32 count = 0;
 		MouseStatusStruct mouseData;
 		rightMouse = 0;
 		leftMouse = 0;
@@ -605,7 +612,7 @@ void debug_process_window()
 	}
 }
 
-void process_debug(short int pKey)
+void process_debug(int16 pKey)
 {
 	debug_process_window();
 

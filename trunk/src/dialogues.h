@@ -28,79 +28,81 @@
 #ifndef DIALOGUES_H
 #define DIALOGUES_H
 
+#include "sys.h"
+
 //TODO: add all 14 colors here for future use
 /** White color value */
 #define WHITE_COLOR_0		0
 
 /** Current text bank */
-int currentTextBank;
+int32 currentTextBank;
 /** Current dialogue text size */
-int currDialTextSize;
+int32 currDialTextSize;
 /** Current dialogue text pointer */
-unsigned char *currDialTextPtr;
+uint8 *currDialTextPtr;
 
 /** Font buffer pointer */
-unsigned char * fontPtr;
+uint8 * fontPtr;
 
 /** Dialogue text size */
-int dialTextSize;
+int32 dialTextSize;
 /** Pixel size between dialogue text */
-int dialSpaceBetween;
+int32 dialSpaceBetween;
 /** Pixel size of the space character */
-int dialCharSpace;
+int32 dialCharSpace;
 /** Dialogue text color */
-int dialTextColor;
+int32 dialTextColor;
 
 /** Dialogue text start color for cross coloring dialogues */
-int dialTextStartColor;
+int32 dialTextStartColor;
 /** Dialogue text stop color for cross coloring dialogues */
-int dialTextStopColor;
+int32 dialTextStopColor;
 /** Dialogue text step size for cross coloring dialogues */
-int dialTextStepSize;
+int32 dialTextStepSize;
 /** Dialogue text buffer size for cross coloring dialogues */
-int dialTextBufferSize;
+int32 dialTextBufferSize;
 
 
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
-void init_dialogue_bank(int bankIdx);
+void init_dialogue_bank(int32 bankIdx);
 
 /** Display a certain dialogue text in the screen
 	@param x X coordinate in screen
 	@param y Y coordinate in screen
 	@param dialogue ascii text to display */
-void display_dialogue_text(int x, int y, char *dialogue);
+void display_dialogue_text(int32 x, int32 y, int8 *dialogue);
 
 /** Gets dialogue text width size
 	@param dialogue ascii text to display */
-int dialogue_text_size(char *dialogue);
+int32 dialogue_text_size(int8 *dialogue);
 
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters
 	@param charSpace number in pixels of the character space */
-void set_font_parameters(int spaceBetween, int charSpace);
+void set_font_parameters(int32 spaceBetween, int32 charSpace);
 
 /** Set the font color
 	@param color color number to choose */
-void set_font_color(int color);
+void set_font_color(int32 color);
 
 /** Set font color parameters to precess cross color display
 	@param stopColor color number to stop 
 	@param startColor color number to start 
 	@param stepSize step size to change between those colors */
-void set_dialogue_cross_color(int stopColor, int startColor, int stepSize);
+void set_dialogue_cross_color(int32 stopColor, int32 startColor, int32 stepSize);
 
 /** Get dialogue text into text buffer
 	@param index dialogue index */
-int get_text(int index);
+int32 get_text(int32 index);
 
 /** Gets menu dialogue text
 	@param index text index to display
 	@param dialogue dialogue text buffer to display */
-void get_menu_text(int index, char *dialogue);
+void get_menu_text(int32 index, int8 *dialogue);
 
 
-void display_dialogue_fullscreen(int dialog, unsigned char color);
+void display_dialogue_fullscreen(int32 dialog, uint8 color);
 
 
 #endif

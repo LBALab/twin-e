@@ -28,54 +28,56 @@
 #ifndef IMAGES_H
 #define IMAGES_H
 
+#include "sys.h"
 #include "main.h"
 
 /** In-game palette (should not be used, except in special case. otherwise use other images functions instead) */
-unsigned char palette[NUMOFCOLORS * 3];
+uint8 palette[NUMOFCOLORS * 3];
 
 /** SDL converted in-game palette */
-unsigned char paletteRGBA[NUMOFCOLORS * 4];
+uint8 paletteRGBA[NUMOFCOLORS * 4];
 
 /** SDL converted custom palette */
-unsigned char paletteRGBACustom[NUMOFCOLORS * 4];
+uint8 paletteRGBACustom[NUMOFCOLORS * 4];
 
 /** flag to check if a custom palette is in use */
-short int palCustom;
+int16 palCustom;
 
 /** flag to check in the game palette was changed */
-short int palReseted;
+int16 palReseted;
 
 /** Load and display Adeline Logo */
 void adeline_logo();
 
 /** Load a custom palette
 	@param index \a RESS.HQR entry index (starting from 0) */
-void load_custom_palette( int index );
+void load_custom_palette(int32 index);
 
 /** Load and display Main Menu image */
-void load_menu_image( short int fade_in );
+void load_menu_image(int16 fade_in);
 
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect
 	@param index \a RESS.HQR entry index (starting from 0) 
 	@param fade_in if we fade in before using the palette */
-void load_image(int index, short int fade_in );
+void load_image(int32 index, int16 fade_in);
 
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect and delay
 	@param index \a RESS.HQR entry index (starting from 0)
 	@param time number of seconds to delay */
-void load_image_delay(int index, int time);
+void load_image_delay(int32 index, int32 time);
 
 /** Converts in-game palette to SDL palette
 	@param palSource palette source with RGB
 	@param palDest palette destination with RGBA */
-void convert_pal_2_RGBA(unsigned char * palSource, unsigned char * palDest);
+void convert_pal_2_RGBA(uint8 * palSource, uint8 * palDest);
 
 /** Fade image in
 	@param palette current palette to fade in */
-void fade_in(unsigned char * palette);
+void fade_in(uint8 * palette);
+
 /** Fade image out
 	@param palette current palette to fade out */
-void fade_out(unsigned char * palette);
+void fade_out(uint8 * palette);
 
 /** Calculate a new color component according with an intensity
 	@param modifier color compenent
@@ -83,7 +85,7 @@ void fade_out(unsigned char * palette);
 	@param param unknown
 	@param intensity intensity value to adjust
 	@return new color component*/
-int cross_dot(int modifier, int color, int param, int intensity);
+int32 cross_dot(int32 modifier, int32 color, int32 param, int32 intensity);
 
 /** Adjust palette intensity
 	@param R red component of color
@@ -91,15 +93,15 @@ int cross_dot(int modifier, int color, int param, int intensity);
 	@param B blue component of color
 	@param palette palette to adjust
 	@param intensity intensity value to adjust */
-void adjust_palette(unsigned char R, unsigned char G, unsigned char B, unsigned char * palette, int intensity);
+void adjust_palette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity);
 
 /** Fade image to black
 	@param palette current palette to fade */
-void fade_2_black(unsigned char *palette);
+void fade_2_black(uint8 *palette);
 
 /** Fade image with another palette source
 	@param palette current palette to fade */
-void fade_2_pal(unsigned char *palette);
+void fade_2_pal(uint8 *palette);
 
 /** Fade black palette to white palette */
 void black_2_white();
@@ -110,7 +112,7 @@ void set_back_pal();
 /** Copy a determinate screen buffer to another
 	@param source screen buffer
 	@param destination screen buffer */
-void copy_screen(unsigned char * source, unsigned char * destination);
+void copy_screen(uint8 * source, uint8 * destination);
 
 /** Clear front buffer screen */
 void clear_screen();

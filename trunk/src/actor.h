@@ -28,6 +28,8 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
+#include "sys.h"
+
 /** Total number of sprites allowed in the game */
 #define NUM_SPRITES 200
 
@@ -46,24 +48,24 @@
 #define PROTOPACK		4
 
 /** Table with all loaded sprites */
-unsigned char* spriteTable[NUM_SPRITES];
+uint8* spriteTable[NUM_SPRITES];
 /** Table with all loaded sprite sizes */
-unsigned int   spriteSizeTable[NUM_SPRITES];
+uint32   spriteSizeTable[NUM_SPRITES];
 
 /** Actors time structure */
 typedef struct TimeStruct
 {
-	short int from;
-	short int to;
-	short int numOfStep;
-	int timeOfChange;
+	int16 from;
+	int16 to;
+	int16 numOfStep;
+	int32 timeOfChange;
 } TimeStruct;
 
 /** Actors zone volumique points structure */
 typedef struct ZVPoint
 {
-	short int bottomLeft;
-	short int topRight;
+	int16 bottomLeft;
+	int16 topRight;
 } ZVPoint;
 
 /** Actors zone volumique box structure */
@@ -77,51 +79,51 @@ typedef struct ZVBox
 /** Actors animation timer structure */
 typedef struct AnimTimerDataStruct
 {
-	unsigned char* ptr;
-	int time;
+	uint8* ptr;
+	int32 time;
 } AnimTimerDataStruct;
 
 /** Actors static flags structure */
 typedef struct StaticFlagsStruct
 {
-	unsigned short int bComputeCollisionWithObj				: 1; // 0x0001
-    unsigned short int bComputeCollisionWithBricks			: 1; // 0x0002
-    unsigned short int bIsZonable							: 1; // 0x0004
-    unsigned short int bUsesClipping						: 1; // 0x0008
-    unsigned short int bCanBePushed							: 1; // 0x0010
-    unsigned short int bComputeLowCollision					: 1; // 0x0020
-    unsigned short int bCanDrown							: 1; // 0x0040
-    unsigned short int bUnk80								: 1; // 0x0080
-    unsigned short int bUnk0100								: 1; // 0x0100
-    unsigned short int bIsHidden							: 1; // 0x0200
-    unsigned short int bIsSpriteActor						: 1; // 0x0400
-    unsigned short int bCanFall								: 1; // 0x0800
-    unsigned short int bDoesntCastShadow					: 1; // 0x1000
-    unsigned short int bIsBackgrounded						: 1; // 0x2000
-    unsigned short int bIsCarrierActor						: 1; // 0x4000
-    unsigned short int bUseMiniZv							: 1; // 0x8000
+	uint16 bComputeCollisionWithObj				: 1; // 0x0001
+    uint16 bComputeCollisionWithBricks			: 1; // 0x0002
+    uint16 bIsZonable							: 1; // 0x0004
+    uint16 bUsesClipping						: 1; // 0x0008
+    uint16 bCanBePushed							: 1; // 0x0010
+    uint16 bComputeLowCollision					: 1; // 0x0020
+    uint16 bCanDrown							: 1; // 0x0040
+    uint16 bUnk80								: 1; // 0x0080
+    uint16 bUnk0100								: 1; // 0x0100
+    uint16 bIsHidden							: 1; // 0x0200
+    uint16 bIsSpriteActor						: 1; // 0x0400
+    uint16 bCanFall								: 1; // 0x0800
+    uint16 bDoesntCastShadow					: 1; // 0x1000
+    uint16 bIsBackgrounded						: 1; // 0x2000
+    uint16 bIsCarrierActor						: 1; // 0x4000
+    uint16 bUseMiniZv							: 1; // 0x8000
 } StaticFlagsStruct;
 
 //TODO: update field names
 /** Actors dynamic flags structure */
 typedef struct DynamicFlagsStruct
 {
-    unsigned short int bUnk0001								: 1; // 0x0001
-    unsigned short int bUnk0002								: 1; // 0x0002
-    unsigned short int bUnk0004								: 1; // 0x0004
-    unsigned short int bUnk0008								: 1; // 0x0008
-    unsigned short int bIsVisible							: 1; // 0x0010 // bIsVisible
-    unsigned short int bUnk0020								: 1; // 0x0020
-    unsigned short int bIsMoving							: 1; // 0x0040
-    unsigned short int bUnk0080								: 1; // 0x0080
-    unsigned short int bUnk0100								: 1; // 0x0100
-    unsigned short int bUnk0200								: 1; // 0x0200
-    unsigned short int bUnk0400								: 1; // 0x0400
-    unsigned short int bUnk0800								: 1; // 0x0800
-    unsigned short int bUnk1000								: 1; // 0x1000
-    unsigned short int bUnk2000								: 1; // 0x2000
-    unsigned short int bUnk4000								: 1; // 0x4000
-    unsigned short int bUnk8000								: 1; // 0x8000
+    uint16 bUnk0001								: 1; // 0x0001
+    uint16 bUnk0002								: 1; // 0x0002
+    uint16 bUnk0004								: 1; // 0x0004
+    uint16 bUnk0008								: 1; // 0x0008
+    uint16 bIsVisible							: 1; // 0x0010 // bIsVisible
+    uint16 bUnk0020								: 1; // 0x0020
+    uint16 bIsMoving							: 1; // 0x0040
+    uint16 bUnk0080								: 1; // 0x0080
+    uint16 bUnk0100								: 1; // 0x0100
+    uint16 bUnk0200								: 1; // 0x0200
+    uint16 bUnk0400								: 1; // 0x0400
+    uint16 bUnk0800								: 1; // 0x0800
+    uint16 bUnk1000								: 1; // 0x1000
+    uint16 bUnk2000								: 1; // 0x2000
+    uint16 bUnk4000								: 1; // 0x4000
+    uint16 bUnk8000								: 1; // 0x8000
 } DynamicFlagsStruct;
 
 /** Actors structure */
@@ -130,58 +132,58 @@ typedef struct ActorStruct
 	StaticFlagsStruct staticFlags;
 	DynamicFlagsStruct dynamicFlags;
 
-	int entity; // costumeIndex
-	int body;
-	int anim;
-	int animExtra; //field_2
-	int field_3;
-	unsigned char *animExtraData;
-	int sprite; // field_8
-   	unsigned char *entityDataPtr;
+	int32 entity; // costumeIndex
+	int32 body;
+	int32 anim;
+	int32 animExtra; //field_2
+	int32 field_3;
+	uint8 *animExtraData;
+	int32 sprite; // field_8
+   	uint8 *entityDataPtr;
 
-	int X; // field_20
-	int Y; // field_22
-	int Z; // field_24
-	int strengthOfHit; // field_66
-	int hitBy;
-	int bonusParameter; // field_10
-	int angle;
-	int speed;
-	int comportement;
-	int info0; // cropLeft
-	int info1; // cropTop
-	int info2; // cropRight
-	int info3; // cropBottom
-	int followedActor; // same as info3
-	int bonusAmount; // field_12
-	int talkColor;
-	int armor; // field_14
-	int life;
+	int32 X; // field_20
+	int32 Y; // field_22
+	int32 Z; // field_24
+	int32 strengthOfHit; // field_66
+	int32 hitBy;
+	int32 bonusParameter; // field_10
+	int32 angle;
+	int32 speed;
+	int32 comportement;
+	int32 info0; // cropLeft
+	int32 info1; // cropTop
+	int32 info2; // cropRight
+	int32 info3; // cropBottom
+	int32 followedActor; // same as info3
+	int32 bonusAmount; // field_12
+	int32 talkColor;
+	int32 armor; // field_14
+	int32 life;
 
-	int positionInMoveScript;
-	unsigned char *moveScript;
+	int32 positionInMoveScript;
+	uint8 *moveScript;
 
-	int positionInActorScript;
-	unsigned char *lifeScript;
+	int32 positionInActorScript;
+	uint8 *lifeScript;
 
-	int labelIdx;			// script label index
-	int currentLabelPtr;	// pointer to LABEL offset
-	int pausedTrackPtr;
+	int32 labelIdx;			// script label index
+	int32 currentLabelPtr;	// pointer to LABEL offset
+	int32 pausedTrackPtr;
 
 	//int costumeIndex;
-	int collision;
-	int standPosition;
-	int standOn;
-	int zone;
+	int32 collision;
+	int32 standPosition;
+	int32 standOn;
+	int32 zone;
 	
-	int lastRotationSpeed;
-	int lastX;
-	int lastZ;
-	int lastY;
-	int previousAnimIdx;
-	int doorStatus;
-	int animPosition;
-	int field_78;
+	int32 lastRotationSpeed;
+	int32 lastX;
+	int32 lastZ;
+	int32 lastY;
+	int32 previousAnimIdx;
+	int32 doorStatus;
+	int32 animPosition;
+	int32 field_78;
 
 	ZVBox boudingBox;
 	TimeStruct time;
@@ -189,67 +191,67 @@ typedef struct ActorStruct
 } ActorStruct;
 
 /** Actor shadow X coordinate */
-int shadowX;
+int32 shadowX;
 /** Actor shadow Y coordinate */
-int shadowY;
+int32 shadowY;
 /** Actor shadow Z coordinate */
-int shadowZ;
+int32 shadowZ;
 /** Actor shadow collition type */
-char shadowCollisionType; // shadowVar
+int8 shadowCollisionType; // shadowVar
 
 /** Process actor X coordinate */
-short int processActorX;
+int16 processActorX;
 /** Process actor Y coordinate */
-short int processActorY;
+int16 processActorY;
 /** Process actor Z coordinate */
-short int processActorZ;
+int16 processActorZ;
 
 /** Actor collition X coordinate */
-int collisionX; // getPosVar1
+int32 collisionX; // getPosVar1
 /** Actor collition Y coordinate */
-int collisionY; // getPosVar2
+int32 collisionY; // getPosVar2
 /** Actor collition Z coordinate */
-int collisionZ; // getPosVar3
+int32 collisionZ; // getPosVar3
 
-short int currentX;
-short int currentY;
-short int currentZ;
+int16 currentX;
+int16 currentY;
+int16 currentZ;
 
-unsigned char *currentActorAnimExtraData;
+uint8 *currentActorAnimExtraData;
 
 
 /** Hero behaviour */
-short int heroBehaviour;
+int16 heroBehaviour;
 
 /** Hero 3D entity for normal behaviour */
-unsigned char *heroEntityNORMAL;	 // file3D0
+uint8 *heroEntityNORMAL;	 // file3D0
 /** Hero 3D entity for athletic behaviour */
-unsigned char *heroEntityATHLETIC;	 // file3D1
+uint8 *heroEntityATHLETIC;	 // file3D1
 /** Hero 3D entity for aggressive behaviour */
-unsigned char *heroEntityAGGRESSIVE; // file3D2
+uint8 *heroEntityAGGRESSIVE; // file3D2
 /** Hero 3D entity for discrete behaviour */
-unsigned char *heroEntityDISCRETE;	 // file3D3
+uint8 *heroEntityDISCRETE;	 // file3D3
 /** Hero 3D entity for protopack behaviour */
-unsigned char *heroEntityPROTOPACK;  // file3D4
+uint8 *heroEntityPROTOPACK;  // file3D4
 
 /** Actors 3D body table - size of NUM_BODIES */
-extern unsigned char *bodyTable[NUM_BODIES];
+extern uint8 *bodyTable[NUM_BODIES];
 
 /** Current position in body table */
-int currentPositionInBodyPtrTab;
+int32 currentPositionInBodyPtrTab;
 
 /** Actor bounding box bottom left X coordinate */
-short int bottomLeftX; // loadCostumeVar
+int16 bottomLeftX; // loadCostumeVar
 /** Actor bounding box bottom left Y coordinate */
-short int bottomLeftY; // loadCostumeVar2
+int16 bottomLeftY; // loadCostumeVar2
 /** Actor bounding box bottom left Z coordinate */
-short int bottomLeftZ; // loadCostumeVar3
+int16 bottomLeftZ; // loadCostumeVar3
 /** Actor bounding box top left X coordinate */
-short int topRightX;   // loadCostumeVar4
+int16 topRightX;   // loadCostumeVar4
 /** Actor bounding box top left Y coordinate */
-short int topRightY;   // loadCostumeVar5
+int16 topRightY;   // loadCostumeVar5
 /** Actor bounding box top left Z coordinate */
-short int topRightZ;   // loadCostumeVar6
+int16 topRightZ;   // loadCostumeVar6
 
 /** Restart hero variables while opening new scenes */
 void restart_hero_scene();
@@ -259,7 +261,7 @@ void load_hero_entities();
 
 /** Set hero behaviour
 	@param behaviour behaviour value to set */
-void set_behaviour(int behaviour);
+void set_behaviour(int32 behaviour);
 
 /** Preload all sprites */
 void preload_sprites();
@@ -267,18 +269,18 @@ void preload_sprites();
 /** Initialize 3D actor
 	@param bodyIdx 3D actor body index
 	@param actorIdx 3D actor index */
-void init_model_actor(int bodyIdx, short int actorIdx);
+void init_model_actor(int32 bodyIdx, int16 actorIdx);
 
 /** Initialize actors
 	@param actorIdx actor index to init */
-void init_actor(short int actorIdx);
+void init_actor(int16 actorIdx);
 
 /** Set actor safe angle
 	@param startAngle start angle
 	@param endAngle end angle 
 	@param stepAngle number of steps 
 	@param timePtr time pointer to update */
-void set_actor_angle_safe(short int startAngle, short int endAngle, short int stepAngle, TimeStruct * timePtr);
+void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr);
 
 /** Clear actors safe angle
 	@param actorPtr actor pointer */
@@ -289,14 +291,14 @@ void clear_real_angle(ActorStruct * actorPtr);
 	@param endAngle end angle 
 	@param stepAngle number of steps 
 	@param timePtr time pointer to update */
-void set_actor_angle(short int startAngle, short int endAngle, short int stepAngle, TimeStruct * timePtr);
+void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr);
 
 /** Get actor real angle
 	@param angleData time pointer to process */
-int get_real_angle(TimeStruct * angleData);
+int32 get_real_angle(TimeStruct * angleData);
 
 /** Get actor angle
 	@param angleData time pointer to process */
-int get_real_value(TimeStruct * angleData);
+int32 get_real_value(TimeStruct * angleData);
 
 #endif

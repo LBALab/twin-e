@@ -28,15 +28,17 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#include "sys.h"
+
 typedef struct MouseStatusStruct
 {
-  int left;
-  int right;
-  int X;
-  int Y;
+  int32 left;
+  int32 right;
+  int32 X;
+  int32 Y;
 } MouseStatusStruct;
 
 
-void process_debug(short int pKey);
+void process_debug(int16 pKey);
 
 #endif
