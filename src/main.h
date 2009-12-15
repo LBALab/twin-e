@@ -29,6 +29,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include "sys.h"
+
 /** Original screen width */
 #define DEFAULT_SCREEN_WIDTH			640
 /** Original screen height */
@@ -58,60 +60,60 @@
 typedef struct ConfigFile
 {
 	/** Language name */
-	char Language[10];
+	int8 Language[10];
 	/** Language CD name */
-	char LanguageCD[10];
+	int8 LanguageCD[10];
 	/** Enable/Disable game dialogues */
-	char FlagDisplayText[3];
+	int8 FlagDisplayText[3];
 	/** Save voice files on hard disk */
-	char FlagKeepVoice[3];
+	int8 FlagKeepVoice[3];
 	/** Wave volume */
-	int WaveVolume;
+	int32 WaveVolume;
 	/** Chacters voices volume */
-	int VoiceVolume;
+	int32 VoiceVolume;
 	/** Music volume */
-	int MusicVolume;
+	int32 MusicVolume;
 	/** CD volume */
-	int CDVolume;
+	int32 CDVolume;
 	/** Line-In volume */
-	int LineVolume;
+	int32 LineVolume;
 	/** Main volume controller */
-	int MasterVolume;
+	int32 MasterVolume;
 	/** *Game version */
-	int Version;
+	int32 Version;
 	/** Language Identification according with Language setting. */
-	int LanguageId;
+	int32 LanguageId;
 	/** Language Identification according with Language setting. */
-	int LanguageCDId;
+	int32 LanguageCDId;
 	/** To allow fullscreen or window mode. */
-	int FullScreen;
+	int32 FullScreen;
 	/** To run the game without sound */
-	int NoSound;
+	int32 NoSound;
 	/** If you want to use the LBA CD or not */
-	int UseCD;
+	int32 UseCD;
 	/** If you want to use high quality sounds */
-	int UseHQSnd;
+	int32 UseHQSnd;
 	/** If you want to use MP3 or OGG files. UseHQSnd must be set */
-	int UseMP3;
+	int32 UseMP3;
 	/** To keep FLA movies aspect ratio or to strech it to 
 		fullscreen like in the original game */
-	int FLAwide;
+	int32 FLAwide;
 	/** To use FLA PCX images instead of FLA movies */
-	int UseFLAPCX;
+	int32 UseFLAPCX;
 	/** Use command format movies like AVIs instead of FLA movies */
-	int UseAVI;
+	int32 UseAVI;
 	/** Use cross fade effect while changing images, or be as the original */
-	int CrossFade;
+	int32 CrossFade;
 	/** Flag to quit the game */
-	int Quit;
+	int32 Quit;
 	/** Flag used to keep the game frames per second */
-	int Fps;
+	int32 Fps;
 	/** Flag to display game debug */
-	int Debug;
+	int32 Debug;
 	/** Use original autosaving system or save when you want */
-	int UseAutoSaving;
+	int32 UseAutoSaving;
 	/** Shadow mode type */
-	int ShadowMode;
+	int32 ShadowMode;
 }ConfigFile;
 
 /** Configuration file structure
@@ -121,7 +123,7 @@ typedef struct ConfigFile
 ConfigFile cfgfile;
 
 /** CD Game directory */
-char * cdDir;
+int8 * cdDir;
 
 /** Initialize main engine variables */
 void init_vars();

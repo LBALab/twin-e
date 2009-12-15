@@ -30,40 +30,49 @@
 
 #include "sdlengine.h"
 
-int currMenuTextIndex;
-int currMenuTextBank;
-char currMenuTextBuffer[256];
+int32 currMenuTextIndex;
+int32 currMenuTextBank;
+int8  currMenuTextBuffer[256];
 
-extern short int OptionsMenuSettings[];
+extern int16 OptionsMenuSettings[];
 
 /** Plasma Effect pointer to file content: RESS.HQR:51 */
-extern unsigned char *plasmaEffectPtr;
+extern uint8 *plasmaEffectPtr;
 
 /** Process the plasma effect
 	@param top top height where the effect will be draw in the front buffer
 	@param color plasma effect start color */
-void process_plasma_effect(int top, int color);
+void process_plasma_effect(int32 top, int32 color);
+
 /** Draw the entire button box 
 	@param left start width to draw the button
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_button_box(int left, int top, int right, int bottom);
+void draw_button_box(int32 left, int32 top, int32 right, int32 bottom);
+
 /** Draws inside buttons transparent area
 	@param left start width to draw the button
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int left, int top, int right, int bottom, int colorAdj);
+void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
+
 /** Used to run the main menu */
 void main_menu();
-/** Used to run the in-game give-up menu */
-int giveup_menu();
-/** Used to run the options menu */
-int options_menu();
 
-int process_giveup_menu();
-void process_options_menu(short int pKey);
+/** Used to run the in-game give-up menu */
+int32 giveup_menu();
+
+/** Used to run the options menu */
+int32 options_menu();
+
+/** Used to process give up menu while playing game */
+int32 process_giveup_menu();
+
+/** Used to process options menu while playing game
+	@param pKey pressed key */
+void process_options_menu(int16 pKey);
 
 #endif

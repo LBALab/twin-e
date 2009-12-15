@@ -63,16 +63,16 @@ SDL_Surface *surfaceTable[16];
 
 // Keyboard variables
 /** Skipped key - key1 */
-short int skipedKey;
+int16 skipedKey;
 /** Pressed key - printTextVar12 */
-short int pressedKey;
+int16 pressedKey;
 //int printTextVar13;
 /** Skip intro variable */
-short int skipIntro;
+int16 skipIntro;
 /** Current key value */
-short int currentKey;
+int16 currentKey;
 /** Auxiliar key value */
-short int key;
+int16 key;
 
 #ifdef GAMEMOD
 TTF_Font *font;
@@ -99,10 +99,10 @@ void sdl_close()
 	@return SDL init state */
 int sdl_initialize()
 {
-	unsigned char *keyboard;
-	int size;
-	int i;
-	int freq;
+	uint8 *keyboard;
+	int32 size;
+	int32 i;
+	int32 freq;
 	//SDL_Surface* icon;
 
 	Uint32 rmask, gmask, bmask, amask;
@@ -201,17 +201,17 @@ int sdl_initialize()
 
 /** Frames per second sdl delay
 	@param fps frames per second */
-void fps_cycles(int fps)
+void fps_cycles(int32 fps)
 {
 	SDL_Delay(1000 / (fps));
 }
 
 /** Deplay certain seconds till proceed 
 	@param time time in seconds to delay */
-void delay(unsigned int time)
+void delay(uint32 time)
 {
-	unsigned int startTicks = SDL_GetTicks();
-	unsigned int stopTicks=0;
+	uint32 startTicks = SDL_GetTicks();
+	uint32 stopTicks=0;
 	skipIntro = 0;
 	do
 	{
@@ -226,7 +226,7 @@ void delay(unsigned int time)
 
 /** Set a new palette in the SDL screen buffer
 	@param palette palette to set */
-void set_palette(unsigned char * palette)
+void set_palette(uint8 * palette)
 {
 	SDL_Color *screenColorsTemp = (SDL_Color *) palette;
 
@@ -238,7 +238,7 @@ void set_palette(unsigned char * palette)
 /** Fade screen from black to white */
 void fade_black_2_white()
 {
-	int i;
+	int32 i;
 
 	SDL_Color colorPtr[256];
 
@@ -263,7 +263,7 @@ void flip()
 	@param top top position to start copy
 	@param right right position to start copy
 	@param bottom bottom position to start copy */
-void copy_block_phys(int left, int top, int right, int bottom)
+void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom)
 {
 	SDL_Rect rectangle;
 
@@ -280,7 +280,7 @@ void copy_block_phys(int left, int top, int right, int bottom)
 	@param buffer screen buffer to blit surface
 	@param width screen width size
 	@param height screen height size */
-void init_screen_buffer(unsigned char *buffer, int width, int height)
+void init_screen_buffer(uint8 *buffer, int32 width, int32 height)
 {
 	screenBuffer = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8, SCREEN_WIDTH, 0, 0, 0, 0);
 }
@@ -288,9 +288,9 @@ void init_screen_buffer(unsigned char *buffer, int width, int height)
 /** Cross fade feature
 	@param buffer screen buffer
 	@param palette new palette to cross fade */
-void cross_fade(unsigned char *buffer, unsigned char *palette)
+void cross_fade(uint8 *buffer, uint8 *palette)
 {
-	int i;
+	int32 i;
 	SDL_Surface *backupSurface;
 	SDL_Surface *newSurface;
 	SDL_Surface *tempSurface;
@@ -364,13 +364,13 @@ void toggle_fullscreen()
 void read_keys()
 {
 	SDL_Event event;
-	int localKey;
-	int i,j, size;
-	int find = 0;
-	short int temp;
-	unsigned char temp2;
-	char found = 0;
-	unsigned char *keyboard;
+	int32 localKey;
+	int32 i,j, size;
+	int32 find = 0;
+	int16 temp;
+	uint8 temp2;
+	int8 found = 0;
+	uint8 *keyboard;
 
 	localKey = 0;
 
@@ -557,7 +557,7 @@ void read_keys()
 	@param Y Y coordinate in screen
 	@param string text to display
 	@param center if the text should be centered accoding with the giving positions */
-void ttf_draw_text(int X, int Y, char *string, int center)
+void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center)
 {
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color *forecol = &white;
