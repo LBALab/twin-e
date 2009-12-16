@@ -36,9 +36,9 @@
 void new_game()
 {
 	/* Intro screen */
-	load_image( RESSHQR_INTROSCREEN1IMG, 1 );
+	/*load_image( RESSHQR_INTROSCREEN1IMG, 1 );
 	init_dialogue_bank(2);
-	display_dialogue_fullscreen(150, 240);
+	display_dialogue_fullscreen(150, 240);*/
 	
 	//delay(1000);
 	/*for(;;)

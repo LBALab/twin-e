@@ -542,9 +542,9 @@ int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum)
 	localActor->animExtraData = currentActorAnimExtraData;
 	localActor->field_78 = arg_4;
 	localActor->animPosition = 0;
-	localActor->dynamicFlags.bUnk0002 = 0;
-	localActor->dynamicFlags.bUnk0004 = 0;
-	localActor->dynamicFlags.bUnk0008 = 1;
+	localActor->dynamicFlags.bIsHitting = 0;
+	localActor->dynamicFlags.bAnimEnded = 0;
+	localActor->dynamicFlags.bAnimFrameReached = 1;
 
 	if (localActor->animExtraData)
 	{
@@ -661,6 +661,15 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 
 	if (actor->staticFlags.bIsSpriteActor) // is sprite actor
     {
+		if (actor->strengthOfHit)
+		{
+			actor->dynamicFlags.bIsHitting = 1;
+		}
+
+		processActorX = actor->X;
+		processActorY = actor->Y;
+		processActorZ = actor->Z;
+
 		// TODO: update sprite actors
 	}
 	else // 3D actor
@@ -674,17 +683,17 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 
 			if (processActorVar5)
 			{
-				actor->dynamicFlags.bUnk0080 = 1;
+				actor->dynamicFlags.bIsRotationByAnim = 1;
 			}
 			else
 			{
-				actor->dynamicFlags.bUnk0080 = 0;
+				actor->dynamicFlags.bIsRotationByAnim = 0;
 			}
 
 			actor->angle = (actor->angle + processActorVar6 - actor->lastRotationSpeed) & 0x3FF;
 			actor->lastRotationSpeed = processActorVar6;
 
-			//Rotate(currentX, currentZ, lactor->angle);
+			rotate_actor(currentX, currentZ, actor->angle);
 
 			currentX = destX; // dest
 			currentZ = destZ;
@@ -697,8 +706,8 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 			actor->lastY = currentY;
 			actor->lastZ = currentZ;
 
-			actor->dynamicFlags.bUnk0004 = 0;
-			actor->dynamicFlags.bUnk0008 = 0;
+			actor->dynamicFlags.bAnimEnded = 0;
+			actor->dynamicFlags.bAnimFrameReached = 0;
 
 			if(keyFramePassed)  // if keyFrame
 			{
@@ -712,7 +721,7 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 				numKeyframe = actor->animPosition;
 				if (numKeyframe == get_num_keyframes(animPtr)) // last anim keyframe
 				{
-					actor->dynamicFlags.bUnk0002 = 0;
+					actor->dynamicFlags.bIsHitting = 0;
 
 					if (actor->field_78 == 0)
 					{
@@ -741,7 +750,7 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 						//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
 					}
 
-					actor->dynamicFlags.bUnk0004 = 1;
+					actor->dynamicFlags.bAnimEnded = 1;
 				}
 
 				actor->lastRotationSpeed = 0;
@@ -758,4 +767,8 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 	// TODO: actor collisions
 	// TODO: check actor damage
 	// TODO: check actor bounding position
+
+	actor->X = processActorX;
+	actor->Y = processActorY;
+	actor->Z = processActorZ;
 }

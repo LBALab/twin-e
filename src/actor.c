@@ -37,6 +37,7 @@
 #include "renderer.h"
 #include "grid.h"
 #include "animations.h"
+#include "renderer.h"
 
 /** Actors 3D body table - size of NUM_BODIES */
 uint8 *bodyTable[NUM_BODIES];
@@ -45,7 +46,7 @@ uint8 *bodyTable[NUM_BODIES];
 /** Restart hero variables while opening new scenes */
 void restart_hero_scene()
 {
-	sceneHero->comportement = 1;
+	sceneHero->controlMode = 1;
 	memset(&sceneHero->dynamicFlags,0,2);
 	memset(&sceneHero->staticFlags,0,2);
 
@@ -381,50 +382,49 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx)
 	@param actorIdx actor index to init */
 void init_actor(int16 actorIdx)
 {
-	ActorStruct *localActor = &sceneActors[actorIdx];
+	ActorStruct *actor = &sceneActors[actorIdx];
 
-	if (localActor->staticFlags.bIsSpriteActor) // if sprite actor
+	if (actor->staticFlags.bIsSpriteActor) // if sprite actor
 	{
-		if (localActor->strengthOfHit != 0)
+		if (actor->strengthOfHit != 0)
 		{
-			localActor->dynamicFlags.bUnk0002 = 1;
+			actor->dynamicFlags.bIsHitting = 1;
 		}
 
-		localActor->entity = -1;
+		actor->entity = -1;
 
 		init_sprite_actor(actorIdx);
 
-		set_actor_angle_safe(0, 0, 0, &localActor->time);
+		set_actor_angle_safe(0, 0, 0, &actor->time);
 
-		if (localActor->staticFlags.bUsesClipping)
+		if (actor->staticFlags.bUsesClipping)
 		{
-			localActor->lastX = localActor->X;
-			localActor->lastY = localActor->Y; // Z
-			localActor->lastZ = localActor->Z; // Y
+			actor->lastX = actor->X;
+			actor->lastY = actor->Y;
+			actor->lastZ = actor->Z;
 		}
 
 	}
-	// TODO: 3D model actors
 	else
 	{
-		localActor->entity = -1;
+		actor->entity = -1;
 		
-		init_model_actor(localActor->body, actorIdx);
+		init_model_actor(actor->body, actorIdx);
 
-		localActor->previousAnimIdx = -1;
-		localActor->field_78 = 0;
+		actor->previousAnimIdx = -1;
+		actor->field_78 = 0;
 
-		if (localActor->entity != -1)
+		if (actor->entity != -1)
 		{
-			init_anim(localActor->anim, 0, 255, actorIdx);
+			init_anim(actor->anim, 0, 255, actorIdx);
 		}
 
-		set_actor_angle_safe(localActor->angle, localActor->angle, 0, &localActor->time);
+		set_actor_angle_safe(actor->angle, actor->angle, 0, &actor->time);
 	}
 
-	localActor->positionInMoveScript = -1;
-	localActor->labelIdx = -1;
-	localActor->positionInActorScript = 0;
+	actor->positionInMoveScript = -1;
+	actor->labelIdx = -1;
+	actor->positionInActorScript = 0;
 }
 
 /** Set actor safe angle
@@ -568,3 +568,48 @@ void get_shadow_position(int32 X, int32 Y, int32 Z)
 	shadowZ = processActorZ;
 }
 
+void move_actor(int32 angleFrom, int32 angleTo, int32 angleSpeed, TimeStruct *time) { // ManualRealAngle
+	int32 numOfStepInt;
+	int16 numOfStep;
+	int16 from;
+	int16 to;
+
+	from = angleFrom & 0x3FF;
+	to   = angleTo & 0x3FF;
+
+	time->from = from;
+	time->to   = to;
+
+	numOfStep = (from - to) << 6;
+
+	if (numOfStep < 0) {
+		numOfStepInt = -numOfStep;
+	} else {
+		numOfStepInt = numOfStep;
+	}
+
+	numOfStepInt >>= 6;
+
+	numOfStepInt *= angleSpeed;
+	numOfStepInt >>= 8;
+
+	time->numOfStep = (int16)numOfStepInt;
+	time->timeOfChange = lbaTime;
+}
+
+void rotate_actor(int32 X, int32 Z, int32 angle) 
+{
+	int32 angle1;
+	int32 angle2;
+
+	if (!angle) {
+		destX = X;
+		destZ = Z;
+	} else {
+		angle1 = shadeAngleTab1[angle & 0x3FF];
+		angle2 = shadeAngleTab1[(angle + 0x100) & 0x3FF];
+
+		destX = (X * angle2 + Z * angle1) >> 14;
+		destZ = (Z * angle2 - X * angle1) >> 14;
+	}
+}

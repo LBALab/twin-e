@@ -30,15 +30,19 @@
 
 #include "sys.h"
 
-extern int32 isUsingOrhoProjection;
+int32 isUsingOrhoProjection;
 
-extern int32 orthoProjX; // setSomethingVar1
-extern int32 orthoProjY; // setSomethingVar2
-extern int32 orthoProjZ; // setSomethingVar2
+int32 orthoProjX; // setSomethingVar1
+int32 orthoProjY; // setSomethingVar2
+int32 orthoProjZ; // setSomethingVar2
 
-extern int32 destX;
-extern int32 destY;
-extern int32 destZ;
+int32 destX;
+int32 destY;
+int32 destZ;
+
+int16 *shadeAngleTab1; // tab1
+int16 *shadeAngleTab2; // tab2
+int16 *shadeAngleTab3; // tab3
 
 void set_light_vector(int32 angleX, int32 angleY, int32 angleZ);
 

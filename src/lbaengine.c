@@ -44,9 +44,13 @@
 #include "debug.h"
 #endif
 
-
 int32 isTimeFreezed=0;
 int32 saveFreezedTime=0;
+
+int32 heroPressedKey;
+int32 heroPressedKey2;
+
+int32 loopPressedKey; // mainLoopVar5
 
 
 void freeze_time()
@@ -63,6 +67,156 @@ void unfreeze_time()
 		lbaTime = saveFreezedTime;
 }
 
+void process_control_mode(int32 actorIdx)
+{
+	ActorStruct *actor = &sceneActors[actorIdx];
+
+	if (actor->entity == -1)
+		return;
+
+	if (actor->dynamicFlags.bIsFalling)
+	{
+		int16 tempAngle = 0;
+
+		if (actor->controlMode != 1)
+			return;
+
+		if (key & 4)
+			tempAngle = 0x100;
+
+		if (key & 8)
+			tempAngle = -0x100;
+
+		move_actor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->time);
+
+		heroPressedKey = key;
+	}
+    else
+	{
+        if (!actor->staticFlags.bIsSpriteActor)
+		{
+			if (actor->controlMode != 1)
+			{
+				actor->angle = get_real_angle(&actor->time);
+			}
+		}
+
+		switch (actor->controlMode)
+		{
+			case 0: // NO_MOVE
+				break;
+			case 1: // MOVE_MANUAL
+				if (!actorIdx)
+				{
+					heroAction = 0;
+
+					//TODO: add action key like in LBA2			
+
+					//TODO: do behaviour actions
+				}
+
+				if (loopPressedKey == 0 || heroAction != 0)
+				{
+					int16 tempAngle;
+
+					if (key & 3)  // if continue walking
+						heroMoved = 0; // don't break animation
+
+					if (key != heroPressedKey || loopPressedKey != heroPressedKey2)
+					{
+						if (heroMoved != 0)
+						{
+							init_anim(ANIM_STANDING, 0, 255, actorIdx);
+						}
+					}
+
+					heroMoved = 0;
+
+					if (key & 1)  // walk forward
+					{
+						//if (currentActorInZoneProcess == 0) // TODO
+						{
+							init_anim(ANIM_FORWARD, 0, 255, actorIdx);
+						}
+						heroMoved = 1;
+					}
+
+					if (key & 2 && !(key & 1))  // walk backward
+					{
+						init_anim(ANIM_BACKWARD, 0, 255, actorIdx);
+						heroMoved = 1;
+					}
+
+					if (key & 4)  // turn left
+					{
+						heroMoved = 1;
+						if (actor->anim == 0)
+						{
+							init_anim(ANIM_TURNLEFT, 0, 255, actorIdx);
+						}
+						else
+						{
+							if (!actor->dynamicFlags.bIsRotationByAnim)
+							{
+								actor->angle = get_real_angle(&actor->time);
+							}
+						}
+					}
+
+					if (key & 8)  // turn right
+					{
+						heroMoved = 1;
+						if (actor->anim == 0)
+						{
+							init_anim(ANIM_TURNRIGHT, 0, 255, actorIdx);
+						}
+						else
+						{
+							if (!actor->dynamicFlags.bIsRotationByAnim)
+							{
+								actor->angle = get_real_angle(&actor->time);
+							}
+						}
+					}
+
+					tempAngle = 0;
+
+					if (key & 4)
+					{
+						tempAngle = 0x100;
+					}
+
+					if (key & 8)
+					{
+						tempAngle = -0x100;
+					}
+
+					move_actor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->time);
+
+					heroPressedKey  = key;
+					heroPressedKey2 = loopPressedKey;
+
+				}
+				break;
+			/*default:
+				printf("Unimplemented control mode %d\n", actor->controlMode);*/
+		}
+	}
+}
+
+void recenter_screen()
+{
+	if ((loopPressedKey & 2))  //  && disableScreenRecenter == 0 recenter screen
+    {
+        newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
+        newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
+		newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
+        reqBgRedraw = 1;
+        //needChangeRoom = 119;
+		//needChangeRoom=currentRoom+1;
+    }
+}
+
 /** Game engine main loop
 	@return true if we want to show credit sequence */
 int32 run_game_engine() // mainLoopInteration
@@ -71,14 +225,16 @@ int32 run_game_engine() // mainLoopInteration
 	int16 pKey; // current pressed key
 	read_keys();
 
-	pKey = skipIntro;
+	key  = pressedKey; 
+	pKey = skipIntro; // mainLoopVar67
+	loopPressedKey = skipedKey;
 
 	if(process_giveup_menu())
 		return 0; // give up
 
 	process_options_menu(pKey);
 
-	// TODO: make recenter screen
+	recenter_screen();
 
 	#ifdef GAMEMOD
 		process_debug(pKey);
@@ -91,6 +247,8 @@ int32 run_game_engine() // mainLoopInteration
 	{
 		ActorStruct *actor = &sceneActors[a];
 
+		process_control_mode(a);
+		// TODO: process_track_script(a);
 		process_actor_animations(a);
 	}
 
@@ -98,8 +256,6 @@ int32 run_game_engine() // mainLoopInteration
 
 	needChangeScene = -1;
 	reqBgRedraw=0;
-
-	
 
 	return 0;
 }

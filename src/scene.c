@@ -184,7 +184,7 @@ void load_scene()
 		sceneActors[i].bonusParameter &= 0xFE;
 		sceneActors[i].angle = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].speed = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].comportement = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].controlMode = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].info0 = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].info1 = *((uint16*)localScene);  localScene+=2;
 		sceneActors[i].info2 = *((uint16*)localScene);  localScene+=2;

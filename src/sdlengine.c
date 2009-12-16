@@ -373,59 +373,13 @@ void read_keys()
 	uint8 *keyboard;
 
 	localKey = 0;
-
-	pressedKey = 0; // printTextVar12
-	skipedKey = 0;	// key1
+	skipedKey = 0;
 	skipIntro = 0;
 
 	SDL_PumpEvents();
 
 	keyboard = SDL_GetKeyState(&size);
 
-	for (j = 0; j < size; j++)
-	{
-		if (keyboard[j])
-		{
-			switch (j)
-			{
-				case SDLK_SPACE:
-					localKey = 0x39;
-					break;
-				case SDLK_UP:
-				case SDLK_KP8:
-					localKey = 0x48;
-					break;
-				case SDLK_DOWN:
-				case SDLK_KP2:
-					localKey = 0x50;
-					break;
-				case SDLK_LEFT:
-				case SDLK_KP4:
-					localKey = 0x4B;
-					break;
-				case SDLK_RIGHT:
-				case SDLK_KP6:
-					localKey = 0x4D;
-					break;
-				#ifdef GAMEMOD
-					// change grid camera
-					case SDLK_s:
-						localKey = 's';
-						break;
-					case SDLK_x:
-						localKey = 'x';
-						break;
-					case SDLK_z:
-						localKey = 'z';
-						break;
-					case SDLK_c:
-						localKey = 'c';
-						break;
-				#endif
-			}
-		}
-	}
-  
 	while (SDL_PollEvent(&event))
    	{
 		switch (event.type)
@@ -440,6 +394,9 @@ void read_keys()
 						leftMouse = 1;
 						break;
 				}
+				break;
+			case SDL_KEYUP:
+				pressedKey = 0;
 				break;
 			case SDL_KEYDOWN:
 				switch(event.key.keysym.sym)
@@ -511,41 +468,86 @@ void read_keys()
 		}
 	}
 
-	for (i = 0; i < 28; i++)
+	for (j = 0; j < size; j++)
 	{
-		if (pressedKeyMap[i] == localKey)
+		if (keyboard[j])
 		{
-			find = i;
-			found = 1;
-		}
-	}
-
-	if (found != 0)
-	{
-		temp = pressedKeyCharMap[find];
-		temp2 = temp & 0x00FF;
-
-		if (temp2 == 0)
-		{
-			// pressed valid keys
-			if (!(localKey & 0x80))
+			switch (j)
 			{
-				pressedKey |= (temp & 0xFF00) >> 8;		
+				case SDLK_SPACE:
+					localKey = 0x39;
+					break;
+				case SDLK_UP:
+				case SDLK_KP8:
+					localKey = 0x48;
+					break;
+				case SDLK_DOWN:
+				case SDLK_KP2:
+					localKey = 0x50;
+					break;
+				case SDLK_LEFT:
+				case SDLK_KP4:
+					localKey = 0x4B;
+					break;
+				case SDLK_RIGHT:
+				case SDLK_KP6:
+					localKey = 0x4D;
+					break;
+				#ifdef GAMEMOD
+					// change grid camera
+					case SDLK_s:
+						localKey = 's';
+						break;
+					case SDLK_x:
+						localKey = 'x';
+						break;
+					case SDLK_z:
+						localKey = 'z';
+						break;
+					case SDLK_c:
+						localKey = 'c';
+						break;
+				#endif
 			}
+		}
+
+		for (i = 0; i < 28; i++)
+		{
+			if (pressedKeyMap[i] == localKey)
+			{
+				find = i;
+				found = 1;
+				break;
+			}
+		}
+
+		if (found != 0)
+		{
+			temp = pressedKeyCharMap[find];
+			temp2 = temp & 0x00FF;
+
+			if (temp2 == 0)
+			{
+				// pressed valid keys
+				if (!(localKey & 0x80))
+				{
+					pressedKey |= (temp & 0xFF00) >> 8;		
+				}
+				else
+				{
+					pressedKey &= -((temp & 0xFF00) >> 8);
+				}
+			}
+			// pressed inactive keys
 			else
 			{
-				pressedKey &= -((temp & 0xFF00) >> 8);
+				skipedKey |= (temp & 0xFF00) >> 8;
 			}
 		}
-		// pressed inactive keys
-		else
-		{
-			skipedKey |= (temp & 0xFF00) >> 8;
-		}
-	}
 
-	//if (found==0)
-		skipIntro = localKey;
+		//if (found==0)
+			skipIntro = localKey;
+	}
 
 	//printf("key: %d %d %d %d\n",pressedKey,skipedKey,skipIntro,localKey);
 }
