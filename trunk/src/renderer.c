@@ -143,15 +143,9 @@ typedef struct bodyHeaderStruct
 
 // ---- variables ----
 
-int32 isUsingOrhoProjection;
-
 int32 baseMatrixRotationX;
 int32 baseMatrixRotationY;
 int32 baseMatrixRotationZ;
-
-int32 orthoProjX; // setSomethingVar1
-int32 orthoProjY; // setSomethingVar2
-int32 orthoProjZ; // setSomethingVar2
 
 int32 baseTransPosX; // setSomething2Var1
 int32 baseTransPosY; // setSomething2Var2
@@ -167,10 +161,6 @@ int32 cameraPosZ; // cameraVar3
 
 // ---
 
-int16 *shadeAngleTab1; // tab1
-int16 *shadeAngleTab2; // tab2
-int16 *shadeAngleTab3; // tab3
-
 int32 renderAngleX; // _angleX
 int32 renderAngleY; // _angleY
 int32 renderAngleZ; // _angleZ
@@ -178,10 +168,6 @@ int32 renderAngleZ; // _angleZ
 int32 renderX; // _X
 int32 renderY; // _Y
 int32 renderZ; // _Z
-
-int32 destX;
-int32 destY;
-int32 destZ;
 
 // --- 
 

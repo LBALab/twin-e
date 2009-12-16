@@ -108,22 +108,22 @@ typedef struct StaticFlagsStruct
 /** Actors dynamic flags structure */
 typedef struct DynamicFlagsStruct
 {
-    uint16 bUnk0001								: 1; // 0x0001
-    uint16 bUnk0002								: 1; // 0x0002
-    uint16 bUnk0004								: 1; // 0x0004
-    uint16 bUnk0008								: 1; // 0x0008
-    uint16 bIsVisible							: 1; // 0x0010 // bIsVisible
-    uint16 bUnk0020								: 1; // 0x0020
-    uint16 bIsMoving							: 1; // 0x0040
-    uint16 bUnk0080								: 1; // 0x0080
-    uint16 bUnk0100								: 1; // 0x0100
-    uint16 bUnk0200								: 1; // 0x0200
-    uint16 bUnk0400								: 1; // 0x0400
-    uint16 bUnk0800								: 1; // 0x0800
-    uint16 bUnk1000								: 1; // 0x1000
-    uint16 bUnk2000								: 1; // 0x2000
-    uint16 bUnk4000								: 1; // 0x4000
-    uint16 bUnk8000								: 1; // 0x8000
+    uint16 bWaitHitFrame						: 1; // 0x0001 wait for hit frame
+    uint16 bIsHitting							: 1; // 0x0002 hit frame anim
+    uint16 bAnimEnded							: 1; // 0x0004 anim ended in the current loop (will be looped in the next engine loop)
+    uint16 bAnimFrameReached					: 1; // 0x0008 new frame anim reached
+    uint16 bIsVisible							: 1; // 0x0010 actor has been drawn in this loop
+    uint16 bIsDead								: 1; // 0x0020 is dead
+    uint16 bIsSpriteMoving						: 1; // 0x0040 door is opening or closing (wait to reach the destination position)
+    uint16 bIsRotationByAnim					: 1; // 0x0080 actor rotation is managed by its animaation not by the engine
+    uint16 bIsFalling							: 1; // 0x0100 is falling on scene
+    uint16 bUnk0200								: 1; // 0x0200 unused
+    uint16 bUnk0400								: 1; // 0x0400 unused
+    uint16 bUnk0800								: 1; // 0x0800 unused
+    uint16 bUnk1000								: 1; // 0x1000 unused
+    uint16 bUnk2000								: 1; // 0x2000 unused
+    uint16 bUnk4000								: 1; // 0x4000 unused
+    uint16 bUnk8000								: 1; // 0x8000 unused
 } DynamicFlagsStruct;
 
 /** Actors structure */
@@ -149,7 +149,7 @@ typedef struct ActorStruct
 	int32 bonusParameter; // field_10
 	int32 angle;
 	int32 speed;
-	int32 comportement;
+	int32 controlMode;
 	int32 info0; // cropLeft
 	int32 info1; // cropTop
 	int32 info2; // cropRight
@@ -222,6 +222,10 @@ uint8 *currentActorAnimExtraData;
 
 /** Hero behaviour */
 int16 heroBehaviour;
+/** Hero moved */
+int16 heroMoved; // twinsenMove
+/** Hero Action */
+int16 heroAction; // action
 
 /** Hero 3D entity for normal behaviour */
 uint8 *heroEntityNORMAL;	 // file3D0
@@ -300,5 +304,10 @@ int32 get_real_angle(TimeStruct * angleData);
 /** Get actor angle
 	@param angleData time pointer to process */
 int32 get_real_value(TimeStruct * angleData);
+
+
+void move_actor(int32 angleFrom, int32 angleTo, int32 angleSpeed, TimeStruct *time);
+
+void rotate_actor(int32 X, int32 Z, int32 angle);
 
 #endif

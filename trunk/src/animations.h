@@ -34,7 +34,11 @@
 /** Total number of animations allowed in the game */
 #define NUM_ANIMS 600
 
-#define ANIM_STANDING 0
+#define ANIM_STANDING  0
+#define ANIM_FORWARD   1
+#define ANIM_BACKWARD  2
+#define ANIM_TURNLEFT  3
+#define ANIM_TURNRIGHT 4
 
 /** Table with all loaded animations */
 uint8* animTable[NUM_ANIMS];

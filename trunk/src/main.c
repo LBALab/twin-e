@@ -418,6 +418,13 @@ void init_vars()
 	currentPositionInBodyPtrTab=0; // TODO: put this in scene.c file under clear_scene()
 }
 
+void init_hero_vars() // TODO: get rid of this here
+{
+	//TODO: reset actor 0
+	sceneHero->speed = 40;
+	// TODO: init in-game hero status var
+}
+
 
 /** Initialize all needed stuffs at first time running engine */
 void init_all()
@@ -430,6 +437,7 @@ void init_all()
 	init_keymap();
 	init_resources();
 	init_vars();
+	init_hero_vars();
 }
 
 /** Main engine function 
