@@ -32,6 +32,7 @@
 #include "sdlengine.h"
 #include "menu.h"
 #include "interface.h"
+#include "lbaengine.h"
 
 #include <math.h>
 

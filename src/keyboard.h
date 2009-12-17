@@ -1,6 +1,6 @@
-/** @file redraw.h
+/** @file keyboard.h
 	@brief
-	This file contains engine redraw actions routines
+	This file contains movies routines
 
 	Prequengine: a Little Big Adventure engine
 
@@ -25,27 +25,32 @@
 	$Id$
 */
 
-#ifndef REDRAW_H
-#define REDRAW_H
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #include "sys.h"
 
-/** Auxiliar object render left position on screen */
-int32 renderLeft;
-/** Auxiliar object render right position on screen */
-int32 renderRight;
-/** Auxiliar object render top position on screen */
-int32 renderTop;
-/** Auxiliar object render bottom position on screen */
-int32 renderBottom;
+/** Pressed key map - scanCodeTab1 */
+uint8 pressedKeyMap[29];
+/** Pressed key char map - scanCodeTab2 */
+uint16 pressedKeyCharMap[31];
 
-//short int drawInGameTransBox;
+/** Skipped key - key1 */
+int16 skipedKey;
+/** Pressed key - printTextVar12 */
+int16 pressedKey;
+//int printTextVar13;
+/** Skip intro variable */
+int16 skipIntro;
+/** Current key value */
+int16 currentKey;
+/** Auxiliar key value */
+int16 key;
 
-/** Request background redraw */
-int16 reqBgRedraw;
+int32 heroPressedKey;
+int32 heroPressedKey2;
 
-/** This is responsible for the entire game screen redraw
-	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int32 bgRedraw);
+/** Initialize engine auxiliar keymap */
+void init_keymap();
 
 #endif

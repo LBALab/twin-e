@@ -26,6 +26,10 @@
 */
 
 #include "resources.h"
+#include "dialogues.h"
+#include "scene.h"
+#include "animations.h"
+#include "images.h"
 
 int8 * HQR_RESS_FILE			= "ress.hqr";
 int8 * HQR_TEXT_FILE			= "text.hqr";
@@ -43,3 +47,23 @@ int8 * HQR_FILE3D_FILE			= "file3d.hqr";
 int8 * HQR_BODY_FILE			= "body.hqr";
 int8 * HQR_ANIM_FILE			= "anim.hqr";
 
+/** Initialize resource pointers */
+void init_resources() {
+	int32 size = 0;
+
+	// Menu and in-game palette
+	init_palettes();
+
+	// load LBA font
+	size = hqr_getalloc_entry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
+
+	set_font_parameters(2, 8);
+	set_font_color(14);
+	set_dialogue_cross_color(136, 143, 2);
+
+	// load sprite actors bounding box data
+	size = hqr_getalloc_entry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
+
+	preload_sprites();
+	preload_animations();
+}

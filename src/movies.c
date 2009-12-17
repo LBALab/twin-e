@@ -37,6 +37,8 @@
 #include "main.h"
 #include "sound.h"
 #include "filereader.h"
+#include "lbaengine.h"
+#include "keyboard.h"
 
 
 /** FLA movie extension */

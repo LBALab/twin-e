@@ -124,7 +124,4 @@ ConfigFile cfgfile;
 /** CD Game directory */
 int8 * cdDir;
 
-/** Initialize main engine variables */
-void init_vars();
-
 #endif

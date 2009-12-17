@@ -88,6 +88,7 @@ extern int8 * HQR_FILE3D_FILE;
 extern int8 * HQR_BODY_FILE;
 extern int8 * HQR_ANIM_FILE;
 
-//HQREntity* RESSentity;
+/** Initialize resource pointers */
+void init_resources();
 
 #endif

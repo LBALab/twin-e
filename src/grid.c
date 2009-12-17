@@ -38,6 +38,7 @@
 #include "images.h"
 #include "actor.h"
 #include "renderer.h"
+#include "redraw.h"
 
 /** Grip X size */
 #define GRID_SIZE_X 64

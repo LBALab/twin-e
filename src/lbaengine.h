@@ -31,10 +31,21 @@
 
 #include "sys.h"
 
+/** Work video buffer */
+uint8 *workVideoBuffer;
+/** Main game video buffer */
+uint8 *frontVideoBuffer;
+/** Auxiliar game video buffer */
+uint8 *frontVideoBufferbis;
+
+/** temporary screen table */
+int32 screenLockupTable[2000];
+
+int16 leftMouse;
+int16 rightMouse;
+
 int32 quitGame;
 volatile int32 lbaTime;
-/** Request background redraw */
-int16 reqBgRedraw;
 
 int16 projPosXScreen; // fullRedrawVar1
 int16 projPosYScreen; // fullRedrawVar2
@@ -46,6 +57,9 @@ int16 projPosZ;
 int16 currentlyFollowedActor;
 
 uint8 gameFlags[256];
+
+
+int32 loopPressedKey; // mainLoopVar5
 
 void freeze_time();
 void unfreeze_time();

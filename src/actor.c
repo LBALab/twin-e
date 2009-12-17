@@ -38,6 +38,7 @@
 #include "grid.h"
 #include "animations.h"
 #include "renderer.h"
+#include "movements.h"
 
 /** Actors 3D body table - size of NUM_BODIES */
 uint8 *bodyTable[NUM_BODIES];
@@ -61,7 +62,7 @@ void restart_hero_scene() {
 	sceneHero->positionInActorScript = 0;
 	sceneHero->zone = -1;
 	//sceneHero->angle = startupAngleInCube; // TODO: DO THIS LATER
-	set_actor_angle_safe(sceneHero->angle, sceneHero->angle, 0, &sceneHero->time);
+	set_actor_angle_safe(sceneHero->angle, sceneHero->angle, 0, &sceneHero->move);
 	set_behaviour(heroBehaviour); //TODO: should be startupComportementHeroInCube
 	//cropBottomScreen = 0;
 }
@@ -370,7 +371,7 @@ void init_actor(int16 actorIdx) {
 
 		init_sprite_actor(actorIdx);
 
-		set_actor_angle_safe(0, 0, 0, &actor->time);
+		set_actor_angle_safe(0, 0, 0, &actor->move);
 
 		if (actor->staticFlags.bUsesClipping) {
 			actor->lastX = actor->X;
@@ -390,182 +391,10 @@ void init_actor(int16 actorIdx) {
 			init_anim(actor->anim, 0, 255, actorIdx);
 		}
 
-		set_actor_angle_safe(actor->angle, actor->angle, 0, &actor->time);
+		set_actor_angle_safe(actor->angle, actor->angle, 0, &actor->move);
 	}
 
 	actor->positionInMoveScript = -1;
 	actor->labelIdx = -1;
 	actor->positionInActorScript = 0;
-}
-
-/** Set actor safe angle
-	@param startAngle start angle
-	@param endAngle end angle
-	@param stepAngle number of steps
-	@param timePtr time pointer to update */
-void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr) {
-	timePtr->from = startAngle & 0x3FF;
-	timePtr->to = endAngle & 0x3FF;
-	timePtr->numOfStep = stepAngle & 0x3FF;
-	timePtr->timeOfChange = lbaTime;
-}
-
-/** Clear actors safe angle
-	@param actorPtr actor pointer */
-void clear_real_angle(ActorStruct * actorPtr) {
-	set_actor_angle_safe(actorPtr->angle, actorPtr->angle, 0, &actorPtr->time);
-}
-
-/** Set actor safe angle
-	@param startAngle start angle
-	@param endAngle end angle
-	@param stepAngle number of steps
-	@param timePtr time pointer to update */
-void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr) {
-	timePtr->from = startAngle;
-	timePtr->to = endAngle;
-	timePtr->numOfStep = stepAngle;
-	timePtr->timeOfChange = lbaTime;
-}
-
-/** Get actor real angle
-	@param angleData time pointer to process */
-int32 get_real_angle(TimeStruct * angleData) {
-	int32 timePassed;
-	int32 remainingAngle;
-
-	if (angleData->numOfStep) {
-		timePassed = lbaTime - angleData->timeOfChange;
-
-		if (timePassed >= angleData->numOfStep) {	// rotation is finished
-			angleData->numOfStep = 0;
-			return (angleData->to);
-		}
-
-		remainingAngle = angleData->to - angleData->from;
-
-		if (remainingAngle < -0x200) {
-			remainingAngle += 0x400;
-		} else if (remainingAngle > 0x200) {
-			remainingAngle -= 0x400;
-		}
-
-		remainingAngle *= timePassed;
-		remainingAngle /= angleData->numOfStep;
-		remainingAngle += angleData->from;
-
-		return (remainingAngle);
-	}
-
-	return (angleData->to);
-}
-
-/** Get actor angle
-	@param angleData time pointer to process */
-int32 get_real_value(TimeStruct * angleData) {
-	int32 tempAngle;
-
-	if (!angleData->numOfStep)
-		return (angleData->to);
-
-	if (!(lbaTime - angleData->timeOfChange < angleData->numOfStep)) {
-		angleData->numOfStep = 0;
-		return (angleData->to);
-	}
-
-	tempAngle = angleData->to - angleData->from;
-	tempAngle *= lbaTime - angleData->timeOfChange;
-	tempAngle /= angleData->numOfStep;
-
-	return (tempAngle + angleData->from);
-}
-
-void get_shadow_position(int32 X, int32 Y, int32 Z) {
-	int32 tempX;
-	int32 tempY;
-	int32 tempZ;
-	uint8* ptr;
-
-	tempX = (X + 0x100) >> 9;
-	tempY = Y >> 8;
-	tempZ = (Z + 0x100) >> 9;
-
-	ptr = blockBuffer + tempZ * 2 + tempX * 25 * 2 + (tempY << 6) * 25 * 2;
-
-	while (tempY) { // search down until either ground is found or lower border of the cube is reached
-		if (*(int16*)ptr) // found the ground
-			break;
-
-		tempY--;
-		ptr -= 2;
-	}
-
-	shadowCollisionType = 0;
-
-	collisionX = tempX;
-	collisionY = tempY;
-	collisionZ = tempZ;
-
-	processActorX = X;
-	processActorY = (tempY + 1) << 8;
-	processActorZ = Y;
-
-	if (*ptr) {
-		uint8* tempPtr;
-
-		tempPtr = get_block_library(*(ptr++) - 1) + 3;
-
-		shadowCollisionType = *(tempPtr + *(ptr) * 4);
-
-		//ReajustPos(shadowCollisionType);
-	}
-
-	shadowX = processActorX;
-	shadowY = processActorY;
-	shadowZ = processActorZ;
-}
-
-void move_actor(int32 angleFrom, int32 angleTo, int32 angleSpeed, TimeStruct *time) { // ManualRealAngle
-	int32 numOfStepInt;
-	int16 numOfStep;
-	int16 from;
-	int16 to;
-
-	from = angleFrom & 0x3FF;
-	to   = angleTo & 0x3FF;
-
-	time->from = from;
-	time->to   = to;
-
-	numOfStep = (from - to) << 6;
-
-	if (numOfStep < 0) {
-		numOfStepInt = -numOfStep;
-	} else {
-		numOfStepInt = numOfStep;
-	}
-
-	numOfStepInt >>= 6;
-
-	numOfStepInt *= angleSpeed;
-	numOfStepInt >>= 8;
-
-	time->numOfStep = (int16)numOfStepInt;
-	time->timeOfChange = lbaTime;
-}
-
-void rotate_actor(int32 X, int32 Z, int32 angle) {
-	int32 angle1;
-	int32 angle2;
-
-	if (!angle) {
-		destX = X;
-		destZ = Z;
-	} else {
-		angle1 = shadeAngleTab1[angle & 0x3FF];
-		angle2 = shadeAngleTab1[(angle + 0x100) & 0x3FF];
-
-		destX = (X * angle2 + Z * angle1) >> 14;
-		destZ = (Z * angle2 - X * angle1) >> 14;
-	}
 }

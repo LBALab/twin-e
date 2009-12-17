@@ -1,6 +1,6 @@
-/** @file redraw.h
+/** @file collision.h
 	@brief
-	This file contains engine redraw actions routines
+	This file contains movies routines
 
 	Prequengine: a Little Big Adventure engine
 
@@ -25,27 +25,16 @@
 	$Id$
 */
 
-#ifndef REDRAW_H
-#define REDRAW_H
+#ifndef COLLISION_H
+#define COLLISION_H
 
 #include "sys.h"
 
-/** Auxiliar object render left position on screen */
-int32 renderLeft;
-/** Auxiliar object render right position on screen */
-int32 renderRight;
-/** Auxiliar object render top position on screen */
-int32 renderTop;
-/** Auxiliar object render bottom position on screen */
-int32 renderBottom;
-
-//short int drawInGameTransBox;
-
-/** Request background redraw */
-int16 reqBgRedraw;
-
-/** This is responsible for the entire game screen redraw
-	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int32 bgRedraw);
+/** Actor collition X coordinate */
+int32 collisionX; // getPosVar1
+/** Actor collition Y coordinate */
+int32 collisionY; // getPosVar2
+/** Actor collition Z coordinate */
+int32 collisionZ; // getPosVar3
 
 #endif

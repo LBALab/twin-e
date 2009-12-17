@@ -38,6 +38,7 @@
 #include "resources.h"
 #include "menu.h"
 #include "animations.h"
+#include "keyboard.h"
 
 #ifdef GAMEMOD
 #include "debug.scene.h"

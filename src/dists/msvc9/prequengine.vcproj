@@ -186,6 +186,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\collision.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\collision.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\debug.c"
 			>
 		</File>
@@ -226,6 +234,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\gamestate.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\gamestate.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\grid.c"
 			>
 		</File>
@@ -258,6 +274,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\keyboard.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\keyboard.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\lbaengine.c"
 			>
 		</File>
@@ -287,6 +311,14 @@
 		</File>
 		<File
 			RelativePath="..\..\menuoptions.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\movements.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\movements.h"
 			>
 		</File>
 		<File

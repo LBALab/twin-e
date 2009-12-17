@@ -33,35 +33,6 @@
 #include "sys.h"
 #include "debug.h"
 
-/** Work video buffer */
-uint8 *workVideoBuffer;
-/** Main game video buffer */
-uint8 *frontVideoBuffer;
-/** Auxiliar game video buffer */
-uint8 *frontVideoBufferbis;
-
-/** temporary screen table */
-int32 screenLockupTable[2000];
-
-/** Pressed key map - scanCodeTab1 */
-uint8 pressedKeyMap[29];
-/** Pressed key char map - scanCodeTab2 */
-uint16 pressedKeyCharMap[31];
-
-/** Skipped key - key1 */
-extern int16 skipedKey;
-/** Pressed key - printTextVar12 */
-extern int16 pressedKey;
-/** Skip intro variable */
-extern int16 skipIntro;
-/** Current key value */
-extern int16 currentKey;
-/** Auxiliar key value */
-extern int16 key;
-
-int16 leftMouse;
-int16 rightMouse;
-
 /** Main SDL screen surface buffer */
 extern SDL_Surface *screen;
 

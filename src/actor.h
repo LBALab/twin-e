@@ -52,13 +52,13 @@ uint8* spriteTable[NUM_SPRITES];
 /** Table with all loaded sprite sizes */
 uint32   spriteSizeTable[NUM_SPRITES];
 
-/** Actors time structure */
-typedef struct TimeStruct {
+/** Actors move structure */
+typedef struct ActorMoveStruct {
 	int16 from;
 	int16 to;
 	int16 numOfStep;
 	int32 timeOfChange;
-} TimeStruct;
+} ActorMoveStruct;
 
 /** Actors zone volumique points structure */
 typedef struct ZVPoint {
@@ -179,7 +179,7 @@ typedef struct ActorStruct {
 	int32 field_78;
 
 	ZVBox boudingBox;
-	TimeStruct time;
+	ActorMoveStruct move;
 	AnimTimerDataStruct animTimerData;
 } ActorStruct;
 
@@ -192,20 +192,6 @@ int32 shadowZ;
 /** Actor shadow collition type */
 int8 shadowCollisionType; // shadowVar
 
-/** Process actor X coordinate */
-int16 processActorX;
-/** Process actor Y coordinate */
-int16 processActorY;
-/** Process actor Z coordinate */
-int16 processActorZ;
-
-/** Actor collition X coordinate */
-int32 collisionX; // getPosVar1
-/** Actor collition Y coordinate */
-int32 collisionY; // getPosVar2
-/** Actor collition Z coordinate */
-int32 collisionZ; // getPosVar3
-
 int16 currentX;
 int16 currentY;
 int16 currentZ;
@@ -215,10 +201,6 @@ uint8 *currentActorAnimExtraData;
 
 /** Hero behaviour */
 int16 heroBehaviour;
-/** Hero moved */
-int16 heroMoved; // twinsenMove
-/** Hero Action */
-int16 heroAction; // action
 
 /** Hero 3D entity for normal behaviour */
 uint8 *heroEntityNORMAL;	 // file3D0
@@ -271,36 +253,5 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx);
 /** Initialize actors
 	@param actorIdx actor index to init */
 void init_actor(int16 actorIdx);
-
-/** Set actor safe angle
-	@param startAngle start angle
-	@param endAngle end angle
-	@param stepAngle number of steps
-	@param timePtr time pointer to update */
-void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr);
-
-/** Clear actors safe angle
-	@param actorPtr actor pointer */
-void clear_real_angle(ActorStruct * actorPtr);
-
-/** Set actor safe angle
-	@param startAngle start angle
-	@param endAngle end angle
-	@param stepAngle number of steps
-	@param timePtr time pointer to update */
-void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr);
-
-/** Get actor real angle
-	@param angleData time pointer to process */
-int32 get_real_angle(TimeStruct * angleData);
-
-/** Get actor angle
-	@param angleData time pointer to process */
-int32 get_real_value(TimeStruct * angleData);
-
-
-void move_actor(int32 angleFrom, int32 angleTo, int32 angleSpeed, TimeStruct *time);
-
-void rotate_actor(int32 X, int32 Z, int32 angle);
 
 #endif
