@@ -38,6 +38,7 @@
 #include "resources.h"
 #include "music.h"
 #include "renderer.h"
+#include "gamestate.h"
 
 uint8* currentScene;
 

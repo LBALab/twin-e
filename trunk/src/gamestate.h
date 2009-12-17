@@ -28,6 +28,9 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+#include "sys.h"
+
+uint8 gameFlags[256];
 
 /** Initialize main engine variables */
 void init_vars();

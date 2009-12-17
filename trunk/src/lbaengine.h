@@ -56,9 +56,6 @@ int16 projPosZ;
 
 int16 currentlyFollowedActor;
 
-uint8 gameFlags[256];
-
-
 int32 loopPressedKey; // mainLoopVar5
 
 void freeze_time();
