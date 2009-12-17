@@ -1,9 +1,9 @@
 /** @file menu.h
 	@brief
 	This file contains main menu create and processing routines.
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -44,7 +44,7 @@ extern uint8 *plasmaEffectPtr;
 	@param color plasma effect start color */
 void process_plasma_effect(int32 top, int32 color);
 
-/** Draw the entire button box 
+/** Draw the entire button box
 	@param left start width to draw the button
 	@param top start height to draw the button
 	@param right end width to draw the button

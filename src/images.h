@@ -1,9 +1,9 @@
 /** @file images.h
 	@brief
 	This file contains image processing.
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -57,7 +57,7 @@ void load_custom_palette(int32 index);
 void load_menu_image(int16 fade_in);
 
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect
-	@param index \a RESS.HQR entry index (starting from 0) 
+	@param index \a RESS.HQR entry index (starting from 0)
 	@param fade_in if we fade in before using the palette */
 void load_image(int32 index, int16 fade_in);
 

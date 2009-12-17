@@ -1,9 +1,9 @@
 /** @file debug.h
 	@brief
 	This file contains the main game debug window routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -30,12 +30,11 @@
 
 #include "sys.h"
 
-typedef struct MouseStatusStruct
-{
-  int32 left;
-  int32 right;
-  int32 X;
-  int32 Y;
+typedef struct MouseStatusStruct {
+	int32 left;
+	int32 right;
+	int32 X;
+	int32 Y;
 } MouseStatusStruct;
 
 

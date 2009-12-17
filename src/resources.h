@@ -1,9 +1,9 @@
 /** @file resources.h
 	@brief
-	This file contains the definitions of most used game resources. 
-	
+	This file contains the definitions of most used game resources.
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 

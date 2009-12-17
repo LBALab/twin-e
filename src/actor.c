@@ -1,9 +1,9 @@
 /** @file actor.c
 	@brief
 	This file contains scene actor routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -44,11 +44,10 @@ uint8 *bodyTable[NUM_BODIES];
 
 //TODO: add all the needed content here
 /** Restart hero variables while opening new scenes */
-void restart_hero_scene()
-{
+void restart_hero_scene() {
 	sceneHero->controlMode = 1;
-	memset(&sceneHero->dynamicFlags,0,2);
-	memset(&sceneHero->staticFlags,0,2);
+	memset(&sceneHero->dynamicFlags, 0, 2);
+	memset(&sceneHero->staticFlags, 0, 2);
 
 	sceneHero->staticFlags.bComputeCollisionWithObj = 1;
 	sceneHero->staticFlags.bComputeCollisionWithBricks = 1;
@@ -69,10 +68,9 @@ void restart_hero_scene()
 
 // TODO: finish this
 /** Load hero 3D body and animations */
-void load_hero_entities()
-{
+void load_hero_entities() {
 	int32 size;
-	
+
 	size = hqr_getalloc_entry(&heroEntityATHLETIC, HQR_FILE3D_FILE, FILE3DHQR_HEROATHLETIC);
 	sceneHero->entityDataPtr = heroEntityATHLETIC;
 	//TCos1Init = getAnimIndexForBody(0, 0);
@@ -98,32 +96,30 @@ void load_hero_entities()
 
 /** Set hero behaviour
 	@param behaviour behaviour value to set */
-void set_behaviour(int32 behaviour)
-{
+void set_behaviour(int32 behaviour) {
 	int32 bodyIdx;
 
-	switch (behaviour)
-	{
-		case NORMAL:
-			heroBehaviour = NORMAL;
-			sceneHero->entityDataPtr = heroEntityNORMAL;
-			break;
-		case ATHLETIC:
-			heroBehaviour = ATHLETIC;
-			sceneHero->entityDataPtr = heroEntityATHLETIC;
-			break;
-		case AGGRESSIVE:
-			heroBehaviour = AGGRESSIVE;
-			sceneHero->entityDataPtr = heroEntityAGGRESSIVE;
-			break;
-		case DISCRETE:
-			heroBehaviour = DISCRETE;
-			sceneHero->entityDataPtr = heroEntityDISCRETE;
-			break;
-		case PROTOPACK:
-			heroBehaviour = PROTOPACK;
-			sceneHero->entityDataPtr = heroEntityPROTOPACK;
-			break;
+	switch (behaviour) {
+	case NORMAL:
+		heroBehaviour = NORMAL;
+		sceneHero->entityDataPtr = heroEntityNORMAL;
+		break;
+	case ATHLETIC:
+		heroBehaviour = ATHLETIC;
+		sceneHero->entityDataPtr = heroEntityATHLETIC;
+		break;
+	case AGGRESSIVE:
+		heroBehaviour = AGGRESSIVE;
+		sceneHero->entityDataPtr = heroEntityAGGRESSIVE;
+		break;
+	case DISCRETE:
+		heroBehaviour = DISCRETE;
+		sceneHero->entityDataPtr = heroEntityDISCRETE;
+		break;
+	case PROTOPACK:
+		heroBehaviour = PROTOPACK;
+		sceneHero->entityDataPtr = heroEntityPROTOPACK;
+		break;
 	};
 
 	bodyIdx = sceneHero->body;
@@ -140,26 +136,22 @@ void set_behaviour(int32 behaviour)
 }
 
 /** Preload all sprites */
-void preload_sprites()
-{
+void preload_sprites() {
 	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_SPRITES_FILE)-1;
+	int32 numEntries = hqr_num_entries(HQR_SPRITES_FILE) - 1;
 
-	for(i=0; i<numEntries; i++)
-	{
-		spriteSizeTable[i] = hqr_getalloc_entry(&spriteTable[i],HQR_SPRITES_FILE,i);
+	for (i = 0; i < numEntries; i++) {
+		spriteSizeTable[i] = hqr_getalloc_entry(&spriteTable[i], HQR_SPRITES_FILE, i);
 	}
 }
 
 /** Initialize sprite actor
 	@param actorIdx sprite actor index */
-void init_sprite_actor(int32 actorIdx)
-{
+void init_sprite_actor(int32 actorIdx) {
 	ActorStruct *localActor = &sceneActors[actorIdx];
 
-	if (localActor->staticFlags.bIsSpriteActor && localActor->sprite != -1 && localActor->entity != localActor->sprite)
-	{
-		int16 *ptr = (int16 *) (spriteBoundingBoxPtr + localActor->sprite * 16 + 4);
+	if (localActor->staticFlags.bIsSpriteActor && localActor->sprite != -1 && localActor->entity != localActor->sprite) {
+		int16 *ptr = (int16 *)(spriteBoundingBoxPtr + localActor->sprite * 16 + 4);
 
 		localActor->entity = localActor->sprite;
 		localActor->boudingBox.X.bottomLeft = *(ptr++);
@@ -174,8 +166,7 @@ void init_sprite_actor(int32 actorIdx)
 /** Initialize 3D actor body
 	@param bodyIdx 3D actor body index
 	@param actorIdx 3D actor index */
-int32 init_body(int32 bodyIdx, int32 actorIdx)
-{
+int32 init_body(int32 bodyIdx, int32 actorIdx) {
 	ActorStruct *localActor;
 	uint8 *bodyPtr;
 	uint8 var1;
@@ -186,12 +177,11 @@ int32 init_body(int32 bodyIdx, int32 actorIdx)
 	int16 *bodyPtr5;
 	int16 flag;
 	int32 index;
-	
+
 	localActor = &sceneActors[actorIdx];
 	bodyPtr = localActor->entityDataPtr;
 
-	do
-	{
+	do {
 		var1 = *(bodyPtr++);
 
 		if (var1 == 0xFF)
@@ -199,21 +189,17 @@ int32 init_body(int32 bodyIdx, int32 actorIdx)
 
 		bodyPtr2 = bodyPtr + 1;
 
-		if (var1 == 1)
-		{
+		if (var1 == 1) {
 			var2 = *(bodyPtr);
 
-			if (var2 == bodyIdx)
-			{
+			if (var2 == bodyIdx) {
 				bodyPtr3 = bodyPtr2 + 1;
 				flag = *((uint16*)bodyPtr3);
 
-				if (!(flag & 0x8000))
-				{
+				if (!(flag & 0x8000)) {
 					hqr_getalloc_entry(&bodyTable[currentPositionInBodyPtrTab], HQR_BODY_FILE, flag & 0xFFFF);
 
-					if (!bodyTable[currentPositionInBodyPtrTab])
-					{
+					if (!bodyTable[currentPositionInBodyPtrTab]) {
 						printf("HQR ERROR: Loading body entities\n");
 						exit(1);
 					}
@@ -221,9 +207,7 @@ int32 init_body(int32 bodyIdx, int32 actorIdx)
 					*((uint16*)bodyPtr3) = currentPositionInBodyPtrTab + 0x8000;
 					index = currentPositionInBodyPtrTab;
 					currentPositionInBodyPtrTab++;
-				}
-				else
-				{
+				} else {
 					flag &= 0x7FFF;
 					index = flag;
 				}
@@ -245,27 +229,32 @@ int32 init_body(int32 bodyIdx, int32 actorIdx)
 
 				bodyPtr5 = (int16 *) bodyPtr3;
 
-				bottomLeftX = *((uint16*)bodyPtr3); bodyPtr3+=2;
-				bottomLeftY = *((uint16*)bodyPtr3); bodyPtr3+=2;
-				bottomLeftZ = *((uint16*)bodyPtr3); bodyPtr3+=2;
+				bottomLeftX = *((uint16*)bodyPtr3);
+				bodyPtr3 += 2;
+				bottomLeftY = *((uint16*)bodyPtr3);
+				bodyPtr3 += 2;
+				bottomLeftZ = *((uint16*)bodyPtr3);
+				bodyPtr3 += 2;
 
-				topRightX = *((uint16*)bodyPtr3); bodyPtr3+=2;
-				topRightY = *((uint16*)bodyPtr3); bodyPtr3+=2;
-				topRightZ = *((uint16*)bodyPtr3); bodyPtr3+=2;
+				topRightX = *((uint16*)bodyPtr3);
+				bodyPtr3 += 2;
+				topRightY = *((uint16*)bodyPtr3);
+				bodyPtr3 += 2;
+				topRightZ = *((uint16*)bodyPtr3);
+				bodyPtr3 += 2;
 
 				return (index);
 			}
 		}
 
 		bodyPtr = *bodyPtr2 + bodyPtr2;
-	}while (1);
+	} while (1);
 }
 
 /** Initialize 3D actor
 	@param bodyIdx 3D actor body index
 	@param actorIdx 3D actor index */
-void init_model_actor(int32 bodyIdx, int16 actorIdx)
-{
+void init_model_actor(int32 bodyIdx, int16 actorIdx) {
 	ActorStruct *localActor;
 	int32  entityIdx;
 	int32  entityIdxOld;
@@ -282,22 +271,17 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx)
 	if (localActor->staticFlags.bIsSpriteActor)
 		return;
 
-	if (actorIdx == 0 && heroBehaviour == PROTOPACK && localActor->armor != 0 && localActor->armor != 1) // if hero
-	{
+	if (actorIdx == 0 && heroBehaviour == PROTOPACK && localActor->armor != 0 && localActor->armor != 1) { // if hero
 		set_behaviour(NORMAL);
 	}
 
-	if (bodyIdx != -1)
-	{
+	if (bodyIdx != -1) {
 		entityIdx = init_body(bodyIdx, actorIdx);
-	}
-	else
-	{
+	} else {
 		entityIdx = -1;
 	}
 
-	if (entityIdx != -1)
-	{
+	if (entityIdx != -1) {
 		if (localActor->entity == entityIdx)
 			return;
 
@@ -306,8 +290,7 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx)
 		localActor->body = bodyIdx;
 		currentIndex = localActor->entity;
 
-		if (bottomLeftX == -32000)
-		{
+		if (bottomLeftX == -32000) {
 			ptr = (uint16 *) bodyTable[localActor->entity];
 			ptr++;
 
@@ -318,21 +301,18 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx)
 			var3 = *((int16 *)ptr++);
 			var4 = *((int16 *)ptr++);
 
-			if (localActor->staticFlags.bUseMiniZv)
-			{
+			if (localActor->staticFlags.bUseMiniZv) {
 				result1 = var2 - var1; // take smaller for bound
 				result2 = var4 - var3;
 
-				if(result1<result2)
-					result=result1;
+				if (result1 < result2)
+					result = result1;
 				else
-					result=result2;
+					result = result2;
 
 				result = abs(result);
 				result >>= 1;
-			}
-			else
-			{
+			} else {
 				result1 = var2 - var1; // take average for bound
 				result2 = var4 - var3;
 
@@ -345,9 +325,7 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx)
 			localActor->boudingBox.X.topRight = result;
 			localActor->boudingBox.Z.bottomLeft = -result;
 			localActor->boudingBox.Z.topRight = result;
-		}
-		else
-		{
+		} else {
 			localActor->boudingBox.X.bottomLeft = bottomLeftX;
 			localActor->boudingBox.X.topRight = topRightX;
 			localActor->boudingBox.Y.bottomLeft = bottomLeftY;
@@ -380,14 +358,11 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx)
 
 /** Initialize actors
 	@param actorIdx actor index to init */
-void init_actor(int16 actorIdx)
-{
+void init_actor(int16 actorIdx) {
 	ActorStruct *actor = &sceneActors[actorIdx];
 
-	if (actor->staticFlags.bIsSpriteActor) // if sprite actor
-	{
-		if (actor->strengthOfHit != 0)
-		{
+	if (actor->staticFlags.bIsSpriteActor) { // if sprite actor
+		if (actor->strengthOfHit != 0) {
 			actor->dynamicFlags.bIsHitting = 1;
 		}
 
@@ -397,25 +372,21 @@ void init_actor(int16 actorIdx)
 
 		set_actor_angle_safe(0, 0, 0, &actor->time);
 
-		if (actor->staticFlags.bUsesClipping)
-		{
+		if (actor->staticFlags.bUsesClipping) {
 			actor->lastX = actor->X;
 			actor->lastY = actor->Y;
 			actor->lastZ = actor->Z;
 		}
 
-	}
-	else
-	{
+	} else {
 		actor->entity = -1;
-		
+
 		init_model_actor(actor->body, actorIdx);
 
 		actor->previousAnimIdx = -1;
 		actor->field_78 = 0;
 
-		if (actor->entity != -1)
-		{
+		if (actor->entity != -1) {
 			init_anim(actor->anim, 0, 255, actorIdx);
 		}
 
@@ -429,11 +400,10 @@ void init_actor(int16 actorIdx)
 
 /** Set actor safe angle
 	@param startAngle start angle
-	@param endAngle end angle 
-	@param stepAngle number of steps 
+	@param endAngle end angle
+	@param stepAngle number of steps
 	@param timePtr time pointer to update */
-void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr)
-{
+void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr) {
 	timePtr->from = startAngle & 0x3FF;
 	timePtr->to = endAngle & 0x3FF;
 	timePtr->numOfStep = stepAngle & 0x3FF;
@@ -442,18 +412,16 @@ void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, Tim
 
 /** Clear actors safe angle
 	@param actorPtr actor pointer */
-void clear_real_angle(ActorStruct * actorPtr)
-{
+void clear_real_angle(ActorStruct * actorPtr) {
 	set_actor_angle_safe(actorPtr->angle, actorPtr->angle, 0, &actorPtr->time);
 }
 
 /** Set actor safe angle
 	@param startAngle start angle
-	@param endAngle end angle 
-	@param stepAngle number of steps 
+	@param endAngle end angle
+	@param stepAngle number of steps
 	@param timePtr time pointer to update */
-void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr)
-{
+void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr) {
 	timePtr->from = startAngle;
 	timePtr->to = endAngle;
 	timePtr->numOfStep = stepAngle;
@@ -462,29 +430,23 @@ void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStru
 
 /** Get actor real angle
 	@param angleData time pointer to process */
-int32 get_real_angle(TimeStruct * angleData)
-{
+int32 get_real_angle(TimeStruct * angleData) {
 	int32 timePassed;
 	int32 remainingAngle;
 
-	if (angleData->numOfStep)
-	{
+	if (angleData->numOfStep) {
 		timePassed = lbaTime - angleData->timeOfChange;
 
-		if (timePassed >= angleData->numOfStep)	// rotation is finished
-		{
+		if (timePassed >= angleData->numOfStep) {	// rotation is finished
 			angleData->numOfStep = 0;
 			return (angleData->to);
 		}
 
 		remainingAngle = angleData->to - angleData->from;
 
-		if (remainingAngle < -0x200)
-		{
+		if (remainingAngle < -0x200) {
 			remainingAngle += 0x400;
-		}
-		else if (remainingAngle > 0x200)
-		{
+		} else if (remainingAngle > 0x200) {
 			remainingAngle -= 0x400;
 		}
 
@@ -500,15 +462,13 @@ int32 get_real_angle(TimeStruct * angleData)
 
 /** Get actor angle
 	@param angleData time pointer to process */
-int32 get_real_value(TimeStruct * angleData)
-{
+int32 get_real_value(TimeStruct * angleData) {
 	int32 tempAngle;
 
 	if (!angleData->numOfStep)
 		return (angleData->to);
 
-	if (!(lbaTime - angleData->timeOfChange < angleData->numOfStep))
-	{
+	if (!(lbaTime - angleData->timeOfChange < angleData->numOfStep)) {
 		angleData->numOfStep = 0;
 		return (angleData->to);
 	}
@@ -520,26 +480,24 @@ int32 get_real_value(TimeStruct * angleData)
 	return (tempAngle + angleData->from);
 }
 
-void get_shadow_position(int32 X, int32 Y, int32 Z)
-{
+void get_shadow_position(int32 X, int32 Y, int32 Z) {
 	int32 tempX;
 	int32 tempY;
 	int32 tempZ;
 	uint8* ptr;
 
-	tempX = (X+0x100)>>9;
-	tempY = Y>>8;
-	tempZ = (Z+0x100)>>9;
+	tempX = (X + 0x100) >> 9;
+	tempY = Y >> 8;
+	tempZ = (Z + 0x100) >> 9;
 
-	ptr = blockBuffer + tempZ*2 + tempX * 25 * 2 + (tempY<<6)*25*2;
+	ptr = blockBuffer + tempZ * 2 + tempX * 25 * 2 + (tempY << 6) * 25 * 2;
 
-	while(tempY) // search down until either ground is found or lower border of the cube is reached
-	{
-		if(*(int16*)ptr) // found the ground
+	while (tempY) { // search down until either ground is found or lower border of the cube is reached
+		if (*(int16*)ptr) // found the ground
 			break;
 
 		tempY--;
-		ptr-=2;
+		ptr -= 2;
 	}
 
 	shadowCollisionType = 0;
@@ -549,16 +507,15 @@ void get_shadow_position(int32 X, int32 Y, int32 Z)
 	collisionZ = tempZ;
 
 	processActorX = X;
-	processActorY = (tempY+1)<<8;
+	processActorY = (tempY + 1) << 8;
 	processActorZ = Y;
 
-	if(*ptr)
-	{
+	if (*ptr) {
 		uint8* tempPtr;
 
-		tempPtr = get_block_library(*(ptr++)-1) + 3;
+		tempPtr = get_block_library(*(ptr++) - 1) + 3;
 
-		shadowCollisionType = *(tempPtr + *(ptr)*4);
+		shadowCollisionType = *(tempPtr + *(ptr) * 4);
 
 		//ReajustPos(shadowCollisionType);
 	}
@@ -597,8 +554,7 @@ void move_actor(int32 angleFrom, int32 angleTo, int32 angleSpeed, TimeStruct *ti
 	time->timeOfChange = lbaTime;
 }
 
-void rotate_actor(int32 X, int32 Z, int32 angle) 
-{
+void rotate_actor(int32 X, int32 Z, int32 angle) {
 	int32 angle1;
 	int32 angle2;
 

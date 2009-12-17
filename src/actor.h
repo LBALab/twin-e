@@ -1,9 +1,9 @@
 /** @file actor.h
 	@brief
 	This file contains scene actor routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -53,8 +53,7 @@ uint8* spriteTable[NUM_SPRITES];
 uint32   spriteSizeTable[NUM_SPRITES];
 
 /** Actors time structure */
-typedef struct TimeStruct
-{
+typedef struct TimeStruct {
 	int16 from;
 	int16 to;
 	int16 numOfStep;
@@ -62,73 +61,67 @@ typedef struct TimeStruct
 } TimeStruct;
 
 /** Actors zone volumique points structure */
-typedef struct ZVPoint
-{
+typedef struct ZVPoint {
 	int16 bottomLeft;
 	int16 topRight;
 } ZVPoint;
 
 /** Actors zone volumique box structure */
-typedef struct ZVBox
-{
+typedef struct ZVBox {
 	ZVPoint X;
 	ZVPoint Y;
 	ZVPoint Z;
 } ZVBox;
 
 /** Actors animation timer structure */
-typedef struct AnimTimerDataStruct
-{
+typedef struct AnimTimerDataStruct {
 	uint8* ptr;
 	int32 time;
 } AnimTimerDataStruct;
 
 /** Actors static flags structure */
-typedef struct StaticFlagsStruct
-{
+typedef struct StaticFlagsStruct {
 	uint16 bComputeCollisionWithObj				: 1; // 0x0001
-    uint16 bComputeCollisionWithBricks			: 1; // 0x0002
-    uint16 bIsZonable							: 1; // 0x0004
-    uint16 bUsesClipping						: 1; // 0x0008
-    uint16 bCanBePushed							: 1; // 0x0010
-    uint16 bComputeLowCollision					: 1; // 0x0020
-    uint16 bCanDrown							: 1; // 0x0040
-    uint16 bUnk80								: 1; // 0x0080
-    uint16 bUnk0100								: 1; // 0x0100
-    uint16 bIsHidden							: 1; // 0x0200
-    uint16 bIsSpriteActor						: 1; // 0x0400
-    uint16 bCanFall								: 1; // 0x0800
-    uint16 bDoesntCastShadow					: 1; // 0x1000
-    uint16 bIsBackgrounded						: 1; // 0x2000
-    uint16 bIsCarrierActor						: 1; // 0x4000
-    uint16 bUseMiniZv							: 1; // 0x8000
+	uint16 bComputeCollisionWithBricks			: 1; // 0x0002
+	uint16 bIsZonable							: 1; // 0x0004
+	uint16 bUsesClipping						: 1; // 0x0008
+	uint16 bCanBePushed							: 1; // 0x0010
+	uint16 bComputeLowCollision					: 1; // 0x0020
+	uint16 bCanDrown							: 1; // 0x0040
+	uint16 bUnk80								: 1; // 0x0080
+	uint16 bUnk0100								: 1; // 0x0100
+	uint16 bIsHidden							: 1; // 0x0200
+	uint16 bIsSpriteActor						: 1; // 0x0400
+	uint16 bCanFall								: 1; // 0x0800
+	uint16 bDoesntCastShadow					: 1; // 0x1000
+	uint16 bIsBackgrounded						: 1; // 0x2000
+	uint16 bIsCarrierActor						: 1; // 0x4000
+	uint16 bUseMiniZv							: 1; // 0x8000
 } StaticFlagsStruct;
 
 //TODO: update field names
 /** Actors dynamic flags structure */
-typedef struct DynamicFlagsStruct
-{
-    uint16 bWaitHitFrame						: 1; // 0x0001 wait for hit frame
-    uint16 bIsHitting							: 1; // 0x0002 hit frame anim
-    uint16 bAnimEnded							: 1; // 0x0004 anim ended in the current loop (will be looped in the next engine loop)
-    uint16 bAnimFrameReached					: 1; // 0x0008 new frame anim reached
-    uint16 bIsVisible							: 1; // 0x0010 actor has been drawn in this loop
-    uint16 bIsDead								: 1; // 0x0020 is dead
-    uint16 bIsSpriteMoving						: 1; // 0x0040 door is opening or closing (wait to reach the destination position)
-    uint16 bIsRotationByAnim					: 1; // 0x0080 actor rotation is managed by its animaation not by the engine
-    uint16 bIsFalling							: 1; // 0x0100 is falling on scene
-    uint16 bUnk0200								: 1; // 0x0200 unused
-    uint16 bUnk0400								: 1; // 0x0400 unused
-    uint16 bUnk0800								: 1; // 0x0800 unused
-    uint16 bUnk1000								: 1; // 0x1000 unused
-    uint16 bUnk2000								: 1; // 0x2000 unused
-    uint16 bUnk4000								: 1; // 0x4000 unused
-    uint16 bUnk8000								: 1; // 0x8000 unused
+typedef struct DynamicFlagsStruct {
+	uint16 bWaitHitFrame						: 1; // 0x0001 wait for hit frame
+	uint16 bIsHitting							: 1; // 0x0002 hit frame anim
+	uint16 bAnimEnded							: 1; // 0x0004 anim ended in the current loop (will be looped in the next engine loop)
+	uint16 bAnimFrameReached					: 1; // 0x0008 new frame anim reached
+	uint16 bIsVisible							: 1; // 0x0010 actor has been drawn in this loop
+	uint16 bIsDead								: 1; // 0x0020 is dead
+	uint16 bIsSpriteMoving						: 1; // 0x0040 door is opening or closing (wait to reach the destination position)
+	uint16 bIsRotationByAnim					: 1; // 0x0080 actor rotation is managed by its animaation not by the engine
+	uint16 bIsFalling							: 1; // 0x0100 is falling on scene
+	uint16 bUnk0200								: 1; // 0x0200 unused
+	uint16 bUnk0400								: 1; // 0x0400 unused
+	uint16 bUnk0800								: 1; // 0x0800 unused
+	uint16 bUnk1000								: 1; // 0x1000 unused
+	uint16 bUnk2000								: 1; // 0x2000 unused
+	uint16 bUnk4000								: 1; // 0x4000 unused
+	uint16 bUnk8000								: 1; // 0x8000 unused
 } DynamicFlagsStruct;
 
 /** Actors structure */
-typedef struct ActorStruct
-{
+typedef struct ActorStruct {
 	StaticFlagsStruct staticFlags;
 	DynamicFlagsStruct dynamicFlags;
 
@@ -139,7 +132,7 @@ typedef struct ActorStruct
 	int32 field_3;
 	uint8 *animExtraData;
 	int32 sprite; // field_8
-   	uint8 *entityDataPtr;
+	uint8 *entityDataPtr;
 
 	int32 X; // field_20
 	int32 Y; // field_22
@@ -175,7 +168,7 @@ typedef struct ActorStruct
 	int32 standPosition;
 	int32 standOn;
 	int32 zone;
-	
+
 	int32 lastRotationSpeed;
 	int32 lastX;
 	int32 lastZ;
@@ -281,8 +274,8 @@ void init_actor(int16 actorIdx);
 
 /** Set actor safe angle
 	@param startAngle start angle
-	@param endAngle end angle 
-	@param stepAngle number of steps 
+	@param endAngle end angle
+	@param stepAngle number of steps
 	@param timePtr time pointer to update */
 void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr);
 
@@ -292,8 +285,8 @@ void clear_real_angle(ActorStruct * actorPtr);
 
 /** Set actor safe angle
 	@param startAngle start angle
-	@param endAngle end angle 
-	@param stepAngle number of steps 
+	@param endAngle end angle
+	@param stepAngle number of steps
 	@param timePtr time pointer to update */
 void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, TimeStruct * timePtr);
 

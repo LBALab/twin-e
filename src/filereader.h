@@ -1,9 +1,9 @@
 /** @file filereader.h
-	@brief 
+	@brief
 	This file contains movies routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -40,8 +40,7 @@
 #define BUFFER_SIZE (2048*SECTORS_IN_BUFFER)
 
 /** File reader structure */
-typedef struct FileReader
-{
+typedef struct FileReader {
 	/** File descriptor */
 	FILE* fd;
 	/** Content buffer */
@@ -57,18 +56,18 @@ typedef struct FileReader
 void frfeed(FileReader* fr);
 
 /** Read file
-	@param fr FileReader pointer 
+	@param fr FileReader pointer
 	@param destPtr content destination pointer
 	@param size size of read characters */
 void frread(FileReader* fr, void* destPtr, uint32 size);
 
 /** Seek file
-	@param fr FileReader pointer 
+	@param fr FileReader pointer
 	@param seekPosition position to seek */
 void frseek(FileReader* fr, uint32 seekPosition);
 
 /** Open file
-	@param fr FileReader pointer 
+	@param fr FileReader pointer
 	@param filename file path
 	@return true if file open and false if error occurred */
 int32 fropen(FileReader* fr, const int8* filename);

@@ -1,9 +1,9 @@
 /** @file animations.c
 	@brief
 	This file contains 3D actors animations routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -37,19 +37,16 @@
 #include "renderer.h"
 
 /** Preload all animations */
-void preload_animations()
-{
+void preload_animations() {
 	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_ANIM_FILE)-1;
+	int32 numEntries = hqr_num_entries(HQR_ANIM_FILE) - 1;
 
-	for(i=0; i<numEntries; i++)
-	{
-		animSizeTable[i] = hqr_getalloc_entry(&animTable[i],HQR_ANIM_FILE,i);
+	for (i = 0; i < numEntries; i++) {
+		animSizeTable[i] = hqr_getalloc_entry(&animTable[i], HQR_ANIM_FILE, i);
 	}
 }
 
-int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr)
-{
+int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 numOfKeyframeInAnim;
 	int16 numOfBonesInAnim;
 	uint8 *ptrToData;
@@ -65,9 +62,9 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 	if (keyframeIdx >= numOfKeyframeInAnim)
 		return (numOfKeyframeInAnim);
 
-	numOfBonesInAnim = *(int16 *) (anim + 2);
+	numOfBonesInAnim = *(int16 *)(anim + 2);
 
-	ptrToData = (uint8 *) ((numOfBonesInAnim * 8 + 8) * keyframeIdx + anim + 8);
+	ptrToData = (uint8 *)((numOfBonesInAnim * 8 + 8) * keyframeIdx + anim + 8);
 
 	bodyHeader = *(int16 *)(body);
 
@@ -79,16 +76,15 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 	animTimerDataPtr->ptr = ptrToData;
 	animTimerDataPtr->time = lbaTime;
 
-	ptrToBodyData = ptrToBodyData + *(int16 *)(ptrToBodyData) + 2; 
+	ptrToBodyData = ptrToBodyData + *(int16 *)(ptrToBodyData) + 2;
 
 	numOfElementInBody = *(int16 *)(ptrToBodyData);
 
-	ptrToBodyData = ptrToBodyData + numOfElementInBody * 6 + 12; 
+	ptrToBodyData = ptrToBodyData + numOfElementInBody * 6 + 12;
 
 	numOfPointInBody = *(int16 *)(ptrToBodyData - 10); // num elements
 
-	if (numOfBonesInAnim > numOfPointInBody)
-	{
+	if (numOfBonesInAnim > numOfPointInBody) {
 		numOfBonesInAnim = numOfPointInBody;
 	}
 
@@ -96,16 +92,14 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 
 	ptrToData += 8;
 
-	do
-	{
-		for (i = 0; i < 8; i++)
-		{
+	do {
+		for (i = 0; i < 8; i++) {
 			*(ptrToBodyData++) = *(ptrToData++);
 		}
 
 		ptrToBodyData += 30;
 
-	}while (--numOfBonesInAnim);
+	} while (--numOfBonesInAnim);
 
 	ptrToData = ptrToDataBackup + 2;
 
@@ -121,18 +115,15 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 	return (1);
 }
 
-int32 get_num_keyframes(uint8 *ptr)
-{
-  return (*(int16 *)(ptr));
+int32 get_num_keyframes(uint8 *ptr) {
+	return (*(int16 *)(ptr));
 }
 
-int get_start_keyframe(uint8 *ptr)
-{
-  return (*(int16 *)(ptr + 4));
+int get_start_keyframe(uint8 *ptr) {
+	return (*(int16 *)(ptr + 4));
 }
 
-void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx)
-{
+void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx) {
 	int16 *dest;
 	int16 lastAngle;
 	int16 newAngle;
@@ -150,31 +141,24 @@ void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx)
 
 	angleDif = newAngle - lastAngle;
 
-	if (angleDif)
-	{
-		if (angleDif < -0x200)
-		{
+	if (angleDif) {
+		if (angleDif < -0x200) {
 			angleDif += 0x400;
-		}
-		else if (angleDif > 0x200)
-		{
+		} else if (angleDif > 0x200) {
 			angleDif -= 0x400;
 		}
 
 		computedAngle = lastAngle + (angleDif * bp) / bx;
-	}
-	else
-	{
+	} else {
 		computedAngle = lastAngle;
 	}
 
-	dest = (int16 *) *(ptr);
+	dest = (int16 *) * (ptr);
 	*dest = computedAngle & 0x3FF;
 	*(ptr) = *(ptr) + 2;
 }
 
-void apply_anim_step(uint8 **ptr, int32 bp, int32 bx)
-{
+void apply_anim_step(uint8 **ptr, int32 bp, int32 bx) {
 	int16 *dest;
 	int16 lastAngle;
 	int16 newAngle;
@@ -189,29 +173,25 @@ void apply_anim_step(uint8 **ptr, int32 bp, int32 bx)
 
 	angleDif = newAngle - lastAngle;
 
-	if (angleDif)
-	{
+	if (angleDif) {
 		computedAngle = lastAngle + (angleDif * bp) / bx;
-	}
-	else
-	{
+	} else {
 		computedAngle = lastAngle;
 	}
 
-	dest = (int16 *) *(ptr);
+	dest = (int16 *) * (ptr);
 	*dest = computedAngle;
 	*(ptr) = *(ptr) + 2;
 }
 
-int32 get_anim_mode(uint8 **ptr)
-{
+int32 get_anim_mode(uint8 **ptr) {
 	int16 *lptr;
 	int16 opcode;
 
-	lptr = (int16 *) *ptr;
+	lptr = (int16 *) * ptr;
 
 	opcode = *(int16 *)(keyFramePtr);
-    *(int16 *)(lptr) = opcode;
+	*(int16 *)(lptr) = opcode;
 
 	keyFramePtr += 2;
 	*(ptr) = *(ptr) + 2;
@@ -220,8 +200,7 @@ int32 get_anim_mode(uint8 **ptr)
 	return (opcode);
 }
 
-int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr)
-{
+int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 animOpcode;
 
 	int16 bodyHeader;
@@ -243,8 +222,7 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 
 	bodyHeader = *(int16 *)(body);
 
-	if (!(bodyHeader & 2))
-	{
+	if (!(bodyHeader & 2)) {
 		return (0);
 	}
 
@@ -255,15 +233,14 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 	ebx = animTimerDataPtr->ptr;
 	ebp = animTimerDataPtr->time;
 
-	if (!ebx)
-	{
+	if (!ebx) {
 		ebx = keyFramePtr;
 		ebp = keyFrameLength;
 	}
-/*	else
-	{
-		assert_ptr(ebx);
-	}*/
+	/*	else
+		{
+			assert_ptr(ebx);
+		}*/
 
 	lastKeyFramePtr = ebx;
 
@@ -276,27 +253,24 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 
 	numOfPointInBody = *(int16 *)(edi - 10);
 
-	if (numOfPointInAnim > numOfPointInBody)
-	{
+	if (numOfPointInAnim > numOfPointInBody) {
 		numOfPointInAnim = numOfPointInBody;
 	}
 
 	eax = lbaTime - ebp;
 
-	if (eax >= keyFrameLength)
-	{
+	if (eax >= keyFrameLength) {
 		int32 *destPtr; // keyFrame
 		int32 *sourcePtr;
 
-		sourcePtr = (int32 *) (keyFramePtr + 8);
+		sourcePtr = (int32 *)(keyFramePtr + 8);
 		destPtr = (int32 *) edi;
 
-		do
-		{
+		do {
 			*(destPtr++) = *(sourcePtr++);
 			*(destPtr++) = *(sourcePtr++);
-			destPtr = (int32 *) (((int8 *)destPtr) + 30);
-		}while (--numOfPointInAnim);
+			destPtr = (int32 *)(((int8 *)destPtr) + 30);
+		} while (--numOfPointInAnim);
 
 		animTimerDataPtr->ptr = keyFramePtr;
 		animTimerDataPtr->time = lbaTime;
@@ -311,9 +285,7 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		processActorSub2Var1 = *(int16 *)(keyFramePtr + 14);
 
 		return (1);
-	}
-	else
-	{
+	} else {
 		keyFramePtrOld = keyFramePtr;
 
 		lastKeyFramePtr += 8;
@@ -329,58 +301,50 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 
 		edi += 38;
 
-		if (--numOfPointInAnim)
-		{
+		if (--numOfPointInAnim) {
 			animVar4 = numOfPointInAnim;
 
-			do
-			{
+			do {
 				animOpcode = get_anim_mode(&edi);
 
-				switch (animOpcode)
-				{
-					case 0:	// allow global rotate
-					{
-						apply_anim_steprotation(&edi, eax, keyFrameLength);
-						apply_anim_steprotation(&edi, eax, keyFrameLength);
-						apply_anim_steprotation(&edi, eax, keyFrameLength);
-						break;
-					}
-					case 1:	// dissallow global rotate
-					{
-						apply_anim_step(&edi, eax, keyFrameLength);
-						apply_anim_step(&edi, eax, keyFrameLength);
-						apply_anim_step(&edi, eax, keyFrameLength);
-						break;
-					}
-					case 2:	// dissallow global rotate + hide
-					{
-						apply_anim_step(&edi, eax, keyFrameLength);
-						apply_anim_step(&edi, eax, keyFrameLength);
-						apply_anim_step(&edi, eax, keyFrameLength);
-						break;
-					}
-					default:
-					{
-						printf("Unsupported animation rotation mode %d!\n", animOpcode);
-						exit(1);
-					}
+				switch (animOpcode) {
+				case 0: {	// allow global rotate
+					apply_anim_steprotation(&edi, eax, keyFrameLength);
+					apply_anim_steprotation(&edi, eax, keyFrameLength);
+					apply_anim_steprotation(&edi, eax, keyFrameLength);
+					break;
+				}
+				case 1: {	// dissallow global rotate
+					apply_anim_step(&edi, eax, keyFrameLength);
+					apply_anim_step(&edi, eax, keyFrameLength);
+					apply_anim_step(&edi, eax, keyFrameLength);
+					break;
+				}
+				case 2: {	// dissallow global rotate + hide
+					apply_anim_step(&edi, eax, keyFrameLength);
+					apply_anim_step(&edi, eax, keyFrameLength);
+					apply_anim_step(&edi, eax, keyFrameLength);
+					break;
+				}
+				default: {
+					printf("Unsupported animation rotation mode %d!\n", animOpcode);
+					exit(1);
+				}
 				}
 
 				edi += 30;
-			}while (--animVar4);
+			} while (--animVar4);
 		}
 
-		currentX = ( *(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
-		currentY = ( *(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
-		currentZ = ( *(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
+		currentX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
+		currentY = (*(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
+		currentZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
 	}
 
 	return (0);
 }
 
-int32 get_body_anim_index(int32 anim, int16 actorNumber)
-{
+int32 get_body_anim_index(int32 anim, int16 actorNumber) {
 	int8 type;
 	uint16 var1;
 	uint8 *bodyPtr;
@@ -391,29 +355,24 @@ int32 get_body_anim_index(int32 anim, int16 actorNumber)
 	localActor = &sceneActors[actorNumber];
 	bodyPtr = localActor->entityDataPtr;
 
-	do
-	{
+	do {
 		type = *(bodyPtr++);
 
-		if (type == -1)
-		{
+		if (type == -1) {
 			currentActorAnimExtraData = NULL;
 			return (-1);
 		}
 
 		ptr = (bodyPtr + 1);
 
-		if (type == 3)
-		{
-			if (anim == *bodyPtr)
-			{
+		if (type == 3) {
+			if (anim == *bodyPtr) {
 				ptr++;
 				var1 = *(int16 *)(ptr);
 				ptr += 2;
 				ptr2 = ptr;
 				ptr++;
-				if (*ptr2 != 0)
-				{
+				if (*ptr2 != 0) {
 					costumePtr = ptr - 1;
 				}
 				currentActorAnimExtraData = costumePtr;
@@ -423,14 +382,13 @@ int32 get_body_anim_index(int32 anim, int16 actorNumber)
 
 		bodyPtr = *ptr + ptr;
 
-	}while (1);
+	} while (1);
 
 	return (0);
 }
 
 
-int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTimerDataPtr)	// copy the next keyFrame from a different buffer
-{
+int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTimerDataPtr) {	// copy the next keyFrame from a different buffer
 	int32 temp;
 	uint8 *ptr;
 	int32 *edi;
@@ -445,8 +403,7 @@ int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTi
 
 	temp = *(int16 *)(lBody);
 
-	if (temp & 2)
-	{
+	if (temp & 2) {
 		ptr = (lBody + 0x10);
 
 		animTimerDataPtr->time = lbaTime;
@@ -464,24 +421,22 @@ int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTi
 		counter = var2;
 		var2 = (var2 * 8) + 8;
 
-		edi = (int32 *) (lBufAnim + 8);
-		esi = (int32 *) (ptr + 10);
+		edi = (int32 *)(lBufAnim + 8);
+		esi = (int32 *)(ptr + 10);
 
-		do
-		{
+		do {
 			*(edi++) = *(esi++);
 			*(edi++) = *(esi++);
 
-			esi = (int32 *) (((int8 *) esi) + 30);
-		}while (--counter);
+			esi = (int32 *)(((int8 *) esi) + 30);
+		} while (--counter);
 
 		return (var2);
 	}
 	return (0);
 }
 
-int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum)
-{
+int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum) {
 	ActorStruct *localActor;
 	int32 animIndex;
 
@@ -504,20 +459,17 @@ int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum)
 	if (animIndex == -1)
 		animIndex = get_body_anim_index(0, actorNum);
 
-	if (arg_4 != 4 && localActor->field_78 == 2)
-	{
+	if (arg_4 != 4 && localActor->field_78 == 2) {
 		localActor->animExtra = newAnim;
 		return (0);
 	}
 
-	if (arg_4 == 3)
-	{
+	if (arg_4 == 3) {
 		arg_4 = 2;
 
 		arg_8 = localActor->anim;
 
-		if (arg_8 == 15 || arg_8 == 7 || arg_8 == 8 || arg_8 == 9)
-		{
+		if (arg_8 == 15 || arg_8 == 7 || arg_8 == 8 || arg_8 == 9) {
 			arg_8 = 0;
 		}
 	}
@@ -525,12 +477,9 @@ int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum)
 	if (arg_4 == 4)
 		arg_4 = 2;
 
-	if (localActor->previousAnimIdx == -1)	// if no previous animation
-	{
+	if (localActor->previousAnimIdx == -1) {	// if no previous animation
 		//setAnimAtKeyFrame(0, HQR_Get(HQR_Anims, animIndex), bodyTable[lactor->costumeIndex], &lactor->animTimerData);	// set animation directly to first keyFrame
-	}
-	else // interpolation between animations
-	{
+	} else { // interpolation between animations
 		animBuffer2 += stock_animation(animBuffer2, bodyTable[localActor->entity], &localActor->animTimerData);
 		if (animBuffer1 + 4488 > animBuffer2)
 			animBuffer2 = animBuffer1;
@@ -546,8 +495,7 @@ int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum)
 	localActor->dynamicFlags.bAnimEnded = 0;
 	localActor->dynamicFlags.bAnimFrameReached = 1;
 
-	if (localActor->animExtraData)
-	{
+	if (localActor->animExtraData) {
 		//GereAnimAction(lactor, actorNum);
 	}
 
@@ -559,8 +507,7 @@ int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum)
 	return (1);
 }
 
-int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr)
-{
+int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 bodyHeader;
 
 	uint8 *edi;
@@ -579,8 +526,7 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 
 	bodyHeader = *(int16 *)(body);
 
-	if (!(bodyHeader & 2))
-	{
+	if (!(bodyHeader & 2)) {
 		return (0);
 	}
 
@@ -591,8 +537,7 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 	ebx = animTimerDataPtr->ptr;
 	ebp = animTimerDataPtr->time;
 
-	if (!ebx)
-	{
+	if (!ebx) {
 		ebx = keyFramePtr;
 		ebp = keyFrameLength;
 	}
@@ -601,8 +546,7 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 
 	eax = lbaTime - ebp;
 
-	if (eax >= keyFrameLength)
-	{
+	if (eax >= keyFrameLength) {
 		animTimerDataPtr->ptr = keyFramePtr;
 		animTimerDataPtr->time = lbaTime;
 
@@ -616,9 +560,7 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 		processActorSub2Var1 = *(int16 *)(keyFramePtr + 14);
 
 		return (1);
-	}
-	else
-	{
+	} else {
 		keyFramePtrOld = keyFramePtr;
 
 		lastKeyFramePtr += 8;
@@ -632,37 +574,34 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 		lastKeyFramePtr += 8;
 		keyFramePtr += 8;
 
-		currentX = ( *(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
-		currentY = ( *(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
-		currentZ = ( *(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
+		currentX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
+		currentY = (*(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
+		currentZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
 	}
 
 	return (0);
 }
 
 /** Process main loop actor animations */
-void process_actor_animations(int32 actorIdx) // DoAnim
-{
+void process_actor_animations(int32 actorIdx) { // DoAnim
 	int16 numKeyframe;
 	int8 *animPtr;
-	ActorStruct *actor; 
+	ActorStruct *actor;
 
 	actor = &sceneActors[actorIdx];
 
-    currentlyProcessedActorNum = actorIdx;
-    processActorVar1 = actor;
+	currentlyProcessedActorNum = actorIdx;
+	processActorVar1 = actor;
 
-    if (actor->entity == -1)
+	if (actor->entity == -1)
 		return;
 
 	processActorVar2 = actor->X;
-    processActorVar3 = actor->Y;
-    processActorVar4 = actor->Z;
+	processActorVar3 = actor->Y;
+	processActorVar4 = actor->Z;
 
-	if (actor->staticFlags.bIsSpriteActor) // is sprite actor
-    {
-		if (actor->strengthOfHit)
-		{
+	if (actor->staticFlags.bIsSpriteActor) { // is sprite actor
+		if (actor->strengthOfHit) {
 			actor->dynamicFlags.bIsHitting = 1;
 		}
 
@@ -671,22 +610,16 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 		processActorZ = actor->Z;
 
 		// TODO: update sprite actors
-	}
-	else // 3D actor
-	{
-		if (actor->previousAnimIdx != -1)
-		{
+	} else { // 3D actor
+		if (actor->previousAnimIdx != -1) {
 			int32 keyFramePassed;
 			animPtr = animTable[actor->previousAnimIdx];
-      
-			keyFramePassed = verify_anim_at_keyframe(actor->animPosition, animPtr,(int8*)bodyTable[actor->entity], &actor->animTimerData); 
 
-			if (processActorVar5)
-			{
+			keyFramePassed = verify_anim_at_keyframe(actor->animPosition, animPtr, (int8*)bodyTable[actor->entity], &actor->animTimerData);
+
+			if (processActorVar5) {
 				actor->dynamicFlags.bIsRotationByAnim = 1;
-			}
-			else
-			{
+			} else {
 				actor->dynamicFlags.bIsRotationByAnim = 0;
 			}
 
@@ -709,31 +642,24 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 			actor->dynamicFlags.bAnimEnded = 0;
 			actor->dynamicFlags.bAnimFrameReached = 0;
 
-			if(keyFramePassed)  // if keyFrame
-			{
+			if (keyFramePassed) { // if keyFrame
 				actor->animPosition++;
 
-				if (actor->animExtraData) // if actor have animation actions to process
-				{
+				if (actor->animExtraData) { // if actor have animation actions to process
 					//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
 				}
 
 				numKeyframe = actor->animPosition;
-				if (numKeyframe == get_num_keyframes(animPtr)) // last anim keyframe
-				{
+				if (numKeyframe == get_num_keyframes(animPtr)) { // last anim keyframe
 					actor->dynamicFlags.bIsHitting = 0;
 
-					if (actor->field_78 == 0)
-					{
+					if (actor->field_78 == 0) {
 						actor->animPosition = get_start_keyframe(animPtr);
-					}
-					else
-					{
+					} else {
 						actor->anim = actor->animExtra;
 						actor->previousAnimIdx = get_body_anim_index(actor->anim, actorIdx);
 
-						if (actor->previousAnimIdx == -1)
-						{
+						if (actor->previousAnimIdx == -1) {
 							actor->previousAnimIdx = get_body_anim_index(0, actorIdx);
 							actor->anim = 0;
 						}
@@ -745,8 +671,7 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 						actor->strengthOfHit = 0;
 					}
 
-					if (actor->animExtraData)
-					{
+					if (actor->animExtraData) {
 						//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
 					}
 
@@ -763,7 +688,7 @@ void process_actor_animations(int32 actorIdx) // DoAnim
 	}
 
 	// TODO: actor standing of object
-    // TODO: actor falling Y speed.
+	// TODO: actor falling Y speed.
 	// TODO: actor collisions
 	// TODO: check actor damage
 	// TODO: check actor bounding position

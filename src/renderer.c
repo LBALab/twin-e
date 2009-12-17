@@ -1,9 +1,9 @@
 /** @file renderer.c
-	@brief 
+	@brief
 	This file contains 3d models render routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -57,22 +57,19 @@
 
 // --- structures ----
 
-typedef struct renderTabEntry
-{
-  int16 depth;
-  int16 renderType;
-  uint8 *dataPtr;
+typedef struct renderTabEntry {
+	int16 depth;
+	int16 renderType;
+	uint8 *dataPtr;
 } renderTabEntry;
 
-typedef struct pointTab
-{
+typedef struct pointTab {
 	int16 X;
 	int16 Y;
 	int16 Z;
 } pointTab;
 
-typedef struct elementEntry
-{
+typedef struct elementEntry {
 	int16 firstPoint;		// data1
 	int16 numOfPoints;		// data2
 	int16 basePoint;		// data3
@@ -89,8 +86,7 @@ typedef struct elementEntry
 	int16 field_24;
 } elementEntry;
 
-typedef struct lineCoordinates
-{
+typedef struct lineCoordinates {
 	int32 data;
 	int16 x1;
 	int16 y1;
@@ -99,46 +95,41 @@ typedef struct lineCoordinates
 } lineCoordinates;
 
 
-typedef struct lineData
-{
+typedef struct lineData {
 	int32 data;
 	int16 p1;
 	int16 p2;
 } lineData;
 
-typedef struct polyHeader
-{
+typedef struct polyHeader {
 	uint8 renderType; //FillVertic_AType
 	uint8 numOfVertex;
 	int16 colorIndex;
 } polyHeader;
 
-typedef struct polyVertexHeader
-{
+typedef struct polyVertexHeader {
 	int16 shadeEntry;
 	int16 dataOffset;
 } polyVertexHeader;
 
 
-typedef struct computedVertex
-{
+typedef struct computedVertex {
 	int16 shadeValue;
 	int16 x;
 	int16 y;
 } computedVertex;
 
-typedef struct bodyHeaderStruct
-{
-  int16 bodyFlag;     
-  int16 unk0;         
-  int16 unk1;         
-  int16 unk2;         
-  int16 unk3;         
-  int16 unk4;         
-  int16 unk5;         
-  int16 offsetToData; 
-  int8 *ptrToKeyFrame;
-  int32 keyFrameTime;
+typedef struct bodyHeaderStruct {
+	int16 bodyFlag;
+	int16 unk0;
+	int16 unk1;
+	int16 unk2;
+	int16 unk3;
+	int16 unk4;
+	int16 unk5;
+	int16 offsetToData;
+	int8 *ptrToKeyFrame;
+	int32 keyFrameTime;
 } bodyHeaderStruct;
 
 // ---- variables ----
@@ -169,7 +160,7 @@ int32 renderX; // _X
 int32 renderY; // _Y
 int32 renderZ; // _Z
 
-// --- 
+// ---
 
 int32 baseMatrix[3*3];
 
@@ -205,7 +196,7 @@ renderTabEntry renderTab[1000];
 renderTabEntry renderTabSorted[1000];
 uint8 renderTab7[10000];
 
-int16 polyRenderType; //FillVertic_AType; 
+int16 polyRenderType; //FillVertic_AType;
 uint8 *renderV19;   // RECHECK THIS
 int32 numOfVertex;
 int16 vertexCoordinates[193];
@@ -234,46 +225,38 @@ int32 renderLoop;
 
 
 
-int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ)
-{
-	if(!isUsingOrhoProjection)
-	{
+int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ) {
+	if (!isUsingOrhoProjection) {
 		cX -= baseRotPosX;
 		cY -= baseRotPosY;
 		cZ -= baseRotPosZ;
-		
-		if(cZ >= 0)
-		{
+
+		if (cZ >= 0) {
 			int32 posZ = cZ + cameraPosX;
 
-			if(posZ < 0)
+			if (posZ < 0)
 				posZ = 0x7FFF;
 
-			projPosX = (cX * cameraPosY)/posZ + orthoProjX;
-			projPosY = (cY * cameraPosZ)/posZ + orthoProjY;
+			projPosX = (cX * cameraPosY) / posZ + orthoProjX;
+			projPosY = (cY * cameraPosZ) / posZ + orthoProjY;
 			projPosZ = posZ;
 			return -1;
-		}
-		else
-		{
+		} else {
 			projPosX = 0;
 			projPosY = 0;
 			projPosZ = 0;
 			return 0;
 		}
-	}
-	else
-	{
+	} else {
 		projPosX = ((cX - cZ) * 24) / 512 + orthoProjX;
 		projPosY = (((cX + cZ) * 12) - cY * 30) / 512 + orthoProjY;
 		projPosZ = cY - cX - cZ;
 	}
-	
+
 	return 1;
 }
 
-void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ)
-{
+void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ) {
 	orthoProjX = X;
 	orthoProjY = Y;
 
@@ -284,15 +267,13 @@ void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ)
 	isUsingOrhoProjection = 0;
 }
 
-void set_base_translation(int32 X, int32 Y, int32 Z)
-{
+void set_base_translation(int32 X, int32 Y, int32 Z) {
 	baseTransPosX = X;
 	baseTransPosY = Y;
 	baseTransPosZ = Z;
 }
 
-void set_ortho_projection(int32 X, int32 Y, int32 Z)
-{
+void set_ortho_projection(int32 X, int32 Y, int32 Z) {
 	orthoProjX = X;
 	orthoProjY = Y;
 	orthoProjZ = Z;
@@ -300,15 +281,13 @@ void set_ortho_projection(int32 X, int32 Y, int32 Z)
 	isUsingOrhoProjection = 1;
 }
 
-void get_base_rotation_position(int32 X, int32 Y, int32 Z)
-{
-	destX = (baseMatrix[0] * X + baseMatrix[1] * Y + baseMatrix[2] * Z)>>14;
-	destY = (baseMatrix[3] * X + baseMatrix[4] * Y + baseMatrix[5] * Z)>>14;
-	destZ = (baseMatrix[6] * X + baseMatrix[7] * Y + baseMatrix[8] * Z)>>14;
+void get_base_rotation_position(int32 X, int32 Y, int32 Z) {
+	destX = (baseMatrix[0] * X + baseMatrix[1] * Y + baseMatrix[2] * Z) >> 14;
+	destY = (baseMatrix[3] * X + baseMatrix[4] * Y + baseMatrix[5] * Z) >> 14;
+	destZ = (baseMatrix[6] * X + baseMatrix[7] * Y + baseMatrix[8] * Z) >> 14;
 }
 
-void set_base_rotation(int32 X, int32 Y, int32 Z)
-{ 
+void set_base_rotation(int32 X, int32 Y, int32 Z) {
 	int32 angleXCos;
 	int32 angleXSin;
 
@@ -317,7 +296,7 @@ void set_base_rotation(int32 X, int32 Y, int32 Z)
 
 	int32 angleZCos;
 	int32 angleZSin;
-  
+
 	int32 matrixElem;
 
 	shadeAngleTab1 = &shadeAngleTable[0];
@@ -339,23 +318,23 @@ void set_base_rotation(int32 X, int32 Y, int32 Z)
 
 	baseMatrix[0] = angleZSin;
 	baseMatrix[1] = -angleZCos;
-	baseMatrix[3] = (angleZCos * angleXSin)>>14;
-	baseMatrix[4] = (angleZSin * angleXSin)>>14;
-	baseMatrix[6] = (angleZCos * angleXCos)>>14;
-	baseMatrix[7] = (angleZSin * angleXCos)>>14;
+	baseMatrix[3] = (angleZCos * angleXSin) >> 14;
+	baseMatrix[4] = (angleZSin * angleXSin) >> 14;
+	baseMatrix[6] = (angleZCos * angleXCos) >> 14;
+	baseMatrix[7] = (angleZSin * angleXCos) >> 14;
 
-	baseMatrix[0] = (angleZSin * angleYSin)>>14;
-	baseMatrix[2] = (angleZSin * angleYCos)>>14;
+	baseMatrix[0] = (angleZSin * angleYSin) >> 14;
+	baseMatrix[2] = (angleZSin * angleYCos) >> 14;
 
 	matrixElem = baseMatrix[3];
 
-	baseMatrix[3] = ((angleYSin * matrixElem) + (angleYCos * angleXCos))>>14;
-	baseMatrix[5] = ((angleYCos * matrixElem) - (angleYSin * angleXCos))>>14;
+	baseMatrix[3] = ((angleYSin * matrixElem) + (angleYCos * angleXCos)) >> 14;
+	baseMatrix[5] = ((angleYCos * matrixElem) - (angleYSin * angleXCos)) >> 14;
 
 	matrixElem = baseMatrix[6];
 
-	baseMatrix[6] = ((angleYSin * matrixElem) - (angleXSin * angleYCos))>>14;
-	baseMatrix[8] = ((angleYCos * matrixElem) + (angleXSin * angleYSin))>>14;
+	baseMatrix[6] = ((angleYSin * matrixElem) - (angleXSin * angleYCos)) >> 14;
+	baseMatrix[8] = ((angleYCos * matrixElem) + (angleXSin * angleYSin)) >> 14;
 
 	get_base_rotation_position(baseTransPosX, baseTransPosY, baseTransPosZ);
 
@@ -364,15 +343,13 @@ void set_base_rotation(int32 X, int32 Y, int32 Z)
 	baseRotPosZ = destZ;
 }
 
-void get_camera_angle_positions(int32 X, int32 Y, int32 Z)
-{
-	destX = (baseMatrix[0] * X + baseMatrix[3] * Y + baseMatrix[6] * Z)>>14;
-	destY = (baseMatrix[1] * X + baseMatrix[4] * Y + baseMatrix[7] * Z)>>14;
-	destZ = (baseMatrix[2] * X + baseMatrix[5] * Y + baseMatrix[8] * Z)>>14;
+void get_camera_angle_positions(int32 X, int32 Y, int32 Z) {
+	destX = (baseMatrix[0] * X + baseMatrix[3] * Y + baseMatrix[6] * Z) >> 14;
+	destY = (baseMatrix[1] * X + baseMatrix[4] * Y + baseMatrix[7] * Z) >> 14;
+	destZ = (baseMatrix[2] * X + baseMatrix[5] * Y + baseMatrix[8] * Z) >> 14;
 }
 
-void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6)
-{
+void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6) {
 	baseTransPosX = transPosX;
 	baseTransPosY = transPosY;
 	baseTransPosZ = transPosZ;
@@ -390,16 +367,14 @@ void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 r
 
 // ------------------------------------------------------------------------------------------------------
 
-void apply_rotation(int32 *tempMatrix, int32 *currentMatrix)
-{
+void apply_rotation(int32 *tempMatrix, int32 *currentMatrix) {
 	int32 angleVar1;    // esi
 	int32 angleVar2;    // ecx
 
 	int32 matrix1[9];
 	int32 matrix2[9];
 
-	if (renderAngleX)
-	{
+	if (renderAngleX) {
 		angleVar2 = shadeAngleTab1[renderAngleX & 0x3FF];
 		angleVar1 = shadeAngleTab1[(renderAngleX+0x100) & 0x3FF];
 
@@ -413,17 +388,14 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix)
 		matrix1[5] = (currentMatrix[5] * angleVar1 - currentMatrix[4] * angleVar2) >> 14;
 		matrix1[7] = (currentMatrix[8] * angleVar2 + currentMatrix[7] * angleVar1) >> 14;
 		matrix1[8] = (currentMatrix[8] * angleVar1 - currentMatrix[7] * angleVar2) >> 14;
-	}
-	else
-	{
+	} else {
 		int32 i;
 
-		for(i=0;i<9;i++)
-		    matrix1[i]=currentMatrix[i];
+		for (i = 0; i < 9; i++)
+			matrix1[i] = currentMatrix[i];
 	}
 
-	if (renderAngleZ)
-	{
+	if (renderAngleZ) {
 		angleVar2 = shadeAngleTab1[renderAngleZ & 0x3FF];
 		angleVar1 = shadeAngleTab1[(renderAngleZ+0x100) & 0x3FF];
 
@@ -437,17 +409,14 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix)
 		matrix2[4] = (matrix1[4] * angleVar1 - matrix1[3] * angleVar2) >> 14;
 		matrix2[6] = (matrix1[7] * angleVar2 + matrix1[6] * angleVar1) >> 14;
 		matrix2[7] = (matrix1[7] * angleVar1 - matrix1[6] * angleVar2) >> 14;
-	}
-	else
-	{
+	} else {
 		int32 i;
 
-		for(i=0;i<9;i++)
-		    matrix2[i]=matrix1[i];
+		for (i = 0; i < 9; i++)
+			matrix2[i] = matrix1[i];
 	}
 
-	if (renderAngleY)
-	{
+	if (renderAngleY) {
 		angleVar2 = shadeAngleTab1[renderAngleY & 0x3FF];			// esi
 		angleVar1 = shadeAngleTab1[(renderAngleY+0x100) & 0x3FF];	// ecx
 
@@ -462,18 +431,15 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix)
 
 		tempMatrix[6] = (matrix2[6] * angleVar1 - matrix2[8] * angleVar2) >> 14;
 		tempMatrix[8] = (matrix2[6] * angleVar2 + matrix2[8] * angleVar1) >> 14;
-	}
-	else
-	{
+	} else {
 		int i;
 
-		for(i=0;i<9;i++)
-		    tempMatrix[i]=matrix2[i];
+		for (i = 0; i < 9; i++)
+			tempMatrix[i] = matrix2[i];
 	}
 }
 
-void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *rotationMatrix)
-{
+void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *rotationMatrix) {
 	int16 tmpX;
 	int16 tmpY;
 	int16 tmpZ;
@@ -483,10 +449,9 @@ void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * de
 	int32 numOfPoints = numPoints;
 	uint8 *pointsPtr;
 
-	do
-	{
+	do {
 		pointsPtr = firstPointsPtr;
-		tempPtr = (int16 *) (firstPointsPtr);
+		tempPtr = (int16 *)(firstPointsPtr);
 
 		tmpX = tempPtr[0];
 		tmpY = tempPtr[1];
@@ -498,11 +463,10 @@ void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * de
 
 		destPoints++;
 		firstPointsPtr = pointsPtr + 6;
-	}while (--numOfPoints);
+	} while (--numOfPoints);
 }
 
-void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *elemPtr) // unsigned char * elemPtr) // loadPart
-{
+void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *elemPtr) { // unsigned char * elemPtr) // loadPart
 	int32 *currentMatrix;
 	int16 baseElement;
 
@@ -513,8 +477,7 @@ void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *e
 	renderAngleY = rotY;
 	renderAngleZ = rotZ;
 
-	if (firstPoint % 6)
-	{
+	if (firstPoint % 6) {
 		printf("RENDER ERROR: invalid firstPoint in process_rotated_element func\n");
 		exit(1);
 	}
@@ -523,18 +486,15 @@ void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *e
 	baseElement = elemPtr->baseElement;
 
 	// if its the first point
-	if (baseElement == -1)
-	{
+	if (baseElement == -1) {
 		currentMatrix = baseMatrix;
 
 		destX = 0;
 		destY = 0;
 		destZ = 0;
-	}
-	else
-	{
-		int32 pointIdx = (elemPtr->basePoint)/6;
-		currentMatrix = (int32 *) ((uint8 *)matricesTable + baseElement);
+	} else {
+		int32 pointIdx = (elemPtr->basePoint) / 6;
+		currentMatrix = (int32 *)((uint8 *)matricesTable + baseElement);
 
 		destX = computedPoints[pointIdx].X;
 		destY = computedPoints[pointIdx].Y;
@@ -543,16 +503,14 @@ void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *e
 
 	apply_rotation((int32 *) currentMatrixTableEntry, currentMatrix);
 
-	if(!numOfPoints)
-	{
+	if (!numOfPoints) {
 		printf("RENDER WARNING: No points in this model!\n");
 	}
 
 	apply_points_rotation(pointsPtr + firstPoint, numOfPoints, &computedPoints[firstPoint / 6], (int32 *) currentMatrixTableEntry);
 }
 
-void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *translationMatrix)
-{
+void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *translationMatrix) {
 	int16 tmpX;
 	int16 tmpY;
 	int16 tmpZ;
@@ -562,10 +520,9 @@ void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab *
 	int32 numOfPoints = numPoints;
 	uint8 *pointsPtr;
 
-	do
-	{
+	do {
 		pointsPtr = firstPointsPtr;
-		tempPtr = (int16 *) (firstPointsPtr);
+		tempPtr = (int16 *)(firstPointsPtr);
 
 		tmpX = tempPtr[0] + renderAngleZ;
 		tmpY = tempPtr[1] + renderAngleY;
@@ -577,11 +534,10 @@ void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab *
 
 		destPoints++;
 		firstPointsPtr = pointsPtr + 6;
-	}while (--numOfPoints);
+	} while (--numOfPoints);
 }
 
-void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry *elemPtr)
-{
+void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry *elemPtr) {
 	int32 *dest;
 	int32 *source;
 
@@ -589,8 +545,7 @@ void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry
 	renderAngleY = rotY;
 	renderAngleZ = rotZ;
 
-	if (elemPtr->baseElement == -1) // base point
-	{
+	if (elemPtr->baseElement == -1) { // base point
 		int32 i;
 
 		destX = 0;
@@ -599,35 +554,32 @@ void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry
 
 		dest = (int32 *) currentMatrixTableEntry;
 
-		for(i=0;i<9;i++)
-		    dest[i]=baseMatrix[i];
-	}
-	else      // dependent
-	{
+		for (i = 0; i < 9; i++)
+			dest[i] = baseMatrix[i];
+	} else {   // dependent
 		int32 i;
 
 		destX = computedPoints[(elemPtr->basePoint) / 6].X;
 		destY = computedPoints[(elemPtr->basePoint) / 6].Y;
 		destZ = computedPoints[(elemPtr->basePoint) / 6].Z;
 
-		source = (int32 *) ((uint8 *)matricesTable + elemPtr->baseElement);
+		source = (int32 *)((uint8 *)matricesTable + elemPtr->baseElement);
 		dest = (int32 *) currentMatrixTableEntry;
 
-		for(i=0;i<9;i++)
-		    dest[i]=source[i];
+		for (i = 0; i < 9; i++)
+			dest[i] = source[i];
 	}
 
 	apply_points_translation(pointsPtr + elemPtr->firstPoint, elemPtr->numOfPoints, &computedPoints[elemPtr->firstPoint / 6], (int *) currentMatrixTableEntry);
 }
 
-void translate_group(int16 ax, int16 bx, int16 cx)
-{
+void translate_group(int16 ax, int16 bx, int16 cx) {
 	int32 ebp;
 	int32 ebx;
 	int32 ecx;
 	int32 eax;
 	int32 edi;
-	
+
 	ebp = ax;
 	ebx = bx;
 	ecx = cx;
@@ -664,8 +616,7 @@ void translate_group(int16 ax, int16 bx, int16 cx)
 	destZ = eax; // TODO: recheck Y
 }
 
-void set_light_vector(int32 angleX, int32 angleY, int32 angleZ)
-{
+void set_light_vector(int32 angleX, int32 angleY, int32 angleZ) {
 	shadeAngleTab1 = &shadeAngleTable[0];
 	shadeAngleTab2 = &shadeAngleTable[256];
 	shadeAngleTab3 = &shadeAngleTable[384];
@@ -681,7 +632,7 @@ void set_light_vector(int32 angleX, int32 angleY, int32 angleZ)
 
 	apply_rotation(shadeMatrix, baseMatrix);
 	translate_group(0, 0, 59);
-	
+
 	lightX = destX;
 	lightY = destY;
 	lightZ = destZ;
@@ -689,8 +640,7 @@ void set_light_vector(int32 angleX, int32 angleY, int32 angleZ)
 
 // ------------------------------------------------------------------------------------------------------
 
-int compute_polygons()
-{
+int compute_polygons() {
 	int16 vertexX, vertexY;
 	int16 *ptr1, *ptr3;
 	int32 i;
@@ -714,8 +664,7 @@ int compute_polygons()
 
 	ptr1 = vertexCoordinates;
 
-	for (i = 0; i < numOfVertex; i++)
-	{
+	for (i = 0; i < numOfVertex; i++) {
 		ptr1++;   // discarding the 1st parameter
 
 		vertexX = *(ptr1++);
@@ -730,30 +679,29 @@ int compute_polygons()
 		if (vertexY < vtop)
 			vtop = vertexY;
 		if (vertexY > vbottom)
-		vbottom = vertexY;
+			vbottom = vertexY;
 	}
 
 	ptr1[0] = pRenderV1[0];
 	ptr1[1] = pRenderV1[1];
 	ptr1[2] = pRenderV1[2];
-	
-	if(vleft<0)
+
+	if (vleft < 0)
 		return ERROR_OUT_OF_SCREEN;
-	if(vright>=640)
+	if (vright >= 640)
 		return ERROR_OUT_OF_SCREEN;
-	if(vtop<0)
+	if (vtop < 0)
 		return ERROR_OUT_OF_SCREEN;
-	if(vbottom>=480)
+	if (vbottom >= 480)
 		return ERROR_OUT_OF_SCREEN;
-	
+
 	ptr1 = pRenderV1;
 
 	vertexParam1 = vertexParam2 = (*(ptr1++)) & 0xFF;
 	oldVertexX = *(ptr1++);
 	oldVertexY = *(ptr1++);
 
-	do
-	{
+	do {
 		oldVertexParam = vertexParam1;
 
 		vertexParam1 = vertexParam2 = (*(ptr1++)) & 0xFF;
@@ -762,22 +710,17 @@ int compute_polygons()
 
 		// drawLine(oldVertexX,oldVertexY,currentVertexX,currentVertexY,255);
 
-		if (currentVertexY == oldVertexY) // since it's scanline based, we don't care when we are only moving along X
-		{
+		if (currentVertexY == oldVertexY) { // since it's scanline based, we don't care when we are only moving along X
 			oldVertexX = size = currentVertexX;
-		}
-		else
-		{
+		} else {
 			push1 = currentVertexX; // let's save the current coordinates since we are going to modify the values
 			push2 = currentVertexY;
 
-			if (currentVertexY < oldVertexY)  // if we are going up
-			{
+			if (currentVertexY < oldVertexY) { // if we are going up
 				size = oldVertexY - currentVertexY;
 				direction = -1;
 
-				if (oldVertexX < currentVertexX)  // if we are going up right
-				{
+				if (oldVertexX < currentVertexX) { // if we are going up right
 					echange = oldVertexX; // we invert the vertex to draw from new to old
 					oldVertexX = currentVertexX;
 					currentVertexX = echange;
@@ -805,7 +748,7 @@ int compute_polygons()
 				temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
 				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
 
-				vfloat = ((int64) (oldVertexX - currentVertexX)) / ((int64) oldVertexY);
+				vfloat = ((int64)(oldVertexX - currentVertexX)) / ((int64) oldVertexY);
 
 				temp6 >>= 1;
 				temp6 += 0x7FFF;
@@ -819,44 +762,37 @@ int compute_polygons()
 
 				oldVertexY += 2;
 
-				for (i = 0; i < oldVertexY; i++)
-				{
+				for (i = 0; i < oldVertexY; i++) {
 					// *(ptr3)=((temp7&0xFFFF0000)>>16);
-					if((ptr3-polyTab) < 960)
+					if ((ptr3 - polyTab) < 960)
 						*(ptr3) = (int16) vfloat2;
 					ptr3 += direction;
 					// temp7+=step;
 					vfloat2 -= vfloat;
 				}
 
-				if (polyRenderType >= 7) // we must compute the color progression
-				{
+				if (polyRenderType >= 7) { // we must compute the color progression
 					int16* ptr3 = &polyTab2[temp2 + 480];
 
 					temp4 = (vertexParam2 - oldVertexParam); // compute the color difference
 
-					if (temp4 >= 0)
-					{
-						union
-						{
-							struct
-							{
+					if (temp4 >= 0) {
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}test;
+						} test;
 
-						union
-						{
-							struct
-							{
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}reste;
-  
+						} reste;
+
 						test.bit.al = oldVertexParam;
 						test.bit.ah = vertexParam2;
 
@@ -868,42 +804,35 @@ int compute_polygons()
 
 						test.temp /= oldVertexX;
 
-						reste.bit.al >>=1;
+						reste.bit.al >>= 1;
 						reste.bit.al += 0x7F;
 
 						reste.bit.ah = oldVertexParam;
 
-						oldVertexX+=2;
+						oldVertexX += 2;
 
-						for (i = 0; i < oldVertexX; i++)
-						{
-							if((ptr3-polyTab2) < 960)
+						for (i = 0; i < oldVertexX; i++) {
+							if ((ptr3 - polyTab2) < 960)
 								*(ptr3) = reste.temp;
 							ptr3 += direction;
 							reste.temp += test.temp;
 						}
-					}
-					else
-					{
-						union
-						{
-							struct
-							{
+					} else {
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}test;
+						} test;
 
-						union
-						{
-							struct
-							{
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}reste;
+						} reste;
 
 						test.bit.al = oldVertexParam;
 						test.bit.ah = vertexParam2;
@@ -917,15 +846,14 @@ int compute_polygons()
 
 						test.temp /= oldVertexX;
 
-						reste.bit.al >>=1;
+						reste.bit.al >>= 1;
 						reste.bit.al = -reste.bit.al;
 						reste.bit.al += 0x7F;
 
 						reste.bit.ah = oldVertexParam;
 
-						for (i = 0; i <= oldVertexX; i++)
-						{
-							if((ptr3-polyTab2) < 960)
+						for (i = 0; i <= oldVertexX; i++) {
+							if ((ptr3 - polyTab2) < 960)
 								*(ptr3) = reste.temp;
 							ptr3 += direction;
 							reste.temp -= test.temp;
@@ -935,14 +863,11 @@ int compute_polygons()
 				direction = 1;
 				oldVertexY = push2;
 				oldVertexX = push1;
-			}
-			else  // if we are going down
-			{
+			} else { // if we are going down
 				size = currentVertexY - oldVertexY; // size is the number of pixel we must go
 				// verticaly
 
-				if (oldVertexX > currentVertexX)  // if we are going down and to the left
-				{
+				if (oldVertexX > currentVertexX) { // if we are going down and to the left
 					echange = oldVertexX; // in that case, we will draw the line the other
 					// side (from new point to old point)
 					oldVertexX = currentVertexX;
@@ -970,7 +895,7 @@ int compute_polygons()
 				temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
 				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
 
-				vfloat = ((int64) (currentVertexX - oldVertexX)) / ((int64) oldVertexY);
+				vfloat = ((int64)(currentVertexX - oldVertexX)) / ((int64) oldVertexY);
 
 				temp6 >>= 1;
 				temp6 += 0x7FFF;
@@ -984,43 +909,36 @@ int compute_polygons()
 
 				oldVertexY += 2;
 
-				for (i = 0; i < oldVertexY; i++)
-				{
+				for (i = 0; i < oldVertexY; i++) {
 					// *(ptr3)=((temp7&0xFFFF0000)>>16);
-					if((ptr3-polyTab) < 960)
+					if ((ptr3 - polyTab) < 960)
 						*(ptr3) = (int16) vfloat2;
 					ptr3 += direction;
 					// temp7+=step;
 					vfloat2 += vfloat;
 				}
 
-				if (polyRenderType >= 7)
-				{
+				if (polyRenderType >= 7) {
 					int16* ptr3 = &polyTab2[temp2];
 
 					temp4 = ((vertexParam2 - oldVertexParam)); // compute the color difference
 
-					if (temp4 >= 0)
-					{
-						union
-						{
-							struct
-							{
+					if (temp4 >= 0) {
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}test;
+						} test;
 
-						union
-						{
-							struct
-							{
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}reste;
+						} reste;
 
 						test.bit.al = oldVertexParam;
 						test.bit.ah = vertexParam2;
@@ -1033,42 +951,35 @@ int compute_polygons()
 
 						test.temp /= oldVertexX;
 
-						reste.bit.al >>=1;
+						reste.bit.al >>= 1;
 						reste.bit.al += 0x7F;
 
 						reste.bit.ah = oldVertexParam;
 
-						oldVertexX+=2;
+						oldVertexX += 2;
 
-						for (i = 0; i < oldVertexX; i++)
-						{
-							if((ptr3-polyTab2) < 960)
+						for (i = 0; i < oldVertexX; i++) {
+							if ((ptr3 - polyTab2) < 960)
 								*(ptr3) = reste.temp;
 							ptr3 += direction;
 							reste.temp += test.temp;
 						}
-					}
-					else
-					{
-						union
-						{
-							struct
-							{
+					} else {
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							} bit;
 							uint16 temp;
-						}test;
+						} test;
 
-						union
-						{
-							struct
-							{
+						union {
+							struct {
 								uint8 al;
 								uint8 ah;
 							}	bit;
 							uint16 temp;
-						}reste;
+						} reste;
 
 						test.bit.al = oldVertexParam;
 						test.bit.ah = vertexParam2;
@@ -1082,15 +993,14 @@ int compute_polygons()
 
 						test.temp /= oldVertexX;
 
-						reste.bit.al >>=1;
+						reste.bit.al >>= 1;
 						reste.bit.al = -reste.bit.al;
 						reste.bit.al += 0x7F;
 
 						reste.bit.ah = oldVertexParam;
 
-						for (i = 0; i <= oldVertexX; i++)
-						{
-							if((ptr3-polyTab2) < 960)
+						for (i = 0; i <= oldVertexX; i++) {
+							if ((ptr3 - polyTab2) < 960)
 								*(ptr3) = reste.temp;
 							ptr3 += direction;
 							reste.temp -= test.temp;
@@ -1102,13 +1012,12 @@ int compute_polygons()
 				oldVertexX = push1;
 			}
 		}
-	}while (--numOfVertexRemaining);
+	} while (--numOfVertexRemaining);
 
 	return (1);
 }
 
-void render_polygons(int32 ecx, int32 edi)
-{
+void render_polygons(int32 ecx, int32 edi) {
 	uint8 *out, *out2;
 	int16 *ptr1;
 	int16 *ptr2;
@@ -1123,28 +1032,26 @@ void render_polygons(int32 ecx, int32 edi)
 	int64 varf3;
 	int64 varf4;
 
- /* if (vtop <= 0 || vbottom <= 0)
-    return;
-  if (vleft <= 0 || vright <= 0)
-    return;
-  if (vleft >= 640)
-    return;
-  // if(vright>=640)
-    // return;
-  if (vtop >= 480 || vbottom >= 480)
-    return;*/
+	/* if (vtop <= 0 || vbottom <= 0)
+	   return;
+	 if (vleft <= 0 || vright <= 0)
+	   return;
+	 if (vleft >= 640)
+	   return;
+	 // if(vright>=640)
+	   // return;
+	 if (vtop >= 480 || vbottom >= 480)
+	   return;*/
 
-	if(vtop<0)
-	{
+	if (vtop < 0) {
 		return;
 	}
 
-	if(vbottom >= 479)
-	{
+	if (vbottom >= 479) {
 		return;
 	}
 
-	out = frontVideoBuffer + 640*vtop;
+	out = frontVideoBuffer + 640 * vtop;
 
 	ptr1 = &polyTab[vtop];
 	ptr2 = &polyTab2[vtop];
@@ -1154,445 +1061,378 @@ void render_polygons(int32 ecx, int32 edi)
 
 	color = edi;
 
-	switch (ecx)
-	{
-		case POLYGONTYPE_FLAT:
-		{
-			currentLine = vtop;
-			do
-			{
-				if(currentLine >=0 && currentLine <480)
-				{
-					stop = ptr1[480];
-					start = ptr1[0];
+	switch (ecx) {
+	case POLYGONTYPE_FLAT: {
+		currentLine = vtop;
+		do {
+			if (currentLine >= 0 && currentLine < 480) {
+				stop = ptr1[480];
+				start = ptr1[0];
 
-					ptr1++;
-					hsize = stop - start;
+				ptr1++;
+				hsize = stop - start;
 
-					if (hsize >= 0)
-					{
-						hsize++;
-						out2 = start + out;
+				if (hsize >= 0) {
+					hsize++;
+					out2 = start + out;
 
-						for(j = start; j < hsize+start; j++)
-						{
-							if(j>=0 && j<640)
+					for (j = start; j < hsize + start; j++) {
+						if (j >= 0 && j < 640)
+							out[j] = color;
+					}
+				}
+			}
+			out += 640;
+			currentLine++;
+		} while (--vsize);
+		break;
+
+	}
+	case POLYGONTYPE_COPPER: {
+		currentLine = vtop;
+		do {
+			if (currentLine >= 0 && currentLine < 480) {
+				start = ptr1[0];
+				stop = ptr1[480];
+
+				ptr1++;
+				hsize = stop - start;
+
+				if (hsize >= 0) {
+					uint16 mask = 0x43DB;
+					uint16 dx;
+					int32 startCopy;
+
+					dx = (uint8)color;
+					dx |= 0x300;
+
+					hsize++;
+					out2 = start + out;
+					startCopy = start;
+
+					for (j = startCopy; j < hsize + startCopy; j++) {
+						start += mask;
+						start = (start & 0xFF00) | ((start & 0xFF) & (uint8)(dx >> 8)) ;
+						start = (start & 0xFF00) | ((start & 0xFF) + (dx & 0xFF));
+						if (j >= 0 && j < 640) {
+							out[j] = start & 0xFF;
+						}
+						mask = (mask << 2) | (mask >> 14);
+						mask++;
+					}
+				}
+
+			}
+			out += 640;
+			currentLine++;
+		} while (--vsize);
+		break;
+	}
+	case POLYGONTYPE_BOPPER: { // TODO: fix this, it have bugs - (1 pixel for 2)
+		currentLine = vtop;
+		do {
+			if (currentLine >= 0 && currentLine < 480) {
+				start = ptr1[0];
+				stop = ptr1[480];
+				ptr1++;
+				hsize = stop - start;
+
+				if (hsize >= 0) {
+					hsize++;
+					out2 = start + out;
+					for (j = start; j < hsize + start; j++) {
+						if ((start + (vtop % 1))&1) {
+							if (j >= 0 && j < 640) {
 								out[j] = color;
+							}
 						}
+						out2++;
 					}
 				}
-				out += 640;
-				currentLine++;
-			}while(--vsize);
-			break;
 
-		}
-		case POLYGONTYPE_COPPER:
-		{
-			currentLine = vtop;
-			do
-			{
-				if(currentLine >=0 && currentLine <480)
-				{
-					start = ptr1[0];
-					stop = ptr1[480];
+			}
+			out += 640;
+			currentLine++;
+		} while (--vsize);
+		break;
+	}
+	case POLYGONTYPE_MARBLE: { // TODO: implement this
+		break;
+	}
+	case POLYGONTYPE_TELE: { // TODO: implement this
+		break;
+	}
+	case POLYGONTYPE_TRAS: { // TODO: implement this
+		break;
+	}
+	case POLYGONTYPE_TRAME: { // TODO: fix this, it have some bugs
+		unsigned char bh = 0;
 
-					ptr1++;
-					hsize = stop - start;
+		currentLine = vtop;
+		do {
+			if (currentLine >= 0 && currentLine < 480) {
+				start = ptr1[0];
+				stop = ptr1[480];
+				ptr1++;
+				hsize = stop - start;
 
-					if(hsize>=0)
-					{
-						uint16 mask = 0x43DB;
-						uint16 dx;
-						int32 startCopy;
-          
-						dx = (uint8)color;
-						dx |= 0x300;
+				if (hsize >= 0) {
+					hsize++;
+					out2 = start + out;
 
-						hsize++;
-						out2 = start + out;
-						startCopy = start;
-
-						for(j = startCopy; j< hsize+startCopy; j++)
-						{
-							start += mask;
-							start = (start &0xFF00) | ((start&0xFF) & (uint8)(dx>>8)) ;
-							start = (start &0xFF00) | ((start&0xFF) + (dx&0xFF));
-							if(j>=0 && j<640)
-							{
-								out[j] = start&0xFF;
-							}
-							mask = (mask << 2) | (mask >> 14);
-							mask++;
-						}
-					}
-          
-				}
-				out += 640;
-				currentLine++;
-			}while(--vsize);
-			break;
-		}
-		case POLYGONTYPE_BOPPER: // TODO: fix this, it have bugs - (1 pixel for 2)
-		{
-			currentLine = vtop;
-			do
-			{
-				if(currentLine >=0 && currentLine <480)
-				{
-					start = ptr1[0];
-					stop = ptr1[480];
-					ptr1++;
-					hsize = stop - start;
-
-					if(hsize >= 0)
-					{
-						hsize++;
-						out2 = start + out;
-						for (j = start; j < hsize+start; j++)
-						{
-							if((start+(vtop%1))&1)
-							{
-								if(j>=0&&j<640)
-								{
-									out[j] = color;
-								}
-							}
+					hsize /= 2;
+					if (hsize > 1) {
+						uint16 ax;
+						bh ^= 1;
+						ax = *((uint16*)out2);
+						ax &= 1;
+						if (ax ^ bh) {
 							out2++;
 						}
-					}
-          
-				}
-				out += 640;
-				currentLine++;
-			}while(--vsize);
-			break;
-		}
-		case POLYGONTYPE_MARBLE: // TODO: implement this
-		{
-			break;
-		}
-		case POLYGONTYPE_TELE: // TODO: implement this
-		{
-			break;
-		}
-		case POLYGONTYPE_TRAS: // TODO: implement this
-		{
-			break;
-		}
-		case POLYGONTYPE_TRAME: // TODO: fix this, it have some bugs
-		{
-			unsigned char bh=0;
 
-			currentLine = vtop;
-			do
-			{
-				if(currentLine >=0 && currentLine <480)
-				{
-					start = ptr1[0];
-					stop = ptr1[480];
-					ptr1++;
-					hsize = stop - start;
-
-					if(hsize >= 0)
-					{
-						hsize++;
-						out2 = start + out;
-          
-						hsize/=2;
-						if(hsize>1)
-						{
-							uint16 ax;
-							bh ^= 1;
-							ax = *((uint16*)out2);
-							ax &= 1;
-							if(ax ^ bh)
-							{
-								out2++;
-							}
-
-							for (j = 0; j < hsize; j++)
-							{
-								*(out2) = (uint8)color;
-								out2+=2;
-							}
+						for (j = 0; j < hsize; j++) {
+							*(out2) = (uint8)color;
+							out2 += 2;
 						}
 					}
-          
 				}
-				out+=640;
-				currentLine++;
-			}while(--vsize);
-			break;
-		}
-		case POLYGONTYPE_GOURAUD:
-		{
-			renderLoop = vsize;
-			currentLine = vtop;
-			do
-			{
-				if(currentLine >=0 && currentLine <480)
-				{
+
+			}
+			out += 640;
+			currentLine++;
+		} while (--vsize);
+		break;
+	}
+	case POLYGONTYPE_GOURAUD: {
+		renderLoop = vsize;
+		currentLine = vtop;
+		do {
+			if (currentLine >= 0 && currentLine < 480) {
+				uint16 startColor = ptr2[0];
+				uint16 stopColor = ptr2[480];
+
+				int16 colorSize = stopColor - startColor;
+
+				stop = ptr1[480];  // stop
+				start = ptr1[0]; // start
+
+				ptr1++;
+				out2 = start + out;
+				hsize = stop - start;
+
+				varf2 = ptr2[480];
+				varf3 = ptr2[0];
+
+				ptr2++;
+
+				varf4 = (int64)((int32)varf2 - (int32)varf3);
+
+				if (hsize == 0) {
+					if (start >= 0 && start < 640)
+						*out2 = ((startColor + stopColor) / 2) >> 8; // moyenne des 2 couleurs
+				} else if (hsize > 0) {
+					if (hsize == 1) {
+						if (start >= -1 && start < 640 - 1)
+							*(out2 + 1) = stopColor >> 8;
+
+						if (start >= 0 && start < 640)
+							*(out2) = startColor >> 8;
+					} else if (hsize == 2) {
+						if (start >= -2 && start < 640 - 2)
+							*(out2 + 2) = stopColor >> 8;
+
+						if (start >= -1 && start < 640 - 1)
+							*(out2 + 1) = ((startColor + stopColor) / 2) >> 8;
+
+						if (start >= 0 && start < 640)
+							*(out2) = startColor >> 8;
+					} else {
+						int currentXPos = start;
+						colorSize /= hsize;
+						hsize++;
+
+						if (hsize % 2) {
+							hsize /= 2;
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2) = startColor >> 8;
+							out2++;
+							currentXPos++;
+							startColor += colorSize;
+						} else {
+							hsize /= 2;
+						}
+
+						do {
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2) = startColor >> 8;
+
+							currentXPos++;
+							startColor += colorSize;
+
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2 + 1) = startColor >> 8;
+
+							currentXPos++;
+							out2 += 2;
+							startColor += colorSize;
+						} while (--hsize);
+					}
+				}
+			}
+			out += 640;
+			currentLine++;
+		} while (--renderLoop);
+		break;
+	}
+	case POLYGONTYPE_DITHER: { // dithering
+		renderLoop = vsize;
+
+		currentLine = vtop;
+		do {
+			if (currentLine >= 0 && currentLine < 480) {
+				stop = ptr1[480]; // stop
+				start = ptr1[0];  // start
+				ptr1++;
+				hsize = stop - start;
+
+				if (hsize >= 0) {
 					uint16 startColor = ptr2[0];
 					uint16 stopColor = ptr2[480];
+					int32 currentXPos = start;
 
-					int16 colorSize = stopColor - startColor;
-
-					stop = ptr1[480];  // stop
-					start = ptr1[0]; // start
-
-					ptr1++;
 					out2 = start + out;
-					hsize = stop - start;
-
-					varf2 = ptr2[480];
-					varf3 = ptr2[0];
-
 					ptr2++;
 
-					varf4 = (int64)((int32)varf2 - (int32)varf3);
+					if (hsize == 0) {
+						if (currentXPos >= 0 && currentXPos < 640)
+							*(out2) = (uint8)(((startColor + stopColor) / 2) >> 8);
+					} else {
+						int16 colorSize = stopColor - startColor;
+						if (hsize == 1) {
+							uint16 currentColor = startColor;
+							hsize++;
+							hsize /= 2;
 
-					if (hsize == 0)
-					{
-						if(start>=0 && start <640)
-							*out2 = ((startColor + stopColor) / 2)>>8; // moyenne des 2 couleurs
-					}
-					else if (hsize > 0)
-					{
-						if (hsize == 1)
-						{
-							if(start>=-1 && start <640-1)
-								*(out2 + 1) = stopColor>>8;
+							currentColor &= 0xFF;
+							currentColor += startColor;
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2) = currentColor >> 8;
 
-							if(start>=0 && start <640)
-								*(out2) = startColor>>8;
-						}
-						else if (hsize == 2)
-						{
-							if(start>=-2 && start<640-2)
-								*(out2 + 2) = stopColor>>8;
+							currentColor &= 0xFF;
+							startColor += colorSize;
+							currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
+							currentColor += startColor;
 
-							if(start>=-1 && start<640-1)
-								*(out2 + 1) = ((startColor + stopColor) / 2)>>8;
+							currentXPos++;
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2 + 1) = currentColor >> 8;
+						} else if (hsize == 2) {
+							uint16 currentColor = startColor;
+							hsize++;
+							hsize /= 2;
 
-							if(start>=0 && start<640)
-								*(out2) = startColor>>8;
-						}
-						else
-						{
-							int currentXPos = start;
+							currentColor &= 0xFF;
+							colorSize /= 2;
+							currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
+							currentColor += startColor;
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2) = currentColor >> 8;
+
+							out2++;
+							currentXPos++;
+							startColor += colorSize;
+
+							currentColor &= 0xFF;
+							currentColor += startColor;
+
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2) = currentColor >> 8;
+
+							currentColor &= 0xFF;
+							startColor += colorSize;
+							currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
+							currentColor += startColor;
+
+							currentXPos++;
+							if (currentXPos >= 0 && currentXPos < 640)
+								*(out2 + 1) = currentColor >> 8;
+						} else {
+							uint16 currentColor = startColor;
 							colorSize /= hsize;
 							hsize++;
 
-							if(hsize%2)
-							{
-								hsize/=2;
-								if(currentXPos>=0 && currentXPos<640)
-								*(out2)=startColor>>8;
+
+							if (hsize % 2) {
+								hsize /= 2;
+								currentColor &= 0xFF;
+								currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
+								currentColor += startColor;
+								if (currentXPos >= 0 && currentXPos < 640)
+									*(out2) = currentColor >> 8;
 								out2++;
 								currentXPos++;
-								startColor+=colorSize;
-							}
-							else
-							{
-								hsize/=2;
+							} else {
+								hsize /= 2;
 							}
 
-							do
-							{
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2)=startColor>>8;
-
+							do {
+								currentColor &= 0xFF;
+								currentColor += startColor;
+								if (currentXPos >= 0 && currentXPos < 640)
+									*(out2) = currentColor >> 8;
 								currentXPos++;
-								startColor+=colorSize;
-
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2+1)=startColor>>8;
-
+								currentColor &= 0xFF;
+								startColor += colorSize;
+								currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
+								currentColor += startColor;
+								if (currentXPos >= 0 && currentXPos < 640)
+									*(out2 + 1) = currentColor >> 8;
 								currentXPos++;
-								out2+=2;
-								startColor+=colorSize;
-							}while(--hsize);
+								out2 += 2;
+								startColor += colorSize;
+							} while (--hsize);
 						}
 					}
 				}
-				out += 640;
-				currentLine++;
-			}while (--renderLoop);
-			break;
-		}
-		case POLYGONTYPE_DITHER: // dithering
-		{
-			renderLoop = vsize;
-
-			currentLine = vtop;
-			do
-			{
-				if(currentLine >=0 && currentLine <480)
-				{
-					stop = ptr1[480]; // stop
-					start = ptr1[0];  // start
-					ptr1++;
-					hsize = stop - start;
-
-					if(hsize>=0)
-					{
-						uint16 startColor = ptr2[0];
-						uint16 stopColor = ptr2[480];
-						int32 currentXPos = start;
-
-						out2 = start + out;
-						ptr2++;
-
-						if(hsize==0)
-						{
-							if(currentXPos>=0 && currentXPos<640)
-								*(out2)=(uint8)(((startColor + stopColor)/2)>>8);
-						}
-						else
-						{
-							int16 colorSize = stopColor - startColor;
-							if(hsize==1)
-							{
-								uint16 currentColor = startColor;
-								hsize++;
-								hsize/=2;
-
-								currentColor&=0xFF;
-								currentColor+=startColor;
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2) = currentColor>>8;
-
-								currentColor&=0xFF;
-								startColor+=colorSize;
-								currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
-								currentColor +=startColor;
-
-								currentXPos++;
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2+1) = currentColor>>8;
-							}
-							else if(hsize==2)
-							{
-								uint16 currentColor = startColor;
-								hsize++;
-								hsize/=2;
-                              
-								currentColor&=0xFF;
-								colorSize/=2;
-								currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
-								currentColor +=startColor;
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2) = currentColor>>8;
-
-								out2++;
-								currentXPos++;
-								startColor+=colorSize;
-
-								currentColor&=0xFF;
-								currentColor+=startColor;
-
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2) = currentColor>>8;
-
-								currentColor&=0xFF;
-								startColor+=colorSize;
-								currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
-								currentColor +=startColor;
-
-								currentXPos++;
-								if(currentXPos>=0 && currentXPos<640)
-									*(out2+1) = currentColor>>8;
-							}
-							else
-							{
-								uint16 currentColor = startColor;
-								colorSize/=hsize;
-								hsize++;
-                
-
-								if(hsize%2)
-								{
-									hsize/=2;
-									currentColor&=0xFF;
-									currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
-									currentColor +=startColor;
-									if(currentXPos>=0 && currentXPos<640)
-										*(out2) = currentColor>>8;
-									out2++;
-									currentXPos++;
-								}
-								else
-								{
-									hsize/=2;
-								}
-
-								do
-								{
-									currentColor&=0xFF;
-									currentColor+=startColor;
-									if(currentXPos>=0 && currentXPos<640)
-										*(out2) = currentColor>>8;
-									currentXPos++;
-									currentColor&=0xFF;
-									startColor+=colorSize;
-									currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
-									currentColor +=startColor;
-									if(currentXPos>=0 && currentXPos<640)
-										*(out2+1) = currentColor>>8;
-									currentXPos++;
-									out2+=2;
-									startColor+=colorSize;
-								}while(--hsize);
-							}
-						}
-					}
-				}
-				out += 640;
-				currentLine++;
-			}while(--renderLoop);
-			break;
-		}
-		default:
-		{
-			#ifdef GAMEMOD
-			printf("RENDER WARNING: Unsuported render type %d\n",ecx);
-			#endif
-			break;
-		}
+			}
+			out += 640;
+			currentLine++;
+		} while (--renderLoop);
+		break;
+	}
+	default: {
+#ifdef GAMEMOD
+		printf("RENDER WARNING: Unsuported render type %d\n", ecx);
+#endif
+		break;
+	}
 	};
 }
 
-void circle_fill(int32 x, int32 y, int32 radius, int8 color)
-{
+void circle_fill(int32 x, int32 y, int32 radius, int8 color) {
 	int32 currentLine;
 
-	radius+=1;
+	radius += 1;
 
-	for(currentLine = -radius; currentLine <= radius; currentLine++)
-	{
+	for (currentLine = -radius; currentLine <= radius; currentLine++) {
 		double width;
 
-		if(abs(currentLine) != radius)
-		{
-			width = sin(acos((int64)currentLine/(int64)radius));
-		}
-		else
-		{
+		if (abs(currentLine) != radius) {
+			width = sin(acos((int64)currentLine / (int64)radius));
+		} else {
 			width = 0;
 		}
 
 		width *= radius;
 
-		if(width < 0)
+		if (width < 0)
 			width = - width;
 
-		draw_line((int32)(x-width),currentLine + y, (int32)(x+width), currentLine+y, color);
+		draw_line((int32)(x - width), currentLine + y, (int32)(x + width), currentLine + y, color);
 	}
 }
 
-int32 render_model_elements(uint8 *esi)
-{
+int32 render_model_elements(uint8 *esi) {
 	uint8 *edi;
 	int16 temp;
 	int32 eax, ecx;
@@ -1639,12 +1479,10 @@ int32 render_model_elements(uint8 *esi)
 	temp = *((int16*)esi);  // we read the number of polygones
 	esi += 2;
 
-	if (temp)
-	{
+	if (temp) {
 		primitiveCounter = temp;  // the number of primitives = the number of polygones
 
-		do      // loop that load all the polygones
-		{
+		do {    // loop that load all the polygones
 			render23 = edi;
 			currentPolyHeader = (polyHeader *) esi;
 			ecx = *((int32*)esi);
@@ -1652,8 +1490,7 @@ int32 render_model_elements(uint8 *esi)
 			polyRenderType = currentPolyHeader->renderType;
 
 			// TODO: RECHECK coordinates axis
-			if (polyRenderType >= 9)
-			{
+			if (polyRenderType >= 9) {
 				destinationHeader = (polyHeader *) edi;
 
 				destinationHeader->renderType = currentPolyHeader->renderType - 2;
@@ -1668,8 +1505,7 @@ int32 render_model_elements(uint8 *esi)
 				bestDepth = -32000;
 				renderV19 = edi;
 
-				do
-				{
+				do {
 					currentPolyVertex = (polyVertexHeader *) esi;
 
 					shadeValue = currentPolyHeader->colorIndex + shadeTable[currentPolyVertex->shadeEntry];
@@ -1679,7 +1515,7 @@ int32 render_model_elements(uint8 *esi)
 					currentComputedVertex->shadeValue = shadeValue;
 
 					currentVertex = &flattenPoints[currentPolyVertex->dataOffset / 6];
-					destinationVertex = (pointTab *) (edi + 2);
+					destinationVertex = (pointTab *)(edi + 2);
 
 					destinationVertex->X = currentVertex->X;
 					destinationVertex->Y = currentVertex->Y;
@@ -1691,10 +1527,8 @@ int32 render_model_elements(uint8 *esi)
 
 					if (currentDepth > bestDepth)
 						bestDepth = currentDepth;
-				}while (--counter);
-			}
-			else if (polyRenderType >= 7) // only 1 shade value is used
-			{
+				} while (--counter);
+			} else if (polyRenderType >= 7) { // only 1 shade value is used
 				destinationHeader = (polyHeader *) edi;
 
 				destinationHeader->renderType = currentPolyHeader->renderType - 7;
@@ -1702,25 +1536,24 @@ int32 render_model_elements(uint8 *esi)
 
 				color = currentPolyHeader->colorIndex;
 
-				shadeEntry = *((int16*)(esi+2));
-			
+				shadeEntry = *((int16*)(esi + 2));
+
 				esi += 4;
 
-				*((int16*)(edi+2)) = color + shadeTable[shadeEntry];
+				*((int16*)(edi + 2)) = color + shadeTable[shadeEntry];
 
 				edi += 4;
 				renderV19 = edi;
 				bestDepth = -32000;
 				counter = destinationHeader->numOfVertex;
 
-				do
-				{
+				do {
 					eax = *((int16*)esi);
 					esi += 2;
 
 					currentVertex = &flattenPoints[eax / 6];
 
-					destinationVertex = (pointTab *) (edi + 2);
+					destinationVertex = (pointTab *)(edi + 2);
 
 					destinationVertex->X = currentVertex->X;
 					destinationVertex->Y = currentVertex->Y;
@@ -1731,10 +1564,8 @@ int32 render_model_elements(uint8 *esi)
 
 					if (currentDepth > bestDepth)
 						bestDepth = currentDepth;
-				}while (--counter);
-			}
-			else  // no shade is used
-			{
+				} while (--counter);
+			} else { // no shade is used
 				destinationHeader = (polyHeader *) edi;
 
 				destinationHeader->renderType = currentPolyHeader->renderType;
@@ -1749,14 +1580,13 @@ int32 render_model_elements(uint8 *esi)
 				eax = 0;
 				counter = currentPolyHeader->numOfVertex;
 
-				do
-				{
+				do {
 					eax = *((int16*)esi);
 					esi += 2;
 
 					currentVertex = &flattenPoints[eax / 6];
 
-					destinationVertex = (pointTab *) (edi + 2);
+					destinationVertex = (pointTab *)(edi + 2);
 
 					destinationVertex->X = currentVertex->X;
 					destinationVertex->Y = currentVertex->Y;
@@ -1767,7 +1597,7 @@ int32 render_model_elements(uint8 *esi)
 
 					if (currentDepth > bestDepth)
 						bestDepth = currentDepth;
-				}while (--(counter));
+				} while (--(counter));
 			}
 
 			render24 = edi;
@@ -1797,12 +1627,9 @@ int32 render_model_elements(uint8 *esi)
 			ax -= bestDepth;
 			currentDepth -= (bx) - 1; // peut-etre une erreur la
 
-			if (currentDepth < 0)
-			{
+			if (currentDepth < 0) {
 				edi = render23;
-			}
-			else
-			{
+			} else {
 				numOfPrimitives++;
 
 				renderTabEntryPtr->depth = render25;
@@ -1812,31 +1639,28 @@ int32 render_model_elements(uint8 *esi)
 
 				edi = render24;
 			}
-		}while (--primitiveCounter);
+		} while (--primitiveCounter);
 	}
 
 	// prepare lines
 
 	temp = *((int16*)esi);
 	esi += 2;
-	if (temp)
-	{
+	if (temp) {
 		numOfPrimitives += temp;
-		do
-		{
+		do {
 			int32 param;
 			lineDataPtr = (lineData *) esi;
 			lineCoordinatesPtr = (lineCoordinates *) edi;
 
-			if (*((int16*)&lineDataPtr->p1) % 6 != 0 || *((int16*)&lineDataPtr->p2) % 6 != 0)
-			{
+			if (*((int16*)&lineDataPtr->p1) % 6 != 0 || *((int16*)&lineDataPtr->p2) % 6 != 0) {
 				printf("RENDER ERROR: lineDataPtr reference is malformed !\n");
 				exit(1);
 			}
 
-			point1 = *((int16*)&lineDataPtr->p1) / 6;
-			point2 = *((int16*)&lineDataPtr->p2) / 6;
-			param = *((int32*)&lineDataPtr->data);
+			point1 = *((int16*) & lineDataPtr->p1) / 6;
+			point2 = *((int16*) & lineDataPtr->p2) / 6;
+			param = *((int32*) & lineDataPtr->data);
 			*((int32*)&lineCoordinatesPtr->data) = param;
 			*((int16*)&lineCoordinatesPtr->x1) = flattenPoints[point1].X;
 			*((int16*)&lineCoordinatesPtr->y1) = flattenPoints[point1].Y;
@@ -1855,26 +1679,24 @@ int32 render_model_elements(uint8 *esi)
 
 			esi += 8;
 			edi += 12;
-		}while (--temp);
+		} while (--temp);
 	}
 
 	// prepare spheres
 
 	temp = *((int16*)esi);
 	esi += 2;
-	if (temp)     
-	{
-		numOfPrimitives+=temp;
-		do
-		{
-			uint8 color = *(esi+1);
-			int16 center = *((uint16*)(esi+6));
-			int16 size = *((uint16*)(esi+4));
+	if (temp) {
+		numOfPrimitives += temp;
+		do {
+			uint8 color = *(esi + 1);
+			int16 center = *((uint16*)(esi + 6));
+			int16 size = *((uint16*)(esi + 4));
 
 			*(uint8*)edi = color;
-			*((int16*)(edi+1)) = flattenPoints[center/6].X;
-			*((int16*)(edi+3)) = flattenPoints[center/6].Y;
-			*((int16*)(edi+5)) = size;
+			*((int16*)(edi + 1)) = flattenPoints[center/6].X;
+			*((int16*)(edi + 3)) = flattenPoints[center/6].Y;
+			*((int16*)(edi + 5)) = size;
 
 			renderTabEntryPtr->depth = flattenPoints[center/6].Z;
 			renderTabEntryPtr->renderType = 2;
@@ -1883,20 +1705,17 @@ int32 render_model_elements(uint8 *esi)
 
 			esi += 8;
 			edi += 7;
-		}while (--temp);
+		} while (--temp);
 	}
 
 	renderTabEntryPtr2 = renderTab;
 
 	renderTabSortedPtr = renderTabSorted;
-	for (i = 0; i < numOfPrimitives; i++)  // then we sort the polygones | WARNING: very slow | TODO: improve this
-	{
+	for (i = 0; i < numOfPrimitives; i++) { // then we sort the polygones | WARNING: very slow | TODO: improve this
 		renderTabEntryPtr2 = renderTab;
 		bestZ = -0x7FFF;
-		for (j = 0; j < numOfPrimitives; j++)
-		{
-			if (renderTabEntryPtr2->depth > bestZ)
-			{
+		for (j = 0; j < numOfPrimitives; j++) {
+			if (renderTabEntryPtr2->depth > bestZ) {
 				bestZ = renderTabEntryPtr2->depth;
 				bestPoly = j;
 			}
@@ -1912,116 +1731,102 @@ int32 render_model_elements(uint8 *esi)
 
 	// prepare to render elements
 
-	if (numOfPrimitives)
-	{
+	if (numOfPrimitives) {
 		primitiveCounter = numOfPrimitives;
 		renderV19 = esi;
 
-		do
-		{
+		do {
 			type = renderTabEntryPtr2->renderType;
 			esi = renderTabEntryPtr2->dataPtr;
 			renderV19 += 8;
 
-			switch (type)
-			{
-				case RENDERTYPE_DRAWLINE: // draw a line
-				{
-					uint32 x1;
-					uint32 y1;
-					uint32 x2;
-					uint32 y2;
+			switch (type) {
+			case RENDERTYPE_DRAWLINE: { // draw a line
+				uint32 x1;
+				uint32 y1;
+				uint32 x2;
+				uint32 y2;
 
-					lineCoordinatesPtr = (lineCoordinates *) esi;
-					color = (*((int32*)&lineCoordinatesPtr->data) & 0xFF00) >> 8;
-			  
-					x1 = *((int16*)(uint16*)&lineCoordinatesPtr->x1);
-					y1 = *((int16*)(uint16*)&lineCoordinatesPtr->y1);
-					x2 = *((int16*)(uint16*)&lineCoordinatesPtr->x2);
-					y2 = *((int16*)(uint16*)&lineCoordinatesPtr->y2);
-			  
-					draw_line(x1,y1,x2,y2,color);
-					break;
+				lineCoordinatesPtr = (lineCoordinates *) esi;
+				color = (*((int32*) & lineCoordinatesPtr->data) & 0xFF00) >> 8;
+
+				x1 = *((int16*)(uint16*) & lineCoordinatesPtr->x1);
+				y1 = *((int16*)(uint16*) & lineCoordinatesPtr->y1);
+				x2 = *((int16*)(uint16*) & lineCoordinatesPtr->x2);
+				y2 = *((int16*)(uint16*) & lineCoordinatesPtr->y2);
+
+				draw_line(x1, y1, x2, y2, color);
+				break;
+			}
+			case RENDERTYPE_DRAWPOLYGON: { // draw a polygon
+				eax = *((int*)esi);
+				esi += 4;
+
+				polyRenderType = eax & 0xFF;
+				numOfVertex = (eax & 0xFF00) >> 8;
+				color = (eax & 0xFF0000) >> 16;
+
+				destPtr = (uint8 *) vertexCoordinates;
+
+				for (i = 0; i < (numOfVertex * 3); i++) {
+					*((int16*)destPtr) = *((int16*)esi);
+					destPtr += 2;
+					esi += 2;
 				}
-				case RENDERTYPE_DRAWPOLYGON: // draw a polygon
-				{
-					eax = *((int*)esi);
-					esi += 4;
 
-					polyRenderType = eax & 0xFF;
-					numOfVertex = (eax & 0xFF00) >> 8;
-					color = (eax & 0xFF0000) >> 16;
-
-					destPtr = (uint8 *) vertexCoordinates;
-
-					for (i = 0; i < (numOfVertex * 3); i++)
-					{
-						*((int16*)destPtr) = *((int16*)esi);
-						destPtr += 2;
-						esi += 2;
-					}
-
-					if (compute_polygons() != ERROR_OUT_OF_SCREEN)
-					{
-						render_polygons(polyRenderType, color);
-					}
-
-					break;
+				if (compute_polygons() != ERROR_OUT_OF_SCREEN) {
+					render_polygons(polyRenderType, color);
 				}
-				case RENDERTYPE_DRAWSPHERE: // draw a sphere
-				{
-					int32 circleParam1;
-					//int32 circleParam2;
-					int32 circleParam3;
-					int32 circleParam4;
-					int32 circleParam5;
 
-					eax = *(int*) esi;
+				break;
+			}
+			case RENDERTYPE_DRAWSPHERE: { // draw a sphere
+				int32 circleParam1;
+				//int32 circleParam2;
+				int32 circleParam3;
+				int32 circleParam4;
+				int32 circleParam5;
 
-					circleParam1 = *(uint8*)esi;
-					circleParam4 = *((int16*)(esi+1));
-					circleParam5 = *((int16*)(esi+3));
-					circleParam3 = *((int16*)(esi+5));
+				eax = *(int*) esi;
 
-					if(!isUsingOrhoProjection)
-					{
-						circleParam3 = (circleParam3 * cameraPosY) / (cameraPosX + *(int16*)esi);
-					}
-					else
-					{
-						circleParam3 = (circleParam3 * 34) >> 9;
-					}
+				circleParam1 = *(uint8*)esi;
+				circleParam4 = *((int16*)(esi + 1));
+				circleParam5 = *((int16*)(esi + 3));
+				circleParam3 = *((int16*)(esi + 5));
 
-					circleParam3+=3;
-
-					if(circleParam4 + circleParam3 > renderRight)
-						renderRight = circleParam4 + circleParam3;
-
-					if(circleParam4 - circleParam3 < renderLeft)
-						renderLeft = circleParam4 - circleParam3;
-
-					if(circleParam5 + circleParam3 > renderBottom)
-						renderBottom = circleParam5 + circleParam3;
-
-					if(circleParam5 - circleParam3 < renderTop)
-						renderTop = circleParam5 - circleParam3;
-
-					circleParam3-=3;
-
-					circle_fill(circleParam4, circleParam5, circleParam3, circleParam1);
+				if (!isUsingOrhoProjection) {
+					circleParam3 = (circleParam3 * cameraPosY) / (cameraPosX + *(int16*)esi);
+				} else {
+					circleParam3 = (circleParam3 * 34) >> 9;
 				}
-				default:
-				{
-					break;
-				}
+
+				circleParam3 += 3;
+
+				if (circleParam4 + circleParam3 > renderRight)
+					renderRight = circleParam4 + circleParam3;
+
+				if (circleParam4 - circleParam3 < renderLeft)
+					renderLeft = circleParam4 - circleParam3;
+
+				if (circleParam5 + circleParam3 > renderBottom)
+					renderBottom = circleParam5 + circleParam3;
+
+				if (circleParam5 - circleParam3 < renderTop)
+					renderTop = circleParam5 - circleParam3;
+
+				circleParam3 -= 3;
+
+				circle_fill(circleParam4, circleParam5, circleParam3, circleParam1);
+			}
+			default: {
+				break;
+			}
 			}
 
 			esi = renderV19;
 			renderTabEntryPtr2++;
-		}while (--primitiveCounter);
-	}
-	else
-	{
+		} while (--primitiveCounter);
+	} else {
 		renderRight = -1;
 		renderBottom = -1;
 		renderLeft = -1;
@@ -2032,8 +1837,7 @@ int32 render_model_elements(uint8 *esi)
 	return (0);
 }
 
-int32 render_animated_model(uint8 *bodyPtr)
-{
+int32 render_animated_model(uint8 *bodyPtr) {
 	elementEntry *elemEntryPtr;
 	pointTab *pointPtr;
 	pointTab *pointPtrDest;
@@ -2063,21 +1867,16 @@ int32 render_animated_model(uint8 *bodyPtr)
 
 	elemEntryPtr = (elementEntry *) elementsPtr;
 
-	if (numOfElements - 1 != 0)
-	{
+	if (numOfElements - 1 != 0) {
 		numOfPrimitives = numOfElements - 1;
-		currentMatrixTableEntry = (uint8 *) &matricesTable[9];
+		currentMatrixTableEntry = (uint8 *) & matricesTable[9];
 
-		do
-		{
+		do {
 			int boneType = elemEntryPtr->flag;
 
-			if (boneType == 0)
-			{
+			if (boneType == 0) {
 				process_rotated_element(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr);  // rotation
-			}
-			else if (boneType == 1)
-			{
+			} else if (boneType == 1) {
 				process_translated_element(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr); // translation
 			}
 
@@ -2085,7 +1884,7 @@ int32 render_animated_model(uint8 *bodyPtr)
 			elementsPtr += 38;
 			elemEntryPtr = (elementEntry *) elementsPtr;
 
-		}while (--numOfPrimitives);
+		} while (--numOfPrimitives);
 	}
 
 	numOfPrimitives = numOfPoints;
@@ -2093,16 +1892,14 @@ int32 render_animated_model(uint8 *bodyPtr)
 	pointPtr = (pointTab *) computedPoints;
 	pointPtrDest = (pointTab *) flattenPoints;
 
-	if (isUsingOrhoProjection != 0) // use standard projection
-	{
-		do
-		{
+	if (isUsingOrhoProjection != 0) { // use standard projection
+		do {
 			coX = pointPtr->X + renderX;
 			coY = pointPtr->Y + renderY;
 			coZ = -(pointPtr->Z + renderZ);
 
-			pointPtrDest->X = (coX + coZ)* 24 /512 + orthoProjX;
-			pointPtrDest->Y = (((coX - coZ) *12) - coY*30) /512 + orthoProjY;
+			pointPtrDest->X = (coX + coZ) * 24 / 512 + orthoProjX;
+			pointPtrDest->Y = (((coX - coZ) * 12) - coY * 30) / 512 + orthoProjY;
 			pointPtrDest->Z = coZ - coX - coY;
 
 			if (pointPtrDest->X < renderLeft)
@@ -2117,26 +1914,23 @@ int32 render_animated_model(uint8 *bodyPtr)
 
 			pointPtr++;
 			pointPtrDest++;
-		}while (--numOfPrimitives);
-	}
-	else
-	{
-		do
-		{
+		} while (--numOfPrimitives);
+	} else {
+		do {
 			coX = pointPtr->X + renderX;
 			coY = pointPtr->Y + renderY;
 			coZ = -(pointPtr->Z + renderZ);
 
 			coZ += cameraPosX;
 
-			if(coZ<=0)
+			if (coZ <= 0)
 				coZ = 0x7FFFFFFF;
 
 			// X projection
 			{
-				coX= (coX * cameraPosY) / coZ + orthoProjX;
+				coX = (coX * cameraPosY) / coZ + orthoProjX;
 
-				if(coX > 0xFFFF)
+				if (coX > 0xFFFF)
 					coX = 0x7FFF;
 
 				pointPtrDest->X = coX;
@@ -2150,9 +1944,9 @@ int32 render_animated_model(uint8 *bodyPtr)
 
 			// Y projection
 			{
-				coY= (-coY * cameraPosZ) / coZ + orthoProjY;
+				coY = (-coY * cameraPosZ) / coZ + orthoProjY;
 
-				if(coY > 0xFFFF)
+				if (coY > 0xFFFF)
 					coY = 0x7FFF;
 
 				pointPtrDest->Y = coY;
@@ -2165,7 +1959,7 @@ int32 render_animated_model(uint8 *bodyPtr)
 
 			// Z projection
 			{
-				if(coZ > 0xFFFF)
+				if (coZ > 0xFFFF)
 					coZ = 0x7FFF;
 
 				pointPtrDest->Z = coZ;
@@ -2174,17 +1968,16 @@ int32 render_animated_model(uint8 *bodyPtr)
 			pointPtr++;
 			pointPtrDest++;
 
-		}while (--numOfPrimitives);
+		} while (--numOfPrimitives);
 	}
 
 	shadePtr = (int32 *) elementsPtr;
 
 	numOfShades = *((uint16*)shadePtr);
 
-	shadePtr = (int32 *) (((uint8 *) shadePtr) + 2);
+	shadePtr = (int32 *)(((uint8 *) shadePtr) + 2);
 
-	if (numOfShades)     // process normal data
-	{
+	if (numOfShades) {   // process normal data
 		int32 color;
 		int32 shade;
 
@@ -2198,12 +1991,10 @@ int32 render_animated_model(uint8 *bodyPtr)
 
 		//assert(frontVideoBufferbis == frontVideoBuffer);
 
-		do // for each element
-		{
+		do { // for each element
 			numOfShades = *((uint16*)tmpElemPtr);
-			
-			if (numOfShades)
-			{
+
+			if (numOfShades) {
 				int32 numShades = numOfShades;
 
 				shadeMatrix[0] = (*lightMatrix) * lightX;
@@ -2218,8 +2009,7 @@ int32 render_animated_model(uint8 *bodyPtr)
 				shadeMatrix[7] = (*(lightMatrix + 7)) * lightZ;
 				shadeMatrix[8] = (*(lightMatrix + 8)) * lightZ;
 
-				do  // for each normal
-				{
+				do { // for each normal
 					int16 col1;
 					int16 col2;
 					int16 col3;
@@ -2227,7 +2017,7 @@ int32 render_animated_model(uint8 *bodyPtr)
 					int16 *colPtr;
 
 					colPtr = (int16 *) shadePtr;
-					
+
 					col1 = *((int16*)colPtr++);
 					col2 = *((int16*)colPtr++);
 					col3 = *((int16*)colPtr++);
@@ -2238,32 +2028,30 @@ int32 render_animated_model(uint8 *bodyPtr)
 
 					shade = 0;
 
-					if (color > 0)
-					{
+					if (color > 0) {
 						color >>= 14;
 						tmpShadePtr = (uint8 *) shadePtr;
-						color /= *((uint16*)(tmpShadePtr+6));
+						color /= *((uint16*)(tmpShadePtr + 6));
 						shade = (uint16) color;
 					}
 
-					*((uint16*)currentShadeDestination) = shade;				
+					*((uint16*)currentShadeDestination) = shade;
 					currentShadeDestination += 2;
 					shadePtr += 2;
 
-				}while (--numShades);
+				} while (--numShades);
 			}
-			
+
 			tmpElemPtr = pri2Ptr2 = pri2Ptr2 + 38; // next element
 
 			tmpLightMatrix = lightMatrix = lightMatrix + 9;
-		}while (--numOfPrimitives);
+		} while (--numOfPrimitives);
 	}
 
 	return render_model_elements((uint8 *) shadePtr);
 }
 
-void prepare_iso_model(uint8 *bodyPtr) // loadGfxSub
-{
+void prepare_iso_model(uint8 *bodyPtr) { // loadGfxSub
 	bodyHeaderStruct *bodyHeader;
 	int16 offsetToData;
 	uint8 *bodyDataPtr;
@@ -2277,8 +2065,7 @@ void prepare_iso_model(uint8 *bodyPtr) // loadGfxSub
 
 	bodyHeader = (bodyHeaderStruct *)bodyPtr;
 
-	if (!(bodyHeader->bodyFlag & 2))	// no animation applicable
-	{
+	if (!(bodyHeader->bodyFlag & 2)) {	// no animation applicable
 		return;
 	}
 
@@ -2293,15 +2080,13 @@ void prepare_iso_model(uint8 *bodyPtr) // loadGfxSub
 
 	ptrToKeyData = ptr2 + 2;
 
-	for (i = 0; i < numOfPoint; i++)
-	{
+	for (i = 0; i < numOfPoint; i++) {
 		ptrToKeyData += 38;
 		*((int16*)(ptrToKeyData + 6)) = (*((int16*)(ptrToKeyData + 6)) * bp) / bx;
 	}
 }
 
-int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr) // AffObjetIso
-{
+int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr) { // AffObjetIso
 	uint8 *ptr;
 	int16 bodyHeader;
 
@@ -2319,39 +2104,33 @@ int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int3
 	renderRight = -32767;
 	renderBottom = -32767;
 
-	if (isUsingOrhoProjection == 0)
-	{       
-		set_base_rotation(X,Y,Z);
+	if (isUsingOrhoProjection == 0) {
+		set_base_rotation(X, Y, Z);
 
 		renderX = destX - baseRotPosX;
 		renderY = destY - baseRotPosY; // RECHECK
 		renderZ = destZ - baseRotPosZ;
-	}
-	else
-	{
+	} else {
 		renderX = X;
 		renderY = Y;
 		renderZ = Z;
 	}
 
 	// reset the number of primitives in the model
-	numOfPrimitives = 0; 
+	numOfPrimitives = 0;
 
 	// restart at the beginning of the renderTable
-	renderTabEntryPtr = renderTab;  
+	renderTabEntryPtr = renderTab;
 
 	bodyHeader = *((uint16*)bodyPtr);
 
 	// jump after the header
-	ptr = bodyPtr + 16 + *((uint16*)(bodyPtr + 14)); 
+	ptr = bodyPtr + 16 + *((uint16*)(bodyPtr + 14));
 
-	if (bodyHeader & 2) // if animated
-	{
+	if (bodyHeader & 2) { // if animated
 		// the mostly used renderer code
 		return (render_animated_model(ptr));
-	}
-	else
-	{
+	} else {
 		printf("Unsupported unanimated model render!\n");
 		exit(1);
 	}
@@ -2359,46 +2138,44 @@ int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int3
 	return (0);
 }
 
-void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest)
-{
+void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest) {
 	int16 cx;
 	int16 ax;
 	int32 i;
 
 	// check if both characters allow animation
-	if(!(*((int16*)bodyPtrSrc)&2))
+	if (!(*((int16*)bodyPtrSrc)&2))
 		return;
 
-	if(!(*((int16*)bodyPtrDest)&2))
+	if (!(*((int16*)bodyPtrDest)&2))
 		return;
 
 	// skip header
-	bodyPtrSrc+=16; 
-	bodyPtrDest+=16;
+	bodyPtrSrc += 16;
+	bodyPtrDest += 16;
 
 	*((uint32*)bodyPtrDest) = *((uint32*)bodyPtrSrc);
-	*((uint32*)(bodyPtrDest+4)) = *((uint32*)(bodyPtrSrc+4));
+	*((uint32*)(bodyPtrDest + 4)) = *((uint32*)(bodyPtrSrc + 4));
 
-	bodyPtrSrc=bodyPtrSrc+*((int16*)(bodyPtrSrc-2));
-	bodyPtrSrc=bodyPtrSrc+(*((int16*)bodyPtrSrc))*6+2;
-	cx=*((int16*)bodyPtrSrc);
+	bodyPtrSrc = bodyPtrSrc + *((int16*)(bodyPtrSrc - 2));
+	bodyPtrSrc = bodyPtrSrc + (*((int16*)bodyPtrSrc)) * 6 + 2;
+	cx = *((int16*)bodyPtrSrc);
 
-	bodyPtrDest=bodyPtrDest+*((int16*)(bodyPtrDest-2));
-	bodyPtrDest=bodyPtrDest+(*((int16*)bodyPtrDest))*6+2;
-	ax=*((int16*)bodyPtrDest);
+	bodyPtrDest = bodyPtrDest + *((int16*)(bodyPtrDest - 2));
+	bodyPtrDest = bodyPtrDest + (*((int16*)bodyPtrDest)) * 6 + 2;
+	ax = *((int16*)bodyPtrDest);
 
-	if(cx>ax)
-		cx=ax;
+	if (cx > ax)
+		cx = ax;
 
-	bodyPtrSrc+=10;
-	bodyPtrDest+=10;
+	bodyPtrSrc += 10;
+	bodyPtrDest += 10;
 
-	for(i=0;i<cx;i++)
-	{
+	for (i = 0; i < cx; i++) {
 		*((uint32*)bodyPtrDest) = *((uint32*)bodyPtrSrc);
-		*((uint32*)(bodyPtrDest+4)) = *((uint32*)(bodyPtrSrc+4));
+		*((uint32*)(bodyPtrDest + 4)) = *((uint32*)(bodyPtrSrc + 4));
 
-		bodyPtrDest+=30;
-		bodyPtrSrc+=30;
+		bodyPtrDest += 30;
+		bodyPtrSrc += 30;
 	}
 }

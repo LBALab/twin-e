@@ -1,9 +1,9 @@
 /** @file sdlengine.c
-	@brief 
+	@brief
 	This file contains SDL engine routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -53,9 +53,9 @@ static void atexit_callback(void);
 #define HIGH_QUALITY_FREQUENCY		44100
 
 /** Main SDL screen surface buffer */
-SDL_Surface *screen=NULL;
+SDL_Surface *screen = NULL;
 /** Auxiliar SDL screen surface buffer */
-SDL_Surface *screenBuffer=NULL;
+SDL_Surface *screenBuffer = NULL;
 /** SDL screen color */
 SDL_Color screenColors[256];
 /** Auxiliar surface table  */
@@ -79,8 +79,7 @@ TTF_Font *font;
 #endif
 
 /** SDL exit callback */
-static void atexit_callback(void)
-{
+static void atexit_callback(void) {
 	stop_track_music();
 	stop_midi_music();
 	Mix_CloseAudio();
@@ -88,8 +87,7 @@ static void atexit_callback(void)
 }
 
 /** Close everything in the game */
-void sdl_close()
-{
+void sdl_close() {
 	stop_track_music();
 	stop_midi_music();
 	atexit(atexit_callback);
@@ -97,8 +95,7 @@ void sdl_close()
 
 /** SDL initializer
 	@return SDL init state */
-int sdl_initialize()
-{
+int sdl_initialize() {
 	uint8 *keyboard;
 	int32 size;
 	int32 i;
@@ -107,27 +104,25 @@ int sdl_initialize()
 
 	Uint32 rmask, gmask, bmask, amask;
 
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		rmask = 0xff000000;
-		gmask = 0x00ff0000;
-		bmask = 0x0000ff00;
-		amask = 0x000000ff;
-	#else
-		rmask = 0x000000ff;
-		gmask = 0x0000ff00;
-		bmask = 0x00ff0000;
-		amask = 0xff000000;
-	#endif
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000;
+	gmask = 0x00ff0000;
+	bmask = 0x0000ff00;
+	amask = 0x000000ff;
+#else
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = 0xff000000;
+#endif
 
-	if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
-	{
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
 
-	#ifdef GAMEMOD
-	if (TTF_Init() < 0)
-	{
+#ifdef GAMEMOD
+	if (TTF_Init() < 0) {
 		fprintf(stderr, "Couldn't initialize TTF: %s\n", SDL_GetError());
 		exit(1);
 	}
@@ -135,21 +130,19 @@ int sdl_initialize()
 
 	font = TTF_OpenFont("verdana.ttf", 12);
 
-	if (font == NULL)
-	{
+	if (font == NULL) {
 		fprintf(stderr, "Couldn't load %d pt font from %s: %s\n", 12, "verdana.ttf", SDL_GetError());
 		exit(2);
 	}
 
 	TTF_SetFontStyle(font, 0);
-	#endif
+#endif
 
 
 	/*icon = SDL_LoadBMP("icon.bmp");
 	SDL_WM_SetIcon(icon, NULL);*/
 
-	if(cfgfile.Debug)
-	{
+	if (cfgfile.Debug) {
 		SDL_version compile_version;
 		const SDL_version *link_version;
 		SDL_VERSION(&compile_version);
@@ -163,13 +156,12 @@ int sdl_initialize()
 	printf("Initialising SDL device. Please wait...\n");
 
 	// Verify if we want to use high quality sounds
-	if(cfgfile.UseHQSnd)
+	if (cfgfile.UseHQSnd)
 		freq = HIGH_QUALITY_FREQUENCY;
 	else
 		freq = ORIGINAL_GAME_FREQUENCY;
 
-	if(Mix_OpenAudio(freq, AUDIO_S16, 2, 4096) < 0)
-	{
+	if (Mix_OpenAudio(freq, AUDIO_S16, 2, 4096) < 0) {
 		printf("Mix_OpenAudio: %s\n", Mix_GetError());
 		exit(1);
 	}
@@ -185,14 +177,12 @@ int sdl_initialize()
 
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE);
 
-	if (screen == NULL)
-	{
+	if (screen == NULL) {
 		fprintf(stderr, "Couldn't set 640x480x8 video mode: %s\n\n", SDL_GetError());
 		exit(1);
 	}
 
-	for (i = 0; i < 16; i++)
-	{
+	for (i = 0; i < 16; i++) {
 		surfaceTable[i] = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
 	}
 
@@ -201,33 +191,29 @@ int sdl_initialize()
 
 /** Frames per second sdl delay
 	@param fps frames per second */
-void fps_cycles(int32 fps)
-{
+void fps_cycles(int32 fps) {
 	SDL_Delay(1000 / (fps));
 }
 
-/** Deplay certain seconds till proceed 
+/** Deplay certain seconds till proceed
 	@param time time in seconds to delay */
-void delay(uint32 time)
-{
+void delay(uint32 time) {
 	uint32 startTicks = SDL_GetTicks();
-	uint32 stopTicks=0;
+	uint32 stopTicks = 0;
 	skipIntro = 0;
-	do
-	{
+	do {
 		read_keys();
-		if(skipIntro==1)
+		if (skipIntro == 1)
 			break;
-		stopTicks = SDL_GetTicks()-startTicks;
+		stopTicks = SDL_GetTicks() - startTicks;
 		SDL_Delay(1);
 		lbaTime++;
-	}while(stopTicks <= time);
+	} while (stopTicks <= time);
 }
 
 /** Set a new palette in the SDL screen buffer
 	@param palette palette to set */
-void set_palette(uint8 * palette)
-{
+void set_palette(uint8 * palette) {
 	SDL_Color *screenColorsTemp = (SDL_Color *) palette;
 
 	SDL_SetColors(screenBuffer, screenColorsTemp, 0, 256);
@@ -236,24 +222,21 @@ void set_palette(uint8 * palette)
 }
 
 /** Fade screen from black to white */
-void fade_black_2_white()
-{
+void fade_black_2_white() {
 	int32 i;
 
 	SDL_Color colorPtr[256];
 
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 
-	for (i = 0; i < 256; i += 3)
-	{
+	for (i = 0; i < 256; i += 3) {
 		memset(colorPtr, i, 1024);
 		SDL_SetPalette(screen, SDL_PHYSPAL, colorPtr, 0, 256);
 	}
 }
 
 /** Blit surface in the screen */
-void flip()
-{
+void flip() {
 	SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
@@ -263,62 +246,58 @@ void flip()
 	@param top top position to start copy
 	@param right right position to start copy
 	@param bottom bottom position to start copy */
-void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom)
-{
+void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom) {
 	SDL_Rect rectangle;
 
 	rectangle.x = left;
 	rectangle.y = top;
-	rectangle.w = right - left +1 ;
-	rectangle.h = bottom - top +1 ;
+	rectangle.w = right - left + 1 ;
+	rectangle.h = bottom - top + 1 ;
 
 	SDL_BlitSurface(screenBuffer, &rectangle, screen, &rectangle);
-	SDL_UpdateRect(screen, left, top, right - left +1, bottom - top+1);
+	SDL_UpdateRect(screen, left, top, right - left + 1, bottom - top + 1);
 }
 
 /** Create SDL screen surface
 	@param buffer screen buffer to blit surface
 	@param width screen width size
 	@param height screen height size */
-void init_screen_buffer(uint8 *buffer, int32 width, int32 height)
-{
+void init_screen_buffer(uint8 *buffer, int32 width, int32 height) {
 	screenBuffer = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8, SCREEN_WIDTH, 0, 0, 0, 0);
 }
 
 /** Cross fade feature
 	@param buffer screen buffer
 	@param palette new palette to cross fade */
-void cross_fade(uint8 *buffer, uint8 *palette)
-{
+void cross_fade(uint8 *buffer, uint8 *palette) {
 	int32 i;
 	SDL_Surface *backupSurface;
 	SDL_Surface *newSurface;
 	SDL_Surface *tempSurface;
 	Uint32 rmask, gmask, bmask, amask;
 
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    rmask = 0xff000000;
-    gmask = 0x00ff0000;
-    bmask = 0x0000ff00;
-    amask = 0x000000ff;
-	#else
-    rmask = 0x000000ff;
-    gmask = 0x0000ff00;
-    bmask = 0x00ff0000;
-    amask = 0xff000000;
-	#endif
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000;
+	gmask = 0x00ff0000;
+	bmask = 0x0000ff00;
+	amask = 0x000000ff;
+#else
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = 0xff000000;
+#endif
 
-    backupSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
-    newSurface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
+	backupSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
+	newSurface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
 
-    tempSurface = SDL_CreateRGBSurfaceFrom(buffer, SCREEN_WIDTH, SCREEN_HEIGHT, 8, SCREEN_WIDTH, 0, 0, 0, 0);
+	tempSurface = SDL_CreateRGBSurfaceFrom(buffer, SCREEN_WIDTH, SCREEN_HEIGHT, 8, SCREEN_WIDTH, 0, 0, 0, 0);
 	SDL_SetColors(tempSurface, (SDL_Color *) palette, 0, 256);
 
-    SDL_BlitSurface(screen, NULL, backupSurface, NULL);
-    SDL_BlitSurface(tempSurface, NULL, newSurface, NULL);
+	SDL_BlitSurface(screen, NULL, backupSurface, NULL);
+	SDL_BlitSurface(tempSurface, NULL, newSurface, NULL);
 
-    for (i = 0; i < 8; i++)
-    {
+	for (i = 0; i < 8; i++) {
 		SDL_BlitSurface(backupSurface, NULL, surfaceTable[i], NULL);
 		SDL_SetAlpha(newSurface, SDL_SRCALPHA | SDL_RLEACCEL, i * 32);
 		SDL_BlitSurface(newSurface, NULL, surfaceTable[i], NULL);
@@ -327,29 +306,25 @@ void cross_fade(uint8 *buffer, uint8 *palette)
 		delay(50);
 	}
 
-    SDL_BlitSurface(newSurface, NULL, screen, NULL);
-    SDL_UpdateRect(screen, 0, 0, 0, 0);
+	SDL_BlitSurface(newSurface, NULL, screen, NULL);
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
 
-    SDL_FreeSurface(backupSurface);
-    SDL_FreeSurface(newSurface);
-    SDL_FreeSurface(tempSurface);
+	SDL_FreeSurface(backupSurface);
+	SDL_FreeSurface(newSurface);
+	SDL_FreeSurface(tempSurface);
 }
 
 /** Switch between window and fullscreen modes */
-void toggle_fullscreen()
-{
+void toggle_fullscreen() {
 	cfgfile.FullScreen = 1 - cfgfile.FullScreen;
 	SDL_FreeSurface(screen);
 
-	if (cfgfile.FullScreen)
-	{
+	if (cfgfile.FullScreen) {
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE);
 		copy_screen(workVideoBuffer, frontVideoBuffer);
 		SDL_ShowCursor(1);
-	}
-	else
-	{
-		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE|SDL_FULLSCREEN);
+	} else {
+		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
 		copy_screen(workVideoBuffer, frontVideoBuffer);
 
 #ifdef _DEBUG
@@ -361,11 +336,10 @@ void toggle_fullscreen()
 }
 
 /** Handle keyboard pressed keys */
-void read_keys()
-{
+void read_keys() {
 	SDL_Event event;
 	int32 localKey;
-	int32 i,j, size;
+	int32 i, j, size;
 	int32 find = 0;
 	int16 temp;
 	uint8 temp2;
@@ -380,173 +354,158 @@ void read_keys()
 
 	keyboard = SDL_GetKeyState(&size);
 
-	while (SDL_PollEvent(&event))
-   	{
-		switch (event.type)
-		{
-			case SDL_MOUSEBUTTONDOWN:
-				switch(event.button.button)
-				{
-					case SDL_BUTTON_RIGHT:
-						rightMouse = 1;
-						break;
-					case SDL_BUTTON_LEFT:
-						leftMouse = 1;
-						break;
-				}
+	while (SDL_PollEvent(&event)) {
+		switch (event.type) {
+		case SDL_MOUSEBUTTONDOWN:
+			switch (event.button.button) {
+			case SDL_BUTTON_RIGHT:
+				rightMouse = 1;
 				break;
-			case SDL_KEYUP:
-				pressedKey = 0;
+			case SDL_BUTTON_LEFT:
+				leftMouse = 1;
 				break;
-			case SDL_KEYDOWN:
-				switch(event.key.keysym.sym)
-				{
-					case SDLK_ESCAPE:
-						localKey = 0x1;
-						break;
-					case SDLK_RETURN:
-						localKey = 0x1C;
-						break;
-					case SDLK_LSHIFT:
-					case SDLK_RSHIFT:
-						localKey = 0x36;
-						break;
-					case SDLK_LALT:
-					case SDLK_RALT:
-						localKey = 0x38;
-						break;
-					case SDLK_LCTRL:
-					case SDLK_RCTRL:      
-						localKey = 0x1D;
-						break;
-					case SDLK_PAGEUP:
-						localKey = 0x49;
-						break;
-					case SDLK_p:  // pause
-						localKey = 'p';
-						break;
-					case SDLK_h:  // holomap
-						localKey = 'h';
-						break;
-					case SDLK_j:
-						localKey = 'j';
-						break;
-					case SDLK_w: // Especial key to do the action
-						localKey = 'w';
-						break;
-					case SDLK_F6:
-						localKey = 0x40;
-						break;
-					case SDLK_F12: 
-						toggle_fullscreen();
-						break;
+			}
+			break;
+		case SDL_KEYUP:
+			pressedKey = 0;
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym) {
+			case SDLK_ESCAPE:
+				localKey = 0x1;
+				break;
+			case SDLK_RETURN:
+				localKey = 0x1C;
+				break;
+			case SDLK_LSHIFT:
+			case SDLK_RSHIFT:
+				localKey = 0x36;
+				break;
+			case SDLK_LALT:
+			case SDLK_RALT:
+				localKey = 0x38;
+				break;
+			case SDLK_LCTRL:
+			case SDLK_RCTRL:
+				localKey = 0x1D;
+				break;
+			case SDLK_PAGEUP:
+				localKey = 0x49;
+				break;
+			case SDLK_p:  // pause
+				localKey = 'p';
+				break;
+			case SDLK_h:  // holomap
+				localKey = 'h';
+				break;
+			case SDLK_j:
+				localKey = 'j';
+				break;
+			case SDLK_w: // Especial key to do the action
+				localKey = 'w';
+				break;
+			case SDLK_F6:
+				localKey = 0x40;
+				break;
+			case SDLK_F12:
+				toggle_fullscreen();
+				break;
 
-					#ifdef GAMEMOD
-						case SDLK_r:  // next room
-							localKey = 'r';
-							break;
-						case SDLK_f:  // previous room
-							localKey = 'f';
-							break;
-						case SDLK_t:  // apply celling grid
-							localKey = 't';
-							break;
-						case SDLK_g:  // increase celling grid index
-							localKey = 'g';
-							break;
-						case SDLK_b:  // decrease celling grid index
-							localKey = 'b';
-							break;
-					#endif
-
-						
-					
-					default:
-						break;
-				}
+#ifdef GAMEMOD
+			case SDLK_r:  // next room
+				localKey = 'r';
 				break;
+			case SDLK_f:  // previous room
+				localKey = 'f';
+				break;
+			case SDLK_t:  // apply celling grid
+				localKey = 't';
+				break;
+			case SDLK_g:  // increase celling grid index
+				localKey = 'g';
+				break;
+			case SDLK_b:  // decrease celling grid index
+				localKey = 'b';
+				break;
+#endif
+
+
+
+			default:
+				break;
+			}
+			break;
 		}
 	}
 
-	for (j = 0; j < size; j++)
-	{
-		if (keyboard[j])
-		{
-			switch (j)
-			{
-				case SDLK_SPACE:
-					localKey = 0x39;
-					break;
-				case SDLK_UP:
-				case SDLK_KP8:
-					localKey = 0x48;
-					break;
-				case SDLK_DOWN:
-				case SDLK_KP2:
-					localKey = 0x50;
-					break;
-				case SDLK_LEFT:
-				case SDLK_KP4:
-					localKey = 0x4B;
-					break;
-				case SDLK_RIGHT:
-				case SDLK_KP6:
-					localKey = 0x4D;
-					break;
-				#ifdef GAMEMOD
-					// change grid camera
-					case SDLK_s:
-						localKey = 's';
-						break;
-					case SDLK_x:
-						localKey = 'x';
-						break;
-					case SDLK_z:
-						localKey = 'z';
-						break;
-					case SDLK_c:
-						localKey = 'c';
-						break;
-				#endif
+	for (j = 0; j < size; j++) {
+		if (keyboard[j]) {
+			switch (j) {
+			case SDLK_SPACE:
+				localKey = 0x39;
+				break;
+			case SDLK_UP:
+			case SDLK_KP8:
+				localKey = 0x48;
+				break;
+			case SDLK_DOWN:
+			case SDLK_KP2:
+				localKey = 0x50;
+				break;
+			case SDLK_LEFT:
+			case SDLK_KP4:
+				localKey = 0x4B;
+				break;
+			case SDLK_RIGHT:
+			case SDLK_KP6:
+				localKey = 0x4D;
+				break;
+#ifdef GAMEMOD
+				// change grid camera
+			case SDLK_s:
+				localKey = 's';
+				break;
+			case SDLK_x:
+				localKey = 'x';
+				break;
+			case SDLK_z:
+				localKey = 'z';
+				break;
+			case SDLK_c:
+				localKey = 'c';
+				break;
+#endif
 			}
 		}
 
-		for (i = 0; i < 28; i++)
-		{
-			if (pressedKeyMap[i] == localKey)
-			{
+		for (i = 0; i < 28; i++) {
+			if (pressedKeyMap[i] == localKey) {
 				find = i;
 				found = 1;
 				break;
 			}
 		}
 
-		if (found != 0)
-		{
+		if (found != 0) {
 			temp = pressedKeyCharMap[find];
 			temp2 = temp & 0x00FF;
 
-			if (temp2 == 0)
-			{
+			if (temp2 == 0) {
 				// pressed valid keys
-				if (!(localKey & 0x80))
-				{
-					pressedKey |= (temp & 0xFF00) >> 8;		
-				}
-				else
-				{
+				if (!(localKey & 0x80)) {
+					pressedKey |= (temp & 0xFF00) >> 8;
+				} else {
 					pressedKey &= -((temp & 0xFF00) >> 8);
 				}
 			}
 			// pressed inactive keys
-			else
-			{
+			else {
 				skipedKey |= (temp & 0xFF00) >> 8;
 			}
 		}
 
 		//if (found==0)
-			skipIntro = localKey;
+		skipIntro = localKey;
 	}
 
 	//printf("key: %d %d %d %d\n",pressedKey,skipedKey,skipIntro,localKey);
@@ -559,39 +518,37 @@ void read_keys()
 	@param Y Y coordinate in screen
 	@param string text to display
 	@param center if the text should be centered accoding with the giving positions */
-void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center)
-{
-    SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
-    SDL_Color *forecol = &white;
-    SDL_Rect rectangle;
+void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
+	SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
+	SDL_Color *forecol = &white;
+	SDL_Rect rectangle;
 
-    SDL_Surface *text;
+	SDL_Surface *text;
 
-    text = TTF_RenderText_Solid(font, string, *forecol);
+	text = TTF_RenderText_Solid(font, string, *forecol);
 
-	if(center)
-		rectangle.x = X - (text->w/2);
+	if (center)
+		rectangle.x = X - (text->w / 2);
 	else
 		rectangle.x = X;
-    rectangle.y = Y - 2;
-    rectangle.w = text->w;
-    rectangle.h = text->h;
+	rectangle.y = Y - 2;
+	rectangle.w = text->w;
+	rectangle.h = text->h;
 
-    SDL_BlitSurface(text, NULL, screenBuffer, &rectangle);
-    SDL_FreeSurface(text);
+	SDL_BlitSurface(text, NULL, screenBuffer, &rectangle);
+	SDL_FreeSurface(text);
 }
 
 /** Gets SDL mouse positions
 	@param mouseData structure that contains mouse position info */
-void get_mouse_positions(MouseStatusStruct *mouseData)
-{
+void get_mouse_positions(MouseStatusStruct *mouseData) {
 	SDL_GetMouseState(&mouseData->X, &mouseData->Y);
 
-    mouseData->left = leftMouse;
-    mouseData->right = rightMouse;
+	mouseData->left = leftMouse;
+	mouseData->right = rightMouse;
 
-    leftMouse = 0;
-    rightMouse = 0;
+	leftMouse = 0;
+	rightMouse = 0;
 }
 
 #endif

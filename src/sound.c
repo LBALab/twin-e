@@ -1,9 +1,9 @@
 /** @file sound.c
-	@brief 
+	@brief
 	This file contains music playing routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -43,9 +43,8 @@ Mix_Chunk *sample;
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */
-void sample_volume(int32 channel, int32 volume)
-{
-	Mix_Volume(channel,volume/2);
+void sample_volume(int32 channel, int32 volume) {
+	Mix_Volume(channel, volume / 2);
 }
 
 /** Play FLA movie samples
@@ -54,47 +53,43 @@ void sample_volume(int32 channel, int32 volume)
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
 	@param y unknown y variable*/
-void play_fla_sample(int32 index,int32 frequency, int32 repeat, int32 x, int32 y)
-{
-	if(!cfgfile.NoSound)
-	{
+void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
+	if (!cfgfile.NoSound) {
 		int32 sampSize = 0;
 		int8 sampfile[256];
 		SDL_RWops *rw;
 		uint8* sampPtr;
-		
-		sprintf(sampfile, FLA_DIR "//%s",HQR_FLASAMP_FILE);
+
+		sprintf(sampfile, FLA_DIR "//%s", HQR_FLASAMP_FILE);
 
 		sampSize = hqr_getalloc_entry(&sampPtr, sampfile, index);
 
 		// Fix incorrect sample files first byte
-		if(*sampPtr!='C')
+		if (*sampPtr != 'C')
 			*sampPtr = 'C';
 
-		rw = SDL_RWFromMem(sampPtr,sampSize);
-		sample=Mix_LoadWAV_RW(rw,1);
+		rw = SDL_RWFromMem(sampPtr, sampSize);
+		sample = Mix_LoadWAV_RW(rw, 1);
 
 		sample_volume(-1, cfgfile.WaveVolume);
 
-		if(Mix_PlayChannel(-1, sample, repeat-1)==-1)
-			printf("Error while playing VOC: Sample %d \n",index);
-		
-		if(cfgfile.Debug)
-			printf("Playing VOC: Sample %d\n",index);
+		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
+			printf("Error while playing VOC: Sample %d \n", index);
+
+		if (cfgfile.Debug)
+			printf("Playing VOC: Sample %d\n", index);
 		free(sampPtr);
 	}
 }
 
 /** Stop samples */
-void stop_sample()
-{
-	if(!cfgfile.NoSound)
-	{
+void stop_sample() {
+	if (!cfgfile.NoSound) {
 		Mix_HaltChannel(-1);
 		//clean up
 		Mix_FreeChunk(sample);
-		sample=NULL; //make sure we free it
-		if(cfgfile.Debug)
+		sample = NULL; //make sure we free it
+		if (cfgfile.Debug)
 			printf("Stop VOC sample\n");
 	}
 }

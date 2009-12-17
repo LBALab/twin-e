@@ -1,9 +1,9 @@
 /** @file interface.h
 	@brief
 	This file contains in-game interface routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 

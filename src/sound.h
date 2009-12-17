@@ -1,9 +1,9 @@
 /** @file sound.h
-	@brief 
+	@brief
 	This file contains music playing routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -41,7 +41,7 @@ void sample_volume(int32 channel, int32 volume);
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
 	@param y unknown y variable*/
-void play_fla_sample(int32 index,int32 frequency, int32 repeat, int32 x, int32 y);
+void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y);
 
 /** Stop samples */
 void stop_sample();
