@@ -45,10 +45,8 @@ uint8* animTable[NUM_ANIMS];
 /** Table with all loaded animations sizes */
 uint32   animSizeTable[NUM_ANIMS];
 
-ActorStruct *processActorVar1; // actor pointer
-int16 processActorVar2; // X
-int16 processActorVar3; // Y
-int16 processActorVar4; // Z
+ActorStruct *processActorPtr; // actor pointer
+
 int16 processActorVar5;
 int16 processActorVar6;
 int16 processActorSub2Var0;

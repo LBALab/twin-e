@@ -43,6 +43,13 @@ int16 processActorY;
 /** Process actor Z coordinate */
 int16 processActorZ;
 
+/** Previous process actor X coordinate */
+int16 previousActorX; // processActorVar2
+/** Previous process actor Y coordinate */
+int16 previousActorY; // processActorVar3
+/** Previous process actor Z coordinate */
+int16 previousActorZ; // processActorVar4
+
 
 /** Get shadow position
 	@param X Shadow X coordinate

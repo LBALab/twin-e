@@ -592,14 +592,14 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 	actor = &sceneActors[actorIdx];
 
 	currentlyProcessedActorNum = actorIdx;
-	processActorVar1 = actor;
+	processActorPtr = actor;
 
 	if (actor->entity == -1)
 		return;
 
-	processActorVar2 = actor->X;
-	processActorVar3 = actor->Y;
-	processActorVar4 = actor->Z;
+	previousActorX = actor->X;
+	previousActorY = actor->Y;
+	previousActorZ = actor->Z;
 
 	if (actor->staticFlags.bIsSpriteActor) { // is sprite actor
 		if (actor->strengthOfHit) {
