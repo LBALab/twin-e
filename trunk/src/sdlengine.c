@@ -43,6 +43,7 @@
 #include "music.h"
 #include "lbaengine.h"
 #include "debug.h"
+#include "keyboard.h"
 
 /** SDL exit callback */
 static void atexit_callback(void);
@@ -60,19 +61,6 @@ SDL_Surface *screenBuffer = NULL;
 SDL_Color screenColors[256];
 /** Auxiliar surface table  */
 SDL_Surface *surfaceTable[16];
-
-// Keyboard variables
-/** Skipped key - key1 */
-int16 skipedKey;
-/** Pressed key - printTextVar12 */
-int16 pressedKey;
-//int printTextVar13;
-/** Skip intro variable */
-int16 skipIntro;
-/** Current key value */
-int16 currentKey;
-/** Auxiliar key value */
-int16 key;
 
 #ifdef GAMEMOD
 TTF_Font *font;

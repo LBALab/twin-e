@@ -35,6 +35,7 @@
 #include "scene.h"
 #include "actor.h"
 #include "renderer.h"
+#include "movements.h"
 
 /** Preload all animations */
 void preload_animations() {

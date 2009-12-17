@@ -34,6 +34,7 @@
 #include "lbaengine.h"
 #include "scene.h"
 #include "main.h"
+#include "redraw.h"
 
 int32 useFreeCamera = 0;
 int32 canChangeScenes = 0;

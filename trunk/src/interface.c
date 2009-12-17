@@ -28,6 +28,7 @@
 #include "interface.h"
 #include "sdlengine.h"
 #include "main.h"
+#include "lbaengine.h"
 
 /** Draw button line
 	@param startWidth width value where the line starts

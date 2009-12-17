@@ -38,6 +38,7 @@
 #include "dialogues.h"
 #include "interface.h"
 #include "redraw.h"
+#include "keyboard.h"
 
 /** Plasma effect file size: RESS.hqr:51 */
 #define PLASMA_EFFECT_FILESIZE	262176

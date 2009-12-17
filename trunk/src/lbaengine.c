@@ -39,6 +39,8 @@
 #include "resources.h"
 #include "renderer.h"
 #include "animations.h"
+#include "movements.h"
+#include "keyboard.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -46,12 +48,6 @@
 
 int32 isTimeFreezed = 0;
 int32 saveFreezedTime = 0;
-
-int32 heroPressedKey;
-int32 heroPressedKey2;
-
-int32 loopPressedKey; // mainLoopVar5
-
 
 void freeze_time() {
 	if (!isTimeFreezed)
@@ -65,117 +61,7 @@ void unfreeze_time() {
 		lbaTime = saveFreezedTime;
 }
 
-void process_control_mode(int32 actorIdx) {
-	ActorStruct *actor = &sceneActors[actorIdx];
 
-	if (actor->entity == -1)
-		return;
-
-	if (actor->dynamicFlags.bIsFalling) {
-		int16 tempAngle = 0;
-
-		if (actor->controlMode != 1)
-			return;
-
-		if (key & 4)
-			tempAngle = 0x100;
-
-		if (key & 8)
-			tempAngle = -0x100;
-
-		move_actor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->time);
-
-		heroPressedKey = key;
-	} else {
-		if (!actor->staticFlags.bIsSpriteActor) {
-			if (actor->controlMode != 1) {
-				actor->angle = get_real_angle(&actor->time);
-			}
-		}
-
-		switch (actor->controlMode) {
-		case 0: // NO_MOVE
-			break;
-		case 1: // MOVE_MANUAL
-			if (!actorIdx) {
-				heroAction = 0;
-
-				//TODO: add action key like in LBA2
-
-				//TODO: do behaviour actions
-			}
-
-			if (loopPressedKey == 0 || heroAction != 0) {
-				int16 tempAngle;
-
-				if (key & 3)  // if continue walking
-					heroMoved = 0; // don't break animation
-
-				if (key != heroPressedKey || loopPressedKey != heroPressedKey2) {
-					if (heroMoved != 0) {
-						init_anim(ANIM_STANDING, 0, 255, actorIdx);
-					}
-				}
-
-				heroMoved = 0;
-
-				if (key & 1) { // walk forward
-					//if (currentActorInZoneProcess == 0) // TODO
-					{
-						init_anim(ANIM_FORWARD, 0, 255, actorIdx);
-					}
-					heroMoved = 1;
-				}
-
-				if (key & 2 && !(key & 1)) { // walk backward
-					init_anim(ANIM_BACKWARD, 0, 255, actorIdx);
-					heroMoved = 1;
-				}
-
-				if (key & 4) { // turn left
-					heroMoved = 1;
-					if (actor->anim == 0) {
-						init_anim(ANIM_TURNLEFT, 0, 255, actorIdx);
-					} else {
-						if (!actor->dynamicFlags.bIsRotationByAnim) {
-							actor->angle = get_real_angle(&actor->time);
-						}
-					}
-				}
-
-				if (key & 8) { // turn right
-					heroMoved = 1;
-					if (actor->anim == 0) {
-						init_anim(ANIM_TURNRIGHT, 0, 255, actorIdx);
-					} else {
-						if (!actor->dynamicFlags.bIsRotationByAnim) {
-							actor->angle = get_real_angle(&actor->time);
-						}
-					}
-				}
-
-				tempAngle = 0;
-
-				if (key & 4) {
-					tempAngle = 0x100;
-				}
-
-				if (key & 8) {
-					tempAngle = -0x100;
-				}
-
-				move_actor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->time);
-
-				heroPressedKey  = key;
-				heroPressedKey2 = loopPressedKey;
-
-			}
-			break;
-			/*default:
-				printf("Unimplemented control mode %d\n", actor->controlMode);*/
-		}
-	}
-}
 
 void recenter_screen() {
 	if ((loopPressedKey & 2)) { //  && disableScreenRecenter == 0 recenter screen
@@ -216,7 +102,7 @@ int32 run_game_engine() { // mainLoopInteration
 	for (a = 0; a < sceneNumActors; a++) {
 		ActorStruct *actor = &sceneActors[a];
 
-		process_control_mode(a);
+		process_actor_movements(a);
 		// TODO: process_track_script(a);
 		process_actor_animations(a);
 	}
