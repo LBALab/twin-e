@@ -1,9 +1,9 @@
 /** @file scene.c
 	@brief
 	This file contains main scenario routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -42,203 +42,235 @@
 uint8* currentScene;
 
 
-void set_actor_staticflags(int32 actorIdx, uint16 staticFlags)
-{
-	if(staticFlags & 0x1)
-    {
+void set_actor_staticflags(int32 actorIdx, uint16 staticFlags) {
+	if (staticFlags & 0x1) {
 		sceneActors[actorIdx].staticFlags.bComputeCollisionWithObj = 1;
-    }
-    if(staticFlags & 0x2)
-    {
+	}
+	if (staticFlags & 0x2) {
 		sceneActors[actorIdx].staticFlags.bComputeCollisionWithBricks = 1;
-    }
-    if(staticFlags & 0x4)
-    {
+	}
+	if (staticFlags & 0x4) {
 		sceneActors[actorIdx].staticFlags.bIsZonable = 1;
-    }
-    if(staticFlags & 0x8)
-    {
+	}
+	if (staticFlags & 0x8) {
 		sceneActors[actorIdx].staticFlags.bUsesClipping = 1;
-    }
-    if(staticFlags & 0x10)
-    {
+	}
+	if (staticFlags & 0x10) {
 		sceneActors[actorIdx].staticFlags.bCanBePushed = 1;
-    }
-    if(staticFlags & 0x20)
-    {
+	}
+	if (staticFlags & 0x20) {
 		sceneActors[actorIdx].staticFlags.bComputeLowCollision = 1;
-    }
-    if(staticFlags & 0x40)
-    {
+	}
+	if (staticFlags & 0x40) {
 		sceneActors[actorIdx].staticFlags.bCanDrown = 1;
-    }
-    if(staticFlags & 0x80)
-    {
+	}
+	if (staticFlags & 0x80) {
 		sceneActors[actorIdx].staticFlags.bUnk80 = 1;
-    }
+	}
 
-    if(staticFlags & 0x100)
-    {
+	if (staticFlags & 0x100) {
 		sceneActors[actorIdx].staticFlags.bUnk0100 = 1;
-    }
-    if(staticFlags & 0x200)
-    {
+	}
+	if (staticFlags & 0x200) {
 		sceneActors[actorIdx].staticFlags.bIsHidden = 1;
-    }
-    if(staticFlags & 0x400)
-    {
+	}
+	if (staticFlags & 0x400) {
 		sceneActors[actorIdx].staticFlags.bIsSpriteActor = 1;
-    }
-    if(staticFlags & 0x800)
-    {
+	}
+	if (staticFlags & 0x800) {
 		sceneActors[actorIdx].staticFlags.bCanFall = 1;
-    }
-    if(staticFlags & 0x1000)
-    {
+	}
+	if (staticFlags & 0x1000) {
 		sceneActors[actorIdx].staticFlags.bDoesntCastShadow = 1;
-    }
-    if(staticFlags & 0x2000)
-    {
+	}
+	if (staticFlags & 0x2000) {
 		//sceneActors[actorIdx].staticFlags.bIsBackgrounded = 1;
-    }
-    if(staticFlags & 0x4000)
-    {
+	}
+	if (staticFlags & 0x4000) {
 		sceneActors[actorIdx].staticFlags.bIsCarrierActor = 1;
-    }
-    if(staticFlags & 0x8000)
-    {
+	}
+	if (staticFlags & 0x8000) {
 		sceneActors[actorIdx].staticFlags.bUseMiniZv = 1;
-    }
+	}
 }
 
-void load_scene()
-{
+void load_scene() {
 	int32 i;
-	int32 scriptSize=0;
+	int32 scriptSize = 0;
 	uint8* localScene = currentScene;
 
 	// load scene ambience properties
 	currentTextBank = *(localScene++);
 	currentGameOverScene = *(localScene++);
-	localScene+=4;
+	localScene += 4;
 
-	alphaLight = *((uint16*)localScene); localScene+=2;
-	betaLight = *((uint16*)localScene);  localScene+=2;
+	alphaLight = *((uint16*)localScene);
+	localScene += 2;
+	betaLight = *((uint16*)localScene);
+	localScene += 2;
 
-	sampleAmbience.info0 = *((uint16*)localScene);  localScene+=2;
-	sampleRepeat.info0 = *((uint16*)localScene);  localScene+=2;
-	sampleRound.info0 = *((uint16*)localScene);  localScene+=2;
+	sampleAmbience.info0 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRepeat.info0 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRound.info0 = *((uint16*)localScene);
+	localScene += 2;
 
-	sampleAmbience.info1 = *((uint16*)localScene);  localScene+=2;
-	sampleRepeat.info1 = *((uint16*)localScene);  localScene+=2;
-	sampleRound.info1 = *((uint16*)localScene);  localScene+=2;
+	sampleAmbience.info1 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRepeat.info1 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRound.info1 = *((uint16*)localScene);
+	localScene += 2;
 
-	sampleAmbience.info2 = *((uint16*)localScene);  localScene+=2;
-	sampleRepeat.info2 = *((uint16*)localScene);  localScene+=2;
-	sampleRound.info2 = *((uint16*)localScene);  localScene+=2;
+	sampleAmbience.info2 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRepeat.info2 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRound.info2 = *((uint16*)localScene);
+	localScene += 2;
 
-	sampleAmbience.info3 = *((uint16*)localScene);  localScene+=2;
-	sampleRepeat.info3 = *((uint16*)localScene);  localScene+=2;
-	sampleRound.info3 = *((uint16*)localScene);  localScene+=2;
-	
-	sampleMinDelay = *((uint16*)localScene);  localScene+=2;
-	sampleMinDelayRnd = *((uint16*)localScene);  localScene+=2;
+	sampleAmbience.info3 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRepeat.info3 = *((uint16*)localScene);
+	localScene += 2;
+	sampleRound.info3 = *((uint16*)localScene);
+	localScene += 2;
+
+	sampleMinDelay = *((uint16*)localScene);
+	localScene += 2;
+	sampleMinDelayRnd = *((uint16*)localScene);
+	localScene += 2;
 
 	sceneMusic = *(localScene++);
 
 	// load hero properties
-	sceneHeroX = *((uint16*)localScene);  localScene+=2;
-	sceneHeroY = *((uint16*)localScene);  localScene+=2;
-	sceneHeroZ = *((uint16*)localScene);  localScene+=2;
+	sceneHeroX = *((uint16*)localScene);
+	localScene += 2;
+	sceneHeroY = *((uint16*)localScene);
+	localScene += 2;
+	sceneHeroZ = *((uint16*)localScene);
+	localScene += 2;
 
-	scriptSize = *((uint16*)localScene);  localScene+=2;
+	scriptSize = *((uint16*)localScene);
+	localScene += 2;
 	sceneHero->moveScript = localScene;
-	localScene+=scriptSize;
+	localScene += scriptSize;
 
-	scriptSize = *((uint16*)localScene);  localScene+=2;
+	scriptSize = *((uint16*)localScene);
+	localScene += 2;
 	sceneHero->lifeScript = localScene;
-	localScene+=scriptSize;
+	localScene += scriptSize;
 
-	sceneNumActors = *((uint16*)localScene);  localScene+=2;
+	sceneNumActors = *((uint16*)localScene);
+	localScene += 2;
 
-	for(i=1; i < sceneNumActors; i++)
-	{
-		uint16 staticFlags = *((uint16*)localScene);  localScene+=2;	
+	for (i = 1; i < sceneNumActors; i++) {
+		uint16 staticFlags = *((uint16*)localScene);
+		localScene += 2;
 		set_actor_staticflags(i, staticFlags);
 
-		sceneActors[i].entity = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].entity = *((uint16*)localScene);
+		localScene += 2;
 
-		if(!sceneActors[i].staticFlags.bIsSpriteActor)
-		{
+		if (!sceneActors[i].staticFlags.bIsSpriteActor) {
 			hqr_getalloc_entry(&sceneActors[i].entityDataPtr, HQR_FILE3D_FILE, sceneActors[i].entity);
 		}
 
 		sceneActors[i].body = *(localScene++);
 		sceneActors[i].anim = *(localScene++);
-		sceneActors[i].sprite = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].X = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].Y = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].Z = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].sprite = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].X = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].Y = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].Z = *((uint16*)localScene);
+		localScene += 2;
 		sceneActors[i].strengthOfHit = *(localScene++);
-		sceneActors[i].bonusParameter = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].bonusParameter = *((uint16*)localScene);
+		localScene += 2;
 		sceneActors[i].bonusParameter &= 0xFE;
-		sceneActors[i].angle = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].speed = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].controlMode = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].info0 = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].info1 = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].info2 = *((uint16*)localScene);  localScene+=2;
-		sceneActors[i].info3 = *((uint16*)localScene);  localScene+=2;
+		sceneActors[i].angle = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].speed = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].controlMode = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].info0 = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].info1 = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].info2 = *((uint16*)localScene);
+		localScene += 2;
+		sceneActors[i].info3 = *((uint16*)localScene);
+		localScene += 2;
 		sceneActors[i].followedActor = sceneActors[i].info3;
 		sceneActors[i].bonusAmount = *(localScene++);
 		sceneActors[i].talkColor = *(localScene++);
 		sceneActors[i].armor = *(localScene++);
 		sceneActors[i].life = *(localScene++);
 
-		scriptSize = *((uint16*)localScene);  localScene+=2;
+		scriptSize = *((uint16*)localScene);
+		localScene += 2;
 		sceneActors[i].moveScript = localScene;
-		localScene+=scriptSize;
+		localScene += scriptSize;
 
-		scriptSize = *((uint16*)localScene);  localScene+=2;
+		scriptSize = *((uint16*)localScene);
+		localScene += 2;
 		sceneActors[i].lifeScript = localScene;
-		localScene+=scriptSize;
+		localScene += scriptSize;
 	}
 
-	sceneNumZones = *((uint16*)localScene);  localScene+=2;
+	sceneNumZones = *((uint16*)localScene);
+	localScene += 2;
 
-	for(i=0; i < sceneNumZones; i++)
-	{
-		sceneZones[i].bottomLeft.X = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].bottomLeft.Y = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].bottomLeft.Z = *((uint16*)localScene);  localScene+=2;
+	for (i = 0; i < sceneNumZones; i++) {
+		sceneZones[i].bottomLeft.X = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].bottomLeft.Y = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].bottomLeft.Z = *((uint16*)localScene);
+		localScene += 2;
 
-		sceneZones[i].topRight.X = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].topRight.Y = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].topRight.Z = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].topRight.X = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].topRight.Y = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].topRight.Z = *((uint16*)localScene);
+		localScene += 2;
 
-		sceneZones[i].type = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].type = *((uint16*)localScene);
+		localScene += 2;
 
-		sceneZones[i].info0 = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].info1 = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].info2 = *((uint16*)localScene);  localScene+=2;
-		sceneZones[i].info3 = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].info0 = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].info1 = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].info2 = *((uint16*)localScene);
+		localScene += 2;
+		sceneZones[i].info3 = *((uint16*)localScene);
+		localScene += 2;
 
-		sceneZones[i].snap = *((uint16*)localScene);  localScene+=2;
+		sceneZones[i].snap = *((uint16*)localScene);
+		localScene += 2;
 	}
 
-	sceneNumTracks = *((uint16*)localScene);  localScene+=2;
+	sceneNumTracks = *((uint16*)localScene);
+	localScene += 2;
 
-	for(i=0; i < sceneNumTracks; i++)
-	{
-		sceneTracks[i].X = *((uint16*)localScene);  localScene+=2;
-		sceneTracks[i].Y = *((uint16*)localScene);  localScene+=2;
-		sceneTracks[i].Z = *((uint16*)localScene);  localScene+=2;
+	for (i = 0; i < sceneNumTracks; i++) {
+		sceneTracks[i].X = *((uint16*)localScene);
+		localScene += 2;
+		sceneTracks[i].Y = *((uint16*)localScene);
+		localScene += 2;
+		sceneTracks[i].Z = *((uint16*)localScene);
+		localScene += 2;
 	}
 }
 
 
-int32 init_scene(int32 index)
-{
+int32 init_scene(int32 index) {
 	int32 sceneSize;
 
 	// load scene from file
@@ -249,13 +281,12 @@ int32 init_scene(int32 index)
 	return 1;
 }
 
-void change_scene()
-{
+void change_scene() {
 	int32 previousSceneIdx, a;
 	// change twinsen house destroyed hard-coded
 	if (needChangeScene == 4 && gameFlags[30] != 0)
 		needChangeScene = 118;
-	
+
 	// local backup previous scene
 	previousSceneIdx = currentSceneIdx;
 
@@ -274,7 +305,7 @@ void change_scene()
 	if (needChangeScene == 116 || needChangeScene == 117)
 		currentTextBank = 10;
 
-	init_dialogue_bank(currentTextBank+3);
+	init_dialogue_bank(currentTextBank + 3);
 
 	init_grid(needChangeScene);
 
@@ -288,7 +319,7 @@ void change_scene()
 	newCameraY = sceneHero->Y >> 8;
 	newCameraZ = sceneHero->X >> 9;
 
-	set_light_vector(alphaLight,betaLight,0); // TODO: set light vector
+	set_light_vector(alphaLight, betaLight, 0); // TODO: set light vector
 
 	// TODO: backup previous scene vars and save game
 
@@ -297,8 +328,7 @@ void change_scene()
 	// TODO: reset Hero vars
 
 	// TODO: load scene actors
-	for (a = 1; a < sceneNumActors; a++)
-	{
+	for (a = 1; a < sceneNumActors; a++) {
 		init_actor(a);
 	}
 
@@ -309,7 +339,7 @@ void change_scene()
 	newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
 
 	// TODO: play midi music (scene music)
-	play_midi_music(sceneMusic,-1);
+	play_midi_music(sceneMusic, -1);
 
 	// TODO: all the other change scene definitions
 }

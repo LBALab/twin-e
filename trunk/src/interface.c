@@ -1,9 +1,9 @@
 /** @file interface.c
 	@brief
 	This file contains in-game interface routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -35,8 +35,7 @@
 	@param endWidth width value where the line ends
 	@param endHeight height value where the line ends
 	@param lineColor line color in the current palette */
-void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor)
-{
+void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor) {
 	int32 temp;
 	int16 flag;
 	int32 flag2;
@@ -47,8 +46,7 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	int32 currentLineColor = lineColor;
 
 	// draw line from left to right
-	if (startWidth > endWidth) 
-	{
+	if (startWidth > endWidth) {
 		temp = endWidth;
 		endWidth = startWidth;
 		startWidth = temp;
@@ -60,22 +58,16 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 
 	flag = 0;
 
-	if (startWidth < SCREEN_TEXTLIMIT_LEFT)
-	{
+	if (startWidth < SCREEN_TEXTLIMIT_LEFT) {
 		flag |= 1;
-	}
-	else
-	{
+	} else {
 		if (startWidth > SCREEN_TEXTLIMIT_RIGHT)
 			return;
 	}
 
-	if (startHeight < SCREEN_TEXTLIMIT_TOP)
-	{
+	if (startHeight < SCREEN_TEXTLIMIT_TOP) {
 		flag |= 8;
-	}
-	else
-	{
+	} else {
 		if (startHeight > SCREEN_TEXTLIMIT_BOTTOM)
 			flag |= 4;
 	}
@@ -87,12 +79,9 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	if (endWidth <= SCREEN_TEXTLIMIT_LEFT)
 		flag |= 2;
 
-	if (endHeight < SCREEN_TEXTLIMIT_TOP)
-	{
+	if (endHeight < SCREEN_TEXTLIMIT_TOP) {
 		flag |= 8;
-	}
-	else
-	{
+	} else {
 		if (endHeight > SCREEN_TEXTLIMIT_BOTTOM)
 			flag |= 4;
 	}
@@ -105,8 +94,7 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	flag2 = 640;//SCREEN_WIDTH;
 	endWidth -= startWidth;
 	endHeight -= startHeight;
-	if (endHeight < 0)
-	{
+	if (endHeight < 0) {
 		flag2 = -flag2;
 		endHeight = -endHeight;
 	}
@@ -114,8 +102,7 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	out = frontVideoBuffer + screenLockupTable[startHeight] + startWidth;
 
 	color = currentLineColor;
-	if (endWidth < endHeight)      // significant slope
-	{
+	if (endWidth < endHeight) {    // significant slope
 		xchg = endWidth;
 		endWidth = endHeight;
 		endHeight = xchg;
@@ -124,39 +111,31 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 		startHeight = endWidth;
 		endHeight <<= 1;
 		endWidth++;
-		do
-		{
+		do {
 			*out = (uint8) color;
 			startHeight -= endHeight;
-			if (startHeight > 0)
-			{
+			if (startHeight > 0) {
 				out += flag2;
-			}
-			else
-			{
+			} else {
 				startHeight += var2;
 				out += flag2 + 1;
 			}
-		}while (--endWidth);
-	}
-	else      // reduced slope
-	{
+		} while (--endWidth);
+	} else {   // reduced slope
 		var2 = endWidth;
 		var2 <<= 1;
 		startHeight = endWidth;
 		endHeight <<= 1;
 		endWidth++;
-		do
-		{
+		do {
 			*out = (uint8) color;
 			out++;
 			startHeight -= endHeight;
-			if (startHeight < 0)
-			{
+			if (startHeight < 0) {
 				startHeight += var2;
 				out += flag2;
 			}
-		}while (--endWidth);
+		} while (--endWidth);
 	}
 }
 
@@ -169,8 +148,7 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	@param leftDest start width to draw the button in destination buffer
 	@param topDest start height to draw the button in destination buffer
 	@dest destination screen buffer, in this case front buffer */
-void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest)
-{
+void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest) {
 	int32 width;
 	int32 height;
 	int8 *s;
@@ -192,10 +170,8 @@ void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, in
 	left >>= 2;
 	temp3 &= 3;
 
-	for(j = 0; j < height; j++)
-	{
-		for (i = 0; i < width; i++)
-		{
+	for (j = 0; j < height; j++) {
+		for (i = 0; i < width; i++) {
 			*(d++) = *(s++);
 		}
 
@@ -210,17 +186,16 @@ void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, in
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj)
-{
-    uint8 *pos;
-    int32 width;
-    int32 height;
-    int32 height2;
-    int32 temp;
-    int32 localMode;
-    int32 var1;
-    int8 color;
-    int8 color2;
+void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj) {
+	uint8 *pos;
+	int32 width;
+	int32 height;
+	int32 height2;
+	int32 temp;
+	int32 localMode;
+	int32 var1;
+	int8 color;
+	int8 color2;
 
 	if (left > SCREEN_TEXTLIMIT_RIGHT)
 		return;
@@ -228,12 +203,12 @@ void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int3
 		return;
 	if (top > SCREEN_TEXTLIMIT_BOTTOM)
 		return;
-    if (bottom < SCREEN_TEXTLIMIT_TOP)
+	if (bottom < SCREEN_TEXTLIMIT_TOP)
 		return;
 
-    if (left < SCREEN_TEXTLIMIT_LEFT)
+	if (left < SCREEN_TEXTLIMIT_LEFT)
 		left = SCREEN_TEXTLIMIT_LEFT;
-    if (right > SCREEN_TEXTLIMIT_RIGHT)
+	if (right > SCREEN_TEXTLIMIT_RIGHT)
 		right = SCREEN_TEXTLIMIT_RIGHT;
 	if (top < SCREEN_TEXTLIMIT_TOP)
 		top = SCREEN_TEXTLIMIT_TOP;
@@ -244,72 +219,64 @@ void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int3
 	height2 = height = bottom - top;
 	height2++;
 
-    width = right - left + 1;
+	width = right - left + 1;
 
-    temp = 640 - width; // SCREEN_WIDTH
-    localMode = colorAdj;
+	temp = 640 - width; // SCREEN_WIDTH
+	localMode = colorAdj;
 
-    do
-	{
+	do {
 		var1 = width;
-		do
-		{
+		do {
 			color2 = color = *pos;
 			color2 &= 0xF0;
 			color &= 0x0F;
-            color -= localMode;
+			color -= localMode;
 			if (color < 0)
 				color = color2;
 			else
 				color += color2;
 			*pos++ = color;
 			var1--;
-		}
-		while (var1 > 0);
+		} while (var1 > 0);
 		pos += temp;
 		height2--;
-	}
-    while (height2 > 0);
+	} while (height2 > 0);
 }
 
-void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e)
-{
+void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e) {
 	uint8 *ptr;
 
-    int32 offset;
+	int32 offset;
 
-    int32 x;
-    int32 y;
+	int32 x;
+	int32 y;
 
-    if (left > SCREEN_TEXTLIMIT_RIGHT)
+	if (left > SCREEN_TEXTLIMIT_RIGHT)
 		return;
 	if (right < SCREEN_TEXTLIMIT_LEFT)
 		return;
 	if (top > SCREEN_TEXTLIMIT_BOTTOM)
 		return;
-    if (bottom < SCREEN_TEXTLIMIT_TOP)
+	if (bottom < SCREEN_TEXTLIMIT_TOP)
 		return;
 
 	// cropping
-    offset = -((right - left) - SCREEN_WIDTH);
+	offset = -((right - left) - SCREEN_WIDTH);
 
-    ptr = frontVideoBuffer + screenLockupTable[top] + left;
+	ptr = frontVideoBuffer + screenLockupTable[top] + left;
 
-    for (x = top; x < bottom; x++)
-	{
-		for (y = left; y < right; y++)
-		{
+	for (x = top; x < bottom; x++) {
+		for (y = left; y < right; y++) {
 			*(ptr++) = e;
 		}
 		ptr += offset;
 	}
 }
 
-void set_clip(int32 left, int32 top, int32 right, int32 bottom)
-{
+void set_clip(int32 left, int32 top, int32 right, int32 bottom) {
 	if (left < 0)
 		left = 0;
-    textWindowLeft = left;
+	textWindowLeft = left;
 
 	if (top < 0)
 		top = 0;
@@ -324,16 +291,14 @@ void set_clip(int32 left, int32 top, int32 right, int32 bottom)
 	textWindowBottom = bottom;
 }
 
-void save_clip() // saveTextWindow
-{
+void save_clip() { // saveTextWindow
 	textWindowLeftSave = textWindowLeft;
 	textWindowTopSave = textWindowTop;
 	textWindowRightSave = textWindowRight;
 	textWindowBottomSave = textWindowBottom;
 }
 
-void reset_clip()
-{
+void reset_clip() {
 	textWindowTop = textWindowLeft = SCREEN_TEXTLIMIT_TOP;
 	textWindowRight = SCREEN_TEXTLIMIT_RIGHT;
 	textWindowBottom = SCREEN_TEXTLIMIT_BOTTOM;

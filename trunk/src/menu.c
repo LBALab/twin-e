@@ -1,9 +1,9 @@
 /** @file menu.c
 	@brief
 	This file contains main menu create and processing routines.
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -68,13 +68,13 @@
 #define OPTIONSMENU_ADVOPTIONS		47
 
 /** Main menu background image number
-	
+
 	Used when returning from credit sequence to redraw the main menu background image */
-#define MAINMENU_BKGIMAGE		9999 
+#define MAINMENU_BKGIMAGE		9999
 /** Menu buttons width */
 #define MAINMENU_BUTTONWIDTH	320
 /** Used to calculate the spanning between button and screen */
-#define MAINMENU_BUTTONSPAN		550 
+#define MAINMENU_BUTTONSPAN		550
 
 /** Music volume button key */
 #define MUSICVOLUME				1
@@ -90,12 +90,12 @@
 /** Main Menu Settings
 
 	Used to create the game main menu. */
-int16 MainMenuSettings[]={
+int16 MainMenuSettings[] = {
 	0,          // Current loaded button (button number)
 	4,          // Num of buttons
 	200,        // Buttons box height ( is used to calc the height where the first button will appear )
 	0,          // unused
-	0,          
+	0,
 	20,         // new game
 	0,
 	21,         // continue game
@@ -108,7 +108,7 @@ int16 MainMenuSettings[]={
 /** Give Up Menu Settings
 
 	Used to create the in-game menu. */
-int16 GiveUpMenuSettings[]={
+int16 GiveUpMenuSettings[] = {
 	0,			// Current loaded button (button number)
 	2,			// Num of buttons
 	240,		// Buttons box height ( is used to calc the height where the first button will appear )
@@ -122,7 +122,7 @@ int16 GiveUpMenuSettings[]={
 /** Give Up Menu Settings
 
 	Used to create the in-game menu. This menu have one extra item to save the game */
-int16 GiveUpMenuSettingsWithSave[]={
+int16 GiveUpMenuSettingsWithSave[] = {
 	0,			// Current loaded button (button number)
 	3,			// Num of buttons
 	240,		// Buttons box height ( is used to calc the height where the first button will appear )
@@ -138,7 +138,7 @@ int16 GiveUpMenuSettingsWithSave[]={
 /** Options Menu Settings
 
 	Used to create the options menu. */
-int16 OptionsMenuSettings[]={
+int16 OptionsMenuSettings[] = {
 	0,			// Current loaded button (button number)
 	4,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -156,7 +156,7 @@ int16 OptionsMenuSettings[]={
 /** Advanced Options Menu Settings
 
 	Used to create the advanced options menu. */
-int16 AdvOptionsMenuSettings[]={
+int16 AdvOptionsMenuSettings[] = {
 	0,			// Current loaded button (button number)
 	5,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -169,14 +169,14 @@ int16 AdvOptionsMenuSettings[]={
 	31,			// Polygon detail (full|medium|low)
 	7,
 	32,			// Shadows (all|character|no)
-	8,			
+	8,
 	33,			// scenary zoon (on|off)
 };
 
 /** Save Game Management Menu Settings
 
 	Used to create the save game management menu. */
-int16 SaveManageMenuSettings[]={
+int16 SaveManageMenuSettings[] = {
 	0,			// Current loaded button (button number)
 	3,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -192,7 +192,7 @@ int16 SaveManageMenuSettings[]={
 /** Volume Menu Settings
 
 	Used to create the volume menu. */
-int16 VolumeMenuSettings[]={
+int16 VolumeMenuSettings[] = {
 	0,			// Current loaded button (button number)
 	7,			// Num of buttons
 	0,			// Buttons box height ( is used to calc the height where the first button will appear )
@@ -223,8 +223,7 @@ uint8 *plasmaEffectVar2;
 
 
 /** Plasma Effect Initialization */
-void plasma_effect_init()
-{
+void plasma_effect_init() {
 	uint8  *temp1 = 0;
 	uint8  *temp2 = 0;
 	int8   *temp2bis = 0;
@@ -239,8 +238,7 @@ void plasma_effect_init()
 	temp1 = plasmaEffectVar1 + 321; // where start first line
 	temp2 = plasmaEffectVar2 + 321; // where start first line
 
-	for (i = 0; i < 15358; i++) // for all the lines except the last one
-	{
+	for (i = 0; i < 15358; i++) { // for all the lines except the last one
 		temp4 = 0;
 
 		temp4 += temp1[-1];
@@ -254,14 +252,10 @@ void plasma_effect_init()
 
 		temp4 = (temp4 >> 3) | ((temp4 & 0x0003) << 13);
 
-		if (!(temp4 & 0x6500))
-		{
-			if (temp2 >= (plasmaEffectVar2 + 14720))
-			{
+		if (!(temp4 & 0x6500)) {
+			if (temp2 >= (plasmaEffectVar2 + 14720)) {
 				temp4--;
-			}
-			else if (temp4 > 0)
-			{
+			} else if (temp4 > 0) {
 				temp4--;
 			}
 		}
@@ -272,18 +266,16 @@ void plasma_effect_init()
 	}
 
 	copy1 = (uint32 *) plasmaEffectVar1;
-	copy2 = (uint32 *) (plasmaEffectVar2 + 320);  // pass to the next line
+	copy2 = (uint32 *)(plasmaEffectVar2 + 320);   // pass to the next line
 
 	for (i = 0; i < 3840; i++)
 		*(copy1++) = *(copy2++);  // copy current frame buffer with 1 line
 
 	temp2bis = (int8 *) plasmaEffectVar2 + 12480; // pointer with 11 last lines
 
-	for (i = 1600; i >= 0; i--) // prepare next frame
-	{
+	for (i = 1600; i >= 0; i--) { // prepare next frame
 		temp4 = *temp2bis;
-		if (temp4 <= 15)
-		{
+		if (temp4 <= 15) {
 			*temp2bis = -(temp4 - 11);
 		}
 		temp2++;
@@ -293,8 +285,7 @@ void plasma_effect_init()
 /** Process the plasma effect
 	@param top top height where the effect will be draw in the front buffer
 	@param color plasma effect start color */
-void process_plasma_effect(int32 top, int32 color)
-{
+void process_plasma_effect(int32 top, int32 color) {
 	uint8 *temp;
 	uint8 *out;
 	int32 i, j;
@@ -302,17 +293,15 @@ void process_plasma_effect(int32 top, int32 color)
 	uint8 bh, bl;
 
 	plasma_effect_init();
-	
+
 	temp = plasmaEffectVar1 + 1600;
 	out = frontVideoBuffer + screenLockupTable[top];
 
 	bl = color;
 	bh = bl + 15;
 
-	for (i = 25; i >= 0; i--)
-	{
-		for (j = MAINMENU_BUTTONWIDTH; j >= 0; j--)
-		{
+	for (i = 25; i >= 0; i--) {
+		for (j = MAINMENU_BUTTONWIDTH; j >= 0; j--) {
 			temp3 = *temp;
 			temp3 = temp3 >> 1;
 			temp3 += bl;
@@ -331,17 +320,16 @@ void process_plasma_effect(int32 top, int32 color)
 	}
 }
 
-/** Draw the entire button box 
+/** Draw the entire button box
 	@param left start width to draw the button
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_button_box(int32 left, int32 top, int32 right, int32 bottom)
-{
-    draw_line(left, top, right, top, 79);			// top line
-    draw_line(left, top, left, bottom, 79);			// left line
-    draw_line(right, ++top, right, bottom, 73);		// right line
-    draw_line(++left, bottom, right, bottom, 73);	// bottom line
+void draw_button_box(int32 left, int32 top, int32 right, int32 bottom) {
+	draw_line(left, top, right, top, 79);			// top line
+	draw_line(left, top, left, bottom, 79);			// left line
+	draw_line(right, ++top, right, bottom, 73);		// right line
+	draw_line(++left, bottom, right, bottom, 73);	// bottom line
 }
 
 /** Draws main menu button
@@ -350,112 +338,96 @@ void draw_button_box(int32 left, int32 top, int32 right, int32 bottom)
 	@param id current button identification from menu settings
 	@param value current button key pressed value
 	@param mode flag to know if should draw as a hover button or not */
-void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 mode)
-{
+void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 mode) {
 	int32 right;
-    int32 top;
-    int32 left;
-    int32 bottom2;
-    int32 bottom;
-   /*
-    * int CDvolumeRemaped; int musicVolumeRemaped; int masterVolumeRemaped; int lineVolumeRemaped;
-    * int waveVolumeRemaped;
-    */
-    
-	int8 dialText[256];
-    int32 textSize;
+	int32 top;
+	int32 left;
+	int32 bottom2;
+	int32 bottom;
+	/*
+	 * int CDvolumeRemaped; int musicVolumeRemaped; int masterVolumeRemaped; int lineVolumeRemaped;
+	 * int waveVolumeRemaped;
+	 */
 
-    left = width - MAINMENU_BUTTONSPAN / 2;
-    right = width + MAINMENU_BUTTONSPAN / 2;
+	int8 dialText[256];
+	int32 textSize;
+
+	left = width - MAINMENU_BUTTONSPAN / 2;
+	right = width + MAINMENU_BUTTONSPAN / 2;
 
 	// topheigh is the center Y pos of the button
-    top = topheight - 25;		// this makes the button be 50 height
-    bottom = bottom2 = topheight + 25;	// ||
+	top = topheight - 25;		// this makes the button be 50 height
+	bottom = bottom2 = topheight + 25;	// ||
 
-    if (mode != 0)
-	{
-		if (id <= 5 && id >= 1)
-		{
-			int32 newWidth=0;
+	if (mode != 0) {
+		if (id <= 5 && id >= 1) {
+			int32 newWidth = 0;
 
-			switch (id)
-			{
-				case 1:
-				{
-					if(cfgfile.MusicVolume>255)
-						cfgfile.MusicVolume=255;
-					if(cfgfile.MusicVolume<0)
-						cfgfile.MusicVolume=0;
-					newWidth = cross_dot(left,right,255,cfgfile.MusicVolume);
-					break;
-				}
-				case 2:
-				{
-					if(cfgfile.WaveVolume>255)
-						cfgfile.WaveVolume=255;
-					if(cfgfile.WaveVolume<0)
-						cfgfile.WaveVolume=0;
-					newWidth = cross_dot(left,right,255,cfgfile.WaveVolume);
-					break;
-				}
-				case 3:
-				{
-					if(cfgfile.CDVolume>255)
-						cfgfile.CDVolume=255;
-					if(cfgfile.CDVolume<0)
-						cfgfile.CDVolume=0;
-					newWidth = cross_dot(left,right,255,cfgfile.CDVolume);
-					break;
-				}
-				case 4:
-				{
-					if(cfgfile.LineVolume>255)
-						cfgfile.LineVolume=255;
-					if(cfgfile.LineVolume<0)
-						cfgfile.LineVolume=0;
-					newWidth = cross_dot(left,right,255,cfgfile.LineVolume);
-					break;
-				}
-				case 5:
-				{
-					if(cfgfile.MasterVolume>255)
-						cfgfile.MasterVolume=255;
-					if(cfgfile.MasterVolume<0)
-						cfgfile.MasterVolume=0;
-					newWidth = cross_dot(left,right,255,cfgfile.MasterVolume);
-					break;
-				}
+			switch (id) {
+			case 1: {
+				if (cfgfile.MusicVolume > 255)
+					cfgfile.MusicVolume = 255;
+				if (cfgfile.MusicVolume < 0)
+					cfgfile.MusicVolume = 0;
+				newWidth = cross_dot(left, right, 255, cfgfile.MusicVolume);
+				break;
+			}
+			case 2: {
+				if (cfgfile.WaveVolume > 255)
+					cfgfile.WaveVolume = 255;
+				if (cfgfile.WaveVolume < 0)
+					cfgfile.WaveVolume = 0;
+				newWidth = cross_dot(left, right, 255, cfgfile.WaveVolume);
+				break;
+			}
+			case 3: {
+				if (cfgfile.CDVolume > 255)
+					cfgfile.CDVolume = 255;
+				if (cfgfile.CDVolume < 0)
+					cfgfile.CDVolume = 0;
+				newWidth = cross_dot(left, right, 255, cfgfile.CDVolume);
+				break;
+			}
+			case 4: {
+				if (cfgfile.LineVolume > 255)
+					cfgfile.LineVolume = 255;
+				if (cfgfile.LineVolume < 0)
+					cfgfile.LineVolume = 0;
+				newWidth = cross_dot(left, right, 255, cfgfile.LineVolume);
+				break;
+			}
+			case 5: {
+				if (cfgfile.MasterVolume > 255)
+					cfgfile.MasterVolume = 255;
+				if (cfgfile.MasterVolume < 0)
+					cfgfile.MasterVolume = 0;
+				newWidth = cross_dot(left, right, 255, cfgfile.MasterVolume);
+				break;
+			}
 			};
 
 			process_plasma_effect(top, 80);
-			if (!(rand() % 5))
-			{
+			if (!(rand() % 5)) {
 				plasmaEffectPtr[rand() % 140 * 10 + 1900] = 255;
 			}
 			draw_splitted_box(newWidth, top, right, bottom, 68);
-		}
-		else
-		{
+		} else {
 			process_plasma_effect(top, 64);
-			if (!(rand() % 5))
-			{
+			if (!(rand() % 5)) {
 				plasmaEffectPtr[rand() % 320 * 10 + 6400] = 255;
 			}
 		}
 
-		if (id <= 5 && id >= 1)
-		{
+		if (id <= 5 && id >= 1) {
 			// implement this
 		}
-	}
-    else
-	{
-		blit_box(left, top, right, bottom, (int8 *) workVideoBuffer, left, top,(int8 *) frontVideoBuffer);
+	} else {
+		blit_box(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *) frontVideoBuffer);
 		draw_transparent_box(left, top, right, bottom2, 4);
 	}
 
-    draw_button_box(left, top, right, bottom);
-    
+	draw_button_box(left, top, right, bottom);
+
 	set_font_color(15);
 	get_menu_text(value, dialText);
 	textSize = dialogue_text_size(dialText);
@@ -463,477 +435,394 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 
 	// TODO: make volume buttons
 
-    copy_block_phys(left, top, right, bottom);
+	copy_block_phys(left, top, right, bottom);
 }
 
 /** Process the menu button draw
 	@param data menu settings array
 	@param mode flag to know if should draw as a hover button or not */
-void draw_button(int16 *menuSettings, int32 mode)
-{
+void draw_button(int16 *menuSettings, int32 mode) {
 	int32  buttonNumber;
-    int32  maxButton;
-    int16  *localData = menuSettings;
-    int32  topHeight;
-    uint8  menuItemId;
-    uint16 menuItemValue; // applicable for sound menus, to save the volume/sound bar
-    int8   currentButton;
-	
-    buttonNumber = *localData;
-    localData += 1;
-    maxButton = *localData;
-    localData += 1;
-    topHeight = *localData;
-    localData += 2;
+	int32  maxButton;
+	int16  *localData = menuSettings;
+	int32  topHeight;
+	uint8  menuItemId;
+	uint16 menuItemValue; // applicable for sound menus, to save the volume/sound bar
+	int8   currentButton;
 
-    if (topHeight == 0)
-	{
-      topHeight = 35;
-	}
-	else
-	{
+	buttonNumber = *localData;
+	localData += 1;
+	maxButton = *localData;
+	localData += 1;
+	topHeight = *localData;
+	localData += 2;
+
+	if (topHeight == 0) {
+		topHeight = 35;
+	} else {
 		topHeight = topHeight - (((maxButton - 1) * 6) + ((maxButton) * 50)) / 2;
 	}
 
-    if (maxButton <= 0)
-	{
-      return;
+	if (maxButton <= 0) {
+		return;
 	}
 
-    currentButton = 0;
+	currentButton = 0;
 
-    do
-	{
+	do {
 		// get menu item settings
-		menuItemId = (uint8) *localData;
+		menuItemId = (uint8) * localData;
 		localData += 1;
 		menuItemValue = *localData;
 		localData += 1;
-		if (mode != 0)
-		{
-			if (currentButton == buttonNumber)
-			{
+		if (mode != 0) {
+			if (currentButton == buttonNumber) {
 				draw_button_gfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
 			}
-		}
-		else
-		{
-			if (currentButton == buttonNumber)
-			{
+		} else {
+			if (currentButton == buttonNumber) {
 				draw_button_gfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
-			}
-			else
-			{
+			} else {
 				draw_button_gfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 0);
 			}
 		}
 
 		currentButton++;
 		topHeight += 56; // increase button top height
-		
+
 		// slow down the CPU
 		fps_cycles(1000);
-	}
-    while (currentButton < maxButton);
+	} while (currentButton < maxButton);
 }
 
 /** Where the main menu options are processed
 	@param menuSettings menu settings array with the information to build the menu options
 	@return pressed menu button identification */
-int process_menu(int16 * menuSettings)
-{
+int process_menu(int16 * menuSettings) {
 	int32 localTime;
-    int32 numEntry;
-    int32 buttonNeedRedraw;
-    int32 maxButton;
-    int16 *localData = menuSettings;
-    int16 currentButton;
-    int16 id;
-    int32 musicChanged;
-    int32 buttonReleased = 1;
+	int32 numEntry;
+	int32 buttonNeedRedraw;
+	int32 maxButton;
+	int16 *localData = menuSettings;
+	int16 currentButton;
+	int16 id;
+	int32 musicChanged;
+	int32 buttonReleased = 1;
 
-    musicChanged = 0;
+	musicChanged = 0;
 
-    buttonNeedRedraw = 1;
+	buttonNeedRedraw = 1;
 
-    numEntry = localData[1];
-    currentButton = localData[0];
-    localTime = lbaTime;
-    maxButton = numEntry - 1;
+	numEntry = localData[1];
+	currentButton = localData[0];
+	localTime = lbaTime;
+	maxButton = numEntry - 1;
 
 	read_keys();
 
-    do
-	{
+	do {
 		// if its on main menu
-		if (localData == MainMenuSettings)
-		{
-			if (lbaTime - localTime <= 11650)
-			{
+		if (localData == MainMenuSettings) {
+			if (lbaTime - localTime <= 11650) {
 				if (skipIntro == 46)
 					if (skipedKey != 32)
 						return MAINMENU_BKGIMAGE;
-			}
-			else
-			{
+			} else {
 				return MAINMENU_BKGIMAGE;
 			}
 		}
 
-		if (pressedKey == 0)
-		{
+		if (pressedKey == 0) {
 			buttonReleased = 1;
 		}
 
-		if (buttonReleased)
-		{
+		if (buttonReleased) {
 			key = pressedKey;
 
-			if (((uint8) key & 2)) // on arrow key down
-			{
+			if (((uint8) key & 2)) { // on arrow key down
 				currentButton++;
-				if (currentButton == numEntry) // if current button is the last, than next button is the first
-				{
+				if (currentButton == numEntry) { // if current button is the last, than next button is the first
 					currentButton = 0;
 				}
 				buttonNeedRedraw = 1;
 				buttonReleased = 0;
 			}
 
-			if (((uint8) key & 1)) // on arrow key up
-			{
+			if (((uint8) key & 1)) { // on arrow key up
 				currentButton--;
-				if (currentButton < 0) // if current button is the first, than previous button is the last
-				{
+				if (currentButton < 0) { // if current button is the first, than previous button is the last
 					currentButton = maxButton;
 				}
 				buttonNeedRedraw = 1;
 				buttonReleased = 0;
 			}
 
-			if (*(localData + 8) <= 5) // if its a volume button
-			{
+			if (*(localData + 8) <= 5) { // if its a volume button
 				id = *(localData + currentButton * 2 + 4); // get button parameters from settings array
 
-				switch (id)
-				{
-					case MUSICVOLUME:
-						{
-							if (((uint8) key & 4)) // on arrow key left
-							{
-								cfgfile.MusicVolume-=4;
-							}
-							if (((uint8) key & 8)) // on arrow key right
-							{
-								cfgfile.MusicVolume+=4;
-							}
-							music_volume(cfgfile.MusicVolume);
-							break;
-						}
-					case SOUNDVOLUME:
-						{
-							if (((uint8) key & 4)) // on arrow key left
-							{
-								cfgfile.WaveVolume-=4;
-							}
-							if (((uint8) key & 8)) // on arrow key right
-							{
-								cfgfile.WaveVolume+=4;
-							}
-							sample_volume(-1, cfgfile.WaveVolume);
-							break;
-						}
-					case CDVOLUME:
-						{
-							if (((uint8) key & 4)) // on arrow key left
-							{
-								cfgfile.CDVolume-=4;
-							}
-							if (((uint8) key & 8)) // on arrow key right
-							{
-								cfgfile.CDVolume+=4;
-							}
-							break;
-						}
-					case LINEVOLUME:
-						{
-							if (((uint8) key & 4)) // on arrow key left
-							{
-								cfgfile.LineVolume-=4;
-							}
-							if (((uint8) key & 8)) // on arrow key right
-							{
-								cfgfile.LineVolume+=4;
-							}
-							break;
-						}
-					case MASTERVOLUME:
-						{
-							if (((uint8) key & 4)) // on arrow key left
-							{
-								cfgfile.MasterVolume-=4;
-							}
-							if (((uint8) key & 8)) // on arrow key right
-							{
-								cfgfile.MasterVolume+=4;
-							}
-							music_volume(cfgfile.MusicVolume);
-							sample_volume(-1, cfgfile.WaveVolume);
-							break;
-						}
-					default:
-						break;
+				switch (id) {
+				case MUSICVOLUME: {
+					if (((uint8) key & 4)) { // on arrow key left
+						cfgfile.MusicVolume -= 4;
+					}
+					if (((uint8) key & 8)) { // on arrow key right
+						cfgfile.MusicVolume += 4;
+					}
+					music_volume(cfgfile.MusicVolume);
+					break;
+				}
+				case SOUNDVOLUME: {
+					if (((uint8) key & 4)) { // on arrow key left
+						cfgfile.WaveVolume -= 4;
+					}
+					if (((uint8) key & 8)) { // on arrow key right
+						cfgfile.WaveVolume += 4;
+					}
+					sample_volume(-1, cfgfile.WaveVolume);
+					break;
+				}
+				case CDVOLUME: {
+					if (((uint8) key & 4)) { // on arrow key left
+						cfgfile.CDVolume -= 4;
+					}
+					if (((uint8) key & 8)) { // on arrow key right
+						cfgfile.CDVolume += 4;
+					}
+					break;
+				}
+				case LINEVOLUME: {
+					if (((uint8) key & 4)) { // on arrow key left
+						cfgfile.LineVolume -= 4;
+					}
+					if (((uint8) key & 8)) { // on arrow key right
+						cfgfile.LineVolume += 4;
+					}
+					break;
+				}
+				case MASTERVOLUME: {
+					if (((uint8) key & 4)) { // on arrow key left
+						cfgfile.MasterVolume -= 4;
+					}
+					if (((uint8) key & 8)) { // on arrow key right
+						cfgfile.MasterVolume += 4;
+					}
+					music_volume(cfgfile.MusicVolume);
+					sample_volume(-1, cfgfile.WaveVolume);
+					break;
+				}
+				default:
+					break;
 				}
 			}
 		}
 
-		if (buttonNeedRedraw == 1)
-		{
+		if (buttonNeedRedraw == 1) {
 			*localData = currentButton;
 
 			draw_button(localData, 0); // current button
-			do
-			{
+			do {
 				read_keys();
 				draw_button(localData, 1);
-			}
-			while (pressedKey == 0 && skipedKey == 0 && skipIntro == 0);
+			} while (pressedKey == 0 && skipedKey == 0 && skipIntro == 0);
 			buttonNeedRedraw = 0;
-		}
-		else
-		{
-			if (musicChanged)
-			{
+		} else {
+			if (musicChanged) {
 				// TODO: update volume settings
-				
+
 			}
 
 			buttonNeedRedraw = 0;
 			draw_button(localData, 1);
 			read_keys();
 			// WARNING: this is here to prevent a fade bug while quit the menu
-			copy_screen(workVideoBuffer,frontVideoBuffer);
+			copy_screen(workVideoBuffer, frontVideoBuffer);
 		}
-	}
-    while (!(skipedKey & 2) && !(skipedKey & 1));
+	} while (!(skipedKey & 2) && !(skipedKey & 1));
 
-    currentButton = *(localData + 5 + currentButton * 2); // get current browsed button
+	currentButton = *(localData + 5 + currentButton * 2); // get current browsed button
 
-    read_keys();
+	read_keys();
 
-    return currentButton;
+	return currentButton;
 }
 
 /** Used to run the advanced options menu */
-int advoptions_menu()
-{
-    int32 ret = 0;
+int advoptions_menu() {
+	int32 ret = 0;
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 
-    do
-	{
-		switch(process_menu(AdvOptionsMenuSettings))
-		{
-			case OPTIONSMENU_RETURNMENU:
-			{
-				ret = 1; // quit option menu
-				break;
-			}
-			//TODO: add other options
-			default:
-				break;
+	do {
+		switch (process_menu(AdvOptionsMenuSettings)) {
+		case OPTIONSMENU_RETURNMENU: {
+			ret = 1; // quit option menu
+			break;
 		}
-	}
-    while (ret != 1);
+		//TODO: add other options
+		default:
+			break;
+		}
+	} while (ret != 1);
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
-    return 0;
+	return 0;
 }
 
 /** Used to run the save game management menu */
-int savemanage_menu()
-{
-    int32 ret = 0;
+int savemanage_menu() {
+	int32 ret = 0;
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 
-    do
-	{
-		switch(process_menu(SaveManageMenuSettings))
-		{
-			case OPTIONSMENU_RETURNMENU:
-			{
-				ret = 1; // quit option menu
-				break;
-			}
-			//TODO: add other options
-			default:
-				break;
+	do {
+		switch (process_menu(SaveManageMenuSettings)) {
+		case OPTIONSMENU_RETURNMENU: {
+			ret = 1; // quit option menu
+			break;
 		}
-	}
-    while (ret != 1);
+		//TODO: add other options
+		default:
+			break;
+		}
+	} while (ret != 1);
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
-    return 0;
+	return 0;
 }
 
 /** Used to run the volume menu */
-int volume_menu()
-{
-    int32 ret = 0;
+int volume_menu() {
+	int32 ret = 0;
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 
-    do
-	{
-		switch(process_menu(VolumeMenuSettings))
-		{
-			case OPTIONSMENU_RETURNMENU:
-			{
-				ret = 1; // quit option menu
-				break;
-			}
-			//TODO: add other options
-			default:
-				break;
+	do {
+		switch (process_menu(VolumeMenuSettings)) {
+		case OPTIONSMENU_RETURNMENU: {
+			ret = 1; // quit option menu
+			break;
 		}
-	}
-    while (ret != 1);
+		//TODO: add other options
+		default:
+			break;
+		}
+	} while (ret != 1);
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
-    return 0;
+	return 0;
 }
 
 /** Used to run the options menu */
-int options_menu()
-{
-    int32 ret = 0;
+int options_menu() {
+	int32 ret = 0;
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 
-    //HQ_StopSample();
-    //playCDtrack(9);
+	//HQ_StopSample();
+	//playCDtrack(9);
 
-    do
-	{
-		switch(process_menu(OptionsMenuSettings))
-		{
-			case OPTIONSMENU_RETURNGAME:
-			case OPTIONSMENU_RETURNMENU:
-			{
-				ret = 1; // quit option menu
-				break;
-			}
-			case OPTIONSMENU_VOLUME:
-			{
-				copy_screen(workVideoBuffer, frontVideoBuffer);
-				flip(workVideoBuffer);
-				volume_menu();
-				break;
-			}
-			case OPTIONSMENU_SAVEMANAGE:
-			{
-				copy_screen(workVideoBuffer, frontVideoBuffer);
-				flip(workVideoBuffer);
-				savemanage_menu();
-				break;
-			}
-			case OPTIONSMENU_ADVOPTIONS:
-			{
-				copy_screen(workVideoBuffer, frontVideoBuffer);
-				flip(workVideoBuffer);
-				advoptions_menu();
-				break;
-			}
-			default:
-				break;
+	do {
+		switch (process_menu(OptionsMenuSettings)) {
+		case OPTIONSMENU_RETURNGAME:
+		case OPTIONSMENU_RETURNMENU: {
+			ret = 1; // quit option menu
+			break;
 		}
-	}
-    while (ret != 1);
+		case OPTIONSMENU_VOLUME: {
+			copy_screen(workVideoBuffer, frontVideoBuffer);
+			flip(workVideoBuffer);
+			volume_menu();
+			break;
+		}
+		case OPTIONSMENU_SAVEMANAGE: {
+			copy_screen(workVideoBuffer, frontVideoBuffer);
+			flip(workVideoBuffer);
+			savemanage_menu();
+			break;
+		}
+		case OPTIONSMENU_ADVOPTIONS: {
+			copy_screen(workVideoBuffer, frontVideoBuffer);
+			flip(workVideoBuffer);
+			advoptions_menu();
+			break;
+		}
+		default:
+			break;
+		}
+	} while (ret != 1);
 
-    copy_screen(workVideoBuffer, frontVideoBuffer);
+	copy_screen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
-    return 0;
+	return 0;
 }
 
 
 /** Used to run the main menu */
-void main_menu()
-{
+void main_menu() {
 	// TODO: stop samples
 
 	copy_screen(frontVideoBuffer, workVideoBuffer);
 
-    // load menu effect file only once
+	// load menu effect file only once
 	plasmaEffectPtr = malloc(PLASMA_EFFECT_FILESIZE);
 	hqr_get_entry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
-	while(!cfgfile.Quit)
-	{
+	while (!cfgfile.Quit) {
 		// TODO: RECHECK THIS LATER
 		init_dialogue_bank(0);
 
 		play_track_music(9); // LBA's Theme
 		// TODO: stop samples
-		
-		switch(process_menu(MainMenuSettings))
-		{
-			case MAINMENU_NEWGAME:
-			{
-				new_game_menu();
-				break;
-			}
-			case MAINMENU_CONTINUEGAME:
-			{
-				break;
-			}
-			case MAINMENU_OPTIONS:
-			{
-				copy_screen(workVideoBuffer, frontVideoBuffer);
-				flip(workVideoBuffer);
-				OptionsMenuSettings[5] = OPTIONSMENU_RETURNMENU;
-				options_menu();
-				break;
-			}
-			case MAINMENU_QUIT:
-			{
-				cfgfile.Quit = 1;
-				break;
-			}
-			case MAINMENU_BKGIMAGE:
-			{
-				load_menu_image( 1 );
-			}
+
+		switch (process_menu(MainMenuSettings)) {
+		case MAINMENU_NEWGAME: {
+			new_game_menu();
+			break;
+		}
+		case MAINMENU_CONTINUEGAME: {
+			break;
+		}
+		case MAINMENU_OPTIONS: {
+			copy_screen(workVideoBuffer, frontVideoBuffer);
+			flip(workVideoBuffer);
+			OptionsMenuSettings[5] = OPTIONSMENU_RETURNMENU;
+			options_menu();
+			break;
+		}
+		case MAINMENU_QUIT: {
+			cfgfile.Quit = 1;
+			break;
+		}
+		case MAINMENU_BKGIMAGE: {
+			load_menu_image(1);
+		}
 		}
 		fps_cycles(cfgfile.Fps);
 	}
 }
 
 /** Used to process give up menu while playing game */
-int giveup_menu()
-{
-    //int32 saveLangue=0;
-    int32 menuId;
+int giveup_menu() {
+	//int32 saveLangue=0;
+	int32 menuId;
 	int16 * localMenu;
 
-    copy_screen(frontVideoBuffer, workVideoBuffer);
+	copy_screen(frontVideoBuffer, workVideoBuffer);
 	//TODO: halt samples
 
-	if(cfgfile.UseAutoSaving==1)
+	if (cfgfile.UseAutoSaving == 1)
 		localMenu = GiveUpMenuSettings;
 	else
 		localMenu = GiveUpMenuSettingsWithSave;
 
-	do
-	{
+	do {
 		//saveLangue = languageCD1;
 		//languageCD1 = 0;
 		init_dialogue_bank(0);
@@ -945,10 +834,9 @@ int giveup_menu()
 		init_dialogue_bank(currentTextBank + 3);
 
 		fps_cycles(cfgfile.Fps);
-	}
-    while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
+	} while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
 
-	if(menuId == GIVEUPMENU_QUIT)
+	if (menuId == GIVEUPMENU_QUIT)
 		return 1;
 
 	return 0;
@@ -956,24 +844,19 @@ int giveup_menu()
 
 /** Used to process options menu while playing game
 	@param pKey pressed key */
-int process_giveup_menu()
-{
-	if(skipIntro == 1)// && twinsen->life > 0 && twinsen->costumeIndex != -1 && !twinsen->staticFlagsBF.bNoDisplay)
-	{
+int process_giveup_menu() {
+	if (skipIntro == 1) { // && twinsen->life > 0 && twinsen->costumeIndex != -1 && !twinsen->staticFlagsBF.bNoDisplay)
 		freeze_time();
-		if(giveup_menu())
-		{
+		if (giveup_menu()) {
 			unfreeze_time();
 			redraw_engine_actions(1);
 			freeze_time();
 			//TODO: save game
-			quitGame=0;
+			quitGame = 0;
 			cfgfile.Quit = 0;
 			unfreeze_time();
 			return 1;
-		}
-		else
-		{
+		} else {
 			unfreeze_time();
 			redraw_engine_actions(1);
 		}
@@ -981,11 +864,9 @@ int process_giveup_menu()
 	return 0;
 }
 
-void process_options_menu(int16 pKey)
-{
+void process_options_menu(int16 pKey) {
 	// Press F6
-	if(pKey == 0x40)
-	{
+	if (pKey == 0x40) {
 		int tmpLangCD = cfgfile.LanguageCDId;
 		freeze_time();
 		//TODO: Stop Samples
@@ -994,7 +875,7 @@ void process_options_menu(int16 pKey)
 		init_dialogue_bank(0);
 		options_menu();
 		cfgfile.LanguageCDId = tmpLangCD;
-		init_dialogue_bank(currentTextBank+3);
+		init_dialogue_bank(currentTextBank + 3);
 		//TODO: play music
 		unfreeze_time();
 		redraw_engine_actions(1);

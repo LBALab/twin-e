@@ -1,9 +1,9 @@
 /** @file sdlengine.h
-	@brief 
+	@brief
 	This file contains SDL engine routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -75,7 +75,7 @@ int sdl_initialize();
 /** Frames per second sdl delay */
 void fps_cycles(int32 fps);
 
-/** Deplay certain seconds till proceed 
+/** Deplay certain seconds till proceed
 	@param time time in seconds to delay */
 void delay(uint32 time);
 

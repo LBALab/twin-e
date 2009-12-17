@@ -1,9 +1,9 @@
 /** @file scene.h
 	@brief
 	This file contains main scenario routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -48,8 +48,7 @@ int32 currentGameOverScene;
 int32 alphaLight;
 int32 betaLight;
 
-typedef struct SceneSamplesStruct
-{
+typedef struct SceneSamplesStruct {
 	int16 info0;
 	int16 info1;
 	int16 info2;
@@ -75,15 +74,13 @@ ActorStruct *sceneHero;
 
 // ZONES
 
-typedef struct ScenePoint
-{
+typedef struct ScenePoint {
 	int16 X;
 	int16 Y;
 	int16 Z;
 } ScenePoint;
 
-typedef struct ZoneBox
-{
+typedef struct ZoneBox {
 	ScenePoint bottomLeft;
 	ScenePoint topRight;
 	int16 type;
@@ -92,32 +89,26 @@ typedef struct ZoneBox
 	int16 info2;
 	int16 info3;
 	int16 snap;
-	union
-	{
-		struct
-		{
+	union {
+		struct {
 			int16 newRoomNumber;
 			int16 positionX;
 			int16 positionY;
 			int16 positionZ;
 		} ChangeRoom;
-		struct
-		{
+		struct {
 			int16 dummy;
 			int16 newCameraX;
 			int16 newCameraY;
 			int16 newCameraZ;
 		} ForceCamera;
-		struct
-		{
+		struct {
 			int16 zoneNumber;
 		} SetActorZone;
-		struct
-		{
+		struct {
 			int16 newGrid;
 		} PatchGrid;
-		struct
-		{
+		struct {
 			int16 textIndex;
 			int16 textColor;
 		} DisplayText;

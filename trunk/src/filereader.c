@@ -1,9 +1,9 @@
 /** @file filereader.c
-	@brief 
+	@brief
 	This file contains movies routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -29,57 +29,47 @@
 
 /** Feed buffer from file
 	@param fr FileReader pointer */
-void frfeed(FileReader* fr)
-{
+void frfeed(FileReader* fr) {
 	fread(fr->buffer, BUFFER_SIZE, 1, fr->fd);
 	fr->bufferPos = 0;
 }
 
 /** Read file
-	@param fr FileReader pointer 
+	@param fr FileReader pointer
 	@param destPtr content destination pointer
 	@param size size of read characters */
-void frread(FileReader* fr, void* destPtr, uint32 size)
-{
-	if(BUFFER_SIZE-fr->bufferPos >= size)
-	{
-		memcpy(destPtr,&fr->buffer[fr->bufferPos],size);
+void frread(FileReader* fr, void* destPtr, uint32 size) {
+	if (BUFFER_SIZE - fr->bufferPos >= size) {
+		memcpy(destPtr, &fr->buffer[fr->bufferPos], size);
 		fr->bufferPos += size;
-	}
-	else
-	{
+	} else {
 		// feed what we can
 		int8* tempPtr = (int8*)destPtr;
-		memcpy( tempPtr, &fr->buffer[fr->bufferPos], BUFFER_SIZE-fr->bufferPos );
-		tempPtr+=BUFFER_SIZE-fr->bufferPos;
-		size-=BUFFER_SIZE-fr->bufferPos;
+		memcpy(tempPtr, &fr->buffer[fr->bufferPos], BUFFER_SIZE - fr->bufferPos);
+		tempPtr += BUFFER_SIZE - fr->bufferPos;
+		size -= BUFFER_SIZE - fr->bufferPos;
 
 		// feed the rest
-		do
-		{
+		do {
 			fr->currSector++;
 			frfeed(fr);
-			if(size>=BUFFER_SIZE)
-			{
+			if (size >= BUFFER_SIZE) {
 				memcpy(tempPtr, fr->buffer, BUFFER_SIZE);
-				tempPtr+=BUFFER_SIZE;
-				size-=BUFFER_SIZE;
-			}
-			else
-			{
+				tempPtr += BUFFER_SIZE;
+				size -= BUFFER_SIZE;
+			} else {
 				memcpy(tempPtr, fr->buffer, size);
 				fr->bufferPos += size;
-				size=0;
+				size = 0;
 			}
-		}while(size>0);
+		} while (size > 0);
 	}
 }
 
 /** Seek file
-	@param fr FileReader pointer 
+	@param fr FileReader pointer
 	@param seekPosition position to seek */
-void frseek(FileReader* fr, uint32 seekPosition)
-{
+void frseek(FileReader* fr, uint32 seekPosition) {
 	uint32 sectorToSeek;
 
 	sectorToSeek = seekPosition / 2048;
@@ -88,19 +78,17 @@ void frseek(FileReader* fr, uint32 seekPosition)
 
 	fr->currSector = sectorToSeek;
 	frfeed(fr);
-	fr->bufferPos = (seekPosition - (sectorToSeek*2048));
+	fr->bufferPos = (seekPosition - (sectorToSeek * 2048));
 }
 
 /** Open file
-	@param fr FileReader pointer 
+	@param fr FileReader pointer
 	@param filename file path
 	@return true if file open and false if error occurred */
-int32 fropen(FileReader* fr, const int8* filename)
-{
-	fr->fd = fopen((const int8*)filename,"rb");
+int32 fropen(FileReader* fr, const int8* filename) {
+	fr->fd = fopen((const int8*)filename, "rb");
 
-	if(fr->fd)
-	{
+	if (fr->fd) {
 		fr->currSector = 0;
 		frfeed(fr);
 		return 1;
@@ -111,7 +99,6 @@ int32 fropen(FileReader* fr, const int8* filename)
 
 /** Close file
 	@param fr FileReader pointer */
-void frclose(FileReader* fr)
-{
+void frclose(FileReader* fr) {
 	fclose(fr->fd);
 }

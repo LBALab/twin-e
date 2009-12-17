@@ -1,9 +1,9 @@
 /** @file dialogues.h
-	@brief 
+	@brief
 	This file contains dialogues processing. It contains text and font functions.
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -87,8 +87,8 @@ void set_font_parameters(int32 spaceBetween, int32 charSpace);
 void set_font_color(int32 color);
 
 /** Set font color parameters to precess cross color display
-	@param stopColor color number to stop 
-	@param startColor color number to start 
+	@param stopColor color number to stop
+	@param startColor color number to start
 	@param stepSize step size to change between those colors */
 void set_dialogue_cross_color(int32 stopColor, int32 startColor, int32 stepSize);
 

@@ -1,9 +1,9 @@
 /** @file music.h
-	@brief 
+	@brief
 	This file contains music playing routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 

@@ -1,9 +1,9 @@
 /** @file animations.h
 	@brief
 	This file contains 3D actors animations routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 

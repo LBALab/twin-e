@@ -1,9 +1,9 @@
 /** @file music.c
-	@brief 
+	@brief
 	This file contains music playing routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -59,23 +59,20 @@ uint8 * midiPtr;
 
 /** Music volume
 	@param current volume number */
-void music_volume(int32 volume)
-{
+void music_volume(int32 volume) {
 	// div 2 because LBA use 255 range and SDL_mixer use 128 range
-	Mix_VolumeMusic(volume/2);
+	Mix_VolumeMusic(volume / 2);
 }
 
-/** Fade music in 
+/** Fade music in
 	@param loops number of*/
-void music_fade_in(int32 loops, int32 ms)
-{
+void music_fade_in(int32 loops, int32 ms) {
 	Mix_FadeInMusic(current_track, loops, ms);
 }
 
 /** Fade music out
 	@param ms number of miliseconds to fade*/
-void music_fade_out(int32 ms)
-{
+void music_fade_out(int32 ms) {
 	while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
 		SDL_Delay(100);
 	}
@@ -85,28 +82,23 @@ void music_fade_out(int32 ms)
 
 /** Play CD music
 	@param track track number to play */
-void play_track_music_cd(int32 track)
-{
-	if(cdrom->numtracks == 10)
-	{
-		if(CD_INDRIVE(SDL_CDStatus(cdrom)))
+void play_track_music_cd(int32 track) {
+	if (cdrom->numtracks == 10) {
+		if (CD_INDRIVE(SDL_CDStatus(cdrom)))
 			SDL_CDPlayTracks(cdrom, track, 0, 1, 0);
-		
-		if(cfgfile.Debug)
-			printf("Playing track (CD): %d\n",track);
+
+		if (cfgfile.Debug)
+			printf("Playing track (CD): %d\n", track);
 	}
 }
 
 /** Stop CD music */
-void stop_track_music_cd()
-{
-	if(cfgfile.UseCD)
-	{
-		if(cdrom!=NULL)
-		{
+void stop_track_music_cd() {
+	if (cfgfile.UseCD) {
+		if (cdrom != NULL) {
 			SDL_CDStop(cdrom);
 
-			if(cfgfile.Debug)
+			if (cfgfile.Debug)
 				printf("Stop CD track\n");
 		}
 	}
@@ -114,193 +106,164 @@ void stop_track_music_cd()
 
 /** Play MP3 music
 	@param track track number to play */
-void play_track_music_mp3(int32 track)
-{
+void play_track_music_mp3(int32 track) {
 	int8 musfile[256];
-	if(cfgfile.UseMP3)
-		sprintf(musfile, MUSIC_FOLDER "//%d.mp3",track);
+	if (cfgfile.UseMP3)
+		sprintf(musfile, MUSIC_FOLDER "//%d.mp3", track);
 	else
-		sprintf(musfile, MUSIC_FOLDER "//%d.ogg",track);
+		sprintf(musfile, MUSIC_FOLDER "//%d.ogg", track);
 
 	stop_track_music_mp3();
 
-	music_fade_in(1,FADE_MS);
+	music_fade_in(1, FADE_MS);
 
 	current_track = Mix_LoadMUS(musfile);
 	music_volume(cfgfile.MusicVolume);
 	Mix_PlayMusic(current_track, -1);
 
-	if(cfgfile.Debug)
-	{
-		if(cfgfile.UseMP3)
-			printf("Playing track (MP3): %s\n",musfile);
+	if (cfgfile.Debug) {
+		if (cfgfile.UseMP3)
+			printf("Playing track (MP3): %s\n", musfile);
 		else
-			printf("Playing track (OGG): %s\n",musfile);
+			printf("Playing track (OGG): %s\n", musfile);
 	}
 }
 
 /** Stop MP3 music */
-void stop_track_music_mp3()
-{
-	if (current_track != NULL)
-	{
+void stop_track_music_mp3() {
+	if (current_track != NULL) {
 		Mix_FreeMusic(current_track);
 		current_track = NULL;
 
-		if(cfgfile.Debug)
+		if (cfgfile.Debug)
 			printf("Stop MP3 track\n");
 	}
 }
 
 /** Generic play music, according with settings it plays CD or MP3 instead
 	@param track track number to play */
-void play_track_music(int32 track)
-{
-	if(!cfgfile.NoSound)
-	{
-		if(track==currentMusic)
+void play_track_music(int32 track) {
+	if (!cfgfile.NoSound) {
+		if (track == currentMusic)
 			return;
 		currentMusic = track;
 
 		stop_midi_music();
-		
-		if(cfgfile.UseHQSnd)
+
+		if (cfgfile.UseHQSnd)
 			play_track_music_mp3(track);
-		else
-			if(cfgfile.UseCD)
-				play_track_music_cd(track);
+		else if (cfgfile.UseCD)
+			play_track_music_cd(track);
 	}
 }
 
 /** Generic stop music according with settings */
-void stop_track_music()
-{
-	if(!cfgfile.NoSound)
-	{
+void stop_track_music() {
+	if (!cfgfile.NoSound) {
 		music_fade_out(FADE_MS);
 
-		if(cfgfile.UseHQSnd)
+		if (cfgfile.UseHQSnd)
 			stop_track_music_mp3();
-		else
-			if(cfgfile.UseCD)
-				stop_track_music_cd();
+		else if (cfgfile.UseCD)
+			stop_track_music_cd();
 	}
 }
 
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
-void play_midi_music(int32 midiIdx, int32 loop)
-{
-	if(!cfgfile.NoSound)
-	{
+void play_midi_music(int32 midiIdx, int32 loop) {
+	if (!cfgfile.NoSound) {
 		int32 midiSize;
 		int8 filename[256];
-		SDL_RWops *rw;	
+		SDL_RWops *rw;
 
 		stop_track_music();
 
-		if(midiIdx==currentMusic)
+		if (midiIdx == currentMusic)
 			return;
 		currentMusic = midiIdx;
 
-		if(cfgfile.UseHQSnd)
-		{
-			if(cfgfile.UseAVI)
-				sprintf(filename,"%s", HQR_MIDI_MI_WIN_MP3_FILE);
+		if (cfgfile.UseHQSnd) {
+			if (cfgfile.UseAVI)
+				sprintf(filename, "%s", HQR_MIDI_MI_WIN_MP3_FILE);
 			else
-				sprintf(filename,"%s", HQR_MIDI_MI_WIN_OGG_FILE);
-		}
-		else
-			sprintf(filename,"%s", HQR_MIDI_MI_WIN_FILE);
-		
-		if(midiPtr)
-		{
-			music_fade_out(FADE_MS/2);
+				sprintf(filename, "%s", HQR_MIDI_MI_WIN_OGG_FILE);
+		} else
+			sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
+
+		if (midiPtr) {
+			music_fade_out(FADE_MS / 2);
 			stop_midi_music();
 			//free(midiPtr);
 		}
 
 		midiSize = hqr_getalloc_entry(&midiPtr, filename, midiIdx);
 
-		rw = SDL_RWFromMem(midiPtr,midiSize);
+		rw = SDL_RWFromMem(midiPtr, midiSize);
 
-		current_track=Mix_LoadMUS_RW(rw);
+		current_track = Mix_LoadMUS_RW(rw);
 
-		music_fade_in(1,FADE_MS);
+		music_fade_in(1, FADE_MS);
 
 		music_volume(cfgfile.MusicVolume);
 
-		if(Mix_PlayMusic(current_track, loop)==-1)
-			printf("Error while playing music: %d \n",midiIdx);
+		if (Mix_PlayMusic(current_track, loop) == -1)
+			printf("Error while playing music: %d \n", midiIdx);
 
-		if(cfgfile.Debug)
-		{
-			if(cfgfile.UseHQSnd)
-			{
-				if(cfgfile.UseAVI)
-					printf("Playing Music (MP3): %d\n",midiIdx);
+		if (cfgfile.Debug) {
+			if (cfgfile.UseHQSnd) {
+				if (cfgfile.UseAVI)
+					printf("Playing Music (MP3): %d\n", midiIdx);
 				else
-					printf("Playing Music (OGG): %d\n",midiIdx);
-			}
-			else
-				printf("Playing Music (MIDI): %d\n",midiIdx);
+					printf("Playing Music (OGG): %d\n", midiIdx);
+			} else
+				printf("Playing Music (MIDI): %d\n", midiIdx);
 		}
 	}
 }
 
 /** Stop MIDI music */
-void stop_midi_music()
-{
-	if(!cfgfile.NoSound)
-	{
-		if (current_track != NULL)
-		{
+void stop_midi_music() {
+	if (!cfgfile.NoSound) {
+		if (current_track != NULL) {
 			Mix_FreeMusic(current_track);
 			current_track = NULL;
-			if(midiPtr != NULL)
+			if (midiPtr != NULL)
 				free(midiPtr);
 
-			if(cfgfile.Debug)
+			if (cfgfile.Debug)
 				printf("Stop MIDI music\n");
 		}
 	}
 }
 
 /** Initialize CD-Rom */
-int init_cdrom()
-{
-	if(!cfgfile.NoSound)
-	{
+int init_cdrom() {
+	if (!cfgfile.NoSound) {
 		int32 numOfCDROM;
 		int32 cdNum;
 
 		numOfCDROM = SDL_CDNumDrives();
-		if(cfgfile.Debug)
+		if (cfgfile.Debug)
 			printf("Found %d CDROM devices\n", numOfCDROM);
 
-		if (!numOfCDROM)
-		{
+		if (!numOfCDROM) {
 			fprintf(stderr, "No CDROM devices available\n");
 			return 0;
 		}
 
-		for(cdNum=0; cdNum < numOfCDROM; cdNum++)
-		{
+		for (cdNum = 0; cdNum < numOfCDROM; cdNum++) {
 			cdname = SDL_CDName(cdNum);
-			if(cfgfile.Debug)
+			if (cfgfile.Debug)
 				printf("Testing drive %s\n", cdname);
 			cdrom = SDL_CDOpen(cdNum);
-			if(!cdrom)
-			{ 
-				if(cfgfile.Debug)
-					fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError()); 
-			} 
-			else
-			{
+			if (!cdrom) {
+				if (cfgfile.Debug)
+					fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError());
+			} else {
 				SDL_CDStatus(cdrom);
-				if(cdrom->numtracks==NUM_CD_TRACKS)
-				{
-					printf("Assuming that it is LBA cd... %s\n\n",cdname);
+				if (cdrom->numtracks == NUM_CD_TRACKS) {
+					printf("Assuming that it is LBA cd... %s\n\n", cdname);
 					cdDir = "LBA";
 					cfgfile.UseCD = 1;
 					return 1;
@@ -311,7 +274,7 @@ int init_cdrom()
 			SDL_CDClose(cdrom);
 		}
 
-		cdrom=NULL;
+		cdrom = NULL;
 
 		printf("Can't find LBA CD!\n\n");
 	}

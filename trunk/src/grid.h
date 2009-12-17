@@ -1,9 +1,9 @@
 /** @file grid.h
-	@brief 
+	@brief
 	This file contains grid manipulation routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -68,28 +68,28 @@ void draw_over_model_actor(int32 X, int32 Y, int32 Z);
 void draw_over_sprite_actor(int32 X, int32 Y, int32 Z);
 
 /** Get sprite width and height sizes
-	@param offset sprite pointer offset 
+	@param offset sprite pointer offset
 	@param width sprite width size
 	@param height sprite height size
 	@param spritePtr sprite buffer pointer */
 void get_sprite_size(int32 offset, int32 *width, int32 *height, uint8 *spritePtr);
 
 /** Draw brick sprite in the screen
-	@param index brick index to draw 
-	@param posX brick X position to draw 
+	@param index brick index to draw
+	@param posX brick X position to draw
 	@param posY brick Y position to draw */
 void draw_brick(int32 index, int32 posX, int32 posY);
 
 /** Draw sprite in the screen
-	@param index sprite index to draw 
-	@param posX sprite X position to draw 
+	@param index sprite index to draw
+	@param posX sprite X position to draw
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw */
 void draw_sprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr);
 
 /** Draw sprite or bricks in the screen according with the type
-	@param index sprite index to draw 
-	@param posX sprite X position to draw 
+	@param index sprite index to draw
+	@param posX sprite X position to draw
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw
 	@param isSprite allows to identify if the sprite to display is brick or a single sprite */

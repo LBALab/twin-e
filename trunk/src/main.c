@@ -1,10 +1,10 @@
 /** @file main.c
-	@brief 
-	This file contains the main engine functions. It also contains 
+	@brief
+	This file contains the main engine functions. It also contains
 	configurations file definitions.
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -65,18 +65,17 @@ const int8* CONFIG_FILENAME = "lba.cfg";
 /** Engine install setup filename
 
 	This file contains informations about the game version.
-	This is only used for original games. For mod games project you can 
+	This is only used for original games. For mod games project you can
 	used \a lba.cfg file \b Version tag. If this tag is set for original game
 	it will be used instead of \a setup.lst file. */
 const int8* SETUP_FILENAME = "setup.lst";
 
 /** Configuration types at \a lba.cfg file
 
-	Fill this with all needed configurations at \a lba.cfg file. 
-	This engine version allows new type of configurations. 
+	Fill this with all needed configurations at \a lba.cfg file.
+	This engine version allows new type of configurations.
 	Check new config lines at \a lba.cfg file after the first game execution */
-int8 CFGList[][18]=
-{
+int8 CFGList[][18] = {
 	"Language:",
 	"LanguageCD:",
 	"FlagDisplayText:",
@@ -119,18 +118,16 @@ int8 CFGList[][18]=
 
 
 /** Allocate video memory, both front and back buffers */
-void allocate_video_memory()
-{
+void allocate_video_memory() {
 	int32 i, j, k;
 
-	workVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH*SCREEN_HEIGHT) * sizeof(uint8));
-	frontVideoBuffer = frontVideoBufferbis = (uint8 *) malloc(sizeof(uint8) * SCREEN_WIDTH*SCREEN_HEIGHT);
+	workVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint8));
+	frontVideoBuffer = frontVideoBufferbis = (uint8 *) malloc(sizeof(uint8) * SCREEN_WIDTH * SCREEN_HEIGHT);
 	init_screen_buffer(frontVideoBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	j = 0;
 	k = 0;
-	for (i = SCREEN_HEIGHT; i > 0; i--)
-	{
+	for (i = SCREEN_HEIGHT; i > 0; i--) {
 		screenLockupTable[j] = k;
 		j++;
 		k += SCREEN_WIDTH;
@@ -139,108 +136,145 @@ void allocate_video_memory()
 	// initVideoVar1 = -1;
 }
 
-/** Gets configuration type index from lba.cfg config file 
+/** Gets configuration type index from lba.cfg config file
 	@param lineBuffer buffer with config line
 	@return config type index */
-int get_config_type_index(int8* lineBuffer)
-{
-    int32 i;
-    int8 buffer[256];
-    int8* ptr;
-
-    strcpy(buffer,lineBuffer);
-
-	ptr = strchr(buffer,' ');
-
-    if(ptr)
-    {
-        *ptr = 0;
-    }
-
-    for(i=0;i<=(sizeof(CFGList)/18);i++)
-    {
-        if(strlen(CFGList[i]))
-        {
-            if(!strcmp(CFGList[i],buffer)){
-                return i;
-            }
-        }
-    }
-
-    return -1;	
-}
-
-/** Init configuration file \a lba.cfg */
-void init_configurations()
-{
-	FILE *fd;
+int get_config_type_index(int8* lineBuffer) {
+	int32 i;
 	int8 buffer[256];
-	int32 cfgtype=-1;
+	int8* ptr;
 
-	fd = fopen(CONFIG_FILENAME, "rb");
-	if(!fd)
-		printf("Error: Can't find config file %s\n",CONFIG_FILENAME);
+	strcpy(buffer, lineBuffer);
 
-	// make sure it quit when it reaches the end of file
-	while(fgets(buffer,256,fd) != NULL)
-	{
-		*strchr(buffer,0x0D0A) = 0;
-		cfgtype = get_config_type_index(buffer);
-		if(cfgtype!=-1)
-		{
-			switch(cfgtype)
-			{
-				case 0: sscanf(buffer,"Language: %s",cfgfile.Language); break;
-				case 1: sscanf(buffer,"LanguageCD: %s",cfgfile.LanguageCD); break;
-				case 2: sscanf(buffer,"FlagDisplayText: %s",cfgfile.FlagDisplayText); break;
-				case 3: sscanf(buffer,"FlagKeepVoice: %s",cfgfile.FlagKeepVoice); break;
-				// case 4,18: unused
-				case 19: sscanf(buffer,"WaveVolume: %d",&cfgfile.WaveVolume); break;
-				case 20: sscanf(buffer,"VoiceVolume: %d",&cfgfile.VoiceVolume); break;
-				case 21: sscanf(buffer,"MusicVolume: %d",&cfgfile.MusicVolume); break;
-				case 22: sscanf(buffer,"CDVolume: %d",&cfgfile.CDVolume); break;
-				case 23: sscanf(buffer,"LineVolume: %d",&cfgfile.LineVolume); break;
-				case 24: sscanf(buffer,"MasterVolume: %d",&cfgfile.MasterVolume); break;
-				case 25: sscanf(buffer,"Version: %d",&cfgfile.Version); break;
-				case 26: sscanf(buffer,"FullScreen: %d",&cfgfile.FullScreen); break;
-				case 27: sscanf(buffer,"UseCD: %d",&cfgfile.UseCD); break;
-				case 28: sscanf(buffer,"NoSound: %d",&cfgfile.NoSound); break;
-				case 29: sscanf(buffer,"UseHQSnd: %d",&cfgfile.UseHQSnd); break;
-				case 30: sscanf(buffer,"UseMP3: %d",&cfgfile.UseMP3); break;
-				case 31: sscanf(buffer,"FLAwide: %d",&cfgfile.FLAwide); break;
-				case 32: sscanf(buffer,"UseFLAPCX: %d",&cfgfile.UseFLAPCX); break;
-				case 33: sscanf(buffer,"UseAVI: %d",&cfgfile.UseAVI); break;
-				case 34: sscanf(buffer,"CrossFade: %d",&cfgfile.CrossFade); break;
-				case 35: sscanf(buffer,"Fps: %d",&cfgfile.Fps); break;
-				case 36: sscanf(buffer,"Debug: %d",&cfgfile.Debug); break;
-				case 37: sscanf(buffer,"UseAutoSaving: %d",&cfgfile.UseAutoSaving); break;
+	ptr = strchr(buffer, ' ');
+
+	if (ptr) {
+		*ptr = 0;
+	}
+
+	for (i = 0; i <= (sizeof(CFGList) / 18); i++) {
+		if (strlen(CFGList[i])) {
+			if (!strcmp(CFGList[i], buffer)) {
+				return i;
 			}
 		}
 	}
 
-	if(!cfgfile.Fps)
+	return -1;
+}
+
+/** Init configuration file \a lba.cfg */
+void init_configurations() {
+	FILE *fd;
+	int8 buffer[256];
+	int32 cfgtype = -1;
+
+	fd = fopen(CONFIG_FILENAME, "rb");
+	if (!fd)
+		printf("Error: Can't find config file %s\n", CONFIG_FILENAME);
+
+	// make sure it quit when it reaches the end of file
+	while (fgets(buffer, 256, fd) != NULL) {
+		*strchr(buffer, 0x0D0A) = 0;
+		cfgtype = get_config_type_index(buffer);
+		if (cfgtype != -1) {
+			switch (cfgtype) {
+			case 0:
+				sscanf(buffer, "Language: %s", cfgfile.Language);
+				break;
+			case 1:
+				sscanf(buffer, "LanguageCD: %s", cfgfile.LanguageCD);
+				break;
+			case 2:
+				sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayText);
+				break;
+			case 3:
+				sscanf(buffer, "FlagKeepVoice: %s", cfgfile.FlagKeepVoice);
+				break;
+				// case 4,18: unused
+			case 19:
+				sscanf(buffer, "WaveVolume: %d", &cfgfile.WaveVolume);
+				break;
+			case 20:
+				sscanf(buffer, "VoiceVolume: %d", &cfgfile.VoiceVolume);
+				break;
+			case 21:
+				sscanf(buffer, "MusicVolume: %d", &cfgfile.MusicVolume);
+				break;
+			case 22:
+				sscanf(buffer, "CDVolume: %d", &cfgfile.CDVolume);
+				break;
+			case 23:
+				sscanf(buffer, "LineVolume: %d", &cfgfile.LineVolume);
+				break;
+			case 24:
+				sscanf(buffer, "MasterVolume: %d", &cfgfile.MasterVolume);
+				break;
+			case 25:
+				sscanf(buffer, "Version: %d", &cfgfile.Version);
+				break;
+			case 26:
+				sscanf(buffer, "FullScreen: %d", &cfgfile.FullScreen);
+				break;
+			case 27:
+				sscanf(buffer, "UseCD: %d", &cfgfile.UseCD);
+				break;
+			case 28:
+				sscanf(buffer, "NoSound: %d", &cfgfile.NoSound);
+				break;
+			case 29:
+				sscanf(buffer, "UseHQSnd: %d", &cfgfile.UseHQSnd);
+				break;
+			case 30:
+				sscanf(buffer, "UseMP3: %d", &cfgfile.UseMP3);
+				break;
+			case 31:
+				sscanf(buffer, "FLAwide: %d", &cfgfile.FLAwide);
+				break;
+			case 32:
+				sscanf(buffer, "UseFLAPCX: %d", &cfgfile.UseFLAPCX);
+				break;
+			case 33:
+				sscanf(buffer, "UseAVI: %d", &cfgfile.UseAVI);
+				break;
+			case 34:
+				sscanf(buffer, "CrossFade: %d", &cfgfile.CrossFade);
+				break;
+			case 35:
+				sscanf(buffer, "Fps: %d", &cfgfile.Fps);
+				break;
+			case 36:
+				sscanf(buffer, "Debug: %d", &cfgfile.Debug);
+				break;
+			case 37:
+				sscanf(buffer, "UseAutoSaving: %d", &cfgfile.UseAutoSaving);
+				break;
+			}
+		}
+	}
+
+	if (!cfgfile.Fps)
 		cfgfile.Fps = DEFAULT_FRAMES_PER_SECOND;
 
 	fclose(fd);
 }
 
 /** Initialize LBA engine */
-void init_engine()
-{
+void init_engine() {
 	// getting configuration file
 	init_configurations();
 
 	// Show engine information
-	printf("Prequengine v%s\n",ENGINE_VERSION);
+	printf("Prequengine v%s\n", ENGINE_VERSION);
 	printf("(c)2008 The Prequel Engine dev-team. Refer to AUTHORS file for further details.\n");
 	printf("Released under the terms of the GNU GPL license version 2 (or, at your opinion, any later). See COPYING file.\n\n");
 	printf("The original Little Big Adventure game is:\n\t(c)1994 by Adeline Software International, All Rights Reserved.\n\n");
 
-	if(cfgfile.Debug)
+	if (cfgfile.Debug)
 		printf("Compiled the %s at %s\n", __DATE__, __TIME__);
 
 	sdl_initialize();
-	
+
 	allocate_video_memory();
 	clear_screen();
 
@@ -256,24 +290,19 @@ void init_engine()
 	adeline_logo();
 
 	// verify game version screens
-	if(cfgfile.Version==EUROPE_VERSION)
-	{
+	if (cfgfile.Version == EUROPE_VERSION) {
 		// Little Big Adventure screen
-		load_image_delay(RESSHQR_LBAIMG,3);
+		load_image_delay(RESSHQR_LBAIMG, 3);
 		// Electronic Arts Logo
-		load_image_delay(RESSHQR_EAIMG,2);
-	}
-	else if (cfgfile.Version==USA_VERSION)
-	{
+		load_image_delay(RESSHQR_EAIMG, 2);
+	} else if (cfgfile.Version == USA_VERSION) {
 		// Relentless screen
-		load_image_delay(RESSHQR_RELLENTIMG,3);
+		load_image_delay(RESSHQR_RELLENTIMG, 3);
 		// Electronic Arts Logo
-		load_image_delay(RESSHQR_EAIMG,2);
-	}
-	else if (cfgfile.Version==MODIFICATION_VERSION)
-	{
+		load_image_delay(RESSHQR_EAIMG, 2);
+	} else if (cfgfile.Version == MODIFICATION_VERSION) {
 		// Modification screen
-		load_image_delay(RESSHQR_RELLENTIMG,2);
+		load_image_delay(RESSHQR_RELLENTIMG, 2);
 		// TODO: add necessary screens here
 	}
 
@@ -281,14 +310,13 @@ void init_engine()
 
 #endif
 
-	load_menu_image( 1 );
+	load_menu_image(1);
 
 	main_menu();
 }
 
 /** Initialize engine auxiliar keymap */
-void init_keymap()
-{
+void init_keymap() {
 	pressedKeyMap[0] = 0x48;
 	pressedKeyMap[1] = 0x50;
 	pressedKeyMap[2] = 0x4B;
@@ -358,9 +386,8 @@ void init_keymap()
 }
 
 /** Initialize resource pointers */
-void init_resources()
-{
-	int32 size=0;
+void init_resources() {
+	int32 size = 0;
 
 	// Menu and in-game palette
 	init_palettes();
@@ -380,9 +407,8 @@ void init_resources()
 }
 
 /** Initialize main engine variables */
-void init_vars()
-{
-	set_camera_position(40,40,128,200,200);
+void init_vars() {
+	set_camera_position(40, 40, 128, 200, 200);
 
 	needChangeScene = 0;
 	reqBgRedraw = 1;
@@ -412,14 +438,13 @@ void init_vars()
 	renderRight = SCREEN_TEXTLIMIT_RIGHT;
 	renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
 
-	rightMouse=0;
-	leftMouse=0;
+	rightMouse = 0;
+	leftMouse = 0;
 
-	currentPositionInBodyPtrTab=0; // TODO: put this in scene.c file under clear_scene()
+	currentPositionInBodyPtrTab = 0; // TODO: put this in scene.c file under clear_scene()
 }
 
-void init_hero_vars() // TODO: get rid of this here
-{
+void init_hero_vars() { // TODO: get rid of this here
 	//TODO: reset actor 0
 	sceneHero->speed = 40;
 	// TODO: init in-game hero status var
@@ -427,8 +452,7 @@ void init_hero_vars() // TODO: get rid of this here
 
 
 /** Initialize all needed stuffs at first time running engine */
-void init_all()
-{
+void init_all() {
 	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
 
 	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
@@ -440,18 +464,16 @@ void init_all()
 	init_hero_vars();
 }
 
-/** Main engine function 
-	@param argc numner of arguments 
+/** Main engine function
+	@param argc numner of arguments
 	@param argv array with all arguments strings */
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	init_all();
 	init_engine();
 	sdl_close();
-	printf("\n\nLBA/Relentless < %s / %s >\n\nOK.\n\n",__DATE__,__TIME__);
-	printf("Prequengine v%s closed\n",ENGINE_VERSION);
-	if(cfgfile.Debug)
-	{
+	printf("\n\nLBA/Relentless < %s / %s >\n\nOK.\n\n", __DATE__, __TIME__);
+	printf("Prequengine v%s closed\n", ENGINE_VERSION);
+	if (cfgfile.Debug) {
 		printf("\nPress <ENTER> to quit debug mode\n");
 		//getchar();
 	}
@@ -460,20 +482,20 @@ int main(int argc, char *argv[])
 
 
 /** \mainpage LBA Prequel Engine Doxxy Documentation
- 
+
 	\section intro_sec Introduction
- 
+
 	LBA Prequel is project based upon the popular Little Big Adventure games
-	released respectively in 1994 (Relentless in North America) and 
-	1997 (Twinsen's Odyssey). Based on the actual LBA game engine, 
-	our goal is to create an original game that is loosely based on the 
+	released respectively in 1994 (Relentless in North America) and
+	1997 (Twinsen's Odyssey). Based on the actual LBA game engine,
+	our goal is to create an original game that is loosely based on the
 	story of Twinsen's ancestor, Hegesippe.
 
 	\section proj_sec The Project
 
 	While making the first game write and design we notice we need something
 	more from using the original game engine. Something that could make the
-	difference. Better movies quality, sound quality, quick all the old 
+	difference. Better movies quality, sound quality, quick all the old
 	sound formats the engine support, etc.. So, because of this type of things
 	we, the Prequel team, decide to create a side project which aims to build
 	an engine based on reverse of the original LBA1 engine. We want to make

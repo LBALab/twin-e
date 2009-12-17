@@ -1,9 +1,9 @@
 /** @file redraw.c
 	@brief
 	This file contains engine redraw actions routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -44,28 +44,26 @@
 #endif
 
 
-typedef struct RedrawStruct
-{
-  uint16 left;
-  uint16 top;
-  uint16 right;
-  uint16 bottom;
+typedef struct RedrawStruct {
+	uint16 left;
+	uint16 top;
+	uint16 right;
+	uint16 bottom;
 } RedrawStruct;
 
 RedrawStruct currentRedrawList[300];
 RedrawStruct nextRedrawList[300];
 
-typedef struct DrawListStruct
-{
-  int16  posValue;
-  uint16 index; // field_2
-  uint16 X;
-  uint16 Y;
-  uint16 Z;
-  uint16 field_A;
-  uint16 field_C;
-  uint16 field_E;
-  uint16 field_10;
+typedef struct DrawListStruct {
+	int16  posValue;
+	uint16 index; // field_2
+	uint16 X;
+	uint16 Y;
+	uint16 Z;
+	uint16 field_A;
+	uint16 field_C;
+	uint16 field_E;
+	uint16 field_10;
 } DrawListStruct;
 
 /** Draw list array to grab the necessary */
@@ -81,8 +79,7 @@ int32 numOfRedrawBox;
 	@param top start height to redraw the region
 	@param right end width to redraw the region
 	@param bottom end height to redraw the region */
-void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom)
-{
+void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom) {
 	int32 area;
 	int32 i = 0;
 	int32 leftValue;
@@ -92,8 +89,7 @@ void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom)
 
 	area = (right - left) * (bottom - top);
 
-	while (i < numOfRedrawBox)
-	{
+	while (i < numOfRedrawBox) {
 		if (currentRedrawList[i].left >= left)
 			leftValue = left;
 		else
@@ -114,14 +110,13 @@ void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom)
 		else
 			bottomValue = currentRedrawList[i].bottom;
 
-		if ((rightValue - leftValue) * (bottomValue - topValue) < ((currentRedrawList[i].bottom - currentRedrawList[i].top) * (currentRedrawList[i].right - currentRedrawList[i].left) + area))
-		{
+		if ((rightValue - leftValue) *(bottomValue - topValue) < ((currentRedrawList[i].bottom - currentRedrawList[i].top) *(currentRedrawList[i].right - currentRedrawList[i].left) + area)) {
 			currentRedrawList[i].left = leftValue;
 			currentRedrawList[i].top = topValue;
 			currentRedrawList[i].right = rightValue;
 			currentRedrawList[i].bottom = bottomValue;
 
-			if(currentRedrawList[i].bottom >= SCREEN_WIDTH)
+			if (currentRedrawList[i].bottom >= SCREEN_WIDTH)
 				currentRedrawList[i].bottom = SCREEN_TEXTLIMIT_BOTTOM;
 			return;
 		}
@@ -134,7 +129,7 @@ void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom)
 	currentRedrawList[i].right = right;
 	currentRedrawList[i].bottom = bottom;
 
-	if(currentRedrawList[i].bottom >= SCREEN_WIDTH)
+	if (currentRedrawList[i].bottom >= SCREEN_WIDTH)
 		currentRedrawList[i].bottom = SCREEN_TEXTLIMIT_BOTTOM;
 
 	numOfRedrawBox++;
@@ -145,8 +140,7 @@ void add_redraw_current_area(int32 left, int32 top, int32 right, int32 bottom)
 	@param top start height to redraw the region
 	@param right end width to redraw the region
 	@param bottom end height to redraw the region */
-void add_redraw_area(int32 left, int32 top, int32 right, int32 bottom)
-{
+void add_redraw_area(int32 left, int32 top, int32 right, int32 bottom) {
 	if (left < 0)
 		left = 0;
 	if (top < 0)
@@ -170,14 +164,12 @@ void add_redraw_area(int32 left, int32 top, int32 right, int32 bottom)
 }
 
 /** Move next regions to the current redraw list */
-void move_next_areas()
-{
+void move_next_areas() {
 	int32 i;
 
 	numOfRedrawBox = 0;
 
-	for (i = 0; i < currNumOfRedrawBox; i++)
-	{
+	for (i = 0; i < currNumOfRedrawBox; i++) {
 		add_redraw_current_area(nextRedrawList[i].left, nextRedrawList[i].top, nextRedrawList[i].right, nextRedrawList[i].bottom);
 	}
 }
@@ -185,32 +177,27 @@ void move_next_areas()
 /** Flip currentRedrawList regions in the screen
 
 	This only updates small areas in the screen so few CPU processor is used */
-void flip_redraw_areas()
-{
+void flip_redraw_areas() {
 	int32 i;
 
-	for (i = 0; i < numOfRedrawBox; i++) // redraw areas on screen
-	{
+	for (i = 0; i < numOfRedrawBox; i++) { // redraw areas on screen
 		copy_block_phys(currentRedrawList[i].left, currentRedrawList[i].top, currentRedrawList[i].right, currentRedrawList[i].bottom);
 	}
 
 	numOfRedrawBox = 0;
 
-	for (i = 0; i < currNumOfRedrawBox; i++) //setup the redraw areas for next display
-	{
+	for (i = 0; i < currNumOfRedrawBox; i++) { //setup the redraw areas for next display
 		add_redraw_current_area(nextRedrawList[i].left, nextRedrawList[i].top, nextRedrawList[i].right, nextRedrawList[i].bottom);
 	}
 }
 
 /** Blit/Update all screen regions in the currentRedrawList */
-void blit_background_areas()
-{
+void blit_background_areas() {
 	int32 i;
 	RedrawStruct* currentArea;
 	currentArea = currentRedrawList;
 
-	for (i = 0; i < numOfRedrawBox; i++)
-	{
+	for (i = 0; i < numOfRedrawBox; i++) {
 		blit_box(currentArea->left, currentArea->top, currentArea->right, currentArea->bottom, (int8 *) workVideoBuffer, currentArea->left, currentArea->top, (int8 *) frontVideoBuffer);
 		currentArea++;
 	}
@@ -219,22 +206,18 @@ void blit_background_areas()
 /** Sort drawing list struct ordered as the first objects appear in the top left corner of the screen
 	@param list drawing list variable which contains information of the drawing objects
 	@param listSize number of drawing objects in the list */
-void sort_drawing_list(DrawListStruct *list, int32 listSize)
-{
+void sort_drawing_list(DrawListStruct *list, int32 listSize) {
 	int32 i;
 	int32 j;
 
 	DrawListStruct tempStruct;
 
-	for(i=0;i<listSize-1;i++)
-	{
-		for(j=0;j<listSize-1-i;j++)
-		{
-			if(list[j+1].posValue<list[j].posValue)
-			{
-				memcpy(&tempStruct,&list[j+1],sizeof(DrawListStruct));
-				memcpy(&list[j+1],&list[j],sizeof(DrawListStruct));
-				memcpy(&list[j],&tempStruct,sizeof(DrawListStruct));
+	for (i = 0; i < listSize - 1; i++) {
+		for (j = 0; j < listSize - 1 - i; j++) {
+			if (list[j+1].posValue < list[j].posValue) {
+				memcpy(&tempStruct, &list[j+1], sizeof(DrawListStruct));
+				memcpy(&list[j+1], &list[j], sizeof(DrawListStruct));
+				memcpy(&list[j], &tempStruct, sizeof(DrawListStruct));
 			}
 		}
 	}
@@ -242,8 +225,7 @@ void sort_drawing_list(DrawListStruct *list, int32 listSize)
 
 /** Process what objects must the drawn in the screen
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-int process_actors_drawlist(int32 bgRedraw)
-{
+int process_actors_drawlist(int32 bgRedraw) {
 	int32 tmpVal;
 	int32 modelActorPos;  // arg_1A
 	int32 spriteActorPos; // top6
@@ -257,55 +239,42 @@ int process_actors_drawlist(int32 bgRedraw)
 	shadowActorPos = modelActorPos + 0x0C00;
 
 	// Process actors drawing list
-	for(modelActorPos=0; modelActorPos < sceneNumActors; modelActorPos++, spriteActorPos++, shadowActorPos++)
-	{
-		localActor = &sceneActors[modelActorPos];		
+	for (modelActorPos = 0; modelActorPos < sceneNumActors; modelActorPos++, spriteActorPos++, shadowActorPos++) {
+		localActor = &sceneActors[modelActorPos];
 		localActor->dynamicFlags.bIsVisible = 0; // reset visible state
 
-		if((useCellingGrid==-1) || localActor->Y <= (*(int16 *)(cellingGridIdx*24 + (int8 *)sceneZones+8)))
-		{
+		if ((useCellingGrid == -1) || localActor->Y <= (*(int16 *)(cellingGridIdx*24 + (int8 *)sceneZones + 8))) {
 			// no redraw required
-			if(localActor->staticFlags.bIsBackgrounded && bgRedraw==0)
-			{
+			if (localActor->staticFlags.bIsBackgrounded && bgRedraw == 0) {
 				// get actor position on screen
 				project_position_on_screen(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ);
-				
+
 				// check if actor is visible on screen, otherwise don't display it
-				if(projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)
-				{
+				if (projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580) {
 					localActor->dynamicFlags.bIsVisible = 1;
 				}
-			}
-			else
-			{
+			} else {
 				// if the actor isn't set as hidden
-				if(localActor->entity != -1 && !(localActor->staticFlags.bIsHidden))
-				{
+				if (localActor->entity != -1 && !(localActor->staticFlags.bIsHidden)) {
 					// get actor position on screen
 					project_position_on_screen(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ);
-					
-					if (((localActor->staticFlags.bUsesClipping) && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) || 
-						((!(localActor->staticFlags.bUsesClipping)) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580))
-					{
+
+					if (((localActor->staticFlags.bUsesClipping) && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) ||
+					        ((!(localActor->staticFlags.bUsesClipping)) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
 						tmpVal = localActor->Z + localActor->X - cameraX - cameraZ;
 
 						// if actor is above another actor
-						if(localActor->standOn != -1)
-						{
+						if (localActor->standOn != -1) {
 							tmpVal = sceneActors[localActor->standOn].X - cameraX + sceneActors[localActor->standOn].Z - cameraZ + 2;
 						}
-					
 
-						if(localActor->staticFlags.bIsSpriteActor)
-						{
+
+						if (localActor->staticFlags.bIsSpriteActor) {
 							drawList[drawListPos].index = spriteActorPos; // > 0x1000
-							if(localActor->staticFlags.bUsesClipping)
-							{
+							if (localActor->staticFlags.bUsesClipping) {
 								tmpVal = localActor->lastX - cameraX + localActor->lastZ - cameraZ;
 							}
-						}
-						else
-						{
+						} else {
 							drawList[drawListPos].index = modelActorPos;
 						}
 
@@ -314,19 +283,15 @@ int process_actors_drawlist(int32 bgRedraw)
 						drawListPos++;
 
 						// if use shadows
-						if(cfgfile.ShadowMode!=0 && !(localActor->staticFlags.bDoesntCastShadow))
-						{
-							if(localActor->standOn != -1)
-							{
+						if (cfgfile.ShadowMode != 0 && !(localActor->staticFlags.bDoesntCastShadow)) {
+							if (localActor->standOn != -1) {
 								shadowX = localActor->X;
-								shadowY = localActor->Y-1;
+								shadowY = localActor->Y - 1;
 								shadowZ = localActor->Z;
-							}
-							else
-							{
+							} else {
 								//get_shadow_position(localActor->X, localActor->Y, localActor->Z);
 							}
-							
+
 							tmpVal--;
 							drawList[drawListPos].posValue = tmpVal; // save the shadow entry in the drawList
 							drawList[drawListPos].index = 0xC00;    // shadowActorPos
@@ -344,64 +309,56 @@ int process_actors_drawlist(int32 bgRedraw)
 	return drawListPos;
 }
 
-/** Process object drawing on screen 
+/** Process object drawing on screen
 
 	Objects like 3D actors, sprite actors, extra bonus and shadows
 	@param numDrawingList number of drawing actors in the current screen*/
-void process_drawing(int32 numDrawingList)
-{
+void process_drawing(int32 numDrawingList) {
 	int32 drawListPos = 0;
 
 	// if has something to draw
-	if(numDrawingList > 0)
-	{
+	if (numDrawingList > 0) {
 		uint32 flags;
 		int32 actorIdx;
 		ActorStruct *localActor;
 
-		do
-		{
+		do {
 			actorIdx = drawList[drawListPos].index & 0x3FF;
 			localActor = &sceneActors[actorIdx];
 			flags = ((uint32) drawList[drawListPos].index) & 0xFC00;
-		
+
 			// Drawing actors
-			if (flags < 0xC00)
-			{
-				if(!flags)
-				{
-					if(!actorIdx) // RECHECK
-					{
+			if (flags < 0xC00) {
+				if (!flags) {
+					if (!actorIdx) { // RECHECK
 					}
 
-					if(localActor->previousAnimIdx != -1)
+					if (localActor->previousAnimIdx != -1)
 						set_model_animation(localActor->animPosition, animTable[localActor->previousAnimIdx], bodyTable[localActor->entity], &localActor->animTimerData);
 
-					if (!render_iso_model(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ, 0, localActor->angle, 0, bodyTable[localActor->entity]))
-					{
-						if(renderLeft < 0)
+					if (!render_iso_model(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ, 0, localActor->angle, 0, bodyTable[localActor->entity])) {
+						if (renderLeft < 0)
 							renderLeft = SCREEN_TEXTLIMIT_LEFT;
 
-						if(renderTop < 0)
+						if (renderTop < 0)
 							renderTop = SCREEN_TEXTLIMIT_TOP;
 
-						if(renderRight >= SCREEN_WIDTH)
+						if (renderRight >= SCREEN_WIDTH)
 							renderRight = SCREEN_TEXTLIMIT_RIGHT;
 
-						if(renderBottom >= SCREEN_HEIGHT)
+						if (renderBottom >= SCREEN_HEIGHT)
 							renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
-		  
-						set_clip(renderLeft, renderTop, renderRight,renderBottom);
 
-						if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom)
-						{
+						set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+						if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 							int32 tempX;
 							int32 tempY;
 							int32 tempZ;
 
 							localActor->dynamicFlags.bIsVisible = 1;
 
-							tempX = (localActor->X + 0x100 )>> 9;
+							tempX = (localActor->X + 0x100) >> 9;
 							tempY = localActor->Y >> 8;
 
 							if (localActor->field_3 & 0x7F)
@@ -410,25 +367,22 @@ void process_drawing(int32 numDrawingList)
 							tempZ = (localActor->Z + 0x100) >> 9;
 
 							draw_over_model_actor(tempX, tempY, tempZ);
-			
-							add_redraw_area(textWindowLeft,textWindowTop,renderRight, renderBottom);
+
+							add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
 						}
 					}
 				}
 			}
 			// Drawing shadows
-			else if(flags == 0xC00)
-			{
+			else if (flags == 0xC00) {
 
 			}
 			// Drawing unknown
-			else if(flags < 0x1000)
-			{
+			else if (flags < 0x1000) {
 
 			}
 			// Drawing sprite actors
-			else if(flags == 0x1000)
-			{
+			else if (flags == 0x1000) {
 				int32 spriteWidth, spriteHeight;
 				//int spriteSize = spriteSizeTable[localActor->entity];
 				uint8 *spritePtr = spriteTable[localActor->entity];
@@ -439,65 +393,56 @@ void process_drawing(int32 numDrawingList)
 				get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
 
 				// calculate sprite position on screen
-				renderLeft = projPosX + *(int16 *) (spriteBoundingBoxPtr + localActor->entity * 16);
-				renderTop = projPosY + *(int16 *) (spriteBoundingBoxPtr + localActor->entity * 16 + 2);
+				renderLeft = projPosX + *(int16 *)(spriteBoundingBoxPtr + localActor->entity * 16);
+				renderTop = projPosY + *(int16 *)(spriteBoundingBoxPtr + localActor->entity * 16 + 2);
 				renderRight = renderLeft + spriteWidth;
 				renderBottom = renderTop + spriteHeight;
 
-				if(localActor->staticFlags.bUsesClipping)
-				{
+				if (localActor->staticFlags.bUsesClipping) {
 					set_clip(projPosXScreen + localActor->info0, projPosYScreen + localActor->info1, projPosXScreen + localActor->info2, projPosYScreen + localActor->info3);
-				}
-				else
-				{
+				} else {
 					set_clip(renderLeft, renderTop, renderRight, renderBottom);
 				}
 
-				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom)
-				{
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 					draw_sprite(0, renderLeft, renderTop, spritePtr);
 
 					localActor->dynamicFlags.bIsVisible = 1;
-					
-					if(localActor->staticFlags.bUsesClipping)
-					{
-						draw_over_sprite_actor((localActor->lastX+0x100)>> 9,localActor->lastY >> 8,(localActor->lastZ+0x100) >> 9);
-					}
-					else
-					{
+
+					if (localActor->staticFlags.bUsesClipping) {
+						draw_over_sprite_actor((localActor->lastX + 0x100) >> 9, localActor->lastY >> 8, (localActor->lastZ + 0x100) >> 9);
+					} else {
 						int tempX, tempZ, tempY;
 
-						tempX = (localActor->X + localActor->boudingBox.X.topRight +0x100) >> 9;
+						tempX = (localActor->X + localActor->boudingBox.X.topRight + 0x100) >> 9;
 						tempZ = localActor->Y >> 8;
 						if (localActor->field_3 & 0x7F)
-						  tempZ++;
-						tempY = (localActor->Z + localActor->boudingBox.Z.topRight +0x100) >> 9;
+							tempZ++;
+						tempY = (localActor->Z + localActor->boudingBox.Z.topRight + 0x100) >> 9;
 
 						draw_over_sprite_actor(tempX, tempZ, tempY);
 					}
-					
-					add_redraw_area(textWindowLeft, textWindowTop,textWindowRight, textWindowBottom);
+
+					add_redraw_area(textWindowLeft, textWindowTop, textWindowRight, textWindowBottom);
 
 					// show clipping area
 					//draw_button_box(renderLeft, renderTop, renderRight, renderBottom);
 				}
 			}
 			// Drawing extras
-			else if(flags == 0x1800)
-			{
+			else if (flags == 0x1800) {
 
 			}
 
 			reset_clip();
 			drawListPos++;
-		}while(drawListPos < numDrawingList);
+		} while (drawListPos < numDrawingList);
 	}
 }
 
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int32 bgRedraw) // fullRedraw
-{
+void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 	int16 tmpProjPosX;
 	int16 tmpProjPosY;
 	int32 numDrawingList;
@@ -507,50 +452,43 @@ void redraw_engine_actions(int32 bgRedraw) // fullRedraw
 
 	reset_clip();
 
-	if(bgRedraw)
-	{
+	if (bgRedraw) {
 		freeze_time();
-		if(needChangeScene!=-1 && needChangeScene!=-2)
+		if (needChangeScene != -1 && needChangeScene != -2)
 			fade_out(paletteRGBA);
 		clear_screen();
 		redraw_grid();
 		// TODO: Update overlay sprites positions
-		copy_screen(frontVideoBuffer,workVideoBuffer);
-		if(needChangeScene!=-1 && needChangeScene!=-2)
-		{
+		copy_screen(frontVideoBuffer, workVideoBuffer);
+		if (needChangeScene != -1 && needChangeScene != -2) {
 			fade_in(paletteRGBA);
 			set_palette(paletteRGBA);
 		}
-	}
-	else
-	{
+	} else {
 		blit_background_areas();
 	}
 
 	// first loop
 	numDrawingList = process_actors_drawlist(bgRedraw);
 
-	sort_drawing_list(drawList,numDrawingList);
+	sort_drawing_list(drawList, numDrawingList);
 
 	currNumOfRedrawBox = 0;
 	process_drawing(numDrawingList);
 
-	#ifdef GAMEMOD
-		display_zones(skipIntro);
-	#endif
+#ifdef GAMEMOD
+	display_zones(skipIntro);
+#endif
 
 	// make celling grid fade
 	// need to be here to fade after drawing all actors in scene
-	if(needChangeScene==-2)
+	if (needChangeScene == -2)
 		cross_fade(frontVideoBuffer, paletteRGBA);
 
-	if(bgRedraw)
-	{
+	if (bgRedraw) {
 		flip();
 		move_next_areas();
-	}
-	else
-	{
+	} else {
 		flip_redraw_areas();
 	}
 }

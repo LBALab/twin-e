@@ -1,10 +1,10 @@
 /** @file main.h
-	@brief 
-	This file contains the main engine functions. It also contains 
+	@brief
+	This file contains the main engine functions. It also contains
 	configurations file definitions.
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -57,8 +57,7 @@
 	Used in the engine to load/use certain parts of code according with
 	this settings. Check \a lba.cfg file for valid values for each settings.\n
 	All the settings with (*) means they are new and only exist in this engine. */
-typedef struct ConfigFile
-{
+typedef struct ConfigFile {
 	/** Language name */
 	int8 Language[10];
 	/** Language CD name */
@@ -95,7 +94,7 @@ typedef struct ConfigFile
 	int32 UseHQSnd;
 	/** If you want to use MP3 or OGG files. UseHQSnd must be set */
 	int32 UseMP3;
-	/** To keep FLA movies aspect ratio or to strech it to 
+	/** To keep FLA movies aspect ratio or to strech it to
 		fullscreen like in the original game */
 	int32 FLAwide;
 	/** To use FLA PCX images instead of FLA movies */
@@ -114,7 +113,7 @@ typedef struct ConfigFile
 	int32 UseAutoSaving;
 	/** Shadow mode type */
 	int32 ShadowMode;
-}ConfigFile;
+} ConfigFile;
 
 /** Configuration file structure
 

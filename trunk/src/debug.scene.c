@@ -1,9 +1,9 @@
 /** @file debug.scene.c
 	@brief
 	This file contains scenario debug routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -33,81 +33,74 @@
 #include "interface.h"
 #include "renderer.h"
 
-int32 showingZones=0;
-int32 typeZones=127; // all zones on as default
+int32 showingZones = 0;
+int32 typeZones = 127; // all zones on as default
 
-void draw_bounding_box_project_points(ScenePoint* pPoint3d, ScenePoint* pPoint3dProjected)
-{
-	project_position_on_screen(pPoint3d->X,pPoint3d->Y,pPoint3d->Z);
+void draw_bounding_box_project_points(ScenePoint* pPoint3d, ScenePoint* pPoint3dProjected) {
+	project_position_on_screen(pPoint3d->X, pPoint3d->Y, pPoint3d->Z);
 
 	pPoint3dProjected->X = projPosX;
 	pPoint3dProjected->Y = projPosY;
 	pPoint3dProjected->Z = projPosZ;
 
-	if(renderLeft > projPosX)
+	if (renderLeft > projPosX)
 		renderLeft = projPosX;
 
-	if(renderRight < projPosX)
+	if (renderRight < projPosX)
 		renderRight = projPosX;
 
-	if(renderTop > projPosY)
+	if (renderTop > projPosY)
 		renderTop = projPosY;
 
-	if(renderBottom < projPosY)
+	if (renderBottom < projPosY)
 		renderBottom = projPosY;
 }
 
-int32 check_zone_type(int32 type)
-{
-	switch(type)
-	{
-		case 0:
-			if(typeZones & 0x01)
-				return 1;
-			break;
-		case 1:
-			if(typeZones & 0x02)
-				return 1;
-			break;
-		case 2:
-			if(typeZones & 0x04)
-				return 1;
-			break;
-		case 3:
-			if(typeZones & 0x08)
-				return 1;
-			break;
-		case 4:
-			if(typeZones & 0x10)
-				return 1;
-			break;
-		case 5:
-			if(typeZones & 0x20)
-				return 1;
-			break;
-		case 6:
-			if(typeZones & 0x40)
-				return 1;
-			break;
-		default:
-			break;
+int32 check_zone_type(int32 type) {
+	switch (type) {
+	case 0:
+		if (typeZones & 0x01)
+			return 1;
+		break;
+	case 1:
+		if (typeZones & 0x02)
+			return 1;
+		break;
+	case 2:
+		if (typeZones & 0x04)
+			return 1;
+		break;
+	case 3:
+		if (typeZones & 0x08)
+			return 1;
+		break;
+	case 4:
+		if (typeZones & 0x10)
+			return 1;
+		break;
+	case 5:
+		if (typeZones & 0x20)
+			return 1;
+		break;
+	case 6:
+		if (typeZones & 0x40)
+			return 1;
+		break;
+	default:
+		break;
 	}
 
 	return 0;
 }
 
-void display_zones(int16 pKey)
-{
-	if(showingZones==1)
-	{
+void display_zones(int16 pKey) {
+	if (showingZones == 1) {
 		int z;
 		ZoneBox *zonePtr = sceneZones;
-		for(z=0; z < sceneNumZones; z++)
-		{
+		for (z = 0; z < sceneNumZones; z++) {
 			zonePtr = &sceneZones[z];
 
-			if(check_zone_type(zonePtr->type))
-			{
+			if (check_zone_type(zonePtr->type)) {
 				ScenePoint frontBottomLeftPoint;
 				ScenePoint frontBottomRightPoint;
 
@@ -131,7 +124,7 @@ void display_zones(int16 pKey)
 
 				ScenePoint backTopLeftPoint2D;
 				ScenePoint backTopRightPoint2D;
-			    
+
 				uint8 color;
 
 				// compute the points in 3D
@@ -170,42 +163,42 @@ void display_zones(int16 pKey)
 
 				// project all points
 
-				draw_bounding_box_project_points( &frontBottomLeftPoint,    &frontBottomLeftPoint2D );
-				draw_bounding_box_project_points( &frontBottomRightPoint,   &frontBottomRightPoint2D );
-				draw_bounding_box_project_points( &frontTopLeftPoint,       &frontTopLeftPoint2D );
-				draw_bounding_box_project_points( &frontTopRightPoint,      &frontTopRightPoint2D );
-				draw_bounding_box_project_points( &backBottomLeftPoint,     &backBottomLeftPoint2D );
-				draw_bounding_box_project_points( &backBottomRightPoint,    &backBottomRightPoint2D );
-				draw_bounding_box_project_points( &backTopLeftPoint,        &backTopLeftPoint2D );
-				draw_bounding_box_project_points( &backTopRightPoint,       &backTopRightPoint2D );
+				draw_bounding_box_project_points(&frontBottomLeftPoint,    &frontBottomLeftPoint2D);
+				draw_bounding_box_project_points(&frontBottomRightPoint,   &frontBottomRightPoint2D);
+				draw_bounding_box_project_points(&frontTopLeftPoint,       &frontTopLeftPoint2D);
+				draw_bounding_box_project_points(&frontTopRightPoint,      &frontTopRightPoint2D);
+				draw_bounding_box_project_points(&backBottomLeftPoint,     &backBottomLeftPoint2D);
+				draw_bounding_box_project_points(&backBottomRightPoint,    &backBottomRightPoint2D);
+				draw_bounding_box_project_points(&backTopLeftPoint,        &backTopLeftPoint2D);
+				draw_bounding_box_project_points(&backTopRightPoint,       &backTopRightPoint2D);
 
 				// draw all lines
 
-				color = 15*3+zonePtr->type*16;
+				color = 15 * 3 + zonePtr->type * 16;
 
 				// draw front part
-				draw_line(frontBottomLeftPoint2D.X,frontBottomLeftPoint2D.Y,frontTopLeftPoint2D.X,frontTopLeftPoint2D.Y,color);
-				draw_line(frontTopLeftPoint2D.X,frontTopLeftPoint2D.Y,frontTopRightPoint2D.X,frontTopRightPoint2D.Y,color);
-				draw_line(frontTopRightPoint2D.X,frontTopRightPoint2D.Y,frontBottomRightPoint2D.X,frontBottomRightPoint2D.Y,color);
-				draw_line(frontBottomRightPoint2D.X,frontBottomRightPoint2D.Y,frontBottomLeftPoint2D.X,frontBottomLeftPoint2D.Y,color);
+				draw_line(frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, color);
+				draw_line(frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, frontTopRightPoint2D.X, frontTopRightPoint2D.Y, color);
+				draw_line(frontTopRightPoint2D.X, frontTopRightPoint2D.Y, frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, color);
+				draw_line(frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, color);
 
 				// draw top part
-				draw_line(frontTopLeftPoint2D.X,frontTopLeftPoint2D.Y,backTopLeftPoint2D.X,backTopLeftPoint2D.Y,color);
-				draw_line(backTopLeftPoint2D.X,backTopLeftPoint2D.Y,backTopRightPoint2D.X,backTopRightPoint2D.Y,color);
-				draw_line(backTopRightPoint2D.X,backTopRightPoint2D.Y,frontTopRightPoint2D.X,frontTopRightPoint2D.Y,color);
-				draw_line(frontTopRightPoint2D.X,frontTopRightPoint2D.Y,frontTopLeftPoint2D.X,frontTopLeftPoint2D.Y,color);
+				draw_line(frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, backTopLeftPoint2D.X, backTopLeftPoint2D.Y, color);
+				draw_line(backTopLeftPoint2D.X, backTopLeftPoint2D.Y, backTopRightPoint2D.X, backTopRightPoint2D.Y, color);
+				draw_line(backTopRightPoint2D.X, backTopRightPoint2D.Y, frontTopRightPoint2D.X, frontTopRightPoint2D.Y, color);
+				draw_line(frontTopRightPoint2D.X, frontTopRightPoint2D.Y, frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, color);
 
 				// draw back part
-				draw_line(backBottomLeftPoint2D.X,backBottomLeftPoint2D.Y,backTopLeftPoint2D.X,backTopLeftPoint2D.Y,color);
-				draw_line(backTopLeftPoint2D.X,backTopLeftPoint2D.Y,backTopRightPoint2D.X,backTopRightPoint2D.Y,color);
-				draw_line(backTopRightPoint2D.X,backTopRightPoint2D.Y,backBottomRightPoint2D.X,backBottomRightPoint2D.Y,color);
-				draw_line(backBottomRightPoint2D.X,backBottomRightPoint2D.Y,backBottomLeftPoint2D.X,backBottomLeftPoint2D.Y,color);
+				draw_line(backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, backTopLeftPoint2D.X, backTopLeftPoint2D.Y, color);
+				draw_line(backTopLeftPoint2D.X, backTopLeftPoint2D.Y, backTopRightPoint2D.X, backTopRightPoint2D.Y, color);
+				draw_line(backTopRightPoint2D.X, backTopRightPoint2D.Y, backBottomRightPoint2D.X, backBottomRightPoint2D.Y, color);
+				draw_line(backBottomRightPoint2D.X, backBottomRightPoint2D.Y, backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, color);
 
 				// draw bottom part
-				draw_line(frontBottomLeftPoint2D.X,frontBottomLeftPoint2D.Y,backBottomLeftPoint2D.X,backBottomLeftPoint2D.Y,color);
-				draw_line(backBottomLeftPoint2D.X,backBottomLeftPoint2D.Y,backBottomRightPoint2D.X,backBottomRightPoint2D.Y,color);
-				draw_line(backBottomRightPoint2D.X,backBottomRightPoint2D.Y,frontBottomRightPoint2D.X,frontBottomRightPoint2D.Y,color);
-				draw_line(frontBottomRightPoint2D.X,frontBottomRightPoint2D.Y,frontBottomLeftPoint2D.X,frontBottomLeftPoint2D.Y,color);
+				draw_line(frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, color);
+				draw_line(backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, backBottomRightPoint2D.X, backBottomRightPoint2D.Y, color);
+				draw_line(backBottomRightPoint2D.X, backBottomRightPoint2D.Y, frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, color);
+				draw_line(frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, color);
 			}
 		}
 	}

@@ -1,9 +1,9 @@
 /** @file menuoptions.c
-	@brief 
+	@brief
 	This file contains movies routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -33,13 +33,12 @@
 #include "sdlengine.h"
 #include "dialogues.h"
 
-void new_game()
-{
+void new_game() {
 	/* Intro screen */
 	/*load_image( RESSHQR_INTROSCREEN1IMG, 1 );
 	init_dialogue_bank(2);
 	display_dialogue_fullscreen(150, 240);*/
-	
+
 	//delay(1000);
 	/*for(;;)
 	{
@@ -50,16 +49,14 @@ void new_game()
 }
 
 /** Main menu new game options */
-void new_game_menu()
-{
+void new_game_menu() {
 	//TODO: process players name
 	//if(process_player_name(42))
 	{
 		// TODO: create new saved game
 		init_engine_vars(1);
 		new_game();
-		if(game_engine_loop())
-		{
+		if (game_engine_loop()) {
 			//TODO: Show credit sequence
 		}
 	}

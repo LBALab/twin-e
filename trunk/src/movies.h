@@ -1,9 +1,9 @@
 /** @file movies.h
-	@brief 
+	@brief
 	This file contains movies routines
-	
+
 	Prequengine: a Little Big Adventure engine
-	
+
 	Copyright (C) 2008 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
@@ -34,8 +34,7 @@
 #define FLA_DIR "fla//"
 
 /** FLA movie header structure */
-typedef struct FLAHeaderStruct
-{
+typedef struct FLAHeaderStruct {
 	/** FLA version */
 	int8 version[6];
 	/** Number of frames */
@@ -51,8 +50,7 @@ typedef struct FLAHeaderStruct
 } FLAHeaderStruct;
 
 /** FLA movie frame structure */
-typedef struct FLAFrameDataStruct
-{
+typedef struct FLAFrameDataStruct {
 	/** Current frame size */
 	int8 videoSize;
 	/** Dummy variable */
@@ -62,8 +60,7 @@ typedef struct FLAFrameDataStruct
 } FLAFrameDataStruct;
 
 /** FLA movie sample structure */
-typedef struct FLASampleStruct
-{
+typedef struct FLASampleStruct {
 	/** Number os samples */
 	int16 sampleNum;
 	/** Sample frequency */
