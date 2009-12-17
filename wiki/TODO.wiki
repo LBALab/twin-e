@@ -7,10 +7,13 @@ This is the place to list every TODO we need to make for this project.
 
 = Details =
 
-  * Improve Keyboard routines. Its now based in original but will be a mess to port it. Possible way to resolve will still made like original but make a bridge between SDL I/O and LBA I/O.
   * Refactoring code:
     # Do endian for reading content from pointers for proper portability.
     # Comment and reorganize the code for animation and renderer files
     # Find better way (file/place) to put all init functions which reset the game state
     # Create new file for movements/direction. Will add code from actor.c and lbaengine.c
     # Rework on engine main loop (get rid of "too many separate functions").
+    # Improve Keyboard routines. Its now based in original but will be a mess to port it. Possible way to resolve will still made like original but make a bridge between SDL I/O and LBA I/O.
+  * Sound: animations don't have sound yet. Do Animation Actions.
+  * Menu: complete other menu options including volume settings
+  * Text: finish code to show intro screens in fullscreen.
