@@ -30,6 +30,7 @@
 #include "scene.h"
 #include "animations.h"
 #include "images.h"
+#include "sdlengine.h"
 
 int8 * HQR_RESS_FILE			= "ress.hqr";
 int8 * HQR_TEXT_FILE			= "text.hqr";
@@ -46,6 +47,37 @@ int8 * HQR_SPRITES_FILE			= "sprites.hqr";
 int8 * HQR_FILE3D_FILE			= "file3d.hqr";
 int8 * HQR_BODY_FILE			= "body.hqr";
 int8 * HQR_ANIM_FILE			= "anim.hqr";
+
+/** Init palettes */
+void init_palettes() {
+	// Init standard palette
+	hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_MAINPAL);
+	convert_pal_2_RGBA(palette, paletteRGBA);
+	set_palette(paletteRGBA);
+
+	// We use it now
+	palCustom = 0;
+}
+
+/** Preload all sprites */
+void preload_sprites() {
+	int32 i;
+	int32 numEntries = hqr_num_entries(HQR_SPRITES_FILE) - 1;
+
+	for (i = 0; i < numEntries; i++) {
+		spriteSizeTable[i] = hqr_getalloc_entry(&spriteTable[i], HQR_SPRITES_FILE, i);
+	}
+}
+
+/** Preload all animations */
+void preload_animations() {
+	int32 i;
+	int32 numEntries = hqr_num_entries(HQR_ANIM_FILE) - 1;
+
+	for (i = 0; i < numEntries; i++) {
+		animSizeTable[i] = hqr_getalloc_entry(&animTable[i], HQR_ANIM_FILE, i);
+	}
+}
 
 /** Initialize resource pointers */
 void init_resources() {
