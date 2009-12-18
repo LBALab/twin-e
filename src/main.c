@@ -105,12 +105,8 @@ int8 CFGList[][18] = {
 	"Version:",
 	"FullScreen:",
 	"UseCD:",
-	"NoSound:",
-	"UseHQSnd:",
-	"UseMP3:",
-	"FLAwide:",
-	"UseFLAPCX:",
-	"UseAVI:",
+	"Sound:",
+	"Movie:",
 	"CrossFade:",
 	"Fps:",
 	"Debug:",
@@ -221,33 +217,21 @@ void init_configurations() {
 				sscanf(buffer, "UseCD: %d", &cfgfile.UseCD);
 				break;
 			case 28:
-				sscanf(buffer, "NoSound: %d", &cfgfile.NoSound);
+				sscanf(buffer, "Sound: %d", &cfgfile.Sound);
 				break;
 			case 29:
-				sscanf(buffer, "UseHQSnd: %d", &cfgfile.UseHQSnd);
+				sscanf(buffer, "Movie: %d", &cfgfile.Movie);
 				break;
 			case 30:
-				sscanf(buffer, "UseMP3: %d", &cfgfile.UseMP3);
-				break;
-			case 31:
-				sscanf(buffer, "FLAwide: %d", &cfgfile.FLAwide);
-				break;
-			case 32:
-				sscanf(buffer, "UseFLAPCX: %d", &cfgfile.UseFLAPCX);
-				break;
-			case 33:
-				sscanf(buffer, "UseAVI: %d", &cfgfile.UseAVI);
-				break;
-			case 34:
 				sscanf(buffer, "CrossFade: %d", &cfgfile.CrossFade);
 				break;
-			case 35:
+			case 31:
 				sscanf(buffer, "Fps: %d", &cfgfile.Fps);
 				break;
-			case 36:
+			case 32:
 				sscanf(buffer, "Debug: %d", &cfgfile.Debug);
 				break;
-			case 37:
+			case 33:
 				sscanf(buffer, "UseAutoSaving: %d", &cfgfile.UseAutoSaving);
 				break;
 			}

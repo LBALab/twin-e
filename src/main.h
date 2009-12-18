@@ -86,25 +86,14 @@ typedef struct ConfigFile {
 	int32 LanguageCDId;
 	/** To allow fullscreen or window mode. */
 	int32 FullScreen;
-	/** To run the game without sound */
-	int32 NoSound;
 	/** If you want to use the LBA CD or not */
 	int32 UseCD;
-	/** If you want to use high quality sounds */
-	int32 UseHQSnd;
-	/** If you want to use MP3 or OGG files. UseHQSnd must be set */
-	int32 UseMP3;
-	/** To keep FLA movies aspect ratio or to strech it to
-		fullscreen like in the original game */
-	int32 FLAwide;
-	/** To use FLA PCX images instead of FLA movies */
-	int32 UseFLAPCX;
-	/** Use command format movies like AVIs instead of FLA movies */
-	int32 UseAVI;
+	/** Allow various sound types */
+	int32 Sound;
+	/** Allow various movie types */
+	int32 Movie;
 	/** Use cross fade effect while changing images, or be as the original */
 	int32 CrossFade;
-	/** Flag to quit the game */
-	int32 Quit;
 	/** Flag used to keep the game frames per second */
 	int32 Fps;
 	/** Flag to display game debug */
@@ -113,6 +102,8 @@ typedef struct ConfigFile {
 	int32 UseAutoSaving;
 	/** Shadow mode type */
 	int32 ShadowMode;
+	/** Flag to quit the game */
+	int32 Quit;
 } ConfigFile;
 
 /** Configuration file structure

@@ -54,7 +54,7 @@ void sample_volume(int32 channel, int32 volume) {
 	@param x unknown x variable
 	@param y unknown y variable*/
 void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		int32 sampSize = 0;
 		int8 sampfile[256];
 		SDL_RWops *rw;
@@ -78,13 +78,14 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 
 		if (cfgfile.Debug)
 			printf("Playing VOC: Sample %d\n", index);
+
 		free(sampPtr);
 	}
 }
 
 /** Stop samples */
 void stop_sample() {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		Mix_HaltChannel(-1);
 		//clean up
 		Mix_FreeChunk(sample);

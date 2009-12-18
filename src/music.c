@@ -108,7 +108,7 @@ void stop_track_music_cd() {
 	@param track track number to play */
 void play_track_music_mp3(int32 track) {
 	int8 musfile[256];
-	if (cfgfile.UseMP3)
+	if (cfgfile.Sound == 2)
 		sprintf(musfile, MUSIC_FOLDER "//%d.mp3", track);
 	else
 		sprintf(musfile, MUSIC_FOLDER "//%d.ogg", track);
@@ -122,7 +122,7 @@ void play_track_music_mp3(int32 track) {
 	Mix_PlayMusic(current_track, -1);
 
 	if (cfgfile.Debug) {
-		if (cfgfile.UseMP3)
+		if (cfgfile.Sound == 2)
 			printf("Playing track (MP3): %s\n", musfile);
 		else
 			printf("Playing track (OGG): %s\n", musfile);
@@ -143,14 +143,14 @@ void stop_track_music_mp3() {
 /** Generic play music, according with settings it plays CD or MP3 instead
 	@param track track number to play */
 void play_track_music(int32 track) {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		if (track == currentMusic)
 			return;
 		currentMusic = track;
 
 		stop_midi_music();
 
-		if (cfgfile.UseHQSnd)
+		if (cfgfile.Sound > 1)
 			play_track_music_mp3(track);
 		else if (cfgfile.UseCD)
 			play_track_music_cd(track);
@@ -159,10 +159,10 @@ void play_track_music(int32 track) {
 
 /** Generic stop music according with settings */
 void stop_track_music() {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		music_fade_out(FADE_MS);
 
-		if (cfgfile.UseHQSnd)
+		if (cfgfile.Sound > 1)
 			stop_track_music_mp3();
 		else if (cfgfile.UseCD)
 			stop_track_music_cd();
@@ -172,7 +172,7 @@ void stop_track_music() {
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
 void play_midi_music(int32 midiIdx, int32 loop) {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		int32 midiSize;
 		int8 filename[256];
 		SDL_RWops *rw;
@@ -183,8 +183,8 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 			return;
 		currentMusic = midiIdx;
 
-		if (cfgfile.UseHQSnd) {
-			if (cfgfile.UseAVI)
+		if (cfgfile.Sound > 1) {
+			if (cfgfile.Sound == 2)
 				sprintf(filename, "%s", HQR_MIDI_MI_WIN_MP3_FILE);
 			else
 				sprintf(filename, "%s", HQR_MIDI_MI_WIN_OGG_FILE);
@@ -211,8 +211,8 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 			printf("Error while playing music: %d \n", midiIdx);
 
 		if (cfgfile.Debug) {
-			if (cfgfile.UseHQSnd) {
-				if (cfgfile.UseAVI)
+			if (cfgfile.Sound > 1) {
+				if (cfgfile.Sound == 2)
 					printf("Playing Music (MP3): %d\n", midiIdx);
 				else
 					printf("Playing Music (OGG): %d\n", midiIdx);
@@ -224,7 +224,7 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 
 /** Stop MIDI music */
 void stop_midi_music() {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		if (current_track != NULL) {
 			Mix_FreeMusic(current_track);
 			current_track = NULL;
@@ -239,7 +239,7 @@ void stop_midi_music() {
 
 /** Initialize CD-Rom */
 int init_cdrom() {
-	if (!cfgfile.NoSound) {
+	if (cfgfile.Sound) {
 		int32 numOfCDROM;
 		int32 cdNum;
 

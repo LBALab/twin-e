@@ -144,7 +144,7 @@ int sdl_initialize() {
 	printf("Initialising SDL device. Please wait...\n");
 
 	// Verify if we want to use high quality sounds
-	if (cfgfile.UseHQSnd)
+	if (cfgfile.Sound > 1)
 		freq = HIGH_QUALITY_FREQUENCY;
 	else
 		freq = ORIGINAL_GAME_FREQUENCY;

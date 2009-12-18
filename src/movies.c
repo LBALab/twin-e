@@ -40,6 +40,12 @@
 #include "lbaengine.h"
 #include "keyboard.h"
 
+/** Config movie types */
+#define CONF_MOVIE_NONE    0
+#define CONF_MOVIE_FLA     1
+#define CONF_MOVIE_FLAWIDE 2
+#define CONF_MOVIE_FLAPCX  3
+#define CONF_MOVIE_AVI     4
 
 /** FLA movie extension */
 #define FLA_EXT ".fla"
@@ -176,7 +182,7 @@ void scale_fla_2x() {
 	uint8* source = (uint8*)flaBuffer;
 	uint8* dest = (uint8*)workVideoBuffer;
 
-	if (cfgfile.FLAwide) {
+	if (cfgfile.Movie == CONF_MOVIE_FLAWIDE) {
 		for (i = 0; i < SCREEN_WIDTH / SCALE*40; i++) {
 			*(dest++) = 0x00;
 		}
@@ -187,7 +193,7 @@ void scale_fla_2x() {
 			*(dest++) = *(source);
 			*(dest++) = *(source++);
 		}
-		if (cfgfile.FLAwide) { // include wide bars
+		if (cfgfile.Movie == CONF_MOVIE_FLAWIDE) { // include wide bars
 			memcpy(dest, dest - SCREEN_WIDTH / SCALE, FLASCREEN_WIDTH*2);
 			dest += FLASCREEN_WIDTH * 2;
 		} else { // stretch the movie like original game.
@@ -202,7 +208,7 @@ void scale_fla_2x() {
 		}
 	}
 
-	if (cfgfile.FLAwide) {
+	if (cfgfile.Movie == CONF_MOVIE_FLAWIDE) {
 		for (i = 0; i < SCREEN_WIDTH / SCALE*40; i++) {
 			*(dest++) = 0x00;
 		}
@@ -370,26 +376,30 @@ void play_fla_movie(int8 *filename) {
 	else
 		fade_2_black(paletteRGBACustom);
 	stop_sample();
-
-	// IMPORTANT: free FLA memory allocation
-	//flaPtr = (char*)ptrAddress;
-	//free(flaPtr);
 }
 
 /** Generic play movies, according with the settings
 	@param movie - movie file path */
 void play_movie(int8 *movie) {
-	if (cfgfile.UseAVI) {
-		int8 fileBuf[256];
-		sprintf(fileBuf, MOVIES_DIR);
-		strcat(fileBuf, movie);
-		strcat(fileBuf, MOVIES_EXT);
-	} else { // play FLA movies
-		int8 fileBuf[256];
+	int8 fileBuf[256];
+
+	switch(cfgfile.Movie) {
+	case CONF_MOVIE_NONE:
+		break;
+	case CONF_MOVIE_FLA:
+	case CONF_MOVIE_FLAWIDE:
 		sprintf(fileBuf, FLA_DIR);
 		strcat(fileBuf, movie);
 		strcat(fileBuf, FLA_EXT);
 		play_fla_movie(fileBuf);
+		break;
+	case CONF_MOVIE_FLAPCX:
+	case CONF_MOVIE_AVI:
+		sprintf(fileBuf, MOVIES_DIR);
+		strcat(fileBuf, movie);
+		strcat(fileBuf, MOVIES_EXT);
+	default:
+		printf("Movie type not supported yet!! Type: %d", cfgfile.Movie);
 	}
 }
 
