@@ -37,16 +37,6 @@
 #include "renderer.h"
 #include "movements.h"
 
-/** Preload all animations */
-void preload_animations() {
-	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_ANIM_FILE) - 1;
-
-	for (i = 0; i < numEntries; i++) {
-		animSizeTable[i] = hqr_getalloc_entry(&animTable[i], HQR_ANIM_FILE, i);
-	}
-}
-
 int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 numOfKeyframeInAnim;
 	int16 numOfBonesInAnim;
@@ -104,14 +94,12 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 
 	ptrToData = ptrToDataBackup + 2;
 
-	currentX = *(int16 *)(ptrToData);
-	currentY = *(int16 *)(ptrToData + 2);
-	currentZ = *(int16 *)(ptrToData + 4);
+	currentStepX = *(int16 *)(ptrToData);
+	currentStepY = *(int16 *)(ptrToData + 2);
+	currentStepZ = *(int16 *)(ptrToData + 4);
 
-	processActorVar5     = *(int16 *)(ptrToData + 6);
-	processActorSub2Var0 = *(int16 *)(ptrToData + 8);
-	processActorVar6     = *(int16 *)(ptrToData + 10);
-	processActorSub2Var1 = *(int16 *)(ptrToData + 12);
+	processRotationByAnim    = *(int16 *)(ptrToData + 6);
+	processLastRotationAngle = *(int16 *)(ptrToData + 10);
 
 	return (1);
 }
@@ -276,14 +264,12 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		animTimerDataPtr->ptr = keyFramePtr;
 		animTimerDataPtr->time = lbaTime;
 
-		currentX = *(int16 *)(keyFramePtr + 2);
-		currentY = *(int16 *)(keyFramePtr + 4);
-		currentZ = *(int16 *)(keyFramePtr + 6);
+		currentStepX = *(int16 *)(keyFramePtr + 2);
+		currentStepY = *(int16 *)(keyFramePtr + 4);
+		currentStepZ = *(int16 *)(keyFramePtr + 6);
 
-		processActorVar5     = *(int16 *)(keyFramePtr + 8);
-		processActorSub2Var0 = *(int16 *)(keyFramePtr + 10);
-		processActorVar6     = *(int16 *)(keyFramePtr + 12);
-		processActorSub2Var1 = *(int16 *)(keyFramePtr + 14);
+		processRotationByAnim    = *(int16 *)(keyFramePtr + 8);
+		processLastRotationAngle = *(int16 *)(keyFramePtr + 12);
 
 		return (1);
 	} else {
@@ -292,10 +278,8 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		lastKeyFramePtr += 8;
 		keyFramePtr += 8;
 
-		processActorVar5     = *(int16 *)(keyFramePtr);
-		processActorSub2Var0 = (*(int16 *)(keyFramePtr + 2) * eax) / keyFrameLength;
-		processActorVar6     = (*(int16 *)(keyFramePtr + 4) * eax) / keyFrameLength;
-		processActorSub2Var1 = (*(int16 *)(keyFramePtr + 6) * eax) / keyFrameLength;
+		processRotationByAnim    = *(int16 *)(keyFramePtr);
+		processLastRotationAngle = (*(int16 *)(keyFramePtr + 4) * eax) / keyFrameLength;
 
 		lastKeyFramePtr += 8;
 		keyFramePtr += 8;
@@ -337,9 +321,9 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 			} while (--animVar4);
 		}
 
-		currentX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
-		currentY = (*(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
-		currentZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
+		currentStepX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
+		currentStepY = (*(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
+		currentStepZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
 	}
 
 	return (0);
@@ -360,7 +344,7 @@ int32 get_body_anim_index(int32 anim, int16 actorNumber) {
 		type = *(bodyPtr++);
 
 		if (type == -1) {
-			currentActorAnimExtraData = NULL;
+			currentActorAnimExtraPtr = NULL;
 			return (-1);
 		}
 
@@ -376,7 +360,7 @@ int32 get_body_anim_index(int32 anim, int16 actorNumber) {
 				if (*ptr2 != 0) {
 					costumePtr = ptr - 1;
 				}
-				currentActorAnimExtraData = costumePtr;
+				currentActorAnimExtraPtr = costumePtr;
 				return (var1);
 			}
 		}
@@ -437,77 +421,6 @@ int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTi
 	return (0);
 }
 
-int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum) {
-	ActorStruct *localActor;
-	int32 animIndex;
-
-	localActor = &sceneActors[actorNum];
-
-	if (localActor->entity == -1)
-		return (0);
-
-	if (localActor->staticFlags.bIsSpriteActor) // si c'est un sprite
-		return (0);
-
-	if (newAnim == localActor->anim && localActor->previousAnimIdx != -1) // le costume est deja loade
-		return (1);
-
-	if (arg_8 == 255 && localActor->field_78 != 2)
-		arg_8 = localActor->anim;
-
-	animIndex = get_body_anim_index(newAnim, actorNum);
-
-	if (animIndex == -1)
-		animIndex = get_body_anim_index(0, actorNum);
-
-	if (arg_4 != 4 && localActor->field_78 == 2) {
-		localActor->animExtra = newAnim;
-		return (0);
-	}
-
-	if (arg_4 == 3) {
-		arg_4 = 2;
-
-		arg_8 = localActor->anim;
-
-		if (arg_8 == 15 || arg_8 == 7 || arg_8 == 8 || arg_8 == 9) {
-			arg_8 = 0;
-		}
-	}
-
-	if (arg_4 == 4)
-		arg_4 = 2;
-
-	if (localActor->previousAnimIdx == -1) {	// if no previous animation
-		//setAnimAtKeyFrame(0, HQR_Get(HQR_Anims, animIndex), bodyTable[lactor->costumeIndex], &lactor->animTimerData);	// set animation directly to first keyFrame
-	} else { // interpolation between animations
-		animBuffer2 += stock_animation(animBuffer2, bodyTable[localActor->entity], &localActor->animTimerData);
-		if (animBuffer1 + 4488 > animBuffer2)
-			animBuffer2 = animBuffer1;
-	}
-
-	localActor->previousAnimIdx = animIndex;
-	localActor->anim = newAnim;
-	localActor->animExtra = arg_8;
-	localActor->animExtraData = currentActorAnimExtraData;
-	localActor->field_78 = arg_4;
-	localActor->animPosition = 0;
-	localActor->dynamicFlags.bIsHitting = 0;
-	localActor->dynamicFlags.bAnimEnded = 0;
-	localActor->dynamicFlags.bAnimFrameReached = 1;
-
-	if (localActor->animExtraData) {
-		//GereAnimAction(lactor, actorNum);
-	}
-
-	localActor->lastRotationSpeed = 0;
-	localActor->lastX = 0;
-	localActor->lastY = 0;
-	localActor->lastZ = 0;
-
-	return (1);
-}
-
 int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 bodyHeader;
 
@@ -551,14 +464,12 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 		animTimerDataPtr->ptr = keyFramePtr;
 		animTimerDataPtr->time = lbaTime;
 
-		currentX = *(int16 *)(keyFramePtr + 2);
-		currentY = *(int16 *)(keyFramePtr + 4);
-		currentZ = *(int16 *)(keyFramePtr + 6);
+		currentStepX = *(int16 *)(keyFramePtr + 2);
+		currentStepY = *(int16 *)(keyFramePtr + 4);
+		currentStepZ = *(int16 *)(keyFramePtr + 6);
 
-		processActorVar5     = *(int16 *)(keyFramePtr + 8);
-		processActorSub2Var0 = *(int16 *)(keyFramePtr + 10);
-		processActorVar6     = *(int16 *)(keyFramePtr + 12);
-		processActorSub2Var1 = *(int16 *)(keyFramePtr + 14);
+		processRotationByAnim    = *(int16 *)(keyFramePtr + 8);
+		processLastRotationAngle = *(int16 *)(keyFramePtr + 12);
 
 		return (1);
 	} else {
@@ -567,23 +478,93 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 		lastKeyFramePtr += 8;
 		keyFramePtr += 8;
 
-		processActorVar5     = *(int16 *)(keyFramePtr);
-		processActorSub2Var0 = (*(int16 *)(keyFramePtr + 2) * eax) / keyFrameLength;
-		processActorVar6     = (*(int16 *)(keyFramePtr + 4) * eax) / keyFrameLength;
-		processActorSub2Var1 = (*(int16 *)(keyFramePtr + 6) * eax) / keyFrameLength;
+		processRotationByAnim    = *(int16 *)(keyFramePtr);
+		processLastRotationAngle = (*(int16 *)(keyFramePtr + 4) * eax) / keyFrameLength;
 
 		lastKeyFramePtr += 8;
 		keyFramePtr += 8;
 
-		currentX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
-		currentY = (*(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
-		currentZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
+		currentStepX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
+		currentStepY = (*(int16 *)(keyFramePtrOld + 4) * eax) / keyFrameLength;
+		currentStepZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
 	}
 
 	return (0);
 }
 
-/** Process main loop actor animations */
+int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
+	ActorStruct *actor;
+	int32 animIndex;
+
+	actor = &sceneActors[actorIdx];
+
+	if (actor->entity == -1)
+		return (0);
+
+	if (actor->staticFlags.bIsSpriteActor)
+		return (0);
+
+	if (newAnim == actor->anim && actor->previousAnimIdx != -1)
+		return (1);
+
+	if (animExtra == 255 && actor->animType != 2)
+		animExtra = actor->anim;
+
+	animIndex = get_body_anim_index(newAnim, actorIdx);
+
+	if (animIndex == -1)
+		animIndex = get_body_anim_index(0, actorIdx);
+
+	if (animType != 4 && actor->animType == 2) {
+		actor->animExtra = newAnim;
+		return (0);
+	}
+
+	if (animType == 3) {
+		animType = 2;
+
+		animExtra = actor->anim;
+
+		if (animExtra == 15 || animExtra == 7 || animExtra == 8 || animExtra == 9) {
+			animExtra = 0;
+		}
+	}
+
+	if (animType == 4)
+		animType = 2;
+
+	if (actor->previousAnimIdx == -1) {	// if no previous animation
+		//setAnimAtKeyFrame(0, HQR_Get(HQR_Anims, animIndex), bodyTable[lactor->costumeIndex], &lactor->animTimerData);	// set animation directly to first keyFrame
+	} else { // interpolation between animations
+		animBuffer2 += stock_animation(animBuffer2, bodyTable[actor->entity], &actor->animTimerData);
+		if (animBuffer1 + 4488 > animBuffer2)
+			animBuffer2 = animBuffer1;
+	}
+
+	actor->previousAnimIdx = animIndex;
+	actor->anim = newAnim;
+	actor->animExtra = animExtra;
+	actor->animExtraPtr = currentActorAnimExtraPtr;
+	actor->animType = animType;
+	actor->animPosition = 0;
+	actor->dynamicFlags.bIsHitting = 0;
+	actor->dynamicFlags.bAnimEnded = 0;
+	actor->dynamicFlags.bAnimFrameReached = 1;
+
+	if (actor->animExtraPtr) {
+		//GereAnimAction(lactor, actorNum);
+	}
+
+	actor->lastRotationAngle = 0;
+	actor->lastX = 0;
+	actor->lastY = 0;
+	actor->lastZ = 0;
+
+	return (1);
+}
+
+/** Process main loop actor animations
+	@param actorIdx Actor index */
 void process_actor_animations(int32 actorIdx) { // DoAnim
 	int16 numKeyframe;
 	int8 *animPtr;
@@ -591,7 +572,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 	actor = &sceneActors[actorIdx];
 
-	currentlyProcessedActorNum = actorIdx;
+	currentlyProcessedActorIdx = actorIdx;
 	processActorPtr = actor;
 
 	if (actor->entity == -1)
@@ -618,43 +599,43 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 			keyFramePassed = verify_anim_at_keyframe(actor->animPosition, animPtr, (int8*)bodyTable[actor->entity], &actor->animTimerData);
 
-			if (processActorVar5) {
+			if (processRotationByAnim) {
 				actor->dynamicFlags.bIsRotationByAnim = 1;
 			} else {
 				actor->dynamicFlags.bIsRotationByAnim = 0;
 			}
 
-			actor->angle = (actor->angle + processActorVar6 - actor->lastRotationSpeed) & 0x3FF;
-			actor->lastRotationSpeed = processActorVar6;
+			actor->angle = (actor->angle + processLastRotationAngle - actor->lastRotationAngle) & 0x3FF;
+			actor->lastRotationAngle = processLastRotationAngle;
 
-			rotate_actor(currentX, currentZ, actor->angle);
+			rotate_actor(currentStepX, currentStepZ, actor->angle);
 
-			currentX = destX; // dest
-			currentZ = destZ;
+			currentStepX = destX; // dest
+			currentStepZ = destZ;
 
-			processActorX = actor->X + currentX - actor->lastX;
-			processActorY = actor->Y + currentY - actor->lastY;
-			processActorZ = actor->Z + currentZ - actor->lastZ;
+			processActorX = actor->X + currentStepX - actor->lastX;
+			processActorY = actor->Y + currentStepY - actor->lastY;
+			processActorZ = actor->Z + currentStepZ - actor->lastZ;
 
-			actor->lastX = currentX;
-			actor->lastY = currentY;
-			actor->lastZ = currentZ;
+			actor->lastX = currentStepX;
+			actor->lastY = currentStepY;
+			actor->lastZ = currentStepZ;
 
 			actor->dynamicFlags.bAnimEnded = 0;
 			actor->dynamicFlags.bAnimFrameReached = 0;
 
-			if (keyFramePassed) { // if keyFrame
+			if (keyFramePassed) {
 				actor->animPosition++;
 
-				if (actor->animExtraData) { // if actor have animation actions to process
+				if (actor->animExtraPtr) { // if actor have animation actions to process
 					//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
 				}
 
 				numKeyframe = actor->animPosition;
-				if (numKeyframe == get_num_keyframes(animPtr)) { // last anim keyframe
+				if (numKeyframe == get_num_keyframes(animPtr)) {
 					actor->dynamicFlags.bIsHitting = 0;
 
-					if (actor->field_78 == 0) {
+					if (actor->animType == 0) {
 						actor->animPosition = get_start_keyframe(animPtr);
 					} else {
 						actor->anim = actor->animExtra;
@@ -665,21 +646,21 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 							actor->anim = 0;
 						}
 
-						actor->animExtraData = currentActorAnimExtraData;
+						actor->animExtraPtr = currentActorAnimExtraPtr;
 
-						actor->field_78 = 0;
+						actor->animType = 0;
 						actor->animPosition = 0;
 						actor->strengthOfHit = 0;
 					}
 
-					if (actor->animExtraData) {
+					if (actor->animExtraPtr) {
 						//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
 					}
 
 					actor->dynamicFlags.bAnimEnded = 1;
 				}
 
-				actor->lastRotationSpeed = 0;
+				actor->lastRotationAngle = 0;
 
 				actor->lastX = 0;
 				actor->lastY = 0;

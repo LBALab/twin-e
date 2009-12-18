@@ -130,7 +130,7 @@ typedef struct ActorStruct {
 	int32 anim;
 	int32 animExtra; //field_2
 	int32 field_3;
-	uint8 *animExtraData;
+	uint8 *animExtraPtr;
 	int32 sprite; // field_8
 	uint8 *entityDataPtr;
 
@@ -169,14 +169,14 @@ typedef struct ActorStruct {
 	int32 standOn;
 	int32 zone;
 
-	int32 lastRotationSpeed;
+	int32 lastRotationAngle;
 	int32 lastX;
 	int32 lastZ;
 	int32 lastY;
 	int32 previousAnimIdx;
 	int32 doorStatus;
 	int32 animPosition;
-	int32 field_78;
+	int32 animType; // field_78
 
 	ZVBox boudingBox;
 	ActorMoveStruct move;
@@ -191,13 +191,6 @@ int32 shadowY;
 int32 shadowZ;
 /** Actor shadow collition type */
 int8 shadowCollisionType; // shadowVar
-
-int16 currentX;
-int16 currentY;
-int16 currentZ;
-
-uint8 *currentActorAnimExtraData;
-
 
 /** Hero behaviour */
 int16 heroBehaviour;

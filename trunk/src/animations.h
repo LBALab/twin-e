@@ -43,15 +43,25 @@
 /** Table with all loaded animations */
 uint8* animTable[NUM_ANIMS];
 /** Table with all loaded animations sizes */
-uint32   animSizeTable[NUM_ANIMS];
+uint32 animSizeTable[NUM_ANIMS];
 
 ActorStruct *processActorPtr; // actor pointer
 
-int16 processActorVar5;
-int16 processActorVar6;
-int16 processActorSub2Var0;
-int16 processActorSub2Var1;
-int16 currentlyProcessedActorNum;
+/** Rotation by anim and not by engine */
+int16 processRotationByAnim;    // processActorVar5
+/** Last rotation angle */
+int16 processLastRotationAngle; // processActorVar6
+/** Current process actor index */
+int16 currentlyProcessedActorIdx;
+
+/** Current step X coornidate */
+int16 currentStepX;
+/** Current step Y coornidate */
+int16 currentStepY;
+/** Current step Z coornidate */
+int16 currentStepZ;
+
+uint8 *currentActorAnimExtraPtr;
 
 uint8 *keyFramePtr;
 uint8 *lastKeyFramePtr;
@@ -63,14 +73,18 @@ uint8 *animBuffer1;
 uint8 *animBuffer2;
 
 
-void preload_animations();
 int32 set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
 int32 get_num_keyframes(uint8 *ptr);
 int32 get_start_keyframe(uint8 *ptr);
 int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
 int32 get_body_anim_index(int32 anim, int16 actorNumber);
-int32 init_anim(int8 newAnim, int16 arg_4, uint8 arg_8, int16 actorNum);
 int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
+
+/**  */
+int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx);
+
+/** Process main loop actor animations
+	@param actorIdx Actor index */
 void process_actor_animations(int32 actorIdx);
 
 #endif

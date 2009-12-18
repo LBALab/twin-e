@@ -92,7 +92,7 @@ void load_hero_entities() {
 	sceneHero->entityDataPtr = heroEntityNORMAL;
 	//TCos4Init = getAnimIndexForBody(0, 0);
 
-	sceneHero->animExtraData = currentActorAnimExtraData;
+	sceneHero->animExtraPtr = currentActorAnimExtraPtr;
 }
 
 /** Set hero behaviour
@@ -131,19 +131,9 @@ void set_behaviour(int32 behaviour) {
 	init_model_actor(bodyIdx, 0);
 
 	sceneHero->anim = -1;
-	sceneHero->field_78 = 0;
+	sceneHero->animType = 0;
 
 	init_anim(ANIM_STANDING, 0, 255, 0);
-}
-
-/** Preload all sprites */
-void preload_sprites() {
-	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_SPRITES_FILE) - 1;
-
-	for (i = 0; i < numEntries; i++) {
-		spriteSizeTable[i] = hqr_getalloc_entry(&spriteTable[i], HQR_SPRITES_FILE, i);
-	}
 }
 
 /** Initialize sprite actor
@@ -385,7 +375,7 @@ void init_actor(int16 actorIdx) {
 		init_model_actor(actor->body, actorIdx);
 
 		actor->previousAnimIdx = -1;
-		actor->field_78 = 0;
+		actor->animType = 0;
 
 		if (actor->entity != -1) {
 			init_anim(actor->anim, 0, 255, actorIdx);

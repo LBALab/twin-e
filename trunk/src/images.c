@@ -259,14 +259,3 @@ void copy_screen(uint8 * source, uint8 * destination) {
 void clear_screen() {
 	memset(frontVideoBuffer, 0, SCREEN_WIDTH*SCREEN_HEIGHT);
 }
-
-/** Init palettes */
-void init_palettes() {
-	// Init standard palette
-	hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_MAINPAL);
-	convert_pal_2_RGBA(palette, paletteRGBA);
-	set_palette(paletteRGBA);
-
-	// We use it now
-	palCustom = 0;
-}
