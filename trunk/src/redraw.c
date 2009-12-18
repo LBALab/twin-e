@@ -295,7 +295,7 @@ int process_actors_drawlist(int32 bgRedraw) {
 
 							tmpVal--;
 							drawList[drawListPos].posValue = tmpVal; // save the shadow entry in the drawList
-							drawList[drawListPos].index = 0xC00;    // shadowActorPos
+							drawList[drawListPos].index = 0xC00;     // shadowActorPos
 							drawList[drawListPos].X = shadowX;
 							drawList[drawListPos].Y = shadowY;
 							drawList[drawListPos].Z = shadowZ;
