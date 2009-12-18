@@ -34,10 +34,15 @@
 /** Total number of animations allowed in the game */
 #define NUM_ANIMS 600
 
+/** Hero standing anim value */
 #define ANIM_STANDING  0
+/** Hero forward anim value */
 #define ANIM_FORWARD   1
+/** Hero backward anim value */
 #define ANIM_BACKWARD  2
+/** Hero turn left anim value */
 #define ANIM_TURNLEFT  3
+/** Hero turn right anim value */
 #define ANIM_TURNRIGHT 4
 
 /** Table with all loaded animations */
@@ -60,27 +65,56 @@ int16 currentStepX;
 int16 currentStepY;
 /** Current step Z coornidate */
 int16 currentStepZ;
-
+/** Current actor anim extra pointer */
 uint8 *currentActorAnimExtraPtr;
 
+/** Pointer to current animation keyframe */
 uint8 *keyFramePtr;
+/** Pointer to last animation keyframe */
 uint8 *lastKeyFramePtr;
-
-uint8 *animVar1;
-int16 animVar4;
 
 uint8 *animBuffer1;
 uint8 *animBuffer2;
 
+/** Set animation keyframe
+	@param keyframIdx Animation keyframe index
+	@param animPtr Pointer to animation
+	@param bodyPtr Body model poitner
+	@param animTimerDataPtr Animation time data */
+int32 set_anim_at_keyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
 
-int32 set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
-int32 get_num_keyframes(uint8 *ptr);
-int32 get_start_keyframe(uint8 *ptr);
-int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
-int32 get_body_anim_index(int32 anim, int16 actorNumber);
-int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr);
+/** Get total number of keyframes in animation
+	@param animPtr Pointer to animation */
+int32 get_num_keyframes(uint8 *animPtr);
 
-/**  */
+/** Get first keyframes in animation
+	@param animPtr Pointer to animation */
+int32 get_start_keyframe(uint8 *animPtr);
+
+/** Set new body animation
+	@param animIdx Animation index
+	@param animPtr Animation pointer
+	@param bodyPtr Body model poitner 
+	@param animTimerDataPtr Animation time data */
+int32 set_model_animation(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
+
+/** Get entity anim index (This is taken from File3D entities)
+	@param animIdx Entity animation index
+	@param actorIdx Actor index */
+int32 get_body_anim_index(int32 animIdx, int16 actorIdx);
+
+/** Verify animation at keyframe
+	@param animIdx Animation index
+	@param animPtr Animation pointer
+	@param bodyPtr Body model poitner 
+	@param animTimerDataPtr Animation time data */
+int32 verify_anim_at_keyframe(int32 animPos, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
+
+/** Initialize animation
+	@param newAnim animation to init
+	@param animType animation type
+	@param animExtra animation actions extra data
+	@param actorIdx actor index */
 int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx);
 
 /** Process main loop actor animations

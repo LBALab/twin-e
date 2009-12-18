@@ -37,7 +37,12 @@
 #include "renderer.h"
 #include "movements.h"
 
-int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
+/** Set animation keyframe
+	@param keyframIdx Animation keyframe index
+	@param animPtr Pointer to animation
+	@param bodyPtr Body model poitner
+	@param animTimerDataPtr Animation time data */
+int set_anim_at_keyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 numOfKeyframeInAnim;
 	int16 numOfBonesInAnim;
 	uint8 *ptrToData;
@@ -48,21 +53,21 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 	int16 numOfPointInBody;
 	int32 i;
 
-	numOfKeyframeInAnim = *(int16 *)(anim);
+	numOfKeyframeInAnim = *(int16 *)(animPtr);
 
 	if (keyframeIdx >= numOfKeyframeInAnim)
-		return (numOfKeyframeInAnim);
+		return numOfKeyframeInAnim;
 
-	numOfBonesInAnim = *(int16 *)(anim + 2);
+	numOfBonesInAnim = *(int16 *)(animPtr + 2);
 
-	ptrToData = (uint8 *)((numOfBonesInAnim * 8 + 8) * keyframeIdx + anim + 8);
+	ptrToData = (uint8 *)((numOfBonesInAnim * 8 + 8) * keyframeIdx + animPtr + 8);
 
-	bodyHeader = *(int16 *)(body);
+	bodyHeader = *(int16 *)(bodyPtr);
 
 	if (!(bodyHeader & 2))
-		return (0);
+		return 0;
 
-	ptrToBodyData = body + 14;
+	ptrToBodyData = bodyPtr + 14;
 
 	animTimerDataPtr->ptr = ptrToData;
 	animTimerDataPtr->time = lbaTime;
@@ -101,17 +106,22 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *anim, uint8 *body, AnimTimerD
 	processRotationByAnim    = *(int16 *)(ptrToData + 6);
 	processLastRotationAngle = *(int16 *)(ptrToData + 10);
 
-	return (1);
+	return 1;
 }
 
-int32 get_num_keyframes(uint8 *ptr) {
-	return (*(int16 *)(ptr));
+/** Get total number of keyframes in animation
+	@param animPtr Pointer to animation */
+int32 get_num_keyframes(uint8 *animPtr) {
+	return (*(int16 *)(animPtr));
 }
 
-int get_start_keyframe(uint8 *ptr) {
-	return (*(int16 *)(ptr + 4));
+/** Get first keyframes in animation
+	@param animPtr Pointer to animation */
+int32 get_start_keyframe(uint8 *animPtr) {
+	return (*(int16 *)(animPtr + 4));
 }
 
+/** Apply animation step rotation */
 void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx) {
 	int16 *dest;
 	int16 lastAngle;
@@ -147,6 +157,7 @@ void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx) {
 	*(ptr) = *(ptr) + 2;
 }
 
+/** Apply animation step */
 void apply_anim_step(uint8 **ptr, int32 bp, int32 bx) {
 	int16 *dest;
 	int16 lastAngle;
@@ -173,6 +184,7 @@ void apply_anim_step(uint8 **ptr, int32 bp, int32 bx) {
 	*(ptr) = *(ptr) + 2;
 }
 
+/** Get animation mode */
 int32 get_anim_mode(uint8 **ptr) {
 	int16 *lptr;
 	int16 opcode;
@@ -186,10 +198,15 @@ int32 get_anim_mode(uint8 **ptr) {
 	*(ptr) = *(ptr) + 2;
 	lastKeyFramePtr += 2;
 
-	return (opcode);
+	return opcode;
 }
 
-int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
+/** Set new body animation
+	@param animIdx Animation index
+	@param animPtr Animation pointer
+	@param bodyPtr Body model poitner 
+	@param animTimerDataPtr Animation time data */
+int32 set_model_animation(int32 animState, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 animOpcode;
 
 	int16 bodyHeader;
@@ -203,21 +220,19 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 	int32 numOfPointInAnim;
 	uint8 *keyFramePtrOld;
 
-	numOfPointInAnim = *(int16 *)(animData + 2);
+	numOfPointInAnim = *(int16 *)(animPtr + 2);
 
-	keyFramePtr = ((numOfPointInAnim * 8 + 8) * animState) + animData + 8;
+	keyFramePtr = ((numOfPointInAnim * 8 + 8) * animState) + animPtr + 8;
 
 	keyFrameLength = *(int16 *)(keyFramePtr);
 
-	bodyHeader = *(int16 *)(body);
+	bodyHeader = *(int16 *)(bodyPtr);
 
 	if (!(bodyHeader & 2)) {
-		return (0);
+		return 0;
 	}
 
-	edi = body + 16;
-
-	animVar1 = edi;
+	edi = bodyPtr + 16;
 
 	ebx = animTimerDataPtr->ptr;
 	ebp = animTimerDataPtr->time;
@@ -226,10 +241,6 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		ebx = keyFramePtr;
 		ebp = keyFrameLength;
 	}
-	/*	else
-		{
-			assert_ptr(ebx);
-		}*/
 
 	lastKeyFramePtr = ebx;
 
@@ -271,7 +282,7 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		processRotationByAnim    = *(int16 *)(keyFramePtr + 8);
 		processLastRotationAngle = *(int16 *)(keyFramePtr + 12);
 
-		return (1);
+		return 1;
 	} else {
 		keyFramePtrOld = keyFramePtr;
 
@@ -287,7 +298,7 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		edi += 38;
 
 		if (--numOfPointInAnim) {
-			animVar4 = numOfPointInAnim;
+			int16 tmpNumOfPoints = numOfPointInAnim;
 
 			do {
 				animOpcode = get_anim_mode(&edi);
@@ -318,7 +329,7 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 				}
 
 				edi += 30;
-			} while (--animVar4);
+			} while (--tmpNumOfPoints);
 		}
 
 		currentStepX = (*(int16 *)(keyFramePtrOld + 2) * eax) / keyFrameLength;
@@ -326,34 +337,37 @@ int32 set_model_animation(int32 animState, uint8 *animData, uint8 *body, AnimTim
 		currentStepZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
 	}
 
-	return (0);
+	return 0;
 }
 
-int32 get_body_anim_index(int32 anim, int16 actorNumber) {
+/** Get entity anim index (This is taken from File3D entities)
+	@param anim Entity animation index
+	@param actorIdx Actor index */
+int32 get_body_anim_index(int32 animIdx, int16 actorIdx) {
 	int8 type;
-	uint16 var1;
+	uint16 realAnimIdx;
 	uint8 *bodyPtr;
 	uint8 *ptr, *ptr2;
 	uint8 *costumePtr = NULL;
-	ActorStruct *localActor;
+	ActorStruct *actor;
 
-	localActor = &sceneActors[actorNumber];
-	bodyPtr = localActor->entityDataPtr;
+	actor = &sceneActors[actorIdx];
+	bodyPtr = actor->entityDataPtr;
 
 	do {
 		type = *(bodyPtr++);
 
 		if (type == -1) {
 			currentActorAnimExtraPtr = NULL;
-			return (-1);
+			return -1;
 		}
 
 		ptr = (bodyPtr + 1);
 
 		if (type == 3) {
-			if (anim == *bodyPtr) {
+			if (animIdx == *bodyPtr) {
 				ptr++;
-				var1 = *(int16 *)(ptr);
+				realAnimIdx = *(int16 *)(ptr);
 				ptr += 2;
 				ptr2 = ptr;
 				ptr++;
@@ -361,7 +375,7 @@ int32 get_body_anim_index(int32 anim, int16 actorNumber) {
 					costumePtr = ptr - 1;
 				}
 				currentActorAnimExtraPtr = costumePtr;
-				return (var1);
+				return realAnimIdx;
 			}
 		}
 
@@ -369,12 +383,15 @@ int32 get_body_anim_index(int32 anim, int16 actorNumber) {
 
 	} while (1);
 
-	return (0);
+	return 0;
 }
 
-
-int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTimerDataPtr) {	// copy the next keyFrame from a different buffer
-	int32 temp;
+/** Stock animation - copy the next keyFrame from a different buffer
+	@param animPtr Animation pointer
+	@param bodyPtr Body model poitner 
+	@param animTimerDataPtr Animation time data */
+int32 stock_animation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
+	int32 playAnim;
 	uint8 *ptr;
 	int32 *edi;
 	int32 *esi;
@@ -383,16 +400,13 @@ int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTi
 	int32 var2;
 	int32 counter;
 
-	//assert_ptr(lBufAnim);
-	//assert_ptr(lBody);
+	playAnim = *(int16 *)(bodyPtr);
 
-	temp = *(int16 *)(lBody);
-
-	if (temp & 2) {
-		ptr = (lBody + 0x10);
+	if (playAnim & 2) {
+		ptr = (bodyPtr + 0x10);
 
 		animTimerDataPtr->time = lbaTime;
-		animTimerDataPtr->ptr = lBufAnim;
+		animTimerDataPtr->ptr = animPtr;
 
 		var0 = *(int16 *)(ptr - 2);
 		ptr = ptr + var0;
@@ -406,7 +420,7 @@ int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTi
 		counter = var2;
 		var2 = (var2 * 8) + 8;
 
-		edi = (int32 *)(lBufAnim + 8);
+		edi = (int32 *)(animPtr + 8);
 		esi = (int32 *)(ptr + 10);
 
 		do {
@@ -416,12 +430,17 @@ int32 stock_animation(uint8 *lBufAnim, uint8 *lBody, AnimTimerDataStruct* animTi
 			esi = (int32 *)(((int8 *) esi) + 30);
 		} while (--counter);
 
-		return (var2);
+		return var2;
 	}
-	return (0);
+	return 0;
 }
 
-int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimTimerDataStruct* animTimerDataPtr) {
+/** Verify animation at keyframe
+	@param animIdx Animation index
+	@param animPtr Animation pointer
+	@param bodyPtr Body model poitner 
+	@param animTimerDataPtr Animation time data */
+int32 verify_anim_at_keyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 bodyHeader;
 
 	uint8 *edi;
@@ -432,21 +451,19 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 	int32 numOfPointInAnim = -1;
 	uint8 *keyFramePtrOld;
 
-	numOfPointInAnim = *(int16 *)(animData + 2);
+	numOfPointInAnim = *(int16 *)(animPtr + 2);
 
-	keyFramePtr = ((numOfPointInAnim * 8 + 8) * animPos) + animData + 8;
+	keyFramePtr = ((numOfPointInAnim * 8 + 8) * animIdx) + animPtr + 8;
 
 	keyFrameLength = *(int16 *)(keyFramePtr);
 
-	bodyHeader = *(int16 *)(body);
+	bodyHeader = *(int16 *)(bodyPtr);
 
 	if (!(bodyHeader & 2)) {
-		return (0);
+		return 0;
 	}
 
-	edi = body + 16;
-
-	animVar1 = edi;
+	edi = bodyPtr + 16;
 
 	ebx = animTimerDataPtr->ptr;
 	ebp = animTimerDataPtr->time;
@@ -471,7 +488,7 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 		processRotationByAnim    = *(int16 *)(keyFramePtr + 8);
 		processLastRotationAngle = *(int16 *)(keyFramePtr + 12);
 
-		return (1);
+		return 1;
 	} else {
 		keyFramePtrOld = keyFramePtr;
 
@@ -489,9 +506,14 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animData, uint8 *body, AnimT
 		currentStepZ = (*(int16 *)(keyFramePtrOld + 6) * eax) / keyFrameLength;
 	}
 
-	return (0);
+	return 0;
 }
 
+/** Initialize animation
+	@param newAnim animation to init
+	@param animType animation type
+	@param animExtra animation actions extra data
+	@param actorIdx actor index */
 int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 	ActorStruct *actor;
 	int32 animIndex;
@@ -499,13 +521,13 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 	actor = &sceneActors[actorIdx];
 
 	if (actor->entity == -1)
-		return (0);
+		return 0;
 
 	if (actor->staticFlags.bIsSpriteActor)
-		return (0);
+		return 0;
 
 	if (newAnim == actor->anim && actor->previousAnimIdx != -1)
-		return (1);
+		return 1;
 
 	if (animExtra == 255 && actor->animType != 2)
 		animExtra = actor->anim;
@@ -517,7 +539,7 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 
 	if (animType != 4 && actor->animType == 2) {
 		actor->animExtra = newAnim;
-		return (0);
+		return 0;
 	}
 
 	if (animType == 3) {
@@ -560,7 +582,7 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 	actor->lastY = 0;
 	actor->lastZ = 0;
 
-	return (1);
+	return 1;
 }
 
 /** Process main loop actor animations
