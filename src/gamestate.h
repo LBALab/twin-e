@@ -30,12 +30,44 @@
 
 #include "sys.h"
 
+/** LBA engine game flags to save quest states */
 uint8 gameFlags[256];
 
-/** Initialize main engine variables */
-void init_vars();
+/** LBA engine chapter */
+int16 gameChapter;
 
-/** Initialize all needed stuffs at first time running engine */
-void init_all();
+/** Magic ball type index */
+int16 magicBallIdx;
+/** Magic level index */
+int16 magicLevelIdx;
+
+/** Inventory used flags */
+uint8 inventoryFlags[28];
+
+/** Inventory used flags */
+uint8 holomapFlags[150]; // GV14
+
+/** Store the number of inventory keys */
+int16 inventoryNumKeys;
+/** Store the number of inventory coins */
+int16 inventoryNumCoins;
+/** Store the number of inventory clover leafs boxes */
+int16 inventoryNumLeafsBox;
+/** Store the number of inventory clover leafs */
+int16 inventoryNumLeafs;
+/** Store the number of inventory magic points */
+int16 inventoryMagicPoints;
+/** Store the number of gas */
+int16 inventoryNumGas;
+
+/** Its using FunFrock Sabre */
+int16 usingSabre;
+
+
+/** Initialize all engine variables */
+void init_engine_vars(int32 save);
+
+/** Initialize engine 3D projections */
+void init_engine_projections();
 
 #endif

@@ -156,7 +156,7 @@ typedef struct ActorStruct {
 	int32 positionInMoveScript;
 	uint8 *moveScript;
 
-	int32 positionInActorScript;
+	int32 positionInLifeScript;
 	uint8 *lifeScript;
 
 	int32 labelIdx;			// script label index
@@ -194,6 +194,10 @@ int8 shadowCollisionType; // shadowVar
 
 /** Hero behaviour */
 int16 heroBehaviour;
+/** Previous Hero behaviour */
+int16 previousHeroBehaviour;
+/** Previous Hero angle */
+int16 previousHeroAngle;
 
 /** Hero 3D entity for normal behaviour */
 uint8 *heroEntityNORMAL;	 // file3D0
@@ -205,6 +209,17 @@ uint8 *heroEntityAGGRESSIVE; // file3D2
 uint8 *heroEntityDISCRETE;	 // file3D3
 /** Hero 3D entity for protopack behaviour */
 uint8 *heroEntityPROTOPACK;  // file3D4
+
+/** Hero current anim for normal behaviour */
+int16 heroAnimIdxNORMAL;	 // TCos0Init
+/** Hero current anim for athletic behaviour */
+int16 heroAnimIdxATHLETIC;	 // TCos1Init
+/** Hero current anim for aggressive behaviour */
+int16 heroAnimIdxAGGRESSIVE; // TCos2Init
+/** Hero current anim for discrete behaviour */
+int16 heroAnimIdxDISCRETE;	 // TCos3Init
+/** Hero current anim for protopack behaviour */
+int16 heroAnimIdxPROTOPACK;  // TCos4Init
 
 /** Actors 3D body table - size of NUM_BODIES */
 extern uint8 *bodyTable[NUM_BODIES];
@@ -246,5 +261,9 @@ void init_model_actor(int32 bodyIdx, int16 actorIdx);
 /** Initialize actors
 	@param actorIdx actor index to init */
 void init_actor(int16 actorIdx);
+
+/** Reset actor
+	@param actorIdx actor index to init */
+void reset_actor(int16 actorIdx);
 
 #endif

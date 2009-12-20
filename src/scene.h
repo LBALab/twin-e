@@ -39,6 +39,12 @@
 #define NUM_MAX_ZONES		100
 #define NUM_MAX_TRACKS		100
 
+#define POSITION_TYPE_NONE		0
+#define POSITION_TYPE_ZONE		1
+#define POSITION_TYPE_SCENE		2
+#define POSITION_TYPE_FALLING	3
+
+
 int32 needChangeScene;
 int32 currentSceneIdx;
 
@@ -55,22 +61,42 @@ typedef struct SceneSamplesStruct {
 	int16 info3;
 } SceneSamplesStruct;
 
+/** Timer for the next sample ambience in scene */
+int32 sampleAmbienceTime;
+
 SceneSamplesStruct sampleAmbience;
 SceneSamplesStruct sampleRepeat;
 SceneSamplesStruct sampleRound;
-
 int16 sampleMinDelay;
 int16 sampleMinDelayRnd;
+
 int16 sceneMusic;
 
-int16 sceneHeroX;
-int16 sceneHeroY;
-int16 sceneHeroZ;
+int16 sceneHeroX; // newTwinsenXByScene
+int16 sceneHeroY; // newTwinsenYByScene
+int16 sceneHeroZ; // newTwinsenZByScene
+
+int16 newHeroX; // newTwinsenX
+int16 newHeroY; // newTwinsenY
+int16 newHeroZ; // newTwinsenZ
+
+int16 zoneHeroX; // newTwinsenXByZone
+int16 zoneHeroY; // newTwinsenYByZone
+int16 zoneHeroZ; // newTwinsenZByZone
+
+/** Hero Y coordinate before fall */
+int16 heroYBeforeFall;
+
+/** Hero type of position in scene */
+int16 heroPositionType; // twinsenPositionModeInNewCube
 
 // ACTORS
 int32 sceneNumActors;
 ActorStruct sceneActors[NUM_MAX_ACTORS];
 ActorStruct *sceneHero;
+
+/** Current followed actor in scene */
+int16 currentlyFollowedActor;
 
 // ZONES
 
@@ -124,10 +150,13 @@ ZoneBox sceneZones[NUM_MAX_ZONES];
 int32 sceneNumTracks;
 ScenePoint sceneTracks[NUM_MAX_TRACKS];
 
-
 // TODO: check what is this
 int16 changeRoomVar10;
+int16 changeRoomVar11;
 
+uint8 sceneFlags[80]; // cubeFlags
+
+/** Change to another scene */
 void change_scene();
 
 #endif

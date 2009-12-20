@@ -48,6 +48,7 @@
 #include "renderer.h"
 #include "animations.h"
 #include "gamestate.h"
+#include "keyboard.h"
 
 /** Engine current version */
 const int8* ENGINE_VERSION = "0.1.0";
@@ -298,6 +299,30 @@ void init_engine() {
 	load_menu_image(1);
 
 	main_menu();
+}
+
+
+/** Initialize all needed stuffs at first time running engine */
+void init_all() {
+	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
+	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
+
+	currentTextBank = -1;
+	currMenuTextIndex = -1;
+	currMenuTextBank = -1;
+	
+	sceneHero = &sceneActors[0];
+
+	renderLeft = 0;
+	renderTop = 0;
+	renderRight = SCREEN_TEXTLIMIT_RIGHT;
+	renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
+
+	rightMouse = 0;
+	leftMouse = 0;
+
+	init_keymap();
+	init_resources();
 }
 
 /** Main engine function

@@ -38,59 +38,119 @@
 #include "keyboard.h"
 #include "resources.h"
 
-/** Initialize main engine variables */
-void init_vars() {
-	set_camera_position(40, 40, 128, 200, 200);
-
-	needChangeScene = 0;
-	reqBgRedraw = 1;
-	currentSceneIdx = 0;
-	currentTextBank = -1;
-	currMenuTextIndex = -1;
-	currMenuTextBank = -1;
-	isUsingOrhoProjection = 1;
-
-	sceneHero = &sceneActors[0];
-
-	useCellingGrid = -1;
-	cellingGridIdx = 0;
-
-	currentlyFollowedActor = 0;
-
-	/*setSomethingVar1 = 320;
-	setSomethingVar2 = 200;
-	setSomethingVar3 = 500;*/
-	// TODO: configure ortho
-	orthoProjX = 311;
-	orthoProjY = 240;
-	orthoProjZ = 512;
-
-	renderLeft = 0;
-	renderTop = 0;
-	renderRight = SCREEN_TEXTLIMIT_RIGHT;
-	renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
-
-	rightMouse = 0;
-	leftMouse = 0;
-
-	currentPositionInBodyPtrTab = 0; // TODO: put this in scene.c file under clear_scene()
+/** Initialize engine 3D projections */
+void init_engine_projections() { // reinitAll1
+	set_ortho_projection(311, 240, 512);
+	set_base_translation(0, 0, 0);
+	set_base_rotation(0, 0, 0);
+	set_light_vector(alphaLight, betaLight, 0);
 }
 
-void init_hero_vars() { // TODO: get rid of this here
-	//TODO: reset actor 0
-	sceneHero->speed = 40;
-	// TODO: init in-game hero status var
+/** Initialize variables */
+void init_scene_vars() {
+	int32 i;
+
+	// TODO: reset extra bonus list
+	// TODO: reset overlay objects list
+
+	for (i = 0; i < 80; i++) {
+		sceneFlags[i] = 0;
+	}
+
+	for (i = 0; i < 255; i++) {
+		gameFlags[i] = 0;
+	}
+
+	for (i = 0; i < 28; i++) {
+		inventoryFlags[i] = 0;
+	}
+
+	sampleAmbience.info0 = -1;
+	sampleAmbience.info1 = -1;
+	sampleAmbience.info2 = -1;
+	sampleAmbience.info3 = -1;
+
+	sampleRepeat.info0 = 0;
+	sampleRepeat.info1 = 0;
+	sampleRepeat.info2 = 0;
+	sampleRepeat.info3 = 0;
+
+	sampleRound.info0 = 0;
+	sampleRound.info1 = 0;
+	sampleRound.info2 = 0;
+	sampleRound.info3 = 0;
+
+	for (i = 0; i < 150; i++) {
+		holomapFlags[i] = 0;
+	}
+
+	sceneNumActors = 0;
+	sceneNumZones  = 0;
+	sceneNumTracks = 0;
+
+	currentPositionInBodyPtrTab = 0;
 }
 
-/** Initialize all needed stuffs at first time running engine */
-void init_all() {
-	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
+void init_hero_vars() { // reinitAll3
+	reset_actor(0); // reset Hero
 
-	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
+	magicBallIdx = -1;
 
-	// Init engine keymap
-	init_keymap();
-	init_resources();
-	init_vars();
+	inventoryNumLeafsBox = 2;
+	inventoryNumLeafs    = 2;
+	inventoryNumCoins    = 0;
+	inventoryNumKeys     = 0;
+	inventoryMagicPoints = 0;
+
+	usingSabre = 0;
+
+	sceneHero->body = 0;
+	sceneHero->life = 50;
+	sceneHero->talkColor = 4;
+}
+
+/** Initialize all engine variables */
+void init_engine_vars(int32 save) { // reinitAll
+	reset_clip();
+
+	alphaLight = 896;
+	betaLight = 950;
+	init_engine_projections();
+	init_scene_vars();
 	init_hero_vars();
+	
+	newHeroX = 0x2000;
+	newHeroY = 0x1800;
+	newHeroZ = 0x2000;
+
+	currentSceneIdx = -1;
+	needChangeScene = 0;
+	//brutalExit = -1;
+	//currentMecaPinguin = -1;
+		
+	inventoryNumLeafs = 0;
+	inventoryNumLeafsBox = 2;
+	inventoryMagicPoints = 0;
+	inventoryNumCoins = 0;
+	inventoryNumKeys = 0;
+	inventoryNumGas = 0;
+
+	magicLevelIdx = 0;
+	usingSabre = 0;
+
+	gameChapter = 0;
+
+	currentTextBank = 0;
+	currentlyFollowedActor = 0;
+	heroBehaviour = 0;
+	previousHeroAngle = 0;
+	previousHeroBehaviour = 0;
+
+	if (save == -1) {
+		// TODO: load game
+		if (newHeroX == -1) {
+			heroPositionType = POSITION_TYPE_NONE;	
+		}
+	}
 }
+

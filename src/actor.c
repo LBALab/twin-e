@@ -59,12 +59,12 @@ void restart_hero_scene() {
 	sceneHero->armor = 1;
 	sceneHero->positionInMoveScript = -1;
 	sceneHero->labelIdx = -1;
-	sceneHero->positionInActorScript = 0;
+	sceneHero->positionInLifeScript = 0;
 	sceneHero->zone = -1;
-	//sceneHero->angle = startupAngleInCube; // TODO: DO THIS LATER
+	sceneHero->angle = previousHeroAngle;
+
 	set_actor_angle_safe(sceneHero->angle, sceneHero->angle, 0, &sceneHero->move);
-	set_behaviour(heroBehaviour); //TODO: should be startupComportementHeroInCube
-	//cropBottomScreen = 0;
+	set_behaviour(previousHeroBehaviour);
 }
 
 // TODO: finish this
@@ -74,23 +74,23 @@ void load_hero_entities() {
 
 	size = hqr_getalloc_entry(&heroEntityATHLETIC, HQR_FILE3D_FILE, FILE3DHQR_HEROATHLETIC);
 	sceneHero->entityDataPtr = heroEntityATHLETIC;
-	//TCos1Init = getAnimIndexForBody(0, 0);
+	heroAnimIdxATHLETIC = get_body_anim_index(0, 0);
 
 	size = hqr_getalloc_entry(&heroEntityAGGRESSIVE, HQR_FILE3D_FILE, FILE3DHQR_HEROAGGRESSIVE);
 	sceneHero->entityDataPtr = heroEntityAGGRESSIVE;
-	//TCos2Init = getAnimIndexForBody(0, 0);
+	heroAnimIdxAGGRESSIVE = get_body_anim_index(0, 0);
 
 	size = hqr_getalloc_entry(&heroEntityDISCRETE, HQR_FILE3D_FILE, FILE3DHQR_HERODISCRETE);
 	sceneHero->entityDataPtr = heroEntityDISCRETE;
-	//TCos3Init = getAnimIndexForBody(0, 0);
+	heroAnimIdxDISCRETE = get_body_anim_index(0, 0);
 
 	size = hqr_getalloc_entry(&heroEntityPROTOPACK, HQR_FILE3D_FILE, FILE3DHQR_HEROPROTOPACK);
 	sceneHero->entityDataPtr = heroEntityPROTOPACK;
-	//TCos4Init = getAnimIndexForBody(0, 0);
+	heroAnimIdxPROTOPACK = get_body_anim_index(0, 0);
 
 	size = hqr_getalloc_entry(&heroEntityNORMAL, HQR_FILE3D_FILE, FILE3DHQR_HERONORMAL);
 	sceneHero->entityDataPtr = heroEntityNORMAL;
-	//TCos4Init = getAnimIndexForBody(0, 0);
+	heroAnimIdxNORMAL = get_body_anim_index(0, 0);
 
 	sceneHero->animExtraPtr = currentActorAnimExtraPtr;
 }
@@ -386,5 +386,58 @@ void init_actor(int16 actorIdx) {
 
 	actor->positionInMoveScript = -1;
 	actor->labelIdx = -1;
-	actor->positionInActorScript = 0;
+	actor->positionInLifeScript = 0;
+}
+
+/** Reset actor
+	@param actorIdx actor index to init */
+void reset_actor(int16 actorIdx) {
+	ActorStruct *actor = &sceneActors[actorIdx];
+
+	actor->body = 0;
+	actor->anim = 0;
+	actor->X = 0;
+	actor->Y = -1;
+	actor->Z = 0;
+
+	actor->boudingBox.X.bottomLeft = 0;
+	actor->boudingBox.X.topRight = 0;
+	actor->boudingBox.Y.bottomLeft = 0;
+	actor->boudingBox.Y.topRight = 0;
+	actor->boudingBox.Z.bottomLeft = 0;
+	actor->boudingBox.Z.topRight = 0;
+
+	actor->angle = 0;
+	actor->speed = 40;
+	actor->controlMode = 0;
+
+	actor->info0 = 0;
+	actor->info1 = 0;
+	actor->info2 = 0;
+	actor->info3 = 0;
+
+	actor->field_3 = 0;
+	actor->collision = -1;
+	actor->standOn = -1;
+	actor->zone = -1;
+	
+	memset(&actor->staticFlags,0,2);
+	memset(&actor->dynamicFlags,0,2);
+
+	actor->life = 50;
+	actor->armor = 1;
+	actor->hitBy = -1;
+	actor->lastRotationAngle = 0;
+	actor->lastX = 0;
+	actor->lastY = 0;
+	actor->lastZ = 0;
+	actor->entity = -1;
+	actor->previousAnimIdx = -1;
+	actor->animType = 0;
+	actor->animPosition = 0;
+
+	set_actor_angle_safe(0, 0, 0, &actor->move);
+
+	actor->positionInMoveScript = -1;
+	actor->positionInLifeScript = 0;
 }
