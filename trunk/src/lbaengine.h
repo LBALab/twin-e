@@ -30,6 +30,7 @@
 #define GAMEENGINE_H
 
 #include "sys.h"
+#include "actor.h"
 
 /** Work video buffer */
 uint8 *workVideoBuffer;
@@ -47,10 +48,14 @@ int16 rightMouse;
 int32 quitGame;
 volatile int32 lbaTime;
 
+ActorMoveStruct loopMovePtr; // mainLoopVar1
+
 int32 loopPressedKey; // mainLoopVar5
 
 /** Disable screen recenter */
 int16 disableScreenRecenter;
+
+
 
 void freeze_time();
 void unfreeze_time();

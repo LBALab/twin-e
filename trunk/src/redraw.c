@@ -320,11 +320,11 @@ void process_drawing(int32 numDrawingList) {
 	if (numDrawingList > 0) {
 		uint32 flags;
 		int32 actorIdx;
-		ActorStruct *localActor;
+		ActorStruct *actor;
 
 		do {
 			actorIdx = drawList[drawListPos].index & 0x3FF;
-			localActor = &sceneActors[actorIdx];
+			actor = &sceneActors[actorIdx];
 			flags = ((uint32) drawList[drawListPos].index) & 0xFC00;
 
 			// Drawing actors
@@ -333,10 +333,10 @@ void process_drawing(int32 numDrawingList) {
 					if (!actorIdx) { // RECHECK
 					}
 
-					if (localActor->previousAnimIdx != -1)
-						set_model_animation(localActor->animPosition, animTable[localActor->previousAnimIdx], bodyTable[localActor->entity], &localActor->animTimerData);
+					if (actor->previousAnimIdx != -1)
+						set_model_animation(actor->animPosition, animTable[actor->previousAnimIdx], bodyTable[actor->entity], &actor->animTimerData);
 
-					if (!render_iso_model(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ, 0, localActor->angle, 0, bodyTable[localActor->entity])) {
+					if (!render_iso_model(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ, 0, actor->angle, 0, bodyTable[actor->entity])) {
 						if (renderLeft < 0)
 							renderLeft = SCREEN_TEXTLIMIT_LEFT;
 
@@ -356,15 +356,15 @@ void process_drawing(int32 numDrawingList) {
 							int32 tempY;
 							int32 tempZ;
 
-							localActor->dynamicFlags.bIsVisible = 1;
+							actor->dynamicFlags.bIsVisible = 1;
 
-							tempX = (localActor->X + 0x100) >> 9;
-							tempY = localActor->Y >> 8;
+							tempX = (actor->X + 0x100) >> 9;
+							tempY = actor->Y >> 8;
 
-							if (localActor->field_3 & 0x7F)
+							if (actor->field_3 & 0x7F)
 								tempY++;
 
-							tempZ = (localActor->Z + 0x100) >> 9;
+							tempZ = (actor->Z + 0x100) >> 9;
 
 							draw_over_model_actor(tempX, tempY, tempZ);
 
@@ -384,22 +384,22 @@ void process_drawing(int32 numDrawingList) {
 			// Drawing sprite actors
 			else if (flags == 0x1000) {
 				int32 spriteWidth, spriteHeight;
-				//int spriteSize = spriteSizeTable[localActor->entity];
-				uint8 *spritePtr = spriteTable[localActor->entity];
+				//int32 spriteSize = spriteSizeTable[actor->entity];
+				uint8 *spritePtr = spriteTable[actor->entity];
 
 				// get actor position on screen
-				project_position_on_screen(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ);
+				project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 
 				get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
 
 				// calculate sprite position on screen
-				renderLeft = projPosX + *(int16 *)(spriteBoundingBoxPtr + localActor->entity * 16);
-				renderTop = projPosY + *(int16 *)(spriteBoundingBoxPtr + localActor->entity * 16 + 2);
+				renderLeft = projPosX + *(int16 *)(spriteBoundingBoxPtr + actor->entity * 16);
+				renderTop = projPosY + *(int16 *)(spriteBoundingBoxPtr + actor->entity * 16 + 2);
 				renderRight = renderLeft + spriteWidth;
 				renderBottom = renderTop + spriteHeight;
 
-				if (localActor->staticFlags.bUsesClipping) {
-					set_clip(projPosXScreen + localActor->info0, projPosYScreen + localActor->info1, projPosXScreen + localActor->info2, projPosYScreen + localActor->info3);
+				if (actor->staticFlags.bUsesClipping) {
+					set_clip(projPosXScreen + actor->info0, projPosYScreen + actor->info1, projPosXScreen + actor->info2, projPosYScreen + actor->info3);
 				} else {
 					set_clip(renderLeft, renderTop, renderRight, renderBottom);
 				}
@@ -407,18 +407,18 @@ void process_drawing(int32 numDrawingList) {
 				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 					draw_sprite(0, renderLeft, renderTop, spritePtr);
 
-					localActor->dynamicFlags.bIsVisible = 1;
+					actor->dynamicFlags.bIsVisible = 1;
 
-					if (localActor->staticFlags.bUsesClipping) {
-						draw_over_sprite_actor((localActor->lastX + 0x100) >> 9, localActor->lastY >> 8, (localActor->lastZ + 0x100) >> 9);
+					if (actor->staticFlags.bUsesClipping) {
+						draw_over_sprite_actor((actor->lastX + 0x100) >> 9, actor->lastY >> 8, (actor->lastZ + 0x100) >> 9);
 					} else {
 						int tempX, tempZ, tempY;
 
-						tempX = (localActor->X + localActor->boudingBox.X.topRight + 0x100) >> 9;
-						tempZ = localActor->Y >> 8;
-						if (localActor->field_3 & 0x7F)
+						tempX = (actor->X + actor->boudingBox.X.topRight + 0x100) >> 9;
+						tempZ = actor->Y >> 8;
+						if (actor->field_3 & 0x7F)
 							tempZ++;
-						tempY = (localActor->Z + localActor->boudingBox.Z.topRight + 0x100) >> 9;
+						tempY = (actor->Z + actor->boudingBox.Z.topRight + 0x100) >> 9;
 
 						draw_over_sprite_actor(tempX, tempZ, tempY);
 					}

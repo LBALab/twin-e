@@ -69,8 +69,6 @@ void recenter_screen() {
 		newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
 		newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
 		reqBgRedraw = 1;
-		//needChangeRoom = 119;
-		//needChangeRoom=currentRoom+1;
 	}
 }
 
@@ -121,9 +119,9 @@ int32 game_engine_loop() { // mainLoop
 	uint32 start;
 
 	quitGame = 1;
-	//requestBackgroundRedraw = 1;
-	//lockPalette = 1;
-	//setActorAngle(0, -256, 5, &mainLoopVar1);
+	reqBgRedraw = 1;
+	// TODO lockPalette = 1;
+	set_actor_angle(0, -256, 5, &loopMovePtr);
 
 	while (quitGame) {
 		start = SDL_GetTicks();
