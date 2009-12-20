@@ -42,11 +42,12 @@
 #define POSITION_TYPE_NONE		0
 #define POSITION_TYPE_ZONE		1
 #define POSITION_TYPE_SCENE		2
-#define POSITION_TYPE_FALLING	3
+#define POSITION_TYPE_REBORN	3
 
 
 int32 needChangeScene;
 int32 currentSceneIdx;
+int32 previousSceneIdx;
 
 uint8 *spriteBoundingBoxPtr;
 
@@ -94,6 +95,9 @@ int16 heroPositionType; // twinsenPositionModeInNewCube
 int32 sceneNumActors;
 ActorStruct sceneActors[NUM_MAX_ACTORS];
 ActorStruct *sceneHero;
+
+/** Meca pinguin actor index */
+int16 mecaPinguinIdx;
 
 /** Current followed actor in scene */
 int16 currentlyFollowedActor;

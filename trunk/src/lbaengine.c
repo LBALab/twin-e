@@ -30,6 +30,7 @@
 #include "sdlengine.h"
 #include "images.h"
 #include "grid.h"
+#include "debug.grid.h"
 #include "scene.h"
 #include "menu.h"
 #include "interface.h"
@@ -41,6 +42,7 @@
 #include "animations.h"
 #include "movements.h"
 #include "keyboard.h"
+#include "gamestate.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -61,17 +63,6 @@ void unfreeze_time() {
 		lbaTime = saveFreezedTime;
 }
 
-
-
-void recenter_screen() {
-	if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
-		newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
-		newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
-		newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
-		reqBgRedraw = 1;
-	}
-}
-
 /** Game engine main loop
 	@return true if we want to show credit sequence */
 int32 run_game_engine() { // mainLoopInteration
@@ -79,30 +70,188 @@ int32 run_game_engine() { // mainLoopInteration
 	int16 pKey; // current pressed key
 	read_keys();
 
+	if (needChangeScene > -1)
+		change_scene();
+
 	key  = pressedKey;
 	pKey = skipIntro; // mainLoopVar67
 	loopPressedKey = skipedKey;
+
+#ifdef GAMEMOD
+	process_debug(pKey);
+#endif
 
 	if (process_giveup_menu())
 		return 0; // give up
 
 	process_options_menu(pKey);
 
-	recenter_screen();
+	// TODO: inventory menu
+	// TODO: behaviour menu
+	// TODO: behaviour menu (LBA2 style)
+	// TODO: use Proto-Pack
 
-#ifdef GAMEMOD
-	process_debug(pKey);
-#endif
+	// Press Enter to Recenter Screen
+	if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
+		newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
+		newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
+		newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
+		reqBgRedraw = 1;
+	}
 
-	if (needChangeScene > -1)
-		change_scene();
+	// TODO: draw holomap
+
+	// Press Pause
+	if (pKey == 0x19) {
+		freeze_time();
+		set_font_color(15);
+		display_dialogue_text(5, 446, "Pause"); // no key for pause in Text Bank
+		copy_block_phys(5, 446, 100, 479);
+		do {
+			read_keys();
+			SDL_Delay(10);
+		} while (skipIntro != 0x19 && !pressedKey);
+		copy_screen(workVideoBuffer, frontVideoBuffer);
+		flip(workVideoBuffer);
+		unfreeze_time();
+	}
+
+	loopActorAngle = get_real_value(&loopMovePtr);
+	if (!loopActorAngle) {
+		loopActorAngle = 1;
+	}
+
+	set_actor_angle(0, -256, 5, &loopMovePtr);
+	disableScreenRecenter = 0;
+
+	// TODO: play ambience samples
+
+	// Reset HitBy state
+	for (a = 0; a < sceneNumActors; a++)
+    {
+        sceneActors[a].hitBy = -1;
+    }
+
+	// TODO: generate extra bonus
 
 	for (a = 0; a < sceneNumActors; a++) {
 		ActorStruct *actor = &sceneActors[a];
 
-		process_actor_movements(a);
-		// TODO: process_track_script(a);
-		process_actor_animations(a);
+		if (!actor->dynamicFlags.bIsDead) {
+			if (actor->life == 0) {
+				if (a == 0) { // if its hero who died
+					init_anim(ANIM_LANDDEATH, 4, 0, 0);
+					actor->controlMode = 0;
+				} else {
+					if (a == mecaPinguinIdx) {
+						// TODO: explode extra	
+					}
+				}
+			}
+
+			if (actor->bonusParameter & 0x1F0 && !(actor->bonusParameter & 1)) {
+				// TODO: give_extra_bonus(a);
+			}
+
+			process_actor_movements(a);
+
+			if (actor->positionInMoveScript != -1) {
+				// TODO: process_track_script(a);
+			}
+
+			process_actor_animations(a);
+
+			if (actor->staticFlags.bIsZonable) {
+				// TODO: process_zone(a);
+			}
+
+			if (actor->positionInLifeScript != -1) {
+				// TODO: process_life_script(a);
+			}
+
+			if (quitGame == -1) {
+				return -1;
+			}
+
+			if (actor->staticFlags.bCanDrown) {
+				// TODO process_actor_drown(a)
+			}
+
+			if (actor->life <= 0) {
+				if (!a) { // if its Hero
+					if (actor->dynamicFlags.bAnimEnded) {
+						if (inventoryNumLeafsBox > 0) { // use clover leaf automaticaly
+							sceneHero->X = newHeroX;
+							sceneHero->Y = newHeroY;
+							sceneHero->Z = newHeroZ;
+
+							needChangeScene = currentSceneIdx;
+							inventoryMagicPoints = magicLevelIdx * 20;
+
+							newCameraX = (sceneHero->X >> 9);
+							newCameraY = (sceneHero->Y >> 8);
+							newCameraZ = (sceneHero->Z >> 9);
+
+							heroPositionType = POSITION_TYPE_REBORN;
+
+							sceneHero->life = 50;
+							reqBgRedraw = 1;
+							// TODO: lockPalette = 1;
+							inventoryNumLeafs--;
+						} else { // game over
+							inventoryNumLeafsBox = 2;
+							inventoryNumLeafs = 1;
+							inventoryMagicPoints = magicLevelIdx * 20; // TODO: recheck this
+							heroBehaviour = previousHeroBehaviour;
+							actor->angle  = previousHeroAngle;
+							actor->life = 50;
+
+							if (previousSceneIdx != currentSceneIdx) {
+								newHeroX = -1;
+								newHeroY = -1;
+								newHeroZ = -1;
+								currentSceneIdx = previousSceneIdx;
+							}
+
+							// TODO: save game
+							// TODO: show game over animation
+						}
+					}
+				} else {
+					// TODO: process_actor_carrier(a);
+					actor->dynamicFlags.bIsDead = 1;
+					actor->entity = -1;
+					actor->zone = -1;
+				}
+			}
+
+			if (needChangeScene != -1) {
+				return 0;
+			}
+		}
+	}
+
+	// recenter screen automatically
+	if (!disableScreenRecenter && !useFreeCamera) {
+		ActorStruct *actor = &sceneActors[currentlyFollowedActor];
+		project_position_on_screen(actor->X - (newCameraX << 9),
+								   actor->Y - (newCameraY << 9),
+								   actor->Z - (newCameraZ << 9));
+		if (projPosX < 80 || projPosX > 539 || projPosY < 80 || projPosY > 429) {
+			newCameraX = ((actor->X + 0x100) >> 9) + (((actor->X + 0x100) >> 9) - newCameraX) / 2;
+			newCameraY = actor->Y >> 8;
+			newCameraZ = ((actor->Z + 0x100) >> 9) + (((actor->Z + 0x100) >> 9) - newCameraZ) / 2;
+
+			if(newCameraX >= 64) {
+				newCameraX = 63;
+			}
+
+			if(newCameraZ >= 64) {
+				newCameraZ = 63;
+			}
+
+			reqBgRedraw = 1;
+		}
 	}
 
 	redraw_engine_actions(reqBgRedraw);

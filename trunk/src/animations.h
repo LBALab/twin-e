@@ -44,6 +44,8 @@
 #define ANIM_TURNLEFT  3
 /** Hero turn right anim value */
 #define ANIM_TURNRIGHT 4
+/** Hero dead anim value */
+#define ANIM_LANDDEATH 10
 
 /** Table with all loaded animations */
 uint8* animTable[NUM_ANIMS];
