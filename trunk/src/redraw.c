@@ -232,7 +232,7 @@ int process_actors_drawlist(int32 bgRedraw) {
 	int32 spriteActorPos; // top6
 	int32 shadowActorPos; // top2
 	int32 drawListPos;    // a12
-	ActorStruct *localActor;
+	ActorStruct *actor;
 
 	modelActorPos = 0;
 	drawListPos = 0;
@@ -241,39 +241,38 @@ int process_actors_drawlist(int32 bgRedraw) {
 
 	// Process actors drawing list
 	for (modelActorPos = 0; modelActorPos < sceneNumActors; modelActorPos++, spriteActorPos++, shadowActorPos++) {
-		localActor = &sceneActors[modelActorPos];
-		localActor->dynamicFlags.bIsVisible = 0; // reset visible state
+		actor = &sceneActors[modelActorPos];
+		actor->dynamicFlags.bIsVisible = 0; // reset visible state
 
-		if ((useCellingGrid == -1) || localActor->Y <= (*(int16 *)(cellingGridIdx*24 + (int8 *)sceneZones + 8))) {
+		if ((useCellingGrid == -1) || actor->Y <= (*(int16 *)(cellingGridIdx*24 + (int8 *)sceneZones + 8))) {
 			// no redraw required
-			if (localActor->staticFlags.bIsBackgrounded && bgRedraw == 0) {
+			if (actor->staticFlags.bIsBackgrounded && bgRedraw == 0) {
 				// get actor position on screen
-				project_position_on_screen(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ);
+				project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 
 				// check if actor is visible on screen, otherwise don't display it
 				if (projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580) {
-					localActor->dynamicFlags.bIsVisible = 1;
+					actor->dynamicFlags.bIsVisible = 1;
 				}
 			} else {
 				// if the actor isn't set as hidden
-				if (localActor->entity != -1 && !(localActor->staticFlags.bIsHidden)) {
+				if (actor->entity != -1 && !(actor->staticFlags.bIsHidden)) {
 					// get actor position on screen
-					project_position_on_screen(localActor->X - cameraX, localActor->Y - cameraY, localActor->Z - cameraZ);
+					project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 
-					if (((localActor->staticFlags.bUsesClipping) && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) ||
-					        ((!(localActor->staticFlags.bUsesClipping)) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
-						tmpVal = localActor->Z + localActor->X - cameraX - cameraZ;
+					if (((actor->staticFlags.bUsesClipping) && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) ||
+					        ((!(actor->staticFlags.bUsesClipping)) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
+						tmpVal = actor->Z + actor->X - cameraX - cameraZ;
 
 						// if actor is above another actor
-						if (localActor->standOn != -1) {
-							tmpVal = sceneActors[localActor->standOn].X - cameraX + sceneActors[localActor->standOn].Z - cameraZ + 2;
+						if (actor->standOn != -1) {
+							tmpVal = sceneActors[actor->standOn].X - cameraX + sceneActors[actor->standOn].Z - cameraZ + 2;
 						}
 
-
-						if (localActor->staticFlags.bIsSpriteActor) {
+						if (actor->staticFlags.bIsSpriteActor) {
 							drawList[drawListPos].index = spriteActorPos; // > 0x1000
-							if (localActor->staticFlags.bUsesClipping) {
-								tmpVal = localActor->lastX - cameraX + localActor->lastZ - cameraZ;
+							if (actor->staticFlags.bUsesClipping) {
+								tmpVal = actor->lastX - cameraX + actor->lastZ - cameraZ;
 							}
 						} else {
 							drawList[drawListPos].index = modelActorPos;
@@ -284,13 +283,13 @@ int process_actors_drawlist(int32 bgRedraw) {
 						drawListPos++;
 
 						// if use shadows
-						if (cfgfile.ShadowMode != 0 && !(localActor->staticFlags.bDoesntCastShadow)) {
-							if (localActor->standOn != -1) {
-								shadowX = localActor->X;
-								shadowY = localActor->Y - 1;
-								shadowZ = localActor->Z;
+						if (cfgfile.ShadowMode != 0 && !(actor->staticFlags.bDoesntCastShadow)) {
+							if (actor->standOn != -1) {
+								shadowX = actor->X;
+								shadowY = actor->Y - 1;
+								shadowZ = actor->Z;
 							} else {
-								//get_shadow_position(localActor->X, localActor->Y, localActor->Z);
+								//get_shadow_position(actor->X, actor->Y, actor->Z);
 							}
 
 							tmpVal--;

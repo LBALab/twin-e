@@ -39,6 +39,8 @@
 #include "music.h"
 #include "renderer.h"
 #include "gamestate.h"
+#include "redraw.h"
+#include "movements.h"
 
 uint8* currentScene;
 
@@ -270,7 +272,7 @@ void load_scene() {
 	}
 }
 
-
+/** Initialize new scene */
 int32 init_scene(int32 index) {
 	int32 sceneSize;
 
@@ -282,22 +284,45 @@ int32 init_scene(int32 index) {
 	return 1;
 }
 
+
+/** Reset scene */
+void reset_scene() {
+	int32 i;
+
+	// TODO: reset extra bonus list
+
+	for (i = 0; i < 80; i++) {
+		sceneFlags[i] = 0;
+	}
+
+	// TODO: reset overlay objects list
+
+	currentPositionInBodyPtrTab = 0;
+	// useAlternatePalette = 0;
+}
+
+/** Change to another scene */
 void change_scene() {
 	int32 previousSceneIdx, a;
+	
 	// change twinsen house destroyed hard-coded
 	if (needChangeScene == 4 && gameFlags[30] != 0)
 		needChangeScene = 118;
 
 	// local backup previous scene
 	previousSceneIdx = currentSceneIdx;
-
 	currentSceneIdx = needChangeScene;
 
 	//TODO: stop_samples
-	currentPositionInBodyPtrTab = 0;
-	//TODO: clear_scene
+
+	reset_scene();
 	load_hero_entities();
-	//TODO: reset twinsen variables
+
+	sceneHero->controlMode = 1;
+	sceneHero->zone = -1;
+	sceneHero->positionInLifeScript = 0;
+	sceneHero->positionInMoveScript = -1;
+	sceneHero->labelIdx = -1;
 
 	init_scene(needChangeScene);
 
@@ -307,40 +332,61 @@ void change_scene() {
 		currentTextBank = 10;
 
 	init_dialogue_bank(currentTextBank + 3);
-
 	init_grid(needChangeScene);
 
-	// TODO: set Hero position
+	if (heroPositionType == POSITION_TYPE_ZONE) {
+		newHeroX = zoneHeroX;
+		newHeroY = zoneHeroY;
+		newHeroZ = zoneHeroZ;
+	}
 
-	sceneHero->X = sceneHeroX;
-	sceneHero->Y = sceneHeroY;
-	sceneHero->Z = sceneHeroZ;
+	if (heroPositionType == POSITION_TYPE_SCENE || heroPositionType == POSITION_TYPE_NONE) {
+		newHeroX = sceneHeroX;
+		newHeroY = sceneHeroY;
+		newHeroZ = sceneHeroZ;
+	}
 
-	newCameraX = sceneHero->X >> 9;
-	newCameraY = sceneHero->Y >> 8;
-	newCameraZ = sceneHero->X >> 9;
+	sceneHero->X = newHeroX;
+	sceneHero->Y = heroYBeforeFall = newHeroY;
+	sceneHero->Z = newHeroZ;
 
-	set_light_vector(alphaLight, betaLight, 0); // TODO: set light vector
+	set_light_vector(alphaLight, betaLight, 0);
 
-	// TODO: backup previous scene vars and save game
+	if (previousSceneIdx != needChangeScene) {
+		previousHeroBehaviour = heroBehaviour;
+		previousHeroAngle = sceneHero->angle;
+		// TODO: save game
+	}
 
-	restart_hero_scene(); //TODO: RestartPerso()
+	restart_hero_scene();
 
-	// TODO: reset Hero vars
-
-	// TODO: load scene actors
 	for (a = 1; a < sceneNumActors; a++) {
 		init_actor(a);
 	}
 
-	// TODO: reset current scene global variables
+	inventoryNumKeys = 0;
+	disableScreenRecenter = 0;
+	heroPositionType = POSITION_TYPE_NONE;
+	sampleAmbienceTime = 0;
 
 	newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
 	newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
 	newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
 
-	// TODO: play midi music (scene music)
-	play_midi_music(sceneMusic, -1);
+	magicBallIdx = -1;
+	heroMoved = 1;
+	useCellingGrid = -1;
+	cellingGridIdx = -1;
+	reqBgRedraw = 1;
+	// TODO: lockpalette = 0;
 
-	// TODO: all the other change scene definitions
+	needChangeScene = -1;
+	changeRoomVar10 = 1;
+	changeRoomVar11 = 14;
+
+	set_light_vector(alphaLight, betaLight, 0);
+
+	if (sceneMusic != -1) {
+		play_midi_music(sceneMusic, -1);
+	}
 }

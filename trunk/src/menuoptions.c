@@ -46,7 +46,6 @@ void new_game() {
 		read_keys();
 	}	*/
 	/* Engine init */
-	init_vars();
 }
 
 /** Main menu new game options */

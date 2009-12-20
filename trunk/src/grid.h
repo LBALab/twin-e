@@ -50,9 +50,9 @@ uint8 *blockBuffer;
 
 
 /** Flag to know if the engine is using celling grids */
-int16 useCellingGrid;
+int16 useCellingGrid; // useAnotherGrm
 /** Current celling grid index */
-int16 cellingGridIdx;
+int16 cellingGridIdx; // currentGrid2
 
 
 /** Draw 3D actor over bricks

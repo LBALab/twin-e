@@ -32,6 +32,13 @@
 
 int32 isUsingOrhoProjection;
 
+int16 projPosXScreen; // fullRedrawVar1
+int16 projPosYScreen; // fullRedrawVar2
+int16 projPosZScreen; // fullRedrawVar3
+int16 projPosX;
+int16 projPosY;
+int16 projPosZ;
+
 int32 orthoProjX; // setSomethingVar1
 int32 orthoProjY; // setSomethingVar2
 int32 orthoProjZ; // setSomethingVar2

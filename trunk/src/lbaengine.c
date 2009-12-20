@@ -64,7 +64,7 @@ void unfreeze_time() {
 
 
 void recenter_screen() {
-	if ((loopPressedKey & 2)) { //  && disableScreenRecenter == 0 recenter screen
+	if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
 		newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
 		newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
 		newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
@@ -137,17 +137,3 @@ int32 game_engine_loop() { // mainLoop
 	}
 	return 0;
 }
-
-void init_engine_vars(int32 save) { // reinitAll
-	alphaLight = 896;
-	betaLight = 950;
-	init_engine_projections();
-}
-
-void init_engine_projections() {
-	set_ortho_projection(311, 240, 512);
-	set_base_translation(0, 0, 0);
-	set_base_rotation(0, 0, 0);
-	set_light_vector(alphaLight, betaLight, 0);
-}
-

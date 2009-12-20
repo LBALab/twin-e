@@ -47,23 +47,14 @@ int16 rightMouse;
 int32 quitGame;
 volatile int32 lbaTime;
 
-int16 projPosXScreen; // fullRedrawVar1
-int16 projPosYScreen; // fullRedrawVar2
-int16 projPosZScreen; // fullRedrawVar3
-int16 projPosX;
-int16 projPosY;
-int16 projPosZ;
-
-int16 currentlyFollowedActor;
-
 int32 loopPressedKey; // mainLoopVar5
+
+/** Disable screen recenter */
+int16 disableScreenRecenter;
 
 void freeze_time();
 void unfreeze_time();
 
 int32 game_engine_loop();
-
-void init_engine_vars(int32 save);
-void init_engine_projections();
 
 #endif
