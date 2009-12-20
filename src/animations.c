@@ -556,7 +556,7 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 		animType = 2;
 
 	if (actor->previousAnimIdx == -1) {	// if no previous animation
-		//setAnimAtKeyFrame(0, HQR_Get(HQR_Anims, animIndex), bodyTable[lactor->costumeIndex], &lactor->animTimerData);	// set animation directly to first keyFrame
+		set_anim_at_keyframe(0, animTable[animIndex], bodyTable[actor->entity], &actor->animTimerData);
 	} else { // interpolation between animations
 		animBuffer2 += stock_animation(animBuffer2, bodyTable[actor->entity], &actor->animTimerData);
 		if (animBuffer1 + 4488 > animBuffer2)
@@ -574,7 +574,7 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 	actor->dynamicFlags.bAnimFrameReached = 1;
 
 	if (actor->animExtraPtr) {
-		//GereAnimAction(lactor, actorNum);
+		//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
 	}
 
 	actor->lastRotationAngle = 0;
