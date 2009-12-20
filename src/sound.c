@@ -52,7 +52,7 @@ void sample_volume(int32 channel, int32 volume) {
 	@param frequency frequency used to play the sample
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
-	@param y unknown y variable*/
+	@param y unknown y variable */
 void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
 	if (cfgfile.Sound) {
 		int32 sampSize = 0;
@@ -61,6 +61,42 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 		uint8* sampPtr;
 
 		sprintf(sampfile, FLA_DIR "//%s", HQR_FLASAMP_FILE);
+
+		sampSize = hqr_getalloc_entry(&sampPtr, sampfile, index);
+
+		// Fix incorrect sample files first byte
+		if (*sampPtr != 'C')
+			*sampPtr = 'C';
+
+		rw = SDL_RWFromMem(sampPtr, sampSize);
+		sample = Mix_LoadWAV_RW(rw, 1);
+
+		sample_volume(-1, cfgfile.WaveVolume);
+
+		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
+			printf("Error while playing VOC: Sample %d \n", index);
+
+		if (cfgfile.Debug)
+			printf("Playing VOC: Sample %d\n", index);
+
+		free(sampPtr);
+	}
+}
+
+/** Play samples
+	@param index sample index under flasamp.hqr file
+	@param frequency frequency used to play the sample
+	@param repeat number of times to repeat the sample
+	@param x unknown x variable
+	@param y unknown y variable */
+void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
+	if (cfgfile.Sound) {
+		int32 sampSize = 0;
+		int8 sampfile[256];
+		SDL_RWops *rw;
+		uint8* sampPtr;
+
+		sprintf(sampfile, "%s", HQR_SAMPLES_FILE);
 
 		sampSize = hqr_getalloc_entry(&sampPtr, sampfile, index);
 

@@ -55,21 +55,16 @@ int32 currentGameOverScene;
 int32 alphaLight;
 int32 betaLight;
 
-typedef struct SceneSamplesStruct {
-	int16 info0;
-	int16 info1;
-	int16 info2;
-	int16 info3;
-} SceneSamplesStruct;
-
 /** Timer for the next sample ambience in scene */
 int32 sampleAmbienceTime;
 
-SceneSamplesStruct sampleAmbience;
-SceneSamplesStruct sampleRepeat;
-SceneSamplesStruct sampleRound;
+int16 sampleAmbiance[4];
+int16 sampleRepeat[4];
+int16 sampleRound[4];
 int16 sampleMinDelay;
 int16 sampleMinDelayRnd;
+
+int16 samplePlayed;
 
 int16 sceneMusic;
 
@@ -162,5 +157,8 @@ uint8 sceneFlags[80]; // cubeFlags
 
 /** Change to another scene */
 void change_scene();
+
+/** Process scene environment sound */
+void process_environment_sound();
 
 #endif

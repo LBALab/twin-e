@@ -124,7 +124,7 @@ int32 run_game_engine() { // mainLoopInteration
 	set_actor_angle(0, -256, 5, &loopMovePtr);
 	disableScreenRecenter = 0;
 
-	// TODO: play ambience samples
+	process_environment_sound();
 
 	// Reset HitBy state
 	for (a = 0; a < sceneNumActors; a++)

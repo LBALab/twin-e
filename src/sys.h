@@ -28,6 +28,8 @@
 #ifndef SYS_H
 #define SYS_H
 
+#define Rnd(x) rand()%x
+
 // TYPES
 
 typedef unsigned char byte;

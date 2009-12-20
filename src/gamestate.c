@@ -65,20 +65,20 @@ void init_scene_vars() {
 		inventoryFlags[i] = 0;
 	}
 
-	sampleAmbience.info0 = -1;
-	sampleAmbience.info1 = -1;
-	sampleAmbience.info2 = -1;
-	sampleAmbience.info3 = -1;
+	sampleAmbiance[0] = -1;
+	sampleAmbiance[1] = -1;
+	sampleAmbiance[2] = -1;
+	sampleAmbiance[3] = -1;
 
-	sampleRepeat.info0 = 0;
-	sampleRepeat.info1 = 0;
-	sampleRepeat.info2 = 0;
-	sampleRepeat.info3 = 0;
+	sampleRepeat[0] = 0;
+	sampleRepeat[1] = 0;
+	sampleRepeat[2] = 0;
+	sampleRepeat[3] = 0;
 
-	sampleRound.info0 = 0;
-	sampleRound.info1 = 0;
-	sampleRound.info2 = 0;
-	sampleRound.info3 = 0;
+	sampleRound[0] = 0;
+	sampleRound[1] = 0;
+	sampleRound[2] = 0;
+	sampleRound[3] = 0;
 
 	for (i = 0; i < 150; i++) {
 		holomapFlags[i] = 0;
