@@ -41,6 +41,7 @@
 #include "gamestate.h"
 #include "redraw.h"
 #include "movements.h"
+#include "sound.h"
 
 uint8* currentScene;
 
@@ -112,32 +113,32 @@ void load_scene() {
 	betaLight = *((uint16*)localScene);
 	localScene += 2;
 
-	sampleAmbience.info0 = *((uint16*)localScene);
+	sampleAmbiance[0] = *((uint16*)localScene);
 	localScene += 2;
-	sampleRepeat.info0 = *((uint16*)localScene);
+	sampleRepeat[0] = *((uint16*)localScene);
 	localScene += 2;
-	sampleRound.info0 = *((uint16*)localScene);
-	localScene += 2;
-
-	sampleAmbience.info1 = *((uint16*)localScene);
-	localScene += 2;
-	sampleRepeat.info1 = *((uint16*)localScene);
-	localScene += 2;
-	sampleRound.info1 = *((uint16*)localScene);
+	sampleRound[0] = *((uint16*)localScene);
 	localScene += 2;
 
-	sampleAmbience.info2 = *((uint16*)localScene);
+	sampleAmbiance[1] = *((uint16*)localScene);
 	localScene += 2;
-	sampleRepeat.info2 = *((uint16*)localScene);
+	sampleRepeat[1] = *((uint16*)localScene);
 	localScene += 2;
-	sampleRound.info2 = *((uint16*)localScene);
+	sampleRound[1] = *((uint16*)localScene);
 	localScene += 2;
 
-	sampleAmbience.info3 = *((uint16*)localScene);
+	sampleAmbiance[2] = *((uint16*)localScene);
 	localScene += 2;
-	sampleRepeat.info3 = *((uint16*)localScene);
+	sampleRepeat[2] = *((uint16*)localScene);
 	localScene += 2;
-	sampleRound.info3 = *((uint16*)localScene);
+	sampleRound[2] = *((uint16*)localScene);
+	localScene += 2;
+
+	sampleAmbiance[3] = *((uint16*)localScene);
+	localScene += 2;
+	sampleRepeat[3] = *((uint16*)localScene);
+	localScene += 2;
+	sampleRound[3] = *((uint16*)localScene);
 	localScene += 2;
 
 	sampleMinDelay = *((uint16*)localScene);
@@ -313,7 +314,7 @@ void change_scene() {
 	previousSceneIdx = currentSceneIdx;
 	currentSceneIdx = needChangeScene;
 
-	//TODO: stop_samples
+	stop_sample();
 
 	reset_scene();
 	load_hero_entities();
@@ -388,5 +389,40 @@ void change_scene() {
 
 	if (sceneMusic != -1) {
 		play_midi_music(sceneMusic, -1);
+	}
+}
+
+/** Process scene environment sound */
+void process_environment_sound() {
+	int16 s, currentAmb, decal, repeat;
+	int16 sampleIdx = -1;
+
+	if (lbaTime >= sampleAmbienceTime) {
+		currentAmb = Rnd(4); // random ambiance
+
+		for(s = 0; s < 4; s++) {
+			if(!(samplePlayed & (1 << currentAmb))) { // if not already played
+				samplePlayed |= (1 << currentAmb); // make sample played
+
+				if(samplePlayed == 15) { // reset if all samples played
+					samplePlayed = 0;
+				}
+
+				sampleIdx = sampleAmbiance[currentAmb];
+				if(sampleIdx != -1) {
+					decal = sampleRound[currentAmb];
+					repeat = sampleRepeat[currentAmb];
+
+					play_sample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, 110);
+					break ;
+				}
+			}
+
+			currentAmb++;    // try next ambiance
+			currentAmb &= 3; // loop in all 4 ambiances
+		}
+
+		// compute next ambiance timer
+		sampleAmbienceTime = lbaTime + (Rnd(sampleMinDelayRnd) + sampleMinDelay) * 50;
 	}
 }

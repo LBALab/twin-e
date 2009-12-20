@@ -261,6 +261,8 @@ void init_engine() {
 
 	sdl_initialize();
 
+	srand(SDL_GetTicks()); // always get a different seed while starting the game
+
 	allocate_video_memory();
 	clear_screen();
 
