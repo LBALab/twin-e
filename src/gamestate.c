@@ -126,7 +126,7 @@ void init_engine_vars(int32 save) { // reinitAll
 	currentSceneIdx = -1;
 	needChangeScene = 0;
 	//brutalExit = -1;
-	//currentMecaPinguin = -1;
+	mecaPinguinIdx = -1;
 		
 	inventoryNumLeafs = 0;
 	inventoryNumLeafsBox = 2;

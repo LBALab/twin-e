@@ -303,7 +303,7 @@ void reset_scene() {
 
 /** Change to another scene */
 void change_scene() {
-	int32 previousSceneIdx, a;
+	int32 a;
 	
 	// change twinsen house destroyed hard-coded
 	if (needChangeScene == 4 && gameFlags[30] != 0)

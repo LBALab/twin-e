@@ -43,25 +43,25 @@ int32 canChangeScenes = 0;
 void change_grid_camera(int16 pKey) {
 	if (useFreeCamera) {
 		// Press up - more X positions
-		if (pKey == 'c') {
+		if (pKey == 0x2E) {
 			newCameraZ--;
 			reqBgRedraw = 1;
 		}
 
 		// Press down - less X positions
-		if (pKey == 'z') {
+		if (pKey == 0x2C) {
 			newCameraZ++;
 			reqBgRedraw = 1;
 		}
 
 		// Press left - less Z positions
-		if (pKey == 's') {
+		if (pKey == 0x1F) {
 			newCameraX--;
 			reqBgRedraw = 1;
 		}
 
 		// Press right - more Z positions
-		if (pKey == 'x') {
+		if (pKey == 0x2D) {
 			newCameraX++;
 			reqBgRedraw = 1;
 		}
@@ -72,7 +72,7 @@ void change_grid_camera(int16 pKey) {
 void change_grid(int16 pKey) {
 	if (canChangeScenes) {
 		// Press up - more X positions
-		if (pKey == 'r') {
+		if (pKey == 0x13) {
 			currentSceneIdx++;
 			if (currentSceneIdx > NUM_SCENES)
 				currentSceneIdx = 0;
@@ -81,7 +81,7 @@ void change_grid(int16 pKey) {
 		}
 
 		// Press down - less X positions
-		if (pKey == 'f') {
+		if (pKey == 0x21) {
 			currentSceneIdx--;
 			if (currentSceneIdx < 0)
 				currentSceneIdx = NUM_SCENES;
@@ -97,31 +97,31 @@ void change_grid(int16 pKey) {
 /** Apply and change disappear celling grid */
 void apply_celling_grid(int16 pKey) {
 	// Increase celling grid index
-	if (pKey == 'g') {
+	if (pKey == 0x22) {
 		cellingGridIdx++;
 		if (cellingGridIdx > 133)
 			cellingGridIdx = 133;
 	}
 	// Decrease celling grid index
-	if (pKey == 'b') {
+	if (pKey == 0x30) {
 		cellingGridIdx--;
 		if (cellingGridIdx < 0)
 			cellingGridIdx = 0;
 	}
 
 	// Enable/disable celling grid
-	if (pKey == 't' && useCellingGrid == -1) {
+	if (pKey == 0x14 && useCellingGrid == -1) {
 		useCellingGrid = 1;
 		//create_grid_map();
 		init_celling_grid(cellingGridIdx);
-		if (cfgfile.Debug && pKey == 't')
+		if (cfgfile.Debug && pKey == 0x14)
 			printf("\nEnable Celling Grid index: %d\n", cellingGridIdx);
 		needChangeScene = -2; // tricky to make the fade
-	} else if (pKey == 't' && useCellingGrid == 1) {
+	} else if (pKey == 0x14 && useCellingGrid == 1) {
 		useCellingGrid = -1;
 		create_grid_map();
 		reqBgRedraw = 1;
-		if (cfgfile.Debug && pKey == 't')
+		if (cfgfile.Debug && pKey == 0x14)
 			printf("\nDisable Celling Grid index: %d\n", cellingGridIdx);
 		needChangeScene = -2; // tricky to make the fade
 	}

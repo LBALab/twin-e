@@ -44,6 +44,7 @@
 #include "lbaengine.h"
 #include "debug.h"
 #include "keyboard.h"
+#include "redraw.h"
 
 /** SDL exit callback */
 static void atexit_callback(void);
@@ -307,6 +308,8 @@ void toggle_fullscreen() {
 	cfgfile.FullScreen = 1 - cfgfile.FullScreen;
 	SDL_FreeSurface(screen);
 
+	reqBgRedraw = 1;
+
 	if (cfgfile.FullScreen) {
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE);
 		copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -381,16 +384,16 @@ void read_keys() {
 				localKey = 0x49;
 				break;
 			case SDLK_p:  // pause
-				localKey = 'p';
+				localKey = 0x19;
 				break;
 			case SDLK_h:  // holomap
-				localKey = 'h';
+				localKey = 0x23;
 				break;
 			case SDLK_j:
-				localKey = 'j';
+				localKey = 0x24;
 				break;
 			case SDLK_w: // Especial key to do the action
-				localKey = 'w';
+				localKey = 0x11;
 				break;
 			case SDLK_F6:
 				localKey = 0x40;
@@ -401,19 +404,19 @@ void read_keys() {
 
 #ifdef GAMEMOD
 			case SDLK_r:  // next room
-				localKey = 'r';
+				localKey = 0x13;
 				break;
 			case SDLK_f:  // previous room
-				localKey = 'f';
+				localKey = 0x21;
 				break;
 			case SDLK_t:  // apply celling grid
-				localKey = 't';
+				localKey = 0x14;
 				break;
 			case SDLK_g:  // increase celling grid index
-				localKey = 'g';
+				localKey = 0x22;
 				break;
 			case SDLK_b:  // decrease celling grid index
-				localKey = 'b';
+				localKey = 0x30;
 				break;
 #endif
 
@@ -451,16 +454,16 @@ void read_keys() {
 #ifdef GAMEMOD
 				// change grid camera
 			case SDLK_s:
-				localKey = 's';
+				localKey = 0x1F;
 				break;
 			case SDLK_x:
-				localKey = 'x';
+				localKey = 0x2D;
 				break;
 			case SDLK_z:
-				localKey = 'z';
+				localKey = 0x2C;
 				break;
 			case SDLK_c:
-				localKey = 'c';
+				localKey = 0x2E;
 				break;
 #endif
 			}
