@@ -39,6 +39,11 @@
 #include "interface.h"
 #include "redraw.h"
 #include "keyboard.h"
+#include "scene.h"
+#include "animations.h"
+#include "actor.h"
+#include "movements.h"
+#include "gamestate.h"
 
 /** Plasma effect file size: RESS.hqr:51 */
 #define PLASMA_EFFECT_FILESIZE	262176
@@ -222,6 +227,14 @@ uint8 *plasmaEffectVar1;
 /** Plasma Effect variables 2 */
 uint8 *plasmaEffectVar2;
 
+/** Hero behaviour menu entity */
+uint8 *behaviourEntity;
+/** Behaviour menu move pointer */
+ActorMoveStruct moveMenu;
+/** Behaviour menu anim state */
+int16 behaviourAnimState[4]; // winTab
+/** Behaviour menu anim data pointer */
+AnimTimerDataStruct behaviourAnimData[4];
 
 /** Plasma Effect Initialization */
 void plasma_effect_init() {
@@ -326,7 +339,7 @@ void process_plasma_effect(int32 top, int32 color) {
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_button_box(int32 left, int32 top, int32 right, int32 bottom) {
+void draw_box(int32 left, int32 top, int32 right, int32 bottom) {
 	draw_line(left, top, right, top, 79);			// top line
 	draw_line(left, top, left, bottom, 79);			// left line
 	draw_line(right, ++top, right, bottom, 73);		// right line
@@ -427,7 +440,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 		draw_transparent_box(left, top, right, bottom2, 4);
 	}
 
-	draw_button_box(left, top, right, bottom);
+	draw_box(left, top, right, bottom);
 
 	set_font_color(15);
 	get_menu_text(value, dialText);
@@ -865,6 +878,8 @@ int process_giveup_menu() {
 	return 0;
 }
 
+/** Used to process options menu while playing game
+	@param pKey pressed key */
 void process_options_menu(int16 pKey) {
 	// Press F6
 	if (pKey == 0x40) {
@@ -881,4 +896,167 @@ void process_options_menu(int16 pKey) {
 		unfreeze_time();
 		redraw_engine_actions(1);
 	}
+}
+
+void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
+	uint8 *currentAnim;
+	int32 boxLeft, boxTop, boxRight, boxBottom, currentAnimState;
+	int8 dialText[256];
+
+	boxLeft   = behaviour * 110 + 110;
+	boxRight  = boxLeft + 99;
+	boxTop    = 110;
+	boxBottom = 229;
+
+	currentAnim = animTable[heroAnimIdx[behaviour]];
+	currentAnimState = behaviourAnimState[behaviour];
+
+	if (set_model_animation(currentAnimState, currentAnim, behaviourEntity, &behaviourAnimData[behaviour])) {
+		currentAnimState++; // keyframe
+		if (currentAnimState == get_num_keyframes(currentAnim)) {
+			currentAnimState = get_start_keyframe(currentAnim);
+		}
+		behaviourAnimState[behaviour] = currentAnimState;
+	}
+
+	if (drawBox == 0) {
+		draw_box(boxLeft - 1, boxTop - 1, boxRight + 1, boxBottom + 1);
+	}
+
+	save_clip();
+	reset_clip();
+
+	if (behaviour != heroBehaviour) { // unselected
+		draw_splitted_box(boxLeft, boxTop, boxRight, boxBottom, 0);
+	} else { // selected
+		draw_splitted_box(boxLeft, boxTop, boxRight, boxBottom, 69);
+
+		// behaviour menu title
+		draw_splitted_box(110, 239, 540, 279, 0);
+		draw_box(110, 239, 540, 279);
+
+		set_font_color(15);
+
+		if (heroBehaviour == 2 && autoAgressive == 1) {
+			get_menu_text(4, dialText);
+		} else {
+			get_menu_text(heroBehaviour, dialText);
+		}
+
+		display_dialogue_text((650 - dialogue_text_size(dialText)) / 2, 240, dialText);
+	}
+
+	// TODO: draw 3D model
+
+	copy_block_phys(boxLeft, boxTop, boxRight, boxBottom);
+	copy_block_phys(110, 239, 540, 279);
+
+	load_clip();
+}
+
+void draw_behaviour_menu(int32 angle) {
+	draw_box(100, 100, 550, 290);
+	draw_transparent_box(101, 101, 549, 289, 2);
+
+	set_anim_at_keyframe(behaviourAnimState[NORMAL], animTable[heroAnimIdx[NORMAL]], behaviourEntity, &behaviourAnimData[NORMAL]);
+	draw_behaviour(NORMAL, angle, 0);
+
+	set_anim_at_keyframe(behaviourAnimState[ATHLETIC], animTable[heroAnimIdx[ATHLETIC]], behaviourEntity, &behaviourAnimData[ATHLETIC]);
+	draw_behaviour(ATHLETIC, angle, 0);
+
+	set_anim_at_keyframe(behaviourAnimState[AGGRESSIVE], animTable[heroAnimIdx[AGGRESSIVE]], behaviourEntity, &behaviourAnimData[AGGRESSIVE]);
+	draw_behaviour(AGGRESSIVE, angle, 0);
+
+	set_anim_at_keyframe(behaviourAnimState[DISCRETE], animTable[heroAnimIdx[DISCRETE]], behaviourEntity, &behaviourAnimData[DISCRETE]);
+	draw_behaviour(DISCRETE, angle, 0);
+
+	//DrawInfoMenu(100, 300);
+
+	copy_block_phys(100, 100, 550, 290);
+}
+
+/** Process hero behaviour menu */
+void process_behaviour_menu() {
+	int32 tmpLanguageCD;
+	int32 tmpTextBank;
+	int32 tmpHeroBehaviour;
+
+	freeze_time();
+
+	if (heroBehaviour == PROTOPACK) {
+		stop_sample();
+		set_behaviour(NORMAL);
+	}
+
+	behaviourEntity = bodyTable[sceneHero->entity];
+
+	heroAnimIdx[NORMAL]     = heroAnimIdxNORMAL;
+	heroAnimIdx[ATHLETIC]   = heroAnimIdxATHLETIC;
+	heroAnimIdx[AGGRESSIVE] = heroAnimIdxAGGRESSIVE;
+	heroAnimIdx[DISCRETE]   = heroAnimIdxDISCRETE;
+
+	set_actor_angle_safe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
+
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+
+	tmpLanguageCD = cfgfile.LanguageCDIdx;
+	cfgfile.LanguageCDIdx = 0;
+
+	tmpTextBank = currentTextBank;
+	currentTextBank = -1;
+
+	init_dialogue_bank(0);
+
+	draw_behaviour_menu(sceneHero->angle);
+
+	tmpHeroBehaviour = heroBehaviour;
+
+	set_anim_at_keyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
+
+	read_keys();
+
+	 while (skipedKey & 4 || (skipIntro > 59 && skipIntro < 62)) {
+		read_keys();
+		key = pressedKey;
+
+		if (key & 8) {
+			heroBehaviour++;
+		}
+
+		if (key & 4) {
+			heroBehaviour--;
+		}
+
+		if (heroBehaviour < 0) {
+			heroBehaviour = 3;
+		}
+
+		if (heroBehaviour >= 4) {
+			heroBehaviour = 0;
+		}
+
+		if (tmpHeroBehaviour != heroBehaviour) {
+			draw_behaviour(heroBehaviour, sceneHero->angle, 1);
+			tmpHeroBehaviour = heroBehaviour;
+			set_actor_angle_safe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
+			set_anim_at_keyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
+
+			while (pressedKey) {
+				read_keys();
+				draw_behaviour(heroBehaviour, -1, 1);
+			}
+		}
+		
+		draw_behaviour(heroBehaviour, -1, 1);
+	}
+
+	set_behaviour(heroBehaviour);
+	init_engine_projections();
+
+	currentTextBank = tmpTextBank;
+	init_dialogue_bank(currentTextBank + 3);
+
+	cfgfile.LanguageCDIdx = tmpLanguageCD;
+
+	unfreeze_time();
 }

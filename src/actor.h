@@ -194,6 +194,8 @@ int8 shadowCollisionType; // shadowVar
 
 /** Hero behaviour */
 int16 heroBehaviour;
+/** Hero auto agressive mode */
+int16 autoAgressive;
 /** Previous Hero behaviour */
 int16 previousHeroBehaviour;
 /** Previous Hero angle */
@@ -220,6 +222,9 @@ int16 heroAnimIdxAGGRESSIVE; // TCos2Init
 int16 heroAnimIdxDISCRETE;	 // TCos3Init
 /** Hero current anim for protopack behaviour */
 int16 heroAnimIdxPROTOPACK;  // TCos4Init
+
+/** Hero anim for behaviour menu */
+int16 heroAnimIdx[4]; // TCOS
 
 /** Actors 3D body table - size of NUM_BODIES */
 extern uint8 *bodyTable[NUM_BODIES];

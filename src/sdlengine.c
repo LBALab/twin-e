@@ -363,7 +363,7 @@ void read_keys() {
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
-				localKey = 0x1;
+				localKey = 0x1; // 0x39
 				break;
 			case SDLK_RETURN:
 				localKey = 0x1C;
@@ -450,6 +450,21 @@ void read_keys() {
 			case SDLK_RIGHT:
 			case SDLK_KP6:
 				localKey = 0x4D;
+				break;
+			case SDLK_LCTRL:
+			case SDLK_RCTRL:
+				localKey = 0x1D;
+				break;
+			case SDLK_RETURN:
+				localKey = 0x1C;
+				break;
+			case SDLK_LSHIFT:
+			case SDLK_RSHIFT:
+				localKey = 0x36;
+				break;
+			case SDLK_LALT:
+			case SDLK_RALT:
+				localKey = 0x38;
 				break;
 #ifdef GAMEMOD
 				// change grid camera
