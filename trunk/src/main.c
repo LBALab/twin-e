@@ -345,6 +345,23 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
+// AUX FUNC
+
+int8* ITOA(int32 number) {
+	int32 numDigits = 1;
+	int8* text;
+
+	if (number >=10 && number <= 99) {
+		numDigits = 2;
+	} else if (number >=100 && number <= 999) {
+		numDigits = 3;
+	}
+
+	text = (int8 *)malloc(sizeof(int8) * numDigits);
+	sprintf(text, "%d", number);
+	return text;
+}
+
 
 /** \mainpage LBA Prequel Engine Doxxy Documentation
 

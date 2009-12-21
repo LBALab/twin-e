@@ -30,6 +30,10 @@
 
 #include "sys.h"
 
+#define GAMEFLAG_TUNIC					4
+#define GAMEFLAG_INVENTORY_DISABLED		70
+
+
 /** LBA engine game flags to save quest states */
 uint8 gameFlags[256];
 
