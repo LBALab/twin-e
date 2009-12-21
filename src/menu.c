@@ -25,6 +25,7 @@
 	$Id$
 */
 
+#include "sys.h"
 #include "main.h"
 #include "menu.h"
 #include "menuoptions.h"
@@ -45,6 +46,8 @@
 #include "movements.h"
 #include "gamestate.h"
 #include "renderer.h"
+#include "grid.h"
+#include "gamestate.h"
 
 /** Plasma effect file size: RESS.hqr:51 */
 #define PLASMA_EFFECT_FILESIZE	262176
@@ -93,6 +96,14 @@
 #define LINEVOLUME				4
 /** Master volume button key */
 #define MASTERVOLUME			5
+
+/** Behaviour menu sprite values */
+#define SPRITE_COIN				3
+#define SPRITE_LIFEPOINTS		4
+#define SPRITE_MAGICPOINTS		5
+#define SPRITE_KEY				6
+#define SPRITE_CLOVERLEAF		7
+#define SPRITE_CLOVERLEAFBOX	41
 
 /** Main Menu Settings
 
@@ -737,7 +748,7 @@ int options_menu() {
 
 	copy_screen(workVideoBuffer, frontVideoBuffer);
 
-	//HQ_StopSample();
+	stop_sample();
 	//playCDtrack(9);
 
 	do {
@@ -792,7 +803,7 @@ void main_menu() {
 		init_dialogue_bank(0);
 
 		play_track_music(9); // LBA's Theme
-		// TODO: stop samples
+		stop_sample();
 
 		switch (process_menu(MainMenuSettings)) {
 		case MAINMENU_NEWGAME: {
@@ -884,7 +895,7 @@ void process_options_menu(int16 pKey) {
 	if (pKey == 0x40) {
 		int tmpLangCD = cfgfile.LanguageCDId;
 		freeze_time();
-		//TODO: Stop Samples
+		stop_sample();
 		OptionsMenuSettings[5] = 15;
 		cfgfile.LanguageCDId = 0;
 		init_dialogue_bank(0);
@@ -895,6 +906,65 @@ void process_options_menu(int16 pKey) {
 		unfreeze_time();
 		redraw_engine_actions(1);
 	}
+}
+
+void draw_info_menu(int16 left, int16 top)
+{
+	int32 boxLeft, boxTop, boxRight, boxBottom; // var_4, var_8, var_10, var_C
+	int32 newBoxLeft, newBoxLeft2, i;
+
+	reset_clip();
+	draw_box(left, top, left + 450, top + 80); //80; 115
+	draw_splitted_box(left + 1, top + 1, left + 449, top + 79, 0); //79
+
+	newBoxLeft2 = left + 9;
+
+	draw_sprite(0, newBoxLeft2, top + 13, spriteTable[SPRITE_LIFEPOINTS]);
+
+	boxRight = left + 325;
+	newBoxLeft = left + 25;
+	boxLeft = cross_dot(newBoxLeft, boxRight, 50, sceneHero->life);
+
+	boxTop = top + 10;
+	boxBottom = top + 25;
+	draw_splitted_box(newBoxLeft, boxTop, boxLeft, boxBottom, 91);
+	draw_splitted_box(boxLeft, boxTop, boxRight, boxBottom, 0);
+
+	draw_box(left + 25, top + 10, left + 325, top + 10 + 15);
+
+	if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED] && gameFlags[GAMEFLAG_TUNIC]) {
+		draw_sprite(0, newBoxLeft2, top + 36, spriteTable[SPRITE_MAGICPOINTS]);
+		if(magicLevelIdx > 0) {
+			draw_splitted_box(newBoxLeft, top + 35, cross_dot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
+		}
+		draw_box(left + 25, top + 35, left + magicLevelIdx * 80, top + 35 + 15);
+	}
+
+	boxLeft = left + 340;
+
+	/** draw coin sprite */
+	draw_sprite(0, boxLeft, top + 15, spriteTable[SPRITE_COIN]);
+	set_font_color(155);
+	display_dialogue_text(left + 370, top + 5, ITOA(inventoryNumCoins));  // amount of coins
+
+	/** draw key sprite */
+	draw_sprite(0, boxLeft, top + 55, spriteTable[SPRITE_KEY]);
+	set_font_color(155);
+	display_dialogue_text(left + 370, top + 40, ITOA(inventoryNumKeys));
+
+	// Clover leaf boxes
+	for (i = 0; i < inventoryNumLeafsBox; i++)  // boites à trefles
+	{
+		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITE_CLOVERLEAFBOX]);
+	}
+
+	// Clover leafs
+	for (i = 0; i < inventoryNumLeafs; i++)
+	{
+		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITE_CLOVERLEAF]);
+	}
+
+	copy_block_phys(left, top, left + 450, top + 135);
 }
 
 void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
@@ -969,7 +1039,7 @@ void draw_behaviour_menu(int32 angle) {
 	set_anim_at_keyframe(behaviourAnimState[DISCRETE], animTable[heroAnimIdx[DISCRETE]], behaviourEntity, &behaviourAnimData[DISCRETE]);
 	draw_behaviour(DISCRETE, angle, 0);
 
-	//DrawInfoMenu(100, 300);
+	draw_info_menu(100, 300);
 
 	copy_block_phys(100, 100, 550, 290);
 }

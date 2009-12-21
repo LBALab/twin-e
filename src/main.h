@@ -117,4 +117,6 @@ ConfigFile cfgfile;
 /** CD Game directory */
 int8 * cdDir;
 
+int8* ITOA(int32 number);
+
 #endif
