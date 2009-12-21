@@ -80,6 +80,7 @@ void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e
 
 void set_clip(int32 left, int32 top, int32 right, int32 bottom);
 void save_clip(); // saveTextWindow
+void load_clip(); // loadSavedTextWindow
 void reset_clip();
 
 #endif

@@ -74,7 +74,7 @@ int32 run_game_engine() { // mainLoopInteration
 		change_scene();
 
 	key  = pressedKey;
-	pKey = skipIntro; // mainLoopVar67
+	pKey = skipIntro; // mainLoopVar7
 	loopPressedKey = skipedKey;
 
 #ifdef GAMEMOD
@@ -87,7 +87,15 @@ int32 run_game_engine() { // mainLoopInteration
 	process_options_menu(pKey);
 
 	// TODO: inventory menu
-	// TODO: behaviour menu
+	
+	// Show behaviour menu
+	if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == 1) {
+		freeze_time();
+		process_behaviour_menu();
+		redraw_engine_actions(1);
+		unfreeze_time();
+	}
+
 	// TODO: behaviour menu (LBA2 style)
 	// TODO: use Proto-Pack
 

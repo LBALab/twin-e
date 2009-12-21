@@ -299,6 +299,13 @@ void save_clip() { // saveTextWindow
 	textWindowBottomSave = textWindowBottom;
 }
 
+void load_clip() { // loadSavedTextWindow
+	textWindowLeft = textWindowLeftSave;
+	textWindowTop = textWindowTopSave;
+	textWindowRight = textWindowRightSave;
+	textWindowBottom = textWindowBottomSave;
+}
+
 void reset_clip() {
 	textWindowTop = textWindowLeft = SCREEN_TEXTLIMIT_TOP;
 	textWindowRight = SCREEN_TEXTLIMIT_RIGHT;

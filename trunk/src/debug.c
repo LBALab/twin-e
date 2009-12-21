@@ -111,14 +111,14 @@ void debug_fill_button(int32 X, int32 Y, int32 width, int32 height, int8 color) 
 
 void debug_draw_button(int32 left, int32 top, int32 right, int32 bottom, int8 *text, int32 textLeft, int32 textRight, int32 isActive, int8 color) {
 	debug_fill_button(left + 1, top + 1, right - left - 1, bottom - top - 1, color);
-	draw_button_box(left, top, right, bottom);
+	draw_box(left, top, right, bottom);
 	ttf_draw_text(textLeft, textRight, text, 0);
 	copy_block_phys(left, top, right, bottom);
 }
 
 void debug_draw_window_box(int32 left, int32 top, int32 right, int32 bottom, int32 alpha) {
 	draw_transparent_box(left, top, right, bottom, alpha);
-	draw_button_box(left, top, right, bottom);
+	draw_box(left, top, right, bottom);
 	//copy_block_phys(left,top,right,bottom);
 }
 
@@ -481,7 +481,7 @@ void debug_plasma_window(int8 *text, int32 color) {
 	}
 	textSize = dialogue_text_size(text);
 	display_dialogue_text((SCREEN_WIDTH / 2) - (textSize / 2), 10, text);
-	draw_button_box(5, 5, 634, 50);
+	draw_box(5, 5, 634, 50);
 	copy_block_phys(5, 5, 634, 50);
 }
 

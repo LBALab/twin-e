@@ -49,7 +49,7 @@ void process_plasma_effect(int32 top, int32 color);
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_button_box(int32 left, int32 top, int32 right, int32 bottom);
+void draw_box(int32 left, int32 top, int32 right, int32 bottom);
 
 /** Draws inside buttons transparent area
 	@param left start width to draw the button
@@ -74,5 +74,8 @@ int32 process_giveup_menu();
 /** Used to process options menu while playing game
 	@param pKey pressed key */
 void process_options_menu(int16 pKey);
+
+/** Process hero behaviour menu */
+void process_behaviour_menu();
 
 #endif

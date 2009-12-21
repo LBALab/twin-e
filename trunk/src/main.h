@@ -62,6 +62,8 @@ typedef struct ConfigFile {
 	int8 Language[10];
 	/** Language CD name */
 	int8 LanguageCD[10];
+	/** Language CD idx */
+	int16 LanguageCDIdx;
 	/** Enable/Disable game dialogues */
 	int8 FlagDisplayText[3];
 	/** Save voice files on hard disk */

@@ -49,6 +49,7 @@
 #include "animations.h"
 #include "gamestate.h"
 #include "keyboard.h"
+#include "actor.h"
 
 /** Engine current version */
 const int8* ENGINE_VERSION = "0.1.0";
@@ -312,6 +313,7 @@ void init_all() {
 	currentTextBank = -1;
 	currMenuTextIndex = -1;
 	currMenuTextBank = -1;
+	autoAgressive = 1;
 	
 	sceneHero = &sceneActors[0];
 
