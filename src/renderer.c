@@ -36,6 +36,8 @@
 #include "lbaengine.h"
 #include "redraw.h"
 #include "interface.h"
+#include "menu.h"
+#include "movements.h"
 
 #define RENDERTYPE_DRAWLINE		0
 #define RENDERTYPE_DRAWPOLYGON	1
@@ -2177,5 +2179,34 @@ void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest) {
 
 		bodyPtrDest += 30;
 		bodyPtrSrc += 30;
+	}
+}
+
+void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 boxBottom, int32 Y, int32 angle, uint8 *entityPtr) {
+	int tmpBoxRight;
+    int x;
+    int y;
+    short int newAngle;
+
+    tmpBoxRight = boxRight;
+
+    y = boxBottom + boxTop;
+    y >>= 1;
+
+    x = boxRight + boxLeft;
+    x >>= 1;
+
+    set_ortho_projection(x, y, 0);
+	set_clip(boxLeft, boxTop, tmpBoxRight, boxBottom);
+
+	if (angle == -1) {
+		newAngle = get_real_angle(&moveMenu);
+		if (moveMenu.numOfStep == 0) {
+			set_actor_angle_safe(newAngle, newAngle - 256, 50, &moveMenu);
+		}
+		render_iso_model(0, Y, 0, 0, newAngle, 0, entityPtr);
+	}
+	else {
+		render_iso_model(0, Y, 0, 0, angle, 0, entityPtr);
 	}
 }

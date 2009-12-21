@@ -44,6 +44,7 @@
 #include "actor.h"
 #include "movements.h"
 #include "gamestate.h"
+#include "renderer.h"
 
 /** Plasma effect file size: RESS.hqr:51 */
 #define PLASMA_EFFECT_FILESIZE	262176
@@ -229,8 +230,6 @@ uint8 *plasmaEffectVar2;
 
 /** Hero behaviour menu entity */
 uint8 *behaviourEntity;
-/** Behaviour menu move pointer */
-ActorMoveStruct moveMenu;
 /** Behaviour menu anim state */
 int16 behaviourAnimState[4]; // winTab
 /** Behaviour menu anim data pointer */
@@ -946,7 +945,7 @@ void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
 		display_dialogue_text((650 - dialogue_text_size(dialText)) / 2, 240, dialText);
 	}
 
-	// TODO: draw 3D model
+	render_behaviour_model(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
 
 	copy_block_phys(boxLeft, boxTop, boxRight, boxBottom);
 	copy_block_phys(110, 239, 540, 279);
@@ -1048,6 +1047,9 @@ void process_behaviour_menu() {
 		}
 		
 		draw_behaviour(heroBehaviour, -1, 1);
+
+		fps_cycles(50);
+		lbaTime++;
 	}
 
 	set_behaviour(heroBehaviour);

@@ -29,12 +29,16 @@
 #define MENU_H
 
 #include "sdlengine.h"
+#include "actor.h"
 
 int32 currMenuTextIndex;
 int32 currMenuTextBank;
 int8  currMenuTextBuffer[256];
 
 extern int16 OptionsMenuSettings[];
+
+/** Behaviour menu move pointer */
+ActorMoveStruct moveMenu;
 
 /** Plasma Effect pointer to file content: RESS.HQR:51 */
 extern uint8 *plasmaEffectPtr;
