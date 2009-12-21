@@ -1035,7 +1035,7 @@ void process_behaviour_menu() {
 		}
 
 		if (tmpHeroBehaviour != heroBehaviour) {
-			draw_behaviour(heroBehaviour, sceneHero->angle, 1);
+			draw_behaviour(tmpHeroBehaviour, sceneHero->angle, 1);
 			tmpHeroBehaviour = heroBehaviour;
 			set_actor_angle_safe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
 			set_anim_at_keyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
@@ -1048,7 +1048,7 @@ void process_behaviour_menu() {
 		
 		draw_behaviour(heroBehaviour, -1, 1);
 
-		fps_cycles(50);
+		fps_cycles(60);
 		lbaTime++;
 	}
 
