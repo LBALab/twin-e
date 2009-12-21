@@ -65,4 +65,6 @@ int32 render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, in
 
 void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest);
 
+void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 boxBottom, int32 Y, int32 angle, uint8 *entityPtr);
+
 #endif
