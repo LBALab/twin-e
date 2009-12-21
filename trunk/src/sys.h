@@ -47,7 +47,11 @@ typedef float int64;
 
 // ENDIAN
 
+#ifdef UNIX
+#define FORCEINLINE static __inline__
+#else
 #define FORCEINLINE __forceinline
+#endif
 
 FORCEINLINE uint8 READ_LE_BYTE(const void *ptr) {
 	return *((const uint8 *)ptr);
