@@ -1,0 +1,47 @@
+CC=gcc
+SDL_LIBS=-lSDLmain -lSDL -lSDL_mixer
+LDFLAGS=-mwindows -lmingw32 $(SDL_LIBS)
+
+OBJS=actor.o \
+	animations.o \
+	debug.o \
+	debug.grid.o \
+	debug.scene.o \
+	dialogues.o \
+	filereader.o \
+	gamestate.o \
+	grid.o \
+	hqrdepack.o \
+	images.o \
+	interface.o \
+	keyboard.o \
+	lbaengine.o \
+	main.o \
+	menu.o \
+	menuoptions.o \
+	movements.o \
+	movies.o \
+	music.o \
+	redraw.o \
+	renderer.o \
+	resources.o \
+	scene.o \
+	sdlengine.o \
+	sound.o
+
+LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf
+
+all: prequengine
+
+prequengine: $(OBJS)
+	$(CC) -o $@ $(OBJS) $(LIBS)
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@del $(OBJS)
+	@del prequengine.exe
+	@del *.bak
+	@del stderr.txt
+	@del stdout.txt
