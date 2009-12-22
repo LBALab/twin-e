@@ -768,7 +768,77 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		processActorY = actor->Y;
 		processActorZ = actor->Z;
 
-		// TODO: update sprite actors
+		if (!actor->dynamicFlags.bIsFalling) {
+			if (actor->speed) {
+				int32 angle = get_real_angle(&actor->move);
+				if (!angle) {
+					if (actor->move.to > 0) {
+						angle = 1;
+					} else {
+						angle = -1;
+					}
+				}
+				
+				rotate_actor(angle, 0, actor->animType);
+
+				processActorY = actor->Y - destY;
+
+				rotate_actor(0, destX, actor->angle);
+
+				processActorX = actor->X + destX;
+				processActorZ = actor->Z + destZ;
+
+				set_actor_angle(0, actor->angle, 50, &actor->move);
+
+				if (actor->dynamicFlags.bIsSpriteMoving) {
+					if (actor->doorStatus) { // open door
+						if (get_distance_2D(processActorX, processActorY, actor->lastX, actor->lastY) >= actor->doorStatus) {
+							if (actor->angle == 0) {
+								processActorZ = actor->lastZ + actor->doorStatus;
+							} else if (actor->angle == 0x100) {
+								processActorX = actor->lastX + actor->doorStatus;
+							} else if (actor->angle == 0x200) {
+								processActorZ = actor->lastZ - actor->doorStatus;
+							} else if (actor->angle == 0x300) {
+								processActorX = actor->lastX - actor->doorStatus;
+							}
+
+							actor->dynamicFlags.bIsSpriteMoving = 0; // TODO: recheck this
+							actor->speed = 0;
+						}
+					} else { // close door
+						int16 updatePos = 0;
+
+						if (actor->angle == 0) {
+							if (processActorZ <= actor->lastZ) {
+								updatePos = 1;
+							}
+						} else if (actor->angle == 0x100) {
+							if (processActorX <= actor->lastX) {
+								updatePos = 1;
+							}
+						} else if (actor->angle == 0x200) {
+							if (processActorZ >= actor->lastZ) {
+								updatePos = 1;
+							}
+						} else if (actor->angle == 0x300) {
+							if (processActorX >= actor->lastX) {
+								updatePos = 1;
+							}
+						}
+
+						if (updatePos) {
+							processActorX = actor->lastX;
+							processActorY = actor->lastY;
+							processActorZ = actor->lastZ;
+
+							actor->dynamicFlags.bIsSpriteMoving = 0; // TODO: recheck this
+							actor->speed = 0;
+						}
+					}
+				}
+			}
+		}
 	} else { // 3D actor
 		if (actor->previousAnimIdx != -1) {
 			int32 keyFramePassed;
