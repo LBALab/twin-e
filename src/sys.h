@@ -29,6 +29,7 @@
 #define SYS_H
 
 #define Rnd(x) rand()%x
+#define Abs(x) abs(x)
 
 // TYPES
 

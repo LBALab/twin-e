@@ -36,6 +36,27 @@
 #include "actor.h"
 #include "renderer.h"
 #include "movements.h"
+#include "sound.h"
+#include "gamestate.h"
+
+enum ActionType {
+	kHitting			= 0,
+	kSample				= 1,
+    kSampleFreq			= 2,
+    kThrowExtraBonus	= 3,
+	kThrowMagicBall		= 4,
+	kSampleRepeat		= 5,
+	kActionUnknown6		= 6,
+	kActionUnknown7		= 7,
+	kActionUnknown8		= 8,
+	kActionUnknown9		= 9, // unused
+	kActionUnknown10	= 10,
+	kActionUnknown11	= 11,
+	kHeroHitting		= 12,
+	kActionUnknown13	= 13,
+	kActionUnknown14	= 14,
+	kActionUnknown15	= 15
+};
 
 /** Set animation keyframe
 	@param keyframIdx Animation keyframe index
@@ -509,6 +530,137 @@ int32 verify_anim_at_keyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, Ani
 	return 0;
 }
 
+/** Process acotr animation actions
+	@param actorIdx Actor index */
+void process_anim_actions(int16 actorIdx) {
+	int32 startAnimEntityIdx, endAnimEntityIdx, actionType, animPos;
+	uint8 *data;
+	ActorStruct *actor;
+
+	actor = &sceneActors[actorIdx];
+	data = actor->animExtraPtr;
+
+	startAnimEntityIdx = 0;
+	endAnimEntityIdx = *(data++);
+
+	while (startAnimEntityIdx < endAnimEntityIdx) {
+		actionType = *(data++);
+
+		actionType -= 5;
+		if (actionType > 16) {
+			return;
+		}
+
+		switch (actionType) {
+		case kHitting: {
+			animPos = *(data++);
+			animPos--;
+			if (animPos == actor->animPosition) {
+				actor->strengthOfHit = *(data);
+				actor->dynamicFlags.bIsHitting = 1;
+			}
+			data++;
+		}
+			break;
+		case kSample: {
+			animPos = *(data++);
+			if (animPos == actor->animPosition) {
+				int16 sampleIdx = *((int16 *)data);
+				play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+			}
+			data+=2;
+		}
+			break;
+		case kSampleFreq: {
+			animPos = *(data++);
+			if (animPos == actor->animPosition) {
+				int16 sampleIdx, frequency;
+				sampleIdx = *((int16 *)data); data+=2;
+				frequency = *((int16 *)data); data+=2;
+				frequency = Rnd(frequency) + 0x1000 - (Abs(frequency) >> 1);
+				play_sample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z);
+			} else {
+				data+=4;
+			}
+		}
+			break;
+		// TODO: do next animation actions
+		case kThrowExtraBonus: {
+			animPos = *(data++);
+			data += 11;
+		}
+			break;
+		case kThrowMagicBall: {
+			if (magicBallIdx == -1) {
+				animPos = *(data++);
+				data += 7;
+			} else {
+				data += 8;
+			}
+		}
+			break;
+		case kSampleRepeat: {
+			animPos = *(data++);
+			if (animPos == actor->animPosition) {
+				int16 sampleIdx, repeat;
+				sampleIdx = *((int16 *)data); data+=2;
+				repeat = *((int16 *)data); data+=2;
+				play_sample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z);
+			} else {
+				data+=4;
+			}
+		}
+			break;
+		case kActionUnknown6: {
+			animPos = *(data++);
+			data += 6;
+		}
+			break;
+		case kActionUnknown7: {
+			animPos = *(data++);
+			data += 11;
+		}
+			break;
+		case kActionUnknown8: {
+			animPos = *(data++);
+			data += 2;
+		}
+			break;
+		case kActionUnknown10: {
+			animPos = *(data++);
+		}
+			break;
+		case kActionUnknown11: {
+			animPos = *(data++);
+		}
+			break;
+		case kHeroHitting: {
+			animPos = *(data++);
+		}
+			break;
+		case kActionUnknown13: {
+			animPos = *(data++);
+			data += 15;
+		}
+			break;
+		case kActionUnknown14: {
+			animPos = *(data++);
+			data += 15;
+		}
+			break;
+		case kActionUnknown15: {
+			animPos = *(data++);
+			data += 11;
+		}
+			break;
+		case kActionUnknown9:
+		default:
+			break;
+		}
+		startAnimEntityIdx++;
+	}
+}
+
 /** Initialize animation
 	@param newAnim animation to init
 	@param animType animation type
@@ -574,7 +726,7 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 	actor->dynamicFlags.bAnimFrameReached = 1;
 
 	if (actor->animExtraPtr) {
-		//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
+		process_anim_actions(actorIdx);
 	}
 
 	actor->lastRotationAngle = 0;
@@ -596,6 +748,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 	currentlyProcessedActorIdx = actorIdx;
 	processActorPtr = actor;
+
+	if (actorIdx == sceneNumActors - 1) // FIXME: skip meca pinguin for now
+		return;
 
 	if (actor->entity == -1)
 		return;
@@ -650,7 +805,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 				actor->animPosition++;
 
 				if (actor->animExtraPtr) { // if actor have animation actions to process
-					//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
+					process_anim_actions(actorIdx);
 				}
 
 				numKeyframe = actor->animPosition;
@@ -676,7 +831,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					}
 
 					if (actor->animExtraPtr) {
-						//TODO process_anim_actions - GereAnimAction(actor, actorIdx);
+						process_anim_actions(actorIdx);
 					}
 
 					actor->dynamicFlags.bAnimEnded = 1;

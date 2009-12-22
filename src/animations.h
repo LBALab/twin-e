@@ -119,6 +119,10 @@ int32 verify_anim_at_keyframe(int32 animPos, uint8 *animPtr, uint8 *bodyPtr, Ani
 	@param actorIdx actor index */
 int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx);
 
+/** Process acotr animation actions
+	@param actorIdx Actor index */
+void process_anim_actions(int16 actorIdx);
+
 /** Process main loop actor animations
 	@param actorIdx Actor index */
 void process_actor_animations(int32 actorIdx);

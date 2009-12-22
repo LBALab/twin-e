@@ -286,7 +286,7 @@ int32 game_engine_loop() { // mainLoop
 		while (SDL_GetTicks() < start + cfgfile.Fps) {
 			if (run_game_engine())
 				return 1;
-			SDL_Delay(cfgfile.Fps);
+			SDL_Delay(1);
 		}
 		lbaTime++;
 	}
