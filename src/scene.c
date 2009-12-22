@@ -170,7 +170,11 @@ void load_scene() {
 	localScene += 2;
 
 	for (i = 1; i < sceneNumActors; i++) {
-		uint16 staticFlags = *((uint16*)localScene);
+		uint16 staticFlags;
+		
+		reset_actor(i);
+
+		staticFlags = *((uint16*)localScene);
 		localScene += 2;
 		set_actor_staticflags(i, staticFlags);
 

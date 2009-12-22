@@ -52,7 +52,7 @@ ActorMoveStruct loopMovePtr; // mainLoopVar1
 
 int32 loopPressedKey; // mainLoopVar5
 
-int32 loopActorAngle; // mainLoopVar17
+int32 loopActorStep; // mainLoopVar17
 
 /** Disable screen recenter */
 int16 disableScreenRecenter;

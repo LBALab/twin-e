@@ -148,10 +148,10 @@ int32 get_real_angle(ActorMoveStruct * movePtr) {
 	return (movePtr->to);
 }
 
-/** Get actor angle
+/** Get actor step
 	@param movePtr Pointer to process movements */
 int32 get_real_value(ActorMoveStruct * movePtr) {
-	int32 tempAngle;
+	int32 tempStep;
 
 	if (!movePtr->numOfStep)
 		return (movePtr->to);
@@ -161,11 +161,11 @@ int32 get_real_value(ActorMoveStruct * movePtr) {
 		return (movePtr->to);
 	}
 
-	tempAngle = movePtr->to - movePtr->from;
-	tempAngle *= lbaTime - movePtr->timeOfChange;
-	tempAngle /= movePtr->numOfStep;
+	tempStep = movePtr->to - movePtr->from;
+	tempStep *= lbaTime - movePtr->timeOfChange;
+	tempStep /= movePtr->numOfStep;
 
-	return (tempAngle + movePtr->from);
+	return (tempStep + movePtr->from);
 }
 
 /** Rotate actor with a given angle
