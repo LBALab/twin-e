@@ -755,9 +755,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 	if (actor->entity == -1)
 		return;
 
-	previousActorX = actor->X;
-	previousActorY = actor->Y;
-	previousActorZ = actor->Z;
+	previousActorX = actor->collisionX;
+	previousActorY = actor->collisionY;
+	previousActorZ = actor->collisionZ;
 
 	if (actor->staticFlags.bIsSpriteActor) { // is sprite actor
 		if (actor->strengthOfHit) {
