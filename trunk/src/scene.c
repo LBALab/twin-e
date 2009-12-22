@@ -314,7 +314,7 @@ void change_scene() {
 	previousSceneIdx = currentSceneIdx;
 	currentSceneIdx = needChangeScene;
 
-	stop_sample();
+	stop_samples();
 
 	reset_scene();
 	load_hero_entities();
@@ -413,7 +413,7 @@ void process_environment_sound() {
 					decal = sampleRound[currentAmb];
 					repeat = sampleRepeat[currentAmb];
 
-					play_sample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, 110);
+					play_sample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110);
 					break ;
 				}
 			}

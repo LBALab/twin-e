@@ -48,10 +48,14 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 	@param frequency frequency used to play the sample
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
-	@param y unknown y variable */
-void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y);
+	@param y unknown y variable
+	@param z unknown z variable */
+void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z);
+
+/** Pause samples */
+void pause_samples();
 
 /** Stop samples */
-void stop_sample();
+void stop_samples();
 
 #endif

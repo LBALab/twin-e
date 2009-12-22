@@ -46,7 +46,7 @@
 /** Original FLA screen height */
 #define FLASCREEN_HEIGHT		200
 /** Default frames per second */
-#define DEFAULT_FRAMES_PER_SECOND	20
+#define DEFAULT_FRAMES_PER_SECOND	19
 
 /** Number of colors used in the game */
 #define NUMOFCOLORS		256

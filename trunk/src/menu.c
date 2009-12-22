@@ -748,7 +748,7 @@ int options_menu() {
 
 	copy_screen(workVideoBuffer, frontVideoBuffer);
 
-	stop_sample();
+	stop_samples();
 	//playCDtrack(9);
 
 	do {
@@ -790,7 +790,7 @@ int options_menu() {
 
 /** Used to run the main menu */
 void main_menu() {
-	// TODO: stop samples
+	stop_samples();
 
 	copy_screen(frontVideoBuffer, workVideoBuffer);
 
@@ -803,7 +803,7 @@ void main_menu() {
 		init_dialogue_bank(0);
 
 		play_track_music(9); // LBA's Theme
-		stop_sample();
+		stop_samples();
 
 		switch (process_menu(MainMenuSettings)) {
 		case MAINMENU_NEWGAME: {
@@ -839,7 +839,7 @@ int giveup_menu() {
 	int16 * localMenu;
 
 	copy_screen(frontVideoBuffer, workVideoBuffer);
-	//TODO: halt samples
+	stop_samples();
 
 	if (cfgfile.UseAutoSaving == 1)
 		localMenu = GiveUpMenuSettings;
@@ -895,7 +895,7 @@ void process_options_menu(int16 pKey) {
 	if (pKey == 0x40) {
 		int tmpLangCD = cfgfile.LanguageCDId;
 		freeze_time();
-		stop_sample();
+		stop_samples();
 		OptionsMenuSettings[5] = 15;
 		cfgfile.LanguageCDId = 0;
 		init_dialogue_bank(0);
@@ -1053,7 +1053,7 @@ void process_behaviour_menu() {
 	freeze_time();
 
 	if (heroBehaviour == PROTOPACK) {
-		stop_sample();
+		stop_samples();
 		set_behaviour(NORMAL);
 	}
 
@@ -1118,7 +1118,7 @@ void process_behaviour_menu() {
 		
 		draw_behaviour(heroBehaviour, -1, 1);
 
-		fps_cycles(60);
+		fps_cycles(50);
 		lbaTime++;
 	}
 
