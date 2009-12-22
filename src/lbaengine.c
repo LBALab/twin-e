@@ -163,6 +163,10 @@ int32 run_game_engine() { // mainLoopInteration
 
 			process_actor_movements(a);
 
+			actor->collisionX = actor->X;
+			actor->collisionY = actor->Y;
+			actor->collisionZ = actor->Z;
+
 			if (actor->positionInMoveScript != -1) {
 				// TODO: process_track_script(a);
 			}

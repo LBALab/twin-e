@@ -186,10 +186,13 @@ void load_scene() {
 		sceneActors[i].sprite = *((uint16*)localScene);
 		localScene += 2;
 		sceneActors[i].X = *((uint16*)localScene);
+		sceneActors[i].collisionX = sceneActors[i].X;
 		localScene += 2;
 		sceneActors[i].Y = *((uint16*)localScene);
+		sceneActors[i].collisionY = sceneActors[i].Y;
 		localScene += 2;
 		sceneActors[i].Z = *((uint16*)localScene);
+		sceneActors[i].collisionZ = sceneActors[i].Z;
 		localScene += 2;
 		sceneActors[i].strengthOfHit = *(localScene++);
 		sceneActors[i].bonusParameter = *((uint16*)localScene);

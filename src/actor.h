@@ -134,9 +134,9 @@ typedef struct ActorStruct {
 	int32 sprite; // field_8
 	uint8 *entityDataPtr;
 
-	int32 X; // field_20
-	int32 Y; // field_22
-	int32 Z; // field_24
+	int32 X;
+	int32 Y;
+	int32 Z;
 	int32 strengthOfHit; // field_66
 	int32 hitBy;
 	int32 bonusParameter; // field_10
@@ -152,6 +152,10 @@ typedef struct ActorStruct {
 	int32 talkColor;
 	int32 armor; // field_14
 	int32 life;
+
+	int32 collisionX; // field_20
+	int32 collisionY; // field_22
+	int32 collisionZ; // field_24
 
 	int32 positionInMoveScript;
 	uint8 *moveScript;
