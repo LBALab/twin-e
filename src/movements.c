@@ -25,6 +25,8 @@
 	$Id$
 */
 
+#include <math.h>
+
 #include "movements.h"
 #include "actor.h"
 #include "lbaengine.h"
@@ -184,6 +186,24 @@ void rotate_actor(int32 X, int32 Z, int32 angle) {
 		destX = (X * angle2 + Z * angle1) >> 14;
 		destZ = (Z * angle2 - X * angle1) >> 14;
 	}
+}
+
+/** Get distance value in 2D
+	@param x1 Actor 1 X coordinate
+	@param z1 Actor 1 Z coordinate
+	@param x2 Actor 2 X coordinate
+	@param z2 Actor 2 Z coordinate */
+int32 get_distance_2D(int32 x1, int32 z1, int32 x2, int32 z2) {
+	int32 newX;
+	int32 newZ;
+
+	newX = x2 - x1;
+	newX *= newX;
+
+	newZ = z2 - z1;
+	newZ *= newZ;
+
+	return (int32)sqrt(newX + newZ);
 }
 
 /** Move actor around the scene
