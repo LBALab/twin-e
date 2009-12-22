@@ -79,7 +79,7 @@ void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMov
 	@param movePtr time pointer to process */
 int32 get_real_angle(ActorMoveStruct * movePtr);
 
-/** Get actor angle
+/** Get actor step
 	@param movePtr time pointer to process */
 int32 get_real_value(ActorMoveStruct * movePtr);
 

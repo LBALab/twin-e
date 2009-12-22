@@ -872,7 +872,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 			rotate_actor(currentStepX, currentStepZ, actor->angle);
 
-			currentStepX = destX; // dest
+			currentStepX = destX;
 			currentStepZ = destZ;
 
 			processActorX = actor->X + currentStepX - actor->lastX;
@@ -889,7 +889,8 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 			if (keyFramePassed) {
 				actor->animPosition++;
 
-				if (actor->animExtraPtr) { // if actor have animation actions to process
+				// if actor have animation actions to process
+				if (actor->animExtraPtr) {
 					process_anim_actions(actorIdx);
 				}
 
@@ -931,11 +932,53 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		}
 	}
 
-	// TODO: actor standing of object
-	// TODO: actor falling Y speed.
-	// TODO: actor collisions
-	// TODO: check actor damage
-	// TODO: check actor bounding position
+	// actor standing on another actor
+	if (actor->standOn != -1) {
+		processActorX -= sceneActors[actor->standOn].collisionX;
+		processActorY -= sceneActors[actor->standOn].collisionY;
+		processActorZ -= sceneActors[actor->standOn].collisionZ;
+
+		processActorX -= sceneActors[actor->standOn].X;
+		processActorY -= sceneActors[actor->standOn].Y;
+		processActorZ -= sceneActors[actor->standOn].Z;
+
+		// TODO: check_zv_on_zv
+	}
+
+	// actor falling Y speed
+	if (actor->dynamicFlags.bIsFalling) {
+		processActorX = previousActorX;
+		processActorY = previousActorY + loopActorStep; // add step to fall
+		processActorZ = previousActorZ;
+	}
+
+	// actor collisions with bricks
+	if (actor->staticFlags.bComputeCollisionWithBricks) {
+		// TODO: actor collision code
+	}	
+
+	// TODO: cause damage
+
+	// check and fix actor bounding position
+	if (processActorX < 0) {
+		processActorX = 0;
+	}
+
+	if (processActorY < 0) {
+		processActorY = 0;
+	}
+
+	if (processActorZ < 0) {
+		processActorZ = 0;
+	}
+
+	if (processActorX > 0x7E00) {
+		processActorX = 0x7E00;
+	}
+
+	if (processActorZ > 0x7E00) {
+		processActorZ = 0x7E00;
+	}
 
 	actor->X = processActorX;
 	actor->Y = processActorY;

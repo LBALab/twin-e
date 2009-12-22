@@ -124,9 +124,9 @@ int32 run_game_engine() { // mainLoopInteration
 		unfreeze_time();
 	}
 
-	loopActorAngle = get_real_value(&loopMovePtr);
-	if (!loopActorAngle) {
-		loopActorAngle = 1;
+	loopActorStep = get_real_value(&loopMovePtr);
+	if (!loopActorStep) {
+		loopActorStep = 1;
 	}
 
 	set_actor_angle(0, -256, 5, &loopMovePtr);
