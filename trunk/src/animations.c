@@ -838,6 +838,21 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					}
 				}
 			}
+
+			if (actor->staticFlags.bCanBePushed) {
+				processActorX += actor->lastX;
+				processActorY += actor->lastY;
+				processActorZ += actor->lastZ;
+
+				if (actor->staticFlags.bUseMiniZv) {
+					processActorX = ((processActorX / 128) * 128);
+					processActorZ = ((processActorZ / 128) * 128);
+				}
+
+				actor->lastX = 0;
+				actor->lastY = 0;
+				actor->lastZ = 0;
+			}
 		}
 	} else { // 3D actor
 		if (actor->previousAnimIdx != -1) {
