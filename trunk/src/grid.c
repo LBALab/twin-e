@@ -832,7 +832,14 @@ int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
 	collisionY = y >> 8;
 	collisionZ = (z + 0x100) >> 9;
 
-	// TODO: validate bound positions
+	if (collisionX < 0 || collisionX >= 64)
+		return 0;
+
+	if (collisionY <= -1)
+		return 1;
+
+	if (collisionY < 0 || collisionY > 24 || collisionZ < 0 || collisionZ >= 64)
+		return 0;
 
 	blockIdx = (*map)[collisionZ][collisionX][collisionY].blockIdx;
 	brickBlockIdx = (*map)[collisionZ][collisionX][collisionY].brickBlockIdx;
