@@ -129,7 +129,7 @@ typedef struct ActorStruct {
 	int32 body;
 	int32 anim;
 	int32 animExtra; //field_2
-	int32 field_3;
+	int32 brickShape; // field_3
 	uint8 *animExtraPtr;
 	int32 sprite; // field_8
 	uint8 *entityDataPtr;

@@ -40,6 +40,7 @@
 #include "gamestate.h"
 #include "collision.h"
 #include "grid.h"
+#include "main.h"
 
 enum ActionType {
 	kHitting			= 0,
@@ -944,7 +945,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		processActorY -= sceneActors[actor->standOn].Y;
 		processActorZ -= sceneActors[actor->standOn].Z;
 
-		if (standing_on_actor(actorIdx, actor->standOn)) {
+		if (!standing_on_actor(actorIdx, actor->standOn)) {
 			actor->standOn = -1; // no longer standing on other actor
 		}
 	}
@@ -962,9 +963,70 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		collisionY = 0;
 		
 		brickShape = get_brick_shape(previousActorX, previousActorY, previousActorZ);
+
+		if (brickShape) {
+			if (brickShape != BRICKSHAPE_SOLID) {
+				// TODO: reajust position acording to brick shape
+			} /*else { 
+				// this shouldn't happen (collision should avoid it)
+				actor->Y = processActorY = (processActorY / 256) * 256 + 256; // go upper
+			}*/
+		}
+
+		if (actor->staticFlags.bComputeCollisionWithObj) {
+			// TODO: check_collision_with_objects(actorIdx) // CheckObjCol(actorIdx)
+		}
+
+		if (actor->standOn != -1 && actor->dynamicFlags.bIsFalling) {
+			// TODO: make it to stop falling // ReceptionObj();
+		}
+
+		causeActorDamage = 0;
+
+		processCollisionX = processActorX;
+		processCollisionY = processActorY;
+		processCollisionZ = processActorZ;
+
+		if (!actorIdx && !actor->staticFlags.bComputeLowCollision) {
+			// TODO: check hero collisions
+		} else {
+			// TODO: check other actors collisions
+		}
+
+		// process wall hit while running
+		if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == ATHLETIC && actor->anim == 1) {
+			rotate_actor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
+
+			destX += processActorX;
+			destZ += processActorZ;
+
+			if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
+				if (get_brick_shape(destX, processActorY + 0x100, destY)) {
+					// TODO: show hit stars sprites
+					// TODO: play running hit animation
+
+					if (currentlyProcessedActorIdx == 0) {
+						heroMoved = 1;
+					}
+					
+					// cause wall damage
+					actor->life--;
+
+					if (cfgfile.Debug == 1) {
+						printf("Wall hit - Type: running");
+					}
+				}
+			}
+		}
+
+		brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+		// var_4 = brickShape;
+		actor->brickShape = brickShape;
 	}	
 
-	// TODO: cause damage
+	if (causeActorDamage) {
+		actor->brickShape |= 0x80;
+	}
 
 	// check and fix actor bounding position
 	if (processActorX < 0) {

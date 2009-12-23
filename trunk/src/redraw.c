@@ -361,7 +361,7 @@ void process_drawing(int32 numDrawingList) {
 							tempX = (actor->X + 0x100) >> 9;
 							tempY = actor->Y >> 8;
 
-							if (actor->field_3 & 0x7F)
+							if (actor->brickShape & 0x7F)
 								tempY++;
 
 							tempZ = (actor->Z + 0x100) >> 9;
@@ -416,7 +416,7 @@ void process_drawing(int32 numDrawingList) {
 
 						tempX = (actor->X + actor->boudingBox.X.topRight + 0x100) >> 9;
 						tempZ = actor->Y >> 8;
-						if (actor->field_3 & 0x7F)
+						if (actor->brickShape & 0x7F)
 							tempZ++;
 						tempY = (actor->Z + actor->boudingBox.Z.topRight + 0x100) >> 9;
 
