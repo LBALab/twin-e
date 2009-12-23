@@ -114,4 +114,6 @@ int32 init_celling_grid(int32 index);
 /** Redraw grid background */
 void redraw_grid();
 
+int32 get_brick_shape(int32 x, int32 y, int32 z);
+
 #endif

@@ -38,6 +38,8 @@
 #include "movements.h"
 #include "sound.h"
 #include "gamestate.h"
+#include "collision.h"
+#include "grid.h"
 
 enum ActionType {
 	kHitting			= 0,
@@ -942,7 +944,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		processActorY -= sceneActors[actor->standOn].Y;
 		processActorZ -= sceneActors[actor->standOn].Z;
 
-		// TODO: check_zv_on_zv
+		if (standing_on_actor(actorIdx, actor->standOn)) {
+			actor->standOn = -1; // no longer standing on other actor
+		}
 	}
 
 	// actor falling Y speed
@@ -954,7 +958,10 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 	// actor collisions with bricks
 	if (actor->staticFlags.bComputeCollisionWithBricks) {
-		// TODO: actor collision code
+		int32 brickShape;
+		collisionY = 0;
+		
+		brickShape = get_brick_shape(previousActorX, previousActorY, previousActorZ);
 	}	
 
 	// TODO: cause damage

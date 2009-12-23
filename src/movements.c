@@ -51,7 +51,7 @@ void get_shadow_position(int32 X, int32 Y, int32 Z) {
 	tempY = Y >> 8;
 	tempZ = (Z + 0x100) >> 9;
 
-	ptr = blockBuffer + tempZ * 2 + tempX * 25 * 2 + (tempY << 6) * 25 * 2;
+	ptr = blockBuffer + tempY * 2 + tempX * 25 * 2 + (tempZ << 6) * 25 * 2;
 
 	while (tempY) { // search down until either ground is found or lower border of the cube is reached
 		if (*(int16*)ptr) // found the ground
