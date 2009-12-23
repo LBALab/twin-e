@@ -31,6 +31,8 @@
 
 #include "sys.h"
 
+#define BRICKSHAPE_SOLID	1
+
 /** New grid camera X coordinates */
 int32 newCameraX;
 /** New grid camera Y coordinates */
