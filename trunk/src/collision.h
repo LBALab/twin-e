@@ -37,4 +37,10 @@ int32 collisionY; // getPosVar2
 /** Actor collition Z coordinate */
 int32 collisionZ; // getPosVar3
 
+
+/** Check if actor 1 is standing in actor2
+	@param actorIdx1 Actor 1 index 
+	@param actorIdx2 Actor 2 index */
+int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2);
+
 #endif

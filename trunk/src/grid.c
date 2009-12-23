@@ -39,6 +39,7 @@
 #include "actor.h"
 #include "renderer.h"
 #include "redraw.h"
+#include "collision.h"
 
 /** Grip X size */
 #define GRID_SIZE_X 64
@@ -753,7 +754,6 @@ void draw_column_grid(int32 blockIdx, int32 brickBlockIdx, int32 x, int32 y, int
 		return;
 
 	get_brick_pos(x - newCameraX, y - newCameraY, z - newCameraZ);
-	//get_brick_pos(x, y, z);
 
 	if (brickPixelPosX < -24)
 		return;
@@ -820,5 +820,32 @@ void redraw_grid() {
 				}
 			}
 		}
+	}
+}
+
+int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
+	uint8 blockIdx, brickBlockIdx;
+	
+	blockMap* map = (blockMap*)blockBuffer;
+
+	collisionX = (x + 0x100) >> 9;
+	collisionY = y >> 8;
+	collisionZ = (z + 0x100) >> 9;
+
+	// TODO: validate bound positions
+
+	blockIdx = (*map)[collisionZ][collisionX][collisionY].blockIdx;
+	brickBlockIdx = (*map)[collisionZ][collisionX][collisionY].brickBlockIdx;
+
+	if (blockIdx) {
+		uint8 *blockPtr;
+		uint8 brickShape;
+		
+		blockPtr = get_block_library(blockIdx) + 3 + brickBlockIdx * 4;
+		brickShape = *((uint8 *)(blockPtr));
+
+		return brickShape;
+	} else {
+		return brickBlockIdx;
 	}
 }
