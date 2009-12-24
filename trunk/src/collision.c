@@ -24,11 +24,14 @@
 	$URL$
 	$Id$
 */
+#include <stdio.h>
 
 #include "collision.h"
 #include "scene.h"
 #include "actor.h"
 #include "movements.h"
+#include "grid.h"
+#include "main.h"
 
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
@@ -84,4 +87,109 @@ int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2) { // CheckZvOnZv
 		return 0;
 
 	return 1; // standing
+}
+
+int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3)
+{
+	if (var3 <= 0) {
+		return var0;
+	}
+
+	if (var3 >= var2) {
+		return var1;
+	}
+
+    return ((((var1 - var0) * var3) / var2) + var0);
+}
+
+/** Reajust actor position in scene according with brick shape bellow actor
+	@param brickShape Shape of brick bellow the actor */
+void reajust_actor_position(int32 brickShape) {
+	int32 brkX, brkY, brkZ;
+
+	if (!brickShape) {
+		return;
+	}
+
+	brkX = (collisionX << 9) - 0x100;
+	brkY = collisionY << 8;
+	brkZ = (collisionZ << 9) - 0x100;
+
+	// double-side stairs
+	if (brickShape >= kDoubleSideStairsTop1 && brickShape <= kDoubleSideStairsRight2) {
+		switch (brickShape) {
+		case kDoubleSideStairsTop1: 
+			if (processActorZ - collisionZ <= processActorX - collisionX) {
+				brickShape = kStairsTopLeft;
+			} else {
+				brickShape = kStairsTopRight;
+			}
+			break;
+		case kDoubleSideStairsBottom1: 
+			if (processActorZ - collisionZ <= processActorX - collisionX) {
+				brickShape = kStairsBottomLeft;
+			} else {
+				brickShape = kStairsBottomRight;
+			}
+			break;
+		case kDoubleSideStairsLeft1: 
+			if (512 - processActorX - collisionX <= processActorZ - collisionZ) {
+				brickShape = kStairsTopLeft;
+			} else {
+				brickShape = kStairsBottomLeft;
+			}
+			break;
+		case kDoubleSideStairsRight1: 
+			if (512 - processActorX - collisionX <= processActorZ - collisionZ) {
+				brickShape = kStairsTopRight;
+			} else {
+				brickShape = kStairsBottomRight;
+			}
+			break;
+
+		case kDoubleSideStairsTop2: 
+			if (processActorX - collisionX >= processActorZ - collisionZ) {
+				brickShape = kStairsTopRight;
+			} else {
+				brickShape = kStairsTopLeft;
+			}
+			break;
+		case kDoubleSideStairsBottom2: 
+			if (processActorZ - collisionZ <= processActorX - collisionX) {
+				brickShape = kStairsBottomRight;
+			} else {
+				brickShape = kStairsBottomLeft;
+			}
+			break;
+		case kDoubleSideStairsLeft2: 
+			if (512 - processActorX - collisionX <= processActorZ - collisionZ) {
+				brickShape = kStairsBottomLeft;
+			} else {
+				brickShape = kStairsTopLeft;
+			}
+			break;
+		case kDoubleSideStairsRight2: 
+			if (512 - processActorX - collisionX <= processActorZ - collisionZ) {
+				brickShape = kStairsBottomRight;
+			} else {
+				brickShape = kStairsTopRight;
+			}
+			break;
+		default:
+			if (cfgfile.Debug == 1) {
+				printf("Brick Shape %d unsupported\n", brickShape);
+			}
+			break;
+		}	
+	}
+
+	if (brickShape >= kStairsTopLeft && brickShape <= kStairsBottomRight) {
+		switch (brickShape) {
+		case kStairsTopLeft: 
+			//processActorY = brkY + 
+			break;
+		default:
+			break;
+		}
+	}
 }
