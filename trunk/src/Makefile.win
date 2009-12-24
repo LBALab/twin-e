@@ -4,6 +4,7 @@ LDFLAGS=-mwindows -lmingw32 $(SDL_LIBS)
 
 OBJS=actor.o \
 	animations.o \
+	collision.o \
 	debug.o \
 	debug.grid.o \
 	debug.scene.o \

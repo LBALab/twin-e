@@ -4,6 +4,7 @@ SDL_LIBS = `sdl-config --libs`
 CFLAGS=-ggdb -DUNIX -DGAMEMOD -Wall $(SDL_CFLAGS)
 OBJS=actor.o \
 	animations.o \
+	collision.o \
 	debug.o \
 	debug.grid.o \
 	debug.scene.o \
