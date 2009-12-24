@@ -965,8 +965,8 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		brickShape = get_brick_shape(previousActorX, previousActorY, previousActorZ);
 
 		if (brickShape) {
-			if (brickShape != BRICKSHAPE_SOLID) {
-				// TODO: reajust position acording to brick shape
+			if (brickShape != kSolid) {
+				reajust_actor_position(brickShape);
 			} /*else { 
 				// this shouldn't happen (collision should avoid it)
 				actor->Y = processActorY = (processActorY / 256) * 256 + 256; // go upper
