@@ -43,6 +43,8 @@ int16 processActorY;
 /** Process actor Z coordinate */
 int16 processActorZ;
 
+ActorStruct *processActorPtr; // processActorVar1
+
 /** Previous process actor X coordinate */
 int16 previousActorX; // processActorVar2
 /** Previous process actor Y coordinate */

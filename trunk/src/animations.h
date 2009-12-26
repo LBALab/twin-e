@@ -58,8 +58,6 @@ uint8* animTable[NUM_ANIMS];
 /** Table with all loaded animations sizes */
 uint32 animSizeTable[NUM_ANIMS];
 
-ActorStruct *processActorPtr; // actor pointer
-
 /** Rotation by anim and not by engine */
 int16 processRotationByAnim;    // processActorVar5
 /** Last rotation angle */

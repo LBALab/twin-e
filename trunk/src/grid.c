@@ -856,3 +856,8 @@ int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
 		return brickBlockIdx;
 	}
 }
+
+int32 get_brick_shape_full(int32 x, int32 y, int32 z, int32 y2) {
+	// TODO process brick shape
+	return 1;
+}

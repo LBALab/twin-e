@@ -60,4 +60,18 @@ void reajust_actor_position(int32 brickShape);
 	@param actorIx Current process actor index */
 int32 check_collision_with_actors(int32 actorIdx);
 
+/** Check Hero collision with bricks
+	@param X Hero X coordinate 
+	@param Y Hero Y coordinate 
+	@param Z Hero Z coordinate
+	@param damageMask Cause damage mask */
+void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask);
+
+/** Check other actor collision with bricks
+	@param X Actor X coordinate 
+	@param Y Actor Y coordinate 
+	@param Z Actor Z coordinate
+	@param damageMask Cause damage mask */
+void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask);
+
 #endif
