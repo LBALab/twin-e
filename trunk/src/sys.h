@@ -53,52 +53,28 @@ typedef float int64;
 
 #ifdef UNIX
 #define FORCEINLINE static __inline__
+#elif MINGW32
+#define FORCEINLINE inline
 #else
 #define FORCEINLINE __forceinline
 #endif
 
-/*FORCEINLINE uint8 READ_LE_BYTE(const void *ptr) {
-	return *((const uint8 *)ptr);
-}
+FORCEINLINE uint8 READ_LE_BYTE(const void *ptr);
 
-FORCEINLINE uint16 READ_LE_UINT16(const void *ptr) {
-	const uint8 *b = (const uint8 *)ptr;
-	return (b[1] << 8) | b[0];
-}
+FORCEINLINE uint16 READ_LE_UINT16(const void *ptr);
 
-FORCEINLINE int16 READ_LE_INT16(const void *ptr) {
-	return (int16)READ_LE_UINT16(ptr);
-}
+FORCEINLINE int16 READ_LE_INT16(const void *ptr);
 
-FORCEINLINE uint32 READ_LE_UINT32(const void *ptr) {
-	const uint8 *b = (const uint8 *)ptr;
-	return (b[3] << 24) | (b[2] << 16) | (b[1] << 8) | (b[0]);
-}
+FORCEINLINE uint32 READ_LE_UINT32(const void *ptr);
 
-FORCEINLINE int32 READ_LE_INT32(const void *ptr) {
-	return (int32)READ_LE_UINT32(ptr);
-}
+FORCEINLINE int32 READ_LE_INT32(const void *ptr);
 
-FORCEINLINE void WRITE_LE_UINT16(void *ptr, uint16 value) {
-	uint8 *b = (uint8 *)ptr;
-	b[0] = (uint8)(value >> 0);
-	b[1] = (uint8)(value >> 8);
-}
+FORCEINLINE void WRITE_LE_UINT16(void *ptr, uint16 value);
 
-FORCEINLINE void WRITE_LE_INT16(void *ptr, int16 value) {
-	WRITE_LE_UINT16(ptr, (uint16)value);
-}
+FORCEINLINE void WRITE_LE_INT16(void *ptr, int16 value);
 
-FORCEINLINE void WRITE_LE_UINT32(void *ptr, uint32 value) {
-	uint8 *b = (uint8 *)ptr;
-	b[0] = (uint8)(value >>  0);
-	b[1] = (uint8)(value >>  8);
-	b[2] = (uint8)(value >> 16);
-	b[3] = (uint8)(value >> 24);
-}
+FORCEINLINE void WRITE_LE_UINT32(void *ptr, uint32 value);
 
-FORCEINLINE void WRITE_LE_INT32(void *ptr, int32 value) {
-	WRITE_LE_UINT32(ptr, (uint32)value);
-}*/
+FORCEINLINE void WRITE_LE_INT32(void *ptr, int32 value);
 
 #endif
