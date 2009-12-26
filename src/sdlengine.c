@@ -401,7 +401,6 @@ void read_keys() {
 			case SDLK_F12:
 				toggle_fullscreen();
 				break;
-
 #ifdef GAMEMOD
 			case SDLK_r:  // next room
 				localKey = 0x13;
@@ -419,9 +418,6 @@ void read_keys() {
 				localKey = 0x30;
 				break;
 #endif
-
-
-
 			default:
 				break;
 			}
@@ -454,9 +450,6 @@ void read_keys() {
 			case SDLK_LCTRL:
 			case SDLK_RCTRL:
 				localKey = 0x1D;
-				break;
-			case SDLK_RETURN:
-				localKey = 0x1C;
 				break;
 			case SDLK_LSHIFT:
 			case SDLK_RSHIFT:
@@ -510,11 +503,10 @@ void read_keys() {
 			}
 		}
 
-		//if (found==0)
-		skipIntro = localKey;
+		if (found==0) {
+			skipIntro = localKey;
+		}
 	}
-
-	//printf("key: %d %d %d %d\n",pressedKey,skipedKey,skipIntro,localKey);
 }
 
 #ifdef GAMEMOD
