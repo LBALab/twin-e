@@ -56,4 +56,8 @@ int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2);
 	@param brickShape Shape of brick bellow the actor */
 void reajust_actor_position(int32 brickShape);
 
+/** Check collision with actors
+	@param actorIx Current process actor index */
+int32 check_collision_with_actors(int32 actorIdx);
+
 #endif

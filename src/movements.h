@@ -50,6 +50,8 @@ int16 previousActorY; // processActorVar3
 /** Previous process actor Z coordinate */
 int16 previousActorZ; // processActorVar4
 
+int32 moveAngle; // DoTrackVar1
+
 
 /** Get shadow position
 	@param X Shadow X coordinate
@@ -74,6 +76,13 @@ void clear_real_angle(ActorStruct * actorPtr);
 	@param stepAngle number of steps
 	@param movePtr time pointer to update */
 void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr);
+
+/** Get actor angle
+	@param x1 Actor 1 X
+	@param z1 Actor 1 Z
+	@param x2 Actor 2 X
+	@param z2 Actor 2 Z */
+int32 get_angle(int32 x1, int32 z1, int32 x2, int32 z2);
 
 /** Get actor real angle
 	@param movePtr time pointer to process */

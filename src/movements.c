@@ -116,6 +116,65 @@ void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMov
 	movePtr->timeOfChange = lbaTime;
 }
 
+/** Get actor angle
+	@param x1 Actor 1 X
+	@param z1 Actor 1 Z
+	@param x2 Actor 2 X
+	@param z2 Actor 2 Z */
+int32 get_angle(int32 x1, int32 z1, int32 x2, int32 z2) {
+	int32 newX, newZ, difX, difZ, tmpX, tmpZ, tmpEx, flag, destAngle, startAngle, stopAngle, finalAngle;
+
+	difZ = tmpZ = z2 - z1;
+	newZ = tmpZ * tmpZ;
+
+	difX = tmpX = x2 - x1;
+	newX = tmpX * tmpX;
+
+	// Exchange X and Z
+	if (newX < newZ) {
+		tmpEx = difX;
+		difX = difZ;
+		difZ = tmpEx;
+
+		flag = 1;
+	} else {
+		flag = 0;
+	}
+
+	moveAngle = (int32)sqrt(newX + newZ);
+
+	if (!moveAngle) {
+		return 0;
+	}
+
+	destAngle = (difZ << 14) / moveAngle;
+
+	startAngle = 0;
+	stopAngle  = 0x100;
+
+	while (shadeAngleTab3[startAngle] > destAngle) {
+		startAngle++;
+	}
+
+	if (shadeAngleTab3[startAngle] != destAngle) {
+		if ((shadeAngleTab3[startAngle - 1] + shadeAngleTab3[startAngle]) / 2 <= destAngle) {
+			startAngle--;
+		}
+	}
+
+	finalAngle = 128 + startAngle;
+
+	if (difX <= 0) {
+		finalAngle = -finalAngle;
+	}
+
+	if (flag & 1) {
+		finalAngle = -finalAngle + 0x100;
+	}
+
+	return finalAngle & 0x3FF;
+}
+
 /** Get actor real angle
 	@param movePtr Pointer to process movements */
 int32 get_real_angle(ActorMoveStruct * movePtr) {

@@ -202,3 +202,195 @@ void reajust_actor_position(int32 brickShape) {
 		}
 	}
 }
+
+/** Check collision with actors
+	@param actorIx Current process actor index */
+int32 check_collision_with_actors(int32 actorIdx) {
+	int32 a, xLeft, xRight, yLeft, yRight, zLeft, zRight;
+	ActorStruct *actor, *actorTest;
+
+	actor = &sceneActors[actorIdx];
+
+	xLeft  = processActorX + actor->boudingBox.X.bottomLeft;
+	xRight = processActorX + actor->boudingBox.X.topRight;
+
+	yLeft  = processActorY + actor->boudingBox.Y.bottomLeft;
+	yRight = processActorY + actor->boudingBox.Y.topRight;
+
+	zLeft  = processActorZ + actor->boudingBox.Z.bottomLeft;
+	zRight = processActorZ + actor->boudingBox.Z.topRight;
+
+	actor->collision = -1;
+
+	for (a = 0; a < sceneNumActors; a++) {
+		actorTest = &sceneActors[a];
+
+		// aviod current processed actor
+		if (a != actorIdx && actorTest->entity != -1 && !actor->staticFlags.bComputeLowCollision && actorTest->standOn != actorIdx) {
+			int32 xLeftTest, xRightTest, yLeftTest, yRightTest, zLeftTest, zRightTest;
+
+			xLeftTest  = actorTest->X + actorTest->boudingBox.X.bottomLeft;
+			xRightTest = actorTest->X + actorTest->boudingBox.X.topRight;
+
+			yLeftTest  = actorTest->Y + actorTest->boudingBox.Y.bottomLeft;
+			yRightTest = actorTest->Y + actorTest->boudingBox.Y.topRight;
+
+			zLeftTest  = actorTest->Z + actorTest->boudingBox.Z.bottomLeft;
+			zRightTest = actorTest->Z + actorTest->boudingBox.Z.topRight;
+
+			if (xLeft < xRightTest && xRight > xLeftTest && yLeft < yRightTest && yRight > yLeftTest && zLeft < zRightTest && zRight > zLeftTest) {
+				actor->collision = a; // mark as collision with actor a
+
+				if (actorTest->staticFlags.bIsCarrierActor) {
+					if (actor->dynamicFlags.bIsFalling) {
+						processActorY = yRightTest - actor->boudingBox.Y.bottomLeft + 1;
+						actor->standOn = a;
+					} else {
+						if (standing_on_actor(actorIdx, a)) {
+							processActorY = yRightTest - actor->boudingBox.Y.bottomLeft + 1;
+							actor->standOn = a;
+						} else {
+							int32 newAngle;
+
+							newAngle = get_angle(processActorX, processActorZ, actorTest->X, actorTest->Z);
+
+							if (actorTest->staticFlags.bCanBePushed && !actor->staticFlags.bCanBePushed) {
+								actorTest->lastY = 0;
+
+								if (actorTest->staticFlags.bUseMiniZv) {
+									if (newAngle >= 0x80 && newAngle < 0x180 && actor->angle > 0x80 && actor->angle < 0x180) {
+										actorTest->lastX = 192;
+									}
+									if (newAngle >= 0x180 && newAngle < 0x280 && actor->angle > 0x180 && actor->angle < 0x280) {
+										actorTest->lastZ = -64;
+									}
+									if (newAngle >= 0x280 && newAngle < 0x380 && actor->angle > 0x280 && actor->angle < 0x380) {
+										actorTest->lastX = -64;
+									}
+									if ((newAngle >= 0x380 || newAngle < 0x80) && (actor->angle > 0x380 || actor->angle < 0x80)) {
+										actorTest->lastX = 192;
+									}
+								} else {
+									actorTest->lastX = processActorX - actor->collisionX;
+									actorTest->lastZ = processActorZ - actor->collisionZ;
+								}
+							}
+
+							if ((actorTest->boudingBox.X.topRight - actorTest->boudingBox.X.bottomLeft == actorTest->boudingBox.Z.topRight - actorTest->boudingBox.Z.bottomLeft) &&
+								(actor->boudingBox.X.topRight - actor->boudingBox.X.bottomLeft == actor->boudingBox.Z.topRight - actor->boudingBox.Z.bottomLeft)) {
+								if (newAngle < 0x180) {
+									processActorX = xLeftTest - actor->boudingBox.X.topRight;
+								}
+								if (newAngle >= 0x180 && newAngle < 0x280) {
+									processActorZ = zRightTest - actor->boudingBox.Z.bottomLeft;
+								}
+								if (newAngle >= 0x280 && newAngle < 0x380) {
+									processActorX = xRightTest - actor->boudingBox.X.bottomLeft;
+								}
+								if (newAngle >= 0x380 || newAngle < 0x380 && newAngle < 0x80) {
+									processActorZ = zLeftTest - actor->boudingBox.Z.topRight;
+								}
+							} else {
+								if (!actor->dynamicFlags.bIsFalling) {
+									processActorX = previousActorX;
+									processActorY = previousActorY;
+									processActorZ = previousActorZ;
+								}
+							}
+						}
+					}
+				} else {
+					int32 newAngle;
+
+					if (standing_on_actor(actorIdx, a)) {
+						hit_actor(actorIdx, a, 1, -1);
+					}
+
+					newAngle = get_angle(processActorX, processActorZ, actorTest->X, actorTest->Z);
+
+					if (actorTest->staticFlags.bCanBePushed && !actor->staticFlags.bCanBePushed) {
+						actorTest->lastY = 0;
+
+						if (actorTest->staticFlags.bUseMiniZv) {
+							if (newAngle >= 0x80 && newAngle < 0x180 && actor->angle > 0x80 && actor->angle < 0x180) {
+								actorTest->lastX = 192;
+							}
+							if (newAngle >= 0x180 && newAngle < 0x280 && actor->angle > 0x180 && actor->angle < 0x280) {
+								actorTest->lastZ = -64;
+							}
+							if (newAngle >= 0x280 && newAngle < 0x380 && actor->angle > 0x280 && actor->angle < 0x380) {
+								actorTest->lastX = -64;
+							}
+							if ((newAngle >= 0x380 || newAngle < 0x80) && (actor->angle > 0x380 || actor->angle < 0x80)) {
+								actorTest->lastX = 192;
+							}
+						} else {
+							actorTest->lastX = processActorX - actor->collisionX;
+							actorTest->lastZ = processActorZ - actor->collisionZ;
+						}
+					}
+
+					if ((actorTest->boudingBox.X.topRight - actorTest->boudingBox.X.bottomLeft == actorTest->boudingBox.Z.topRight - actorTest->boudingBox.Z.bottomLeft) &&
+						(actor->boudingBox.X.topRight - actor->boudingBox.X.bottomLeft == actor->boudingBox.Z.topRight - actor->boudingBox.Z.bottomLeft)) {
+						if (newAngle < 0x180) {
+							processActorX = xLeftTest - actor->boudingBox.X.topRight;
+						}
+						if (newAngle >= 0x180 && newAngle < 0x280) {
+							processActorZ = zRightTest - actor->boudingBox.Z.bottomLeft;
+						}
+						if (newAngle >= 0x280 && newAngle < 0x380) {
+							processActorX = xRightTest - actor->boudingBox.X.bottomLeft;
+						}
+						if (newAngle >= 0x380 || newAngle < 0x380 && newAngle < 0x80) {
+							processActorZ = zLeftTest - actor->boudingBox.Z.topRight;
+						}
+					} else {
+						if (!actor->dynamicFlags.bIsFalling) {
+							processActorX = previousActorX;
+							processActorY = previousActorY;
+							processActorZ = previousActorZ;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (actor->dynamicFlags.bIsHitting) {
+		rotate_actor(0, 200, actor->angle);
+
+		xLeft  = processActorX + actor->boudingBox.X.bottomLeft;
+		xRight = processActorX + actor->boudingBox.X.topRight;
+
+		yLeft  = processActorY + actor->boudingBox.Y.bottomLeft;
+		yRight = processActorY + actor->boudingBox.Y.topRight;
+
+		zLeft  = processActorZ + actor->boudingBox.Z.bottomLeft;
+		zRight = processActorZ + actor->boudingBox.Z.topRight;
+	
+		for (a = 0; a < sceneNumActors; a++) {
+			actorTest = &sceneActors[a];
+
+			// aviod current processed actor
+			if (a != actorIdx && actorTest->entity != -1 && !actor->staticFlags.bIsHidden && actorTest->standOn != actorIdx) {
+				int32 xLeftTest, xRightTest, yLeftTest, yRightTest, zLeftTest, zRightTest;
+
+				xLeftTest  = actorTest->X + actorTest->boudingBox.X.bottomLeft;
+				xRightTest = actorTest->X + actorTest->boudingBox.X.topRight;
+
+				yLeftTest  = actorTest->Y + actorTest->boudingBox.Y.bottomLeft;
+				yRightTest = actorTest->Y + actorTest->boudingBox.Y.topRight;
+
+				zLeftTest  = actorTest->Z + actorTest->boudingBox.Z.bottomLeft;
+				zRightTest = actorTest->Z + actorTest->boudingBox.Z.topRight;
+
+				if (xLeft < xRightTest && xRight > xLeftTest && yLeft < yRightTest && yRight > yLeftTest && zLeft < zRightTest && zRight > zLeftTest) {
+					hit_actor(actorIdx, a, actor->strengthOfHit, actor->angle + 0x200);
+					actor->dynamicFlags.bIsHitting = 0;
+				}
+			}
+		}
+	}
+
+	return actor->collision;
+}

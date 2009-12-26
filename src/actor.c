@@ -441,3 +441,42 @@ void reset_actor(int16 actorIdx) {
 	actor->positionInMoveScript = -1;
 	actor->positionInLifeScript = 0;
 }
+
+/** Process hit actor
+	@param actorIdx actor hitting index
+	@param actorIdxAttacked actor attacked index
+	@param strengthOfHit actor hitting strength of hit
+	@param angle angle of actor hitting */
+void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32 angle) {
+	ActorStruct *actor = &sceneActors[actorIdxAttacked];
+
+	if (actor->life <= 0) {
+		return;
+	}
+
+	actor->hitBy = actorIdx;
+
+	if (actor->armor <= strengthOfHit) {
+		if (actor->anim == ANIM_BIG_HIT || actor->anim == ANIM_HIT2) {
+			int32 tmpAnimPos;
+			tmpAnimPos = actor->animPosition;
+			if (actor->animExtra) {
+				process_anim_actions(actorIdxAttacked);
+			}
+
+			actor->animPosition = tmpAnimPos;
+		} else {
+			if (angle != -1) {
+				set_actor_angle_safe(angle, angle, 0, &actor->move);
+			} 
+			
+			if (rand() & 1) {
+				init_anim(ANIM_HIT2, 3, 255, actorIdxAttacked);
+			} else {
+				init_anim(ANIM_BIG_HIT, 3, 255, actorIdxAttacked);
+			}
+		}
+	} else {
+		init_anim(ANIM_HIT, 3, 255, actorIdxAttacked);
+	}
+}

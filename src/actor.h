@@ -275,4 +275,11 @@ void init_actor(int16 actorIdx);
 	@param actorIdx actor index to init */
 void reset_actor(int16 actorIdx);
 
+/** Process hit actor
+	@param actorIdx actor hitting index
+	@param actorIdxAttacked actor attacked index
+	@param strengthOfHit actor hitting strength of hit
+	@param angle angle of actor hitting */
+void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32 angle);
+
 #endif
