@@ -988,9 +988,17 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		processCollisionZ = processActorZ;
 
 		if (!actorIdx && !actor->staticFlags.bComputeLowCollision) {
-			// TODO: check hero collisions
+			// check hero collisions with bricks
+			check_hero_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 1);
+			check_hero_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 2);
+			check_hero_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   4);
+			check_hero_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   8);
 		} else {
-			// TODO: check other actors collisions
+			// check other actors collisions with bricks
+			check_actor_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 1);
+			check_actor_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 2);
+			check_actor_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   4);
+			check_actor_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   8);
 		}
 
 		// process wall hit while running

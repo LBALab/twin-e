@@ -394,3 +394,73 @@ int32 check_collision_with_actors(int32 actorIdx) {
 
 	return actor->collision;
 }
+
+/** Check Hero collision with bricks
+	@param X Hero X coordinate 
+	@param Y Hero Y coordinate 
+	@param Z Hero Z coordinate
+	@param damageMask Cause damage mask */
+void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask) {
+	int32 brickShape;
+
+	brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+
+	processActorX += X;
+	processActorY += Y;
+	processActorZ += Z;
+
+	if (processActorX >= 0 && processActorZ >= 0 && processActorX <= 0x7E00 && processActorZ <= 0x7E00) {
+		reajust_actor_position(brickShape);
+		brickShape = get_brick_shape_full(processActorX, processActorY, previousActorZ + Z, processActorPtr->boudingBox.Y.topRight);
+
+		if (brickShape == 1) {
+			causeActorDamage |= damageMask;
+			brickShape = get_brick_shape_full(X + processActorX, processActorY, previousActorZ, processActorPtr->boudingBox.Y.topRight);
+			
+			if (brickShape != 1) {
+				processCollisionX = previousActorX;
+			}
+		} else {
+			processCollisionZ = previousActorZ;
+		}
+	}
+
+	processActorX = processCollisionX;
+	processActorY = processCollisionY;
+	processActorZ = processCollisionZ;
+}
+
+/** Check other actor collision with bricks
+	@param X Actor X coordinate 
+	@param Y Actor Y coordinate 
+	@param Z Actor Z coordinate
+	@param damageMask Cause damage mask */
+void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask) {
+	int32 brickShape;
+
+	brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+
+	processActorX += X;
+	processActorY += Y;
+	processActorZ += Z;
+
+	if (processActorX >= 0 && processActorZ >= 0 && processActorX <= 0x7E00 && processActorZ <= 0x7E00) {
+		reajust_actor_position(brickShape);
+		brickShape = get_brick_shape(processActorX, processActorY, previousActorZ + Z);
+
+		if (brickShape == 1) {
+			causeActorDamage |= damageMask;
+			brickShape = get_brick_shape(X + processActorX, processActorY, previousActorZ);
+			
+			if (brickShape != 1) {
+				processCollisionX = previousActorX;
+			}
+		} else {
+			processCollisionZ = previousActorZ;
+		}
+	}
+
+	processActorX = processCollisionX;
+	processActorY = processCollisionY;
+	processActorZ = processCollisionZ;
+}
