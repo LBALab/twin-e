@@ -974,7 +974,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		}
 
 		if (actor->staticFlags.bComputeCollisionWithObj) {
-			// TODO: check_collision_with_objects(actorIdx) // CheckObjCol(actorIdx)
+			check_collision_with_actors(actorIdx); // CheckObjCol(actorIdx)
 		}
 
 		if (actor->standOn != -1 && actor->dynamicFlags.bIsFalling) {
