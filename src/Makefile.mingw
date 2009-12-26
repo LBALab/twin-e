@@ -1,6 +1,7 @@
 CC=gcc
 SDL_LIBS=-lSDLmain -lSDL -lSDL_mixer -lSDL_ttf
 LDFLAGS=-mwindows -lmingw32 $(SDL_LIBS)
+CFLAGS=-DMINGW32
 
 OBJS=   actor.o \
 	animations.o \
@@ -28,7 +29,8 @@ OBJS=   actor.o \
 	resources.o \
 	scene.o \
 	sdlengine.o \
-	sound.o
+	sound.o \
+	sys.o
 
 LIBS=$(LDFLAGS)
 
