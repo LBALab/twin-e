@@ -848,7 +848,7 @@ int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
 		uint8 *blockPtr;
 		uint8 brickShape;
 		
-		blockPtr = get_block_library(blockIdx) + 3 + brickBlockIdx * 4;
+		blockPtr = get_block_library(blockIdx-1) + 3 + brickBlockIdx * 4;
 		brickShape = *((uint8 *)(blockPtr));
 
 		return brickShape;

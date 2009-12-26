@@ -93,13 +93,10 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z) {
 	if (cfgfile.Sound) {
 		int32 sampSize = 0;
-		int8 sampfile[256];
 		SDL_RWops *rw;
 		uint8* sampPtr;
 
-		sprintf(sampfile, "%s", HQR_SAMPLES_FILE);
-
-		sampSize = hqr_getalloc_entry(&sampPtr, sampfile, index);
+		sampSize = hqr_getalloc_entry(&sampPtr, HQR_SAMPLES_FILE, index);
 
 		// Fix incorrect sample files first byte
 		if (*sampPtr != 'C')

@@ -233,8 +233,7 @@ int hqr_num_entries(int8 *filename) {
 int32 hqr_getalloc_entry(uint8 ** ptr, int8 *filename, int32 index) {
 	int32 size;
 	size = hqr_entry_size(filename, index);
-	//if(*ptr)
-	//free(ptr);
+
 	*ptr = (uint8*)malloc(size * sizeof(uint8));
 	if (!*ptr) {
 		printf("HQR WARNING: unable to allocate entry memory!!\n");

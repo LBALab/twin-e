@@ -186,7 +186,16 @@ void reajust_actor_position(int32 brickShape) {
 	if (brickShape >= kStairsTopLeft && brickShape <= kStairsBottomRight) {
 		switch (brickShape) {
 		case kStairsTopLeft: 
-			//processActorY = brkY + 
+			processActorY = brkY + get_average_value(0, 0x100, 0x200, processActorX - brkX);
+			break;
+		case kStairsTopRight: 
+			processActorY = brkY + get_average_value(0, 0x100, 0x200, processActorZ - brkZ);
+			break;
+		case kStairsBottomLeft: 
+			processActorY = brkY + get_average_value(0x100, 0, 0x200, processActorZ - brkZ);
+			break;
+		case kStairsBottomRight: 
+			processActorY = brkY + get_average_value(0x100, 0, 0x200, processActorX - brkX);
 			break;
 		default:
 			break;
