@@ -28,6 +28,9 @@
 #ifndef SYS_H
 #define SYS_H
 
+#include <stdlib.h>
+#include <math.h>
+
 #define Rnd(x) rand()%x
 #define Abs(x) abs(x)
 
@@ -54,7 +57,7 @@ typedef float int64;
 #define FORCEINLINE __forceinline
 #endif
 
-FORCEINLINE uint8 READ_LE_BYTE(const void *ptr) {
+/*FORCEINLINE uint8 READ_LE_BYTE(const void *ptr) {
 	return *((const uint8 *)ptr);
 }
 
@@ -96,6 +99,6 @@ FORCEINLINE void WRITE_LE_UINT32(void *ptr, uint32 value) {
 
 FORCEINLINE void WRITE_LE_INT32(void *ptr, int32 value) {
 	WRITE_LE_UINT32(ptr, (uint32)value);
-}
+}*/
 
 #endif

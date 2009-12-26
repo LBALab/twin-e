@@ -1,8 +1,8 @@
 CC=gcc
-SDL_LIBS=-lSDLmain -lSDL -lSDL_mixer
+SDL_LIBS=-lSDLmain -lSDL -lSDL_mixer -lSDL_ttf
 LDFLAGS=-mwindows -lmingw32 $(SDL_LIBS)
 
-OBJS=actor.o \
+OBJS=   actor.o \
 	animations.o \
 	collision.o \
 	debug.o \
@@ -30,11 +30,11 @@ OBJS=actor.o \
 	sdlengine.o \
 	sound.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf
+LIBS=$(LDFLAGS)
 
-all: prequengine
+all: prequengine_mingw
 
-prequengine: $(OBJS)
+prequengine_mingw: $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LIBS)
 
 .c.o:
@@ -42,7 +42,7 @@ prequengine: $(OBJS)
 
 clean:
 	@del $(OBJS)
-	@del prequengine.exe
+	@del prequengine_mingw.exe
 	@del *.bak
 	@del stderr.txt
 	@del stdout.txt

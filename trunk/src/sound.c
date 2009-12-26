@@ -60,7 +60,7 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 		SDL_RWops *rw;
 		uint8* sampPtr;
 
-		sprintf(sampfile, FLA_DIR "//%s", HQR_FLASAMP_FILE);
+		sprintf(sampfile, FLA_DIR "%s",HQR_FLASAMP_FILE);
 
 		sampSize = hqr_getalloc_entry(&sampPtr, sampfile, index);
 
