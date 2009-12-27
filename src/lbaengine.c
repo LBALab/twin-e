@@ -44,6 +44,7 @@
 #include "keyboard.h"
 #include "gamestate.h"
 #include "sound.h"
+#include "script.move.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -172,7 +173,7 @@ int32 run_game_engine() { // mainLoopInteration
 			actor->collisionZ = actor->Z;
 
 			if (actor->positionInMoveScript != -1) {
-				// TODO: process_track_script(a);
+				process_move_script(a);
 			}
 
 			process_actor_animations(a);
