@@ -259,6 +259,11 @@ void load_hero_entities();
 	@param behaviour behaviour value to set */
 void set_behaviour(int32 behaviour);
 
+/** Initialize 3D actor body
+	@param bodyIdx 3D actor body index
+	@param actorIdx 3D actor index */
+int32 init_body(int32 bodyIdx, int32 actorIdx);
+
 /** Preload all sprites */
 void preload_sprites();
 

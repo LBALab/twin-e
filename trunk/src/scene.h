@@ -37,7 +37,7 @@
 
 #define NUM_MAX_ACTORS		100
 #define NUM_MAX_ZONES		100
-#define NUM_MAX_TRACKS		100
+#define NUM_MAX_TRACKS		200
 
 #define POSITION_TYPE_NONE		0
 #define POSITION_TYPE_ZONE		1
@@ -98,6 +98,8 @@ int16 mecaPinguinIdx;
 int16 currentlyFollowedActor;
 /** Current actor in zone */
 int16 currentActorInZone; // currentActorInZoneProcess
+/** Current actor manipulated in scripts */
+int16 currentScriptValue; // manipActorResult
 
 // ZONES
 
