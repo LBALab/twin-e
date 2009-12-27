@@ -1,4 +1,4 @@
-/** @file scriptmove.h
+/** @file script.move.h
 	@brief
 	This file contains movies routines
 

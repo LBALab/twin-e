@@ -370,6 +370,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\script.move.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\script.move.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\sdlengine.c"
 			>
 		</File>
@@ -387,6 +395,10 @@
 		</File>
 		<File
 			RelativePath="..\..\sound.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\sys.c"
 			>
 		</File>
 		<File
