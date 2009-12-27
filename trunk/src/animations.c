@@ -1054,9 +1054,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					}
 
 					// no Z coordinate issue
-					if (!get_brick_shape(processActorX, processActorY, previousActorZ)) {
+					/*if (!get_brick_shape(processActorX, processActorY, previousActorZ)) {
 						processActorZ = previousActorZ;
-					}
+					}*/
 
 					// no X coordinate issue
 					if (!get_brick_shape(previousActorX, processActorY, processActorZ)) {

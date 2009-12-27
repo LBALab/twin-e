@@ -56,6 +56,10 @@
 #define ANIM_LANDING_HIT	9
 /** Dead anim value */
 #define ANIM_LANDDEATH		10
+/** Climbing ladder anim value */
+#define ANIM_CLIMB_LADDER	12
+/** Reach top of ladder anim value */
+#define ANIM_TOP_LADDER		13
 /** Hit anim value */
 #define ANIM_HIT2			22
 

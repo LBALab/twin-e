@@ -850,7 +850,7 @@ int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
 
 	if (blockIdx) {
 		uint8 *blockPtr;
-		uint8 brickShape, tmpBrickIdx;
+		uint8 tmpBrickIdx;
 		
 		blockPtr = currentBll;
 
@@ -860,9 +860,7 @@ int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
 		tmpBrickIdx = *(blockBufferPtr + 1);
 		blockPtr = blockPtr + tmpBrickIdx * 4;
 
-		brickShape = *blockPtr;
-
-		return brickShape;
+		return *blockPtr;
 	} else {
 		return *(blockBufferPtr + 1);
 	}

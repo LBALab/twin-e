@@ -71,8 +71,9 @@ int32 run_game_engine() { // mainLoopInteration
 	int16 pKey; // current pressed key
 	read_keys();
 
-	if (needChangeScene > -1)
+	if (needChangeScene > -1) {
 		change_scene();
+	}
 
 	key  = pressedKey;
 	pKey = skipIntro; // mainLoopVar7
@@ -177,7 +178,7 @@ int32 run_game_engine() { // mainLoopInteration
 			process_actor_animations(a);
 
 			if (actor->staticFlags.bIsZonable) {
-				// TODO: process_zone(a);
+				process_actor_zones(a);
 			}
 
 			if (actor->positionInLifeScript != -1) {

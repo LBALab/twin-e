@@ -96,7 +96,7 @@ int32 check_zone_type(int32 type) {
 void display_zones(int16 pKey) {
 	if (showingZones == 1) {
 		int z;
-		ZoneBox *zonePtr = sceneZones;
+		ZoneStruct *zonePtr = sceneZones;
 		for (z = 0; z < sceneNumZones; z++) {
 			zonePtr = &sceneZones[z];
 
