@@ -1,4 +1,4 @@
-/** @file scriptmove.c
+/** @file script.move.c
 	@brief
 	This file contains movies routines
 

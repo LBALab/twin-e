@@ -21,8 +21,8 @@
 	along with this program; if not, write to the Free Software \n
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-	$URL: https://prequengine.googlecode.com/svn/trunk/src/sys.h $
-	$Id: sys.h 50 2009-12-26 18:30:04Z alexandrefontoura $
+	$URL$
+	$Id$
 */
 
 #include "sys.h"
