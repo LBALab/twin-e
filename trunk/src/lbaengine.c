@@ -43,6 +43,7 @@
 #include "movements.h"
 #include "keyboard.h"
 #include "gamestate.h"
+#include "sound.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -151,14 +152,16 @@ int32 run_game_engine() { // mainLoopInteration
 					init_anim(ANIM_LANDDEATH, 4, 0, 0);
 					actor->controlMode = 0;
 				} else {
+					play_sample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z);
+
 					if (a == mecaPinguinIdx) {
 						// TODO: explode extra	
 					}
 				}
-			}
-
-			if (actor->bonusParameter & 0x1F0 && !(actor->bonusParameter & 1)) {
-				// TODO: give_extra_bonus(a);
+				
+				if (actor->bonusParameter & 0x1F0 && !(actor->bonusParameter & 1)) {
+					// TODO: give_extra_bonus(a);
+				}
 			}
 
 			process_actor_movements(a);

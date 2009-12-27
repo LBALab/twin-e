@@ -824,9 +824,10 @@ void redraw_grid() {
 }
 
 int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
-	uint8 blockIdx, brickBlockIdx;
+	uint8 blockIdx;
+	uint8 *blockBufferPtr;
 	
-	blockMap* map = (blockMap*)blockBuffer;
+	blockBufferPtr = blockBuffer;
 
 	collisionX = (x + 0x100) >> 9;
 	collisionY = y >> 8;
@@ -841,23 +842,108 @@ int32 get_brick_shape(int32 x, int32 y, int32 z) { // WorldColBrick
 	if (collisionY < 0 || collisionY > 24 || collisionZ < 0 || collisionZ >= 64)
 		return 0;
 
-	blockIdx = (*map)[collisionZ][collisionX][collisionY].blockIdx;
-	brickBlockIdx = (*map)[collisionZ][collisionX][collisionY].brickBlockIdx;
+	blockBufferPtr += collisionX * 50;
+	blockBufferPtr += collisionY * 2;
+	blockBufferPtr += (collisionZ << 7) * 25;
+
+	blockIdx = *blockBufferPtr; 
 
 	if (blockIdx) {
 		uint8 *blockPtr;
-		uint8 brickShape;
+		uint8 brickShape, tmpBrickIdx;
 		
-		blockPtr = get_block_library(blockIdx-1) + 3 + brickBlockIdx * 4;
-		brickShape = *((uint8 *)(blockPtr));
+		blockPtr = currentBll;
+
+		blockPtr += *(uint32 *)(blockPtr + blockIdx * 4 - 4);
+		blockPtr += 3;
+		
+		tmpBrickIdx = *(blockBufferPtr + 1);
+		blockPtr = blockPtr + tmpBrickIdx * 4;
+
+		brickShape = *blockPtr;
 
 		return brickShape;
 	} else {
-		return brickBlockIdx;
+		return *(blockBufferPtr + 1);
 	}
 }
 
 int32 get_brick_shape_full(int32 x, int32 y, int32 z, int32 y2) {
-	// TODO process brick shape
-	return 1;
+	int32 newY, currY, i;
+	uint8 blockIdx, brickShape;
+	uint8 *blockBufferPtr;
+	
+	blockBufferPtr = blockBuffer;
+
+	collisionX = (x + 0x100) >> 9;
+	collisionY = y >> 8;
+	collisionZ = (z + 0x100) >> 9;
+
+	if (collisionX < 0 || collisionX >= 64)
+		return 0;
+
+	if (collisionY <= -1)
+		return 1;
+
+	if (collisionY < 0 || collisionY > 24 || collisionZ < 0 || collisionZ >= 64)
+		return 0;
+
+	blockBufferPtr += collisionX * 50;
+	blockBufferPtr += collisionY * 2;
+	blockBufferPtr += (collisionZ << 7) * 25;
+
+	blockIdx = *blockBufferPtr; 
+
+	if (blockIdx) {
+		uint8 *blockPtr;
+		uint8 tmpBrickIdx;
+
+		blockPtr = currentBll;
+
+		blockPtr += *(uint32 *)(blockPtr + blockIdx * 4 - 4);
+		blockPtr += 3;
+		
+		tmpBrickIdx = *(blockBufferPtr + 1);
+		blockPtr = blockPtr + tmpBrickIdx * 4;
+
+		brickShape = *blockPtr;
+
+		newY = (y2 + 255) >> 8;
+		currY = collisionY;
+
+		for (i = 0; i < newY; i++) {
+			if (currY > 24) {
+				return brickShape;
+			}
+
+			blockBufferPtr += 2;
+			currY++;
+
+			if (*(int16 *)(blockBufferPtr) != 0) {
+				return 1;
+			}
+		}
+
+		return brickShape;
+	} else {
+		brickShape = *(blockBufferPtr + 1);
+
+		newY = (y2 + 255) >> 8;
+		currY = collisionY;
+
+		for (i = 0; i < newY; i++) {
+			if (currY > 24) {
+				return brickShape;
+			}
+
+			blockBufferPtr += 2;
+			currY++;
+
+			if (*(int16 *)(blockBufferPtr) != 0) {
+				return 1;
+			}
+		}
+	}
+
+	return 0;
 }

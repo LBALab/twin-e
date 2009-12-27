@@ -74,4 +74,7 @@ void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask)
 	@param damageMask Cause damage mask */
 void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask);
 
+/** Make actor to stop falling */
+void stop_falling();
+
 #endif
