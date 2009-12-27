@@ -355,8 +355,7 @@ void process_actor_movements(int32 actorIdx) {
 				heroMoved = 0;
 
 				if (key & 1) { // walk forward
-					//if (currentActorInZoneProcess == 0) // TODO
-					{
+					if (currentActorInZone == 0) {
 						init_anim(ANIM_FORWARD, 0, 255, actorIdx);
 					}
 					heroMoved = 1;

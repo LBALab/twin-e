@@ -42,6 +42,7 @@
 #include "redraw.h"
 #include "movements.h"
 #include "sound.h"
+#include "animations.h"
 
 uint8* currentScene;
 
@@ -254,13 +255,13 @@ void load_scene() {
 		sceneZones[i].type = *((uint16*)localScene);
 		localScene += 2;
 
-		sceneZones[i].info0 = *((uint16*)localScene);
+		sceneZones[i].infoData.generic.info0 = *((uint16*)localScene);
 		localScene += 2;
-		sceneZones[i].info1 = *((uint16*)localScene);
+		sceneZones[i].infoData.generic.info1 = *((uint16*)localScene);
 		localScene += 2;
-		sceneZones[i].info2 = *((uint16*)localScene);
+		sceneZones[i].infoData.generic.info2 = *((uint16*)localScene);
 		localScene += 2;
-		sceneZones[i].info3 = *((uint16*)localScene);
+		sceneZones[i].infoData.generic.info3 = *((uint16*)localScene);
 		localScene += 2;
 
 		sceneZones[i].snap = *((uint16*)localScene);
@@ -431,5 +432,107 @@ void process_environment_sound() {
 
 		// compute next ambiance timer
 		sampleAmbienceTime = lbaTime + (Rnd(sampleMinDelayRnd) + sampleMinDelay) * 50;
+	}
+}
+
+/** Process actor zones
+	@param actorIdx Process actor index */
+void process_actor_zones(int32 actorIdx) {
+	int32 currentX, currentY, currentZ, z, tmpCellingGrid;
+	ActorStruct *actor;
+
+	actor = &sceneActors[actorIdx];
+
+	currentX = actor->X;
+	currentY = actor->Y;
+	currentZ = actor->Z;
+
+	actor->zone = -1;
+	tmpCellingGrid = 0;
+
+	if (!actorIdx) {
+		currentActorInZone = actorIdx;
+	}
+
+	for (z = 0; z < sceneNumZones; z++) {
+		ZoneStruct *zone = &sceneZones[z];
+
+		// check if actor is in zone
+		if ((currentX >= zone->bottomLeft.X && currentX <= zone->topRight.X) &&
+			(currentY >= zone->bottomLeft.Y && currentY <= zone->topRight.Y) &&
+			(currentZ >= zone->bottomLeft.Z && currentZ <= zone->topRight.Z)) {
+			switch (zone->type) {
+			case kCube:
+				if (!actorIdx && actor->life > 0) {
+					needChangeScene = zone->infoData.ChangeScene.newSceneIdx;
+					zoneHeroX = actor->X - zone->bottomLeft.X + zone->infoData.ChangeScene.X;
+					zoneHeroY = actor->Y - zone->bottomLeft.Y + zone->infoData.ChangeScene.Y;
+					zoneHeroZ = actor->Z - zone->bottomLeft.Z + zone->infoData.ChangeScene.Z;
+					heroPositionType = POSITION_TYPE_ZONE;
+				}
+				break;
+			case kCamera:
+				if (currentlyFollowedActor == actorIdx) {
+					disableScreenRecenter = 1;
+					if (newCameraX != zone->infoData.CameraView.X || newCameraY != zone->infoData.CameraView.Y || newCameraZ != zone->infoData.CameraView.Z) {
+						newCameraX = zone->infoData.CameraView.X;
+						newCameraY = zone->infoData.CameraView.Y;
+						newCameraZ = zone->infoData.CameraView.Z;
+						reqBgRedraw = 1;
+					}
+				}
+				break;
+			case kSceneric:
+				actor->zone = zone->infoData.Sceneric.zoneIdx;
+				break;
+			case kGrid:
+				if (currentlyFollowedActor == actorIdx) {
+					tmpCellingGrid = 1;
+					if (useCellingGrid != zone->infoData.CeillingGrid.newGrid) {
+						if (zone->infoData.CeillingGrid.newGrid != -1) {
+							create_grid_map();
+						}
+
+						useCellingGrid = zone->infoData.CeillingGrid.newGrid;
+						cellingGridIdx = z;
+						freeze_time();
+						init_celling_grid(useCellingGrid);
+						unfreeze_time();
+					}
+				}
+				break;
+			case kObject:
+				// TODO: give extra bonus 
+				break;
+			case kText:
+				// TODO: display text message
+				break;
+			case kLadder:
+				if (!actorIdx && heroBehaviour != PROTOPACK && (actor->anim == ANIM_FORWARD || actor->anim == ANIM_TOP_LADDER || actor->anim == ANIM_CLIMB_LADDER)) {
+					rotate_actor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
+					destX += processActorX;
+					destZ += processActorZ;
+
+					if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
+						if (get_brick_shape(destX, actor->Y + 0x100, destZ)) {
+							currentActorInZone = 1;
+							if (actor->Y >= Abs(zone->bottomLeft.Y + zone->topRight.Y) / 2) {
+								init_anim(ANIM_TOP_LADDER, 2, 0, actorIdx); // reached end of ladder
+							} else {
+								init_anim(ANIM_CLIMB_LADDER, 0, 255, actorIdx); // go up in ladder
+							}
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	if (!tmpCellingGrid && actorIdx == currentlyFollowedActor && useCellingGrid != -1) {
+		useCellingGrid = -1;
+		cellingGridIdx = -1;
+		create_grid_map();
+		reqBgRedraw = 1;
 	}
 }

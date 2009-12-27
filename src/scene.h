@@ -96,6 +96,8 @@ int16 mecaPinguinIdx;
 
 /** Current followed actor in scene */
 int16 currentlyFollowedActor;
+/** Current actor in zone */
+int16 currentActorInZone; // currentActorInZoneProcess
 
 // ZONES
 
@@ -105,43 +107,55 @@ typedef struct ScenePoint {
 	int16 Z;
 } ScenePoint;
 
-typedef struct ZoneBox {
+typedef struct ZoneStruct {
 	ScenePoint bottomLeft;
 	ScenePoint topRight;
 	int16 type;
-	int16 info0;
-	int16 info1;
-	int16 info2;
-	int16 info3;
-	int16 snap;
 	union {
 		struct {
-			int16 newRoomNumber;
-			int16 positionX;
-			int16 positionY;
-			int16 positionZ;
-		} ChangeRoom;
+			int16 newSceneIdx;
+			int16 X;
+			int16 Y;
+			int16 Z;
+		} ChangeScene;
 		struct {
 			int16 dummy;
-			int16 newCameraX;
-			int16 newCameraY;
-			int16 newCameraZ;
-		} ForceCamera;
+			int16 X;
+			int16 Y;
+			int16 Z;
+		} CameraView;
 		struct {
-			int16 zoneNumber;
-		} SetActorZone;
+			int16 zoneIdx;
+		} Sceneric;
 		struct {
 			int16 newGrid;
-		} PatchGrid;
+		} CeillingGrid;
 		struct {
-			int16 textIndex;
+			int16 textIdx;
 			int16 textColor;
 		} DisplayText;
+		struct {
+			int16 info0;
+			int16 info1;
+			int16 info2;
+			int16 info3;
+		} generic;
 	} infoData;
-} ZoneBox;
+	int16 snap;
+} ZoneStruct;
 
 int32 sceneNumZones;
-ZoneBox sceneZones[NUM_MAX_ZONES];
+ZoneStruct sceneZones[NUM_MAX_ZONES];
+
+enum ZoneType {
+	kCube		= 0, // Change to another scene
+	kCamera		= 1, // Binds camera view
+	kSceneric	= 2, // For use in Life Script
+	kGrid		= 3, // Set disappearing Grid fragment
+	kObject		= 4, // Give bonus
+	kText		= 5, // Displays text message
+	kLadder		= 6  // Hero can climb on it
+};
 
 
 // TRACKS
@@ -160,5 +174,9 @@ void change_scene();
 
 /** Process scene environment sound */
 void process_environment_sound();
+
+/** Process actor zones
+	@param actorIdx Process actor index */
+void process_actor_zones(int32 actorIdx);
 
 #endif

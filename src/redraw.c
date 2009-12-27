@@ -482,8 +482,10 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 	// make celling grid fade
 	// need to be here to fade after drawing all actors in scene
-	if (needChangeScene == -2)
+	if (needChangeScene == -2) {
 		cross_fade(frontVideoBuffer, paletteRGBA);
+		needChangeScene = -1;
+	}
 
 	if (bgRedraw) {
 		flip();
