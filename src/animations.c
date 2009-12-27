@@ -941,9 +941,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		processActorY -= sceneActors[actor->standOn].collisionY;
 		processActorZ -= sceneActors[actor->standOn].collisionZ;
 
-		processActorX -= sceneActors[actor->standOn].X;
-		processActorY -= sceneActors[actor->standOn].Y;
-		processActorZ -= sceneActors[actor->standOn].Z;
+		processActorX += sceneActors[actor->standOn].X;
+		processActorY += sceneActors[actor->standOn].Y;
+		processActorZ += sceneActors[actor->standOn].Z;
 
 		if (!standing_on_actor(actorIdx, actor->standOn)) {
 			actor->standOn = -1; // no longer standing on other actor
@@ -974,11 +974,11 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		}
 
 		if (actor->staticFlags.bComputeCollisionWithObj) {
-			check_collision_with_actors(actorIdx); // CheckObjCol(actorIdx)
+			check_collision_with_actors(actorIdx);
 		}
 
 		if (actor->standOn != -1 && actor->dynamicFlags.bIsFalling) {
-			// TODO: make it to stop falling // ReceptionObj();
+			stop_falling();
 		}
 
 		causeActorDamage = 0;
@@ -1002,16 +1002,16 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		}
 
 		// process wall hit while running
-		if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == ATHLETIC && actor->anim == 1) {
+		if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == ATHLETIC && actor->anim == ANIM_FORWARD) {
 			rotate_actor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
 
 			destX += processActorX;
 			destZ += processActorZ;
 
 			if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
-				if (get_brick_shape(destX, processActorY + 0x100, destY)) {
-					// TODO: show hit stars sprites
-					// TODO: play running hit animation
+				if (get_brick_shape(destX, processActorY + 0x100, destZ)) {
+					// TODO: init_stars(actor->X, actor->Y + 1000, actor->Z, 0);
+					init_anim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);
 
 					if (currentlyProcessedActorIdx == 0) {
 						heroMoved = 1;
@@ -1021,7 +1021,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					actor->life--;
 
 					if (cfgfile.Debug == 1) {
-						printf("Wall hit - Type: running");
+						printf("Wall hit - Type: running\n");
 					}
 				}
 			}
@@ -1030,7 +1030,86 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
 		// var_4 = brickShape;
 		actor->brickShape = brickShape;
-	}	
+
+		if (brickShape) {
+			if (brickShape == kSolid) {
+				if (actor->dynamicFlags.bIsFalling) {
+					stop_falling();
+					processActorY = (collisionY << 8) + 0x100;
+				} else {
+					if (!actorIdx && heroBehaviour == ATHLETIC && actor->anim == brickShape) {
+						// TODO: init_stars(actor->X, actor->Y + 1000, actor->Z, 0);
+						init_anim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);	
+
+						if (!actorIdx) {
+							heroMoved = 1;
+						}
+						
+						// cause wall damage
+						actor->life--;
+
+						if (cfgfile.Debug == 1) {
+							printf("Wall hit - Type: running 2\n");
+						}
+					}
+
+					// no Z coordinate issue
+					if (!get_brick_shape(processActorX, processActorY, previousActorZ)) {
+						processActorZ = previousActorZ;
+					}
+
+					// no X coordinate issue
+					if (!get_brick_shape(previousActorX, processActorY, processActorZ)) {
+						processActorX = previousActorX;
+					}
+
+					// X and Z with issue, no move
+					if (get_brick_shape(processActorX, processActorY, previousActorZ) && get_brick_shape(previousActorX, processActorY, processActorZ)) {
+						return;
+					}
+				}
+			} else {
+				if (actor->dynamicFlags.bIsFalling) {
+					stop_falling();
+				}
+
+				reajust_actor_position(brickShape);
+			}
+
+			actor->dynamicFlags.bIsFalling = 0;
+		} else {
+			if (actor->staticFlags.bCanFall && actor->standOn == -1) {
+				brickShape = get_brick_shape(processActorX, processActorY - 1, processActorZ);
+
+				if (brickShape) {
+					if (actor->dynamicFlags.bIsFalling) {
+						stop_falling();
+					}
+
+					reajust_actor_position(brickShape);
+				} else {
+					if (!actor->dynamicFlags.bIsRotationByAnim) {
+						actor->dynamicFlags.bIsFalling = 1;
+
+						if (!actorIdx && heroYBeforeFall == 0) {
+							heroYBeforeFall = processActorY;
+						}
+
+						init_anim(ANIM_FALL, 0, 255, actorIdx);
+					}
+				}
+			}
+		}
+
+		// if under the map, than die
+		if (collisionY == -1) {
+			actor->life = 0;
+		}
+	} else {
+		if (actor->staticFlags.bComputeCollisionWithObj) {
+			check_collision_with_actors(actorIdx);
+		}
+	}
 
 	if (causeActorDamage) {
 		actor->brickShape |= 0x80;

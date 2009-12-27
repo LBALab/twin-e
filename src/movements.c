@@ -342,8 +342,9 @@ void process_actor_movements(int32 actorIdx) {
 			if (loopPressedKey == 0 || heroAction != 0) {
 				int16 tempAngle;
 
-				if (key & 3)  // if continue walking
+				if (key & 3) {  // if continue walking
 					heroMoved = 0; // don't break animation
+				}
 
 				if (key != heroPressedKey || loopPressedKey != heroPressedKey2) {
 					if (heroMoved != 0) {

@@ -32,6 +32,7 @@
 #include "movements.h"
 #include "grid.h"
 #include "main.h"
+#include "animations.h"
 
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
@@ -146,7 +147,6 @@ void reajust_actor_position(int32 brickShape) {
 				brickShape = kStairsBottomRight;
 			}
 			break;
-
 		case kDoubleSideStairsTop2: 
 			if (processActorX - collisionX >= processActorZ - collisionZ) {
 				brickShape = kStairsTopRight;
@@ -411,17 +411,21 @@ void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask)
 
 	if (processActorX >= 0 && processActorZ >= 0 && processActorX <= 0x7E00 && processActorZ <= 0x7E00) {
 		reajust_actor_position(brickShape);
-		brickShape = get_brick_shape_full(processActorX, processActorY, previousActorZ + Z, processActorPtr->boudingBox.Y.topRight);
+		brickShape = get_brick_shape_full(processActorX, processActorY, processActorZ, processActorPtr->boudingBox.Y.topRight);
 
-		if (brickShape == 1) {
+		if (brickShape == kSolid) {
 			causeActorDamage |= damageMask;
-			brickShape = get_brick_shape_full(X + processActorX, processActorY, previousActorZ, processActorPtr->boudingBox.Y.topRight);
-			
-			if (brickShape != 1) {
-				processCollisionX = previousActorX;
+			brickShape = get_brick_shape_full(processActorX, processActorY, previousActorZ + Z, processActorPtr->boudingBox.Y.topRight);
+
+			if (brickShape == kSolid) {
+				brickShape = get_brick_shape_full(X + previousActorX, processActorY, processActorZ, processActorPtr->boudingBox.Y.topRight);
+				
+				if (brickShape != kSolid) {
+					processCollisionX = previousActorX;
+				}
+			} else {
+				processCollisionZ = previousActorZ;
 			}
-		} else {
-			processCollisionZ = previousActorZ;
 		}
 	}
 
@@ -446,21 +450,54 @@ void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask
 
 	if (processActorX >= 0 && processActorZ >= 0 && processActorX <= 0x7E00 && processActorZ <= 0x7E00) {
 		reajust_actor_position(brickShape);
-		brickShape = get_brick_shape(processActorX, processActorY, previousActorZ + Z);
+		brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
 
-		if (brickShape == 1) {
+		if (brickShape == kSolid) {
 			causeActorDamage |= damageMask;
-			brickShape = get_brick_shape(X + processActorX, processActorY, previousActorZ);
-			
-			if (brickShape != 1) {
-				processCollisionX = previousActorX;
+			brickShape = get_brick_shape(processActorX, processActorY, previousActorZ + Z);
+
+			if (brickShape == kSolid) {
+				brickShape = get_brick_shape(X + previousActorX, processActorY, processActorZ);
+				
+				if (brickShape != kSolid) {
+					processCollisionX = previousActorX;
+				}
+			} else {
+				processCollisionZ = previousActorZ;
 			}
-		} else {
-			processCollisionZ = previousActorZ;
 		}
 	}
 
 	processActorX = processCollisionX;
 	processActorY = processCollisionY;
 	processActorZ = processCollisionZ;
+}
+
+/** Make actor to stop falling */
+void stop_falling() { // ReceptionObj()
+	int32 fall;
+
+	if (currentlyProcessedActorIdx == 0) {
+		fall = heroYBeforeFall - processActorY;
+
+		if (fall >= 0x1000) {
+			// TODO: init_stars(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, 0); // InitSpecial
+			processActorPtr->life--;
+			init_anim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
+		} else if (fall >= 0x800) {
+			// TODO: init_stars(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, 0); // InitSpecial
+			processActorPtr->life--;
+			init_anim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
+		} else if (fall > 10) {
+			init_anim(ANIM_LANDING, 2, 0, currentlyProcessedActorIdx);	
+		} else {
+			init_anim(ANIM_STANDING, 0, 0, currentlyProcessedActorIdx);	
+		}
+
+		heroYBeforeFall = 0;
+	} else {
+		init_anim(ANIM_LANDING, 2, processActorPtr->animExtra, currentlyProcessedActorIdx);
+	}
+
+	processActorPtr->dynamicFlags.bIsFalling = 0;
 }

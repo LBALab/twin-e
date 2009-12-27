@@ -35,23 +35,29 @@
 #define NUM_ANIMS 600
 
 /** Standing anim value */
-#define ANIM_STANDING	0
+#define ANIM_STANDING		0
 /** Forward anim value */
-#define ANIM_FORWARD	1
+#define ANIM_FORWARD		1
 /** Backward anim value */
-#define ANIM_BACKWARD	2
+#define ANIM_BACKWARD		2
 /** Turn left anim value */
-#define ANIM_TURNLEFT	3
+#define ANIM_TURNLEFT		3
 /** Turn right anim value */
-#define ANIM_TURNRIGHT	4
+#define ANIM_TURNRIGHT		4
 /** Hit anim value */
-#define ANIM_HIT		5
+#define ANIM_HIT			5
 /** Big hit anim value */
-#define ANIM_BIG_HIT	6
+#define ANIM_BIG_HIT		6
+/** Fall anim value */
+#define ANIM_FALL			7
+/** Landing anim value */
+#define ANIM_LANDING		8
+/** Landing hit anim value */
+#define ANIM_LANDING_HIT	9
 /** Dead anim value */
-#define ANIM_LANDDEATH	10
+#define ANIM_LANDDEATH		10
 /** Hit anim value */
-#define ANIM_HIT2		22
+#define ANIM_HIT2			22
 
 /** Table with all loaded animations */
 uint8* animTable[NUM_ANIMS];
