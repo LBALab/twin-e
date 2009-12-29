@@ -444,42 +444,65 @@ int32 lELSE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptP
 
 /*0x11*/
 int32 lBODY(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 bodyIdx = *(scriptPtr);
+	init_body(bodyIdx, actorIdx);
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x12*/
 int32 lBODY_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 otherBodyIdx = *(scriptPtr++);
+	int32 otherActorIdx = *(scriptPtr);
+	init_body(otherBodyIdx, otherActorIdx);
+	actor->positionInLifeScript += 2;
+	return 0;
 }
 
 /*0x13*/
 int32 lANIM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 animIdx = *(scriptPtr);
+	init_anim(animIdx, 0, 0, actorIdx);
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x14*/
 int32 lANIM_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 otherAnimIdx = *(scriptPtr++);
+	int32 otherActorIdx = *(scriptPtr);
+	init_anim(otherAnimIdx, 0, 0, otherActorIdx);
+	actor->positionInLifeScript += 2;
+	return 0;
 }
 
 /*0x15*/
 int32 lSET_LIFE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->positionInLifeScript = *((int16 *)scriptPtr); // offset
+	return 0;
 }
 
 /*0x16*/
 int32 lSET_LIFE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	sceneActors[otherActorIdx].positionInLifeScript = *((int16 *)scriptPtr); // offset
+	actor->positionInLifeScript += 2;
+	return 0;
 }
 
 /*0x17*/
 int32 lSET_TRACK(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->positionInMoveScript = *((int16 *)scriptPtr); // offset
+	actor->positionInLifeScript += 2;
+	return 0;
 }
 
 /*0x18*/
 int32 lSET_TRACK_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	sceneActors[otherActorIdx].positionInMoveScript = *((int16 *)scriptPtr); // offset
+	actor->positionInLifeScript += 2;
+	return 0;
 }
 
 /*0x19*/
@@ -489,12 +512,21 @@ int32 lMESSAGE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scri
 
 /*0x1A*/
 int32 lFALLABLE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 flag = *(scriptPtr);
+	actor->staticFlags.bCanFall = flag & 1;
+	return 0;
 }
 
 /*0x1B*/
 int32 lSET_DIRMODE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 controlMode = *(scriptPtr++);
+	actor->controlMode = controlMode;
+	if (controlMode == 2) {
+		actor->followedActor = *(scriptPtr++);
+		actor->positionInLifeScript++;
+	}
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x1C*/
