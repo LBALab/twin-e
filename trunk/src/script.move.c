@@ -47,19 +47,19 @@ typedef struct ScriptMoveFunction {
 
 
 /*0x00*/
-int32 END(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mEND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	continueMove = 0;
 	actor->positionInMoveScript = -1;
 	return 0;
 }
 
 /*0x01*/
-int32 NOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mNOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	return 0;
 }
 
 /*0x02*/
-int32 BODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mBODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 bodyIdx = *(scriptPtr);
 	init_body(bodyIdx, actorIdx);
 	actor->positionInMoveScript++;
@@ -67,7 +67,7 @@ int32 BODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continue
 }
 
 /*0x03*/
-int32 ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 animIdx = *(scriptPtr++);
 	if (init_anim(animIdx, 0, 0, actorIdx)) {
 		actor->positionInMoveScript++;
@@ -79,7 +79,7 @@ int32 ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continue
 }
 
 /*0x04*/
-int32 GOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 newAngle;
 
 	actor->positionInMoveScript++;
@@ -106,7 +106,7 @@ int32 GOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 }
 
 /*0x05*/
-int32 WAIT_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mWAIT_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	if (!actor->dynamicFlags.bAnimEnded) {
 		continueMove = 0;
 		actor->positionInMoveScript--;
@@ -118,13 +118,13 @@ int32 WAIT_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *con
 }
 
 /*0x06*/
-int32 LOOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mLOOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	// TODO
 	return -1;
 }
 
 /*0x07*/
-int32 ANGLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mANGLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->positionInMoveScript += 2;
 	if (!actor->staticFlags.bIsSpriteActor) {
 		currentScriptValue = *((int16 *)scriptPtr);
@@ -136,7 +136,7 @@ int32 ANGLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 }
 
 /*0x08*/
-int32 POS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mPOS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->positionInMoveScript++;
 	currentScriptValue = *(scriptPtr);
 
@@ -156,7 +156,7 @@ int32 POS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *con
 }
 
 /*0x09*/
-int32 LABEL(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mLABEL(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->labelIdx = *(scriptPtr);
 	actor->positionInMoveScript++;
 	actor->currentLabelPtr = actor->positionInMoveScript - 2;
@@ -164,20 +164,20 @@ int32 LABEL(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 }
 
 /*0x0A*/
-int32 GOTO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mGOTO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->positionInMoveScript = *((int16 *)scriptPtr);
 	return 0;
 }
 
 /*0x0B*/
-int32 STOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSTOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	continueMove = 0;
 	actor->positionInMoveScript = -1;
 	return 0;
 }
 
 /*0x0C*/
-int32 GOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 newAngle;
 
 	actor->positionInMoveScript++;
@@ -204,7 +204,7 @@ int32 GOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 }
 
 /*0x0D*/
-int32 WAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->positionInMoveScript += 2;
 
 	if (actor->dynamicFlags.bAnimEnded) {
@@ -234,7 +234,7 @@ int32 WAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 
 }
 
 /*0x0E*/
-int32 SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
@@ -242,7 +242,7 @@ int32 SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *contin
 }
 
 /*0x0F*/
-int32 GOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 newAngle;
 
 	actor->positionInMoveScript++;
@@ -268,7 +268,7 @@ int32 GOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 
 }
 
 /*0x10*/
-int32 SPEED(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSPEED(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->positionInMoveScript += 2;
 	actor->speed = *((int16 *)scriptPtr);
 
@@ -280,7 +280,7 @@ int32 SPEED(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 }
 
 /*0x11*/
-int32 BACKGROUND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mBACKGROUND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	actor->positionInMoveScript++;
 
 	if (*(scriptPtr) == 0) {
@@ -303,7 +303,7 @@ int32 BACKGROUND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 }
 
 /*0x12*/
-int32 WAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 numSeconds, currentTime;
 	actor->positionInMoveScript += 5;
 	
@@ -326,13 +326,13 @@ int32 WAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int3
 }
 
 /*0x13*/
-int32 NO_BODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mNO_BODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	init_body(-1, actorIdx);
 	return 0;
 }
 
 /*0x14*/
-int32 BETA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mBETA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int16 beta;
 
 	beta = *((int16 *)scriptPtr);
@@ -374,31 +374,31 @@ void OPEN_DOOR(int32 opcode, int32 actorIdx, ActorStruct *actor, uint8 *scriptPt
 }
 
 /*0x15*/
-int32 OPEN_LEFT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mOPEN_LEFT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	OPEN_DOOR(0x15, actorIdx, actor, scriptPtr, continueMove, scriptPosition, move);
 	return 0;
 }
 
 /*0x16*/
-int32 OPEN_RIGHT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mOPEN_RIGHT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	OPEN_DOOR(0x16, actorIdx, actor, scriptPtr, continueMove, scriptPosition, move);
 	return 0;
 }
 
 /*0x17*/
-int32 OPEN_UP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mOPEN_UP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	OPEN_DOOR(0x17, actorIdx, actor, scriptPtr, continueMove, scriptPosition, move);
 	return 0;
 }
 
 /*0x18*/
-int32 OPEN_DOWN(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mOPEN_DOWN(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	OPEN_DOOR(0x18, actorIdx, actor, scriptPtr, continueMove, scriptPosition, move);
 	return 0;
 }
 
 /*0x19*/
-int32 CLOSE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mCLOSE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
 		actor->doorStatus = 0;
 		actor->dynamicFlags.bIsSpriteMoving = 1;
@@ -409,7 +409,7 @@ int32 CLOSE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 }
 
 /*0x1A*/
-int32 WAIT_DOOR(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mWAIT_DOOR(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
 		if (actor->speed) {
 			continueMove = 0;
@@ -420,7 +420,7 @@ int32 WAIT_DOOR(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *con
 }
 
 /*0x1B*/
-int32 SAMPLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 freq = Rnd(2048) + 2048;
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, freq, 1, actor->X, actor->Y, actor->Z);
@@ -429,7 +429,7 @@ int32 SAMPLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 }
 
 /*0x1C*/
-int32 SAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
@@ -437,27 +437,27 @@ int32 SAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 
 }
 
 /*0x1D*/
-int32 SAMPLE_STOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSAMPLE_STOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	stop_samples();
 	actor->positionInMoveScript += 2;
 	return 0;
 }
 
 /*0x1E*/
-int32 PLAY_FLA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mPLAY_FLA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	// TODO
 	return -1;
 }
 
 /*0x1F*/
-int32 REPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mREPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	// TODO
 	actor->positionInMoveScript += 2;
 	return -1;
 }
 
 /*0x20*/
-int32 SIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+int32 mSIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
@@ -465,54 +465,98 @@ int32 SIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 
 }
 
 /*0x21*/
-int32 FACE_HERO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
-	// TODO
-	return -1;
+int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+	actor->positionInMoveScript += 2;
+	if (!actor->staticFlags.bIsSpriteActor) {
+		currentScriptValue = *((int16 *)scriptPtr);
+		if (currentScriptValue == -1 && actor->move.numOfStep == 0) {
+			currentScriptValue = get_angle(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+			move_actor(actor->angle, currentScriptValue, actor->speed, &actor->move);
+			*((int16 *)scriptPtr) = currentScriptValue;
+		}
+
+		if (actor->angle != currentScriptValue) {
+			continueMove = 0;
+			actor->positionInMoveScript -= 3;
+		} else {
+			clear_real_angle(actor);
+			*((int16 *)scriptPtr) = -1;
+		}
+	}
+	return 0;
 }
 
 /*0x22*/
-int32 ANGLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
-	// TODO
-	return -1;
+int32 mANGLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
+	int32 newAngle;
+
+	actor->positionInMoveScript += 4;
+	if (!actor->staticFlags.bIsSpriteActor) {
+		currentScriptValue = *((int16 *)scriptPtr + 2);
+
+		if (currentScriptValue == -1 && actor->move.numOfStep == 0) {
+			if (rand() & 1) {
+				currentScriptValue = *((int16 *)scriptPtr);
+				newAngle = actor->angle + 0x100 + (Abs(currentScriptValue) >> 1);
+				currentScriptValue = (newAngle - Rnd(currentScriptValue)) & 0x3FF;
+			} else {
+				currentScriptValue = *((int16 *)scriptPtr);
+				newAngle = actor->angle - 0x100 + (Abs(currentScriptValue) >> 1);
+				currentScriptValue = (newAngle - Rnd(currentScriptValue)) & 0x3FF;
+			}
+
+			move_actor(actor->angle, currentScriptValue, actor->speed, &actor->move);
+			*((int16 *)scriptPtr + 2) = currentScriptValue;
+		}
+
+		if (actor->angle != currentScriptValue) {
+			continueMove = 0;
+			actor->positionInMoveScript -= 5;
+		} else {
+			clear_real_angle(actor);
+			*((int16 *)scriptPtr + 2) = -1;
+		}
+	}
+	return 0;
 }
 
 
 static const ScriptMoveFunction function_map[] = {
-	/*0x00*/ MAPFUNC("END", END),
-	/*0x01*/ MAPFUNC("NOP", NOP),
-	/*0x02*/ MAPFUNC("BODY", BODY),
-	/*0x03*/ MAPFUNC("ANIM", ANIM),
-	/*0x04*/ MAPFUNC("GOTO_POINT", GOTO_POINT),
-	/*0x05*/ MAPFUNC("WAIT_ANIM", WAIT_ANIM),
-	/*0x06*/ MAPFUNC("LOOP", LOOP),
-	/*0x07*/ MAPFUNC("ANGLE", ANGLE),
-	/*0x08*/ MAPFUNC("POS_POINT", POS_POINT),
-	/*0x09*/ MAPFUNC("LABEL", LABEL),
-	/*0x0A*/ MAPFUNC("GOTO", GOTO),
-	/*0x0B*/ MAPFUNC("STOP", STOP),
-	/*0x0C*/ MAPFUNC("GOTO_SYM_POINT", GOTO_SYM_POINT),
-	/*0x0D*/ MAPFUNC("WAIT_NUM_ANIM", WAIT_NUM_ANIM),
-	/*0x0E*/ MAPFUNC("SAMPLE", SAMPLE),
-	/*0x0F*/ MAPFUNC("GOTO_POINT_3D", GOTO_POINT_3D),
-	/*0x10*/ MAPFUNC("SPEED", SPEED),
-	/*0x11*/ MAPFUNC("BACKGROUND", BACKGROUND),
-	/*0x12*/ MAPFUNC("WAIT_NUM_SECOND", WAIT_NUM_SECOND),
-	/*0x13*/ MAPFUNC("NO_BODY", NO_BODY),
-	/*0x14*/ MAPFUNC("BETA", BETA),
-	/*0x15*/ MAPFUNC("OPEN_LEFT", OPEN_LEFT),
-	/*0x16*/ MAPFUNC("OPEN_RIGHT", OPEN_RIGHT),
-	/*0x17*/ MAPFUNC("OPEN_UP", OPEN_UP),
-	/*0x18*/ MAPFUNC("OPEN_DOWN", OPEN_DOWN),
-	/*0x19*/ MAPFUNC("CLOSE", CLOSE),
-	/*0x1A*/ MAPFUNC("WAIT_DOOR", WAIT_DOOR),
-	/*0x1B*/ MAPFUNC("SAMPLE_RND", SAMPLE_RND),
-	/*0x1C*/ MAPFUNC("SAMPLE_ALWAYS", SAMPLE_ALWAYS),
-	/*0x1D*/ MAPFUNC("SAMPLE_STOP", SAMPLE_STOP),
-	/*0x1E*/ MAPFUNC("PLAY_FLA", PLAY_FLA),
-	/*0x1F*/ MAPFUNC("REPEAT_SAMPLE", REPEAT_SAMPLE),
-	/*0x20*/ MAPFUNC("SIMPLE_SAMPLE", SIMPLE_SAMPLE),
-	/*0x21*/ MAPFUNC("FACE_HERO", FACE_HERO),
-	/*0x22*/ MAPFUNC("ANGLE_RND", ANGLE_RND)
+	/*0x00*/ MAPFUNC("END", mEND),
+	/*0x01*/ MAPFUNC("NOP", mNOP),
+	/*0x02*/ MAPFUNC("BODY", mBODY),
+	/*0x03*/ MAPFUNC("ANIM", mANIM),
+	/*0x04*/ MAPFUNC("GOTO_POINT", mGOTO_POINT),
+	/*0x05*/ MAPFUNC("WAIT_ANIM", mWAIT_ANIM),
+	/*0x06*/ MAPFUNC("LOOP", mLOOP),
+	/*0x07*/ MAPFUNC("ANGLE", mANGLE),
+	/*0x08*/ MAPFUNC("POS_POINT", mPOS_POINT),
+	/*0x09*/ MAPFUNC("LABEL", mLABEL),
+	/*0x0A*/ MAPFUNC("GOTO", mGOTO),
+	/*0x0B*/ MAPFUNC("STOP", mSTOP),
+	/*0x0C*/ MAPFUNC("GOTO_SYM_POINT", mGOTO_SYM_POINT),
+	/*0x0D*/ MAPFUNC("WAIT_NUM_ANIM", mWAIT_NUM_ANIM),
+	/*0x0E*/ MAPFUNC("SAMPLE", mSAMPLE),
+	/*0x0F*/ MAPFUNC("GOTO_POINT_3D", mGOTO_POINT_3D),
+	/*0x10*/ MAPFUNC("SPEED", mSPEED),
+	/*0x11*/ MAPFUNC("BACKGROUND", mBACKGROUND),
+	/*0x12*/ MAPFUNC("WAIT_NUM_SECOND", mWAIT_NUM_SECOND),
+	/*0x13*/ MAPFUNC("NO_BODY", mNO_BODY),
+	/*0x14*/ MAPFUNC("BETA", mBETA),
+	/*0x15*/ MAPFUNC("OPEN_LEFT", mOPEN_LEFT),
+	/*0x16*/ MAPFUNC("OPEN_RIGHT", mOPEN_RIGHT),
+	/*0x17*/ MAPFUNC("OPEN_UP", mOPEN_UP),
+	/*0x18*/ MAPFUNC("OPEN_DOWN", mOPEN_DOWN),
+	/*0x19*/ MAPFUNC("CLOSE", mCLOSE),
+	/*0x1A*/ MAPFUNC("WAIT_DOOR", mWAIT_DOOR),
+	/*0x1B*/ MAPFUNC("SAMPLE_RND", mSAMPLE_RND),
+	/*0x1C*/ MAPFUNC("SAMPLE_ALWAYS", mSAMPLE_ALWAYS),
+	/*0x1D*/ MAPFUNC("SAMPLE_STOP", mSAMPLE_STOP),
+	/*0x1E*/ MAPFUNC("PLAY_FLA", mPLAY_FLA),
+	/*0x1F*/ MAPFUNC("REPEAT_SAMPLE", mREPEAT_SAMPLE),
+	/*0x20*/ MAPFUNC("SIMPLE_SAMPLE", mSIMPLE_SAMPLE),
+	/*0x21*/ MAPFUNC("FACE_HERO", mFACE_HERO),
+	/*0x22*/ MAPFUNC("ANGLE_RND", mANGLE_RND)
 };
 
 /** Process actor move script

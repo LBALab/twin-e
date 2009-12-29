@@ -107,6 +107,15 @@ void rotate_actor(int32 X, int32 Z, int32 angle);
 	@param z2 Actor 2 Z coordinate */
 int32 get_distance_2D(int32 x1, int32 z1, int32 x2, int32 z2);
 
+/** Get distance value in 3D
+	@param x1 Actor 1 X coordinate
+	@param y1 Actor 1 Y coordinate
+	@param z1 Actor 1 Z coordinate
+	@param x2 Actor 2 X coordinate
+	@param y2 Actor 2 Y coordinate
+	@param z2 Actor 2 Z coordinate */
+int32 get_distance_3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2);
+
 /** Move actor around the scene
 	@param angleFrom Current actor angle
 	@param angleTo Angle to rotate
