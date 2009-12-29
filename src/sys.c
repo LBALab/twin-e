@@ -27,9 +27,7 @@
 
 #include "sys.h"
 
-FORCEINLINE uint8 READ_LE_BYTE(const void *ptr) {
-	return *((const uint8 *)ptr);
-}
+// Little endian
 
 FORCEINLINE uint16 READ_LE_UINT16(const void *ptr) {
 	const uint8 *b = (const uint8 *)ptr;
@@ -69,4 +67,44 @@ FORCEINLINE void WRITE_LE_UINT32(void *ptr, uint32 value) {
 
 FORCEINLINE void WRITE_LE_INT32(void *ptr, int32 value) {
 	WRITE_LE_UINT32(ptr, (uint32)value);
+}
+
+// TODO: big endian
+
+// Main endian functions
+
+FORCEINLINE uint8 READ_BYTE(const void *ptr) {
+	return *((const uint8 *)ptr);
+}
+
+FORCEINLINE uint16 READ_UINT16(const void *ptr) {
+	return READ_LE_UINT16(ptr);
+}
+
+FORCEINLINE int16 READ_INT16(const void *ptr) {
+	return READ_LE_INT16(ptr);
+}
+
+FORCEINLINE uint32 READ_UINT32(const void *ptr) {
+	return READ_LE_UINT32(ptr);
+}
+
+FORCEINLINE int32 READ_INT32(const void *ptr) {
+	return READ_LE_INT32(ptr);
+}
+
+FORCEINLINE void WRITE_UINT16(void *ptr, uint16 value) {
+	WRITE_LE_UINT16(ptr, value);
+}
+
+FORCEINLINE void WRITE_INT16(void *ptr, int16 value) {
+	WRITE_LE_INT16(ptr, value);
+}
+
+FORCEINLINE void WRITE_UINT32(void *ptr, uint32 value) {
+	WRITE_LE_UINT32(ptr, value);
+}
+
+FORCEINLINE void WRITE_INT32(void *ptr, int32 value) {
+	WRITE_LE_INT32(ptr, value);
 }

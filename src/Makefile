@@ -27,6 +27,7 @@ OBJS=actor.o \
 	renderer.o \
 	resources.o \
 	scene.o \
+	script.life.o \
 	script.move.o \
 	sdlengine.o \
 	sound.o

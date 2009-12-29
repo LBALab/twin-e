@@ -370,6 +370,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\script.life.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\script.life.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\script.move.c"
 			>
 		</File>
