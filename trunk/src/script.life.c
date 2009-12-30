@@ -116,19 +116,39 @@ int32 process_life_conditions(ActorStruct *actor) {
 	conditionOpcode = *(scriptPtr++);
 
 	switch(conditionOpcode) {
-	case kcCOL: // TODO
-		currentScriptValue = -1;
+	case kcCOL: 
+		if (actor->life <= 0) {
+			currentScriptValue = -1;
+		} else {
+			currentScriptValue = actor->collision;
+		}
 		break;
-	case kcCOL_OBJ: { // TODO
+	case kcCOL_OBJ: {
 		int32 actorIdx = *(scriptPtr++);
-		currentScriptValue = -1;
-		//currentScriptValue = sceneActors[actorIdx].zone;
+		if (sceneActors[actorIdx].life <= 0) {
+			currentScriptValue = -1;
+		} else {
+			currentScriptValue = sceneActors[actorIdx].collision;
+		}
 	}
 		break;
-	case kcDISTANCE: { // TODO
-		*(scriptPtr++);
-		currentScriptValue = -1;
+	case kcDISTANCE: {
+		ActorStruct *otherActor;
+		int32 actorIdx = *(scriptPtr++);
 		conditionValueSize = 2;
+		otherActor = &sceneActors[actorIdx];
+		if (!otherActor->dynamicFlags.bIsDead) {
+			if (Abs(otherActor->Y - actor->Y) >= 1500) {
+				currentScriptValue = 0x7D00;	
+			} else {
+				currentScriptValue = get_distance_2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
+				if (currentScriptValue > 0x7D00) {
+					currentScriptValue = 0x7D00;
+				}
+			}
+		} else {
+			currentScriptValue = 0x7D00;
+		}
 	}
 		break;
 	case kcZONE:

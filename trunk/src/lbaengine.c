@@ -184,8 +184,6 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->positionInLifeScript != -1) {
-				if (a==6)
-					printf("actor 6\n");
 				process_life_script(a);
 			}
 
