@@ -48,7 +48,7 @@ typedef struct ScriptMoveFunction {
 
 /*0x00*/
 int32 mEND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
-	continueMove = 0;
+	*continueMove = 0;
 	actor->positionInMoveScript = -1;
 	return 0;
 }
@@ -73,7 +73,7 @@ int32 mANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 		actor->positionInMoveScript++;
 	} else {
 		actor->positionInMoveScript = scriptPosition;
-		continueMove = 0;
+		*continueMove = 0;
 	}
 	return 0;
 }
@@ -98,7 +98,7 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 	}
 
 	if (moveAngle > 500) {
-		continueMove = 0;
+		*continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	}
 
@@ -108,10 +108,10 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 /*0x05*/
 int32 mWAIT_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	if (!actor->dynamicFlags.bAnimEnded) {
-		continueMove = 0;
+		*continueMove = 0;
 		actor->positionInMoveScript--;
 	} else {
-		continueMove = 0;
+		*continueMove = 0;
 		clear_real_angle(actor);
 	}
 	return 0;
@@ -171,7 +171,7 @@ int32 mGOTO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 
 /*0x0B*/
 int32 mSTOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
-	continueMove = 0;
+	*continueMove = 0;
 	actor->positionInMoveScript = -1;
 	return 0;
 }
@@ -196,7 +196,7 @@ int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int3
 	}
 
 	if (moveAngle > 500) {
-		continueMove = 0;
+		*continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	}
 
@@ -218,12 +218,12 @@ int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 		if (animPos == animRepeats) {
 			animPos = 0;
 		} else {
-			continueMove = 0;
+			*continueMove = 0;
 		}
 
 		*(scriptPtr + 1) = animPos;
 	} else {
-		continueMove = 0;
+		*continueMove = 0;
 	}
 
 	if (continueMove == 0) {
@@ -256,7 +256,7 @@ int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 	actor->animType = get_angle(actor->Y, 0, destY, moveAngle);
 
 	if (moveAngle > 100) {
-		continueMove = 0;
+		*continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	} else {
 		actor->X = destX;
@@ -308,18 +308,18 @@ int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int
 	actor->positionInMoveScript += 5;
 	
 	numSeconds  = *(scriptPtr);
-	currentTime = *((int16 *)scriptPtr + 1);
+	currentTime = *((int32 *)scriptPtr + 1);
 
 	if (currentTime == 0) {
 		currentTime = lbaTime + numSeconds * 50;
-		*((int16 *)scriptPtr + 1) = currentTime;
+		*((int32 *)scriptPtr + 1) = currentTime;
 	}
 
 	if (lbaTime < currentTime) {
-		continueMove = 0;
+		*continueMove = 0;
 		actor->positionInMoveScript -= 6;
 	} else {
-		*((int16 *)scriptPtr + 1) = 0;
+		*((int32 *)scriptPtr + 1) = 0;
 	}
 
 	return 0;
@@ -412,7 +412,7 @@ int32 mCLOSE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *contin
 int32 mWAIT_DOOR(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
 		if (actor->speed) {
-			continueMove = 0;
+			*continueMove = 0;
 			actor->positionInMoveScript--;
 		}
 	}
@@ -476,7 +476,7 @@ int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 		}
 
 		if (actor->angle != currentScriptValue) {
-			continueMove = 0;
+			*continueMove = 0;
 			actor->positionInMoveScript -= 3;
 		} else {
 			clear_real_angle(actor);
@@ -510,7 +510,7 @@ int32 mANGLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 		}
 
 		if (actor->angle != currentScriptValue) {
-			continueMove = 0;
+			*continueMove = 0;
 			actor->positionInMoveScript -= 5;
 		} else {
 			clear_real_angle(actor);

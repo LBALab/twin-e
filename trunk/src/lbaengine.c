@@ -184,7 +184,9 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->positionInLifeScript != -1) {
-				//process_life_script(a);
+				if (a==6)
+					printf("actor 6\n");
+				process_life_script(a);
 			}
 
 			if (quitGame == -1) {
@@ -236,7 +238,7 @@ int32 run_game_engine() { // mainLoopInteration
 						}
 					}
 				} else {
-					// TODO: process_actor_carrier(a);
+					process_actor_carrier(a);
 					actor->dynamicFlags.bIsDead = 1;
 					actor->entity = -1;
 					actor->zone = -1;
