@@ -25,6 +25,8 @@
 	$Id$
 */
 
+#include <stdio.h>
+
 #include "script.life.h"
 #include "scene.h"
 #include "actor.h"
@@ -37,6 +39,7 @@
 #include "lbaengine.h"
 #include "gamestate.h"
 #include "grid.h"
+#include "music.h"
 
 /** Returns:
 	   -1 - TODO
@@ -691,22 +694,54 @@ int32 lFOUND_OBJECT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 
 
 /*0x2F*/
 int32 lSET_DOOR_LEFT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 distance = *((int16 *)scriptPtr);
+	
+	actor->angle = 0x300;
+	actor->X = actor->lastX - distance;
+	actor->dynamicFlags.bIsSpriteMoving = 0;
+	actor->speed = 0;
+	actor->positionInLifeScript += 2;
+
+	return 0;
 }
 
 /*0x30*/
 int32 lSET_DOOR_RIGHT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 distance = *((int16 *)scriptPtr);
+	
+	actor->angle = 0x100;
+	actor->X = actor->lastX - distance;
+	actor->dynamicFlags.bIsSpriteMoving = 0;
+	actor->speed = 0;
+	actor->positionInLifeScript += 2;
+
+	return 0;
 }
 
 /*0x31*/
 int32 lSET_DOOR_UP(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 distance = *((int16 *)scriptPtr);
+	
+	actor->angle = 0x200;
+	actor->Z = actor->lastX - distance;
+	actor->dynamicFlags.bIsSpriteMoving = 0;
+	actor->speed = 0;
+	actor->positionInLifeScript += 2;
+
+	return 0;
 }
 
 /*0x32*/
 int32 lSET_DOOR_DOWN(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 distance = *((int16 *)scriptPtr);
+	
+	actor->angle = 0;
+	actor->Z = actor->lastX - distance;
+	actor->dynamicFlags.bIsSpriteMoving = 0;
+	actor->speed = 0;
+	actor->positionInLifeScript += 2;
+
+	return 0;
 }
 
 /*0x33*/
@@ -731,12 +766,21 @@ int32 lBRICK_COL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *sc
 
 /*0x37*/
 int32 lOR_IF(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 valueSize = process_life_conditions(actor, scriptPtr);
+	if (process_life_operators(valueSize, scriptPtr)) {
+		actor->positionInLifeScript = *((int16 *)scriptPtr); // condition offset
+	} else {
+		actor->positionInLifeScript += 2;
+	}
+	
+	return 0;
 }
 
 /*0x38*/
 int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->staticFlags.bIsHidden = *(scriptPtr);
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x39*/
@@ -746,7 +790,19 @@ int32 lZOOM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptP
 
 /*0x3A*/
 int32 lPOS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 trackIdx = *(scriptPtr);
+
+	destX = sceneTracks[trackIdx].X;
+	destY = sceneTracks[trackIdx].Y;
+	destZ = sceneTracks[trackIdx].Z;
+
+	actor->X = destX;
+	actor->Y = destY;
+	actor->Z = destZ;
+
+	actor->positionInLifeScript++;
+
+	return 0;
 }
 
 /*0x3B*/
@@ -781,7 +837,10 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scr
 
 /*0x41*/
 int32 lPLAY_MIDI(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 midiIdx = *(scriptPtr);
+	play_midi_music(midiIdx, 0); // TODO: improve this
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x42*/
@@ -811,7 +870,13 @@ int32 lBIG_MESSAGE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *
 
 /*0x47*/
 int32 lINIT_PINGOUIN(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 pingouinActor = *(scriptPtr);
+	sceneActors[pingouinActor].dynamicFlags.bIsDead = 1;
+	mecaPinguinIdx = pingouinActor;
+	sceneActors[pingouinActor].entity = -1;
+	sceneActors[pingouinActor].zone = -1;
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x48*/
@@ -836,7 +901,10 @@ int32 lSUB_FUEL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scr
 
 /*0x4C*/
 int32 lSET_GRM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	cellingGridIdx = *(scriptPtr);
+	init_celling_grid(cellingGridIdx);
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x4D*/
@@ -856,12 +924,23 @@ int32 lFULL_POINT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *s
 
 /*0x50*/
 int32 lBETA(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 newAngle = *((int16 *)scriptPtr);
+	actor->angle = newAngle;
+	clear_real_angle(actor);
+	actor->positionInLifeScript += 2;
+	return 0;
 }
 
 /*0x51*/
 int32 lGRM_OFF(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	if (cellingGridIdx != -1) {
+		useCellingGrid = -1;
+		cellingGridIdx = -1;
+		create_grid_map();
+		redraw_engine_actions(1);
+	}
+	
+	return 0;
 }
 
 /*0x52*/
@@ -931,7 +1010,14 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uin
 
 /*0x5F*/
 int32 lANIM_SET(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 animIdx = *(scriptPtr);
+
+	actor->anim = -1;
+	actor->previousAnimIdx = -1;
+	init_anim(animIdx, 0, 0, actorIdx);
+	actor->positionInLifeScript++;
+
+	return 0;
 }
 
 /*0x60*/
@@ -941,7 +1027,10 @@ int32 lHOLOMAP_TRAJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 
 
 /*0x61*/
 int32 lGAME_OVER(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	sceneHero->dynamicFlags.bAnimEnded = 1;
+	sceneHero->life = 0;
+	inventoryNumLeafs = 0;
+	return 1; // break
 }
 
 /*0x62*/
@@ -961,7 +1050,11 @@ int32 lPLAY_CD_TRACK(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8
 
 /*0x65*/
 int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	set_ortho_projection(311, 240, 512);
+	set_base_translation(0, 0, 0);
+	set_base_rotation(0, 0, 0);
+	set_light_vector(alphaLight, betaLight, 0);
+	return 0;
 }
 
 /*0x66*/
@@ -981,7 +1074,7 @@ int32 lCLEAR_TEXT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *s
 
 /*0x69*/
 int32 lBRUTAL_EXIT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	return 1; // break
 }
 
 static const ScriptLifeFunction function_map[] = {
@@ -1112,5 +1205,10 @@ void process_life_script(int32 actorIdx) {
 		actor->positionInLifeScript++;
 
 		end = function_map[scriptOpcode].function(actorIdx, actor, opcodePtr, scriptPtr, scriptPosition);
+
+		if (end < 0) { // show error message
+			printf("Life script [%s] not implemented\n", function_map[scriptOpcode].name);
+		}
+
 	} while(end != 1);
 }
