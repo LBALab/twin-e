@@ -44,6 +44,7 @@
 #include "keyboard.h"
 #include "gamestate.h"
 #include "sound.h"
+#include "script.life.h"
 #include "script.move.h"
 
 #ifdef GAMEMOD
@@ -183,7 +184,7 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->positionInLifeScript != -1) {
-				// TODO: process_life_script(a);
+				//process_life_script(a);
 			}
 
 			if (quitGame == -1) {

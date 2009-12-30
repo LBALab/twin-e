@@ -26,6 +26,7 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "script.life.h"
 #include "scene.h"
@@ -40,6 +41,7 @@
 #include "gamestate.h"
 #include "grid.h"
 #include "music.h"
+#include "movies.h"
 
 /** Returns:
 	   -1 - TODO
@@ -109,6 +111,8 @@ int32 process_life_conditions(ActorStruct *actor, uint8 *scriptPtr) {
 
 	conditionValueSize = 1;
 	conditionOpcode = *(scriptPtr++);
+
+	printf("DEBG: Actor condition opcode %d\n", conditionOpcode);
 	
 	switch(conditionOpcode) {
 	case kcCOL: // TODO
@@ -279,6 +283,7 @@ int32 process_life_conditions(ActorStruct *actor, uint8 *scriptPtr) {
 		currentScriptValue = 1;
 		break;
 	default:
+		printf("ERROR: Actor condition opcode %d\n", conditionOpcode);
 		break;
 	}
 
@@ -293,6 +298,7 @@ int32 process_life_operators(int32 valueSize, uint8 *scriptPtr) {
 	int32 operatorCode, conditionValue;
 
 	operatorCode = *(scriptPtr++);
+	printf("DEBG: Actor operator opcode %d\n", operatorCode);
 
 	if (valueSize == 1) {
 		conditionValue = *(scriptPtr++);
@@ -336,7 +342,7 @@ int32 process_life_operators(int32 valueSize, uint8 *scriptPtr) {
 		}
 		break;
 	default:
-		// TODO: add message
+		printf("ERROR: Actor operator opcode %d\n", operatorCode);
 		break;
 	}
 
@@ -511,6 +517,7 @@ int32 lSET_TRACK_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8
 
 /*0x19*/
 int32 lMESSAGE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
@@ -631,6 +638,7 @@ int32 lSET_FLAG_GAME(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8
 
 /*0x25*/
 int32 lKILL_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -654,6 +662,7 @@ int32 lUSE_ONE_LITTLE_KEY(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, 
 
 /*0x28*/
 int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
@@ -678,6 +687,7 @@ int32 lRESTORE_L_TRACK(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uin
 
 /*0x2C*/
 int32 lMESSAGE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 3; // TODO
 	return -1;
 }
 
@@ -689,6 +699,7 @@ int32 lINC_CHAPTER(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *
 
 /*0x2E*/
 int32 lFOUND_OBJECT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -746,21 +757,25 @@ int32 lSET_DOOR_DOWN(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8
 
 /*0x33*/
 int32 lGIVE_BONUS(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x34*/
 int32 lCHANGE_CUBE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x35*/
 int32 lOBJ_COL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x36*/
 int32 lBRICK_COL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -785,6 +800,7 @@ int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *sc
 
 /*0x39*/
 int32 lZOOM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -807,32 +823,41 @@ int32 lPOS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *sc
 
 /*0x3B*/
 int32 lSET_MAGIC_LEVEL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x3C*/
 int32 lSUB_MAGIC_POINT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x3D*/
 int32 lSET_LIFE_POINT_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
 /*0x3E*/
 int32 lSUB_LIFE_POINT_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
 /*0x3F*/
 int32 lHIT_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
 /*0x40*/
 int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int8 *movie = (int8 *)scriptPtr;
+	int32 nameSize = strlen(movie);
+	play_movie(movie);
+	actor->positionInLifeScript = nameSize + 1;
+	return 0;
 }
 
 /*0x41*/
@@ -850,21 +875,25 @@ int32 lINC_CLOVER_BOX(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint
 
 /*0x43*/
 int32 lSET_USED_INVENTORY(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x44*/
 int32 lADD_CHOICE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
 /*0x45*/
 int32 lASK_CHOICE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
 /*0x46*/
 int32 lBIG_MESSAGE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
@@ -881,21 +910,25 @@ int32 lINIT_PINGOUIN(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8
 
 /*0x48*/
 int32 lSET_HOLO_POS(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x49*/
 int32 lCLR_HOLO_POS(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x4A*/
 int32 lADD_FUEL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
 /*0x4B*/
 int32 lSUB_FUEL(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -909,11 +942,13 @@ int32 lSET_GRM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scri
 
 /*0x4D*/
 int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
 /*04E*/
 int32 lSAY_MESSAGE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 3; // TODO
 	return -1;
 }
 
@@ -975,6 +1010,7 @@ int32 lFADE_PAL_ALARM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint
 
 /*0x58*/
 int32 lEXPLODE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -990,6 +1026,7 @@ int32 lBUBBLE_OFF(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *s
 
 /*0x5B*/
 int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 3; // TODO
 	return -1;
 }
 
@@ -1022,6 +1059,7 @@ int32 lANIM_SET(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scr
 
 /*0x60*/
 int32 lHOLOMAP_TRAJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -1045,6 +1083,7 @@ int32 lMIDI_OFF(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scr
 
 /*0x64*/
 int32 lPLAY_CD_TRACK(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript++; // TODO
 	return -1;
 }
 
@@ -1064,6 +1103,7 @@ int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scri
 
 /*0x67*/
 int32 lTEXT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	actor->positionInLifeScript += 2; // TODO
 	return -1;
 }
 
@@ -1195,6 +1235,7 @@ void process_life_script(int32 actorIdx) {
 	ActorStruct *actor;
 
 	actor = &sceneActors[actorIdx];
+	printf("DEBUG: Actor %d life script start\n", actorIdx);
 
 	do {
 		scriptPosition = actor->positionInLifeScript;
@@ -1202,12 +1243,18 @@ void process_life_script(int32 actorIdx) {
 		opcodePtr	   = scriptPtr;
 		scriptOpcode   = *(scriptPtr++);
 
+		printf("DEBUG: Actor %d command opcode %d\n", actorIdx, scriptOpcode);
+
 		actor->positionInLifeScript++;
 
-		end = function_map[scriptOpcode].function(actorIdx, actor, opcodePtr, scriptPtr, scriptPosition);
+		if (scriptOpcode <= 105) {
+			end = function_map[scriptOpcode].function(actorIdx, actor, opcodePtr, scriptPtr, scriptPosition);
+		} else {
+			printf("ERROR: Actor %d with wrong offset/opcode - Offset: %d\n", actorIdx, actor->positionInLifeScript);
+		}
 
 		if (end < 0) { // show error message
-			printf("Life script [%s] not implemented\n", function_map[scriptOpcode].name);
+			printf("Actor %d Life script [%s] not implemented\n", actorIdx, function_map[scriptOpcode].name);
 		}
 
 	} while(end != 1);
