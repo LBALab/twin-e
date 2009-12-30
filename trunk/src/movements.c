@@ -25,6 +25,7 @@
 	$Id$
 */
 
+#include <stdio.h>
 #include <math.h>
 
 #include "movements.h"
@@ -352,9 +353,9 @@ void process_actor_movements(int32 actorIdx) {
 		}
 
 		switch (actor->controlMode) {
-		case 0: // NO_MOVE
+		case kNO_MOVE:
 			break;
-		case 1: // MOVE_MANUAL
+		case kMANUAL:
 			if (!actorIdx) {
 				heroAction = 0;
 
@@ -429,8 +430,21 @@ void process_actor_movements(int32 actorIdx) {
 
 			}
 			break;
-			/*default:
-				printf("Unimplemented control mode %d\n", actor->controlMode);*/
+		/*case kFOLLOW:
+			break;
+		case kTRACK:
+			break;
+		case kFOLLOW_2:
+			break;
+		case kTRACK_ATTACK:
+			break;
+		case kSAME_XZ:
+			break;
+		case kRANDOM:
+			break;*/
+		default:
+			printf("Control mode %d not implemented\n", actor->controlMode);
+			break;
 		}
 	}
 }
