@@ -92,7 +92,7 @@ ActorStruct sceneActors[NUM_MAX_ACTORS];
 ActorStruct *sceneHero;
 
 /** Meca pinguin actor index */
-int16 mecaPinguinIdx;
+int16 mecaPinguinIdx; // currentPingouin
 
 /** Current followed actor in scene */
 int16 currentlyFollowedActor;
