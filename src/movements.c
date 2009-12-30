@@ -441,10 +441,10 @@ void process_actor_movements(int32 actorIdx) {
 		case kSAME_XZ:
 			break;
 		case kRANDOM:
-			break;*/
+			break;
 		default:
 			printf("Control mode %d not implemented\n", actor->controlMode);
-			break;
+			break;*/
 		}
 	}
 }

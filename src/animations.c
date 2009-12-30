@@ -752,9 +752,6 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 	currentlyProcessedActorIdx = actorIdx;
 	processActorPtr = actor;
 
-	if (actorIdx == sceneNumActors - 1) // FIXME: skip meca pinguin for now
-		return;
-
 	if (actor->entity == -1)
 		return;
 

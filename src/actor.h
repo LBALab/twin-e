@@ -287,4 +287,7 @@ void reset_actor(int16 actorIdx);
 	@param angle angle of actor hitting */
 void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32 angle);
 
+/** Process actor carrier */
+void process_actor_carrier(int32 actorIdx);
+
 #endif
