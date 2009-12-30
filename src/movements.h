@@ -31,6 +31,18 @@
 #include "sys.h"
 #include "actor.h"
 
+/** Control mode types */
+enum ControlMode {
+	kNO_MOVE	  = 0,
+	kMANUAL		  = 1,
+	kFOLLOW		  = 2,
+	kTRACK		  = 3,
+	kFOLLOW_2	  = 4,
+	kTRACK_ATTACK = 5,
+	kSAME_XZ	  = 6,
+	kRANDOM		  = 7
+};
+
 /** Hero moved */
 int16 heroMoved; // twinsenMove
 /** Hero Action */

@@ -36,6 +36,7 @@
 #include "redraw.h"
 #include "lbaengine.h"
 #include "gamestate.h"
+#include "grid.h"
 
 /** Returns:
 	   -1 - TODO
@@ -452,8 +453,8 @@ int32 lBODY(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptP
 
 /*0x12*/
 int32 lBODY_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	int32 otherActorIdx = *(scriptPtr++);
 	int32 otherBodyIdx = *(scriptPtr++);
-	int32 otherActorIdx = *(scriptPtr);
 	init_body(otherBodyIdx, otherActorIdx);
 	actor->positionInLifeScript += 2;
 	return 0;
@@ -469,8 +470,8 @@ int32 lANIM(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptP
 
 /*0x14*/
 int32 lANIM_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
+	int32 otherActorIdx = *(scriptPtr++);
 	int32 otherAnimIdx = *(scriptPtr++);
-	int32 otherActorIdx = *(scriptPtr);
 	init_anim(otherAnimIdx, 0, 0, otherActorIdx);
 	actor->positionInLifeScript += 2;
 	return 0;
@@ -486,7 +487,7 @@ int32 lSET_LIFE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scr
 int32 lSET_LIFE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
 	int32 otherActorIdx = *(scriptPtr++);
 	sceneActors[otherActorIdx].positionInLifeScript = *((int16 *)scriptPtr); // offset
-	actor->positionInLifeScript += 2;
+	actor->positionInLifeScript += 3;
 	return 0;
 }
 
@@ -520,58 +521,109 @@ int32 lFALLABLE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scr
 /*0x1B*/
 int32 lSET_DIRMODE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
 	int32 controlMode = *(scriptPtr++);
+
 	actor->controlMode = controlMode;
-	if (controlMode == 2) {
+	if (controlMode == kFOLLOW) {
 		actor->followedActor = *(scriptPtr++);
 		actor->positionInLifeScript++;
 	}
 	actor->positionInLifeScript++;
+
 	return 0;
 }
 
 /*0x1C*/
 int32 lSET_DIRMODE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int32 controlMode = *(scriptPtr++);
+
+	sceneActors[otherActorIdx].controlMode = controlMode;
+	if (controlMode == kFOLLOW) {
+		sceneActors[otherActorIdx].followedActor = *(scriptPtr++);
+		actor->positionInLifeScript++;
+	}
+	actor->positionInLifeScript++;
+
+	return 0;
 }
 
 /*0x1D*/
 int32 lCAM_FOLLOW(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 followedActorIdx;
+	followedActorIdx = *(scriptPtr);
+
+	if (currentlyFollowedActor != followedActorIdx) {
+		newCameraX = sceneActors[followedActorIdx].X >> 9;
+		newCameraY = sceneActors[followedActorIdx].Y >> 8;
+		newCameraZ = sceneActors[followedActorIdx].Z >> 9;
+
+		currentlyFollowedActor = followedActorIdx;
+		reqBgRedraw = 1;
+	}
+
+	actor->positionInLifeScript++;
+
+	return 0;
 }
 
 /*0x1E*/
 int32 lSET_BEHAVIOUR(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 behavior = *(scriptPtr);
+
+	init_anim(ANIM_STANDING, 0, 255, 0);
+	set_behaviour(behavior);
+	actor->positionInLifeScript++;
+
+	return 0;
 }
 
 /*0x1F*/
 int32 lSET_FLAG_CUBE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 flagIdx = *(scriptPtr++);
+	int32 flagValue = *(scriptPtr++);
+
+	sceneFlags[flagIdx] = flagValue;
+	actor->positionInLifeScript += 2;
+	
+	return 0;
 }
 
 /*0x20*/
 int32 lCOMPORTEMENT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->positionInLifeScript++;
+	return 0;
 }
 
 /*0x21*/
 int32 lSET_COMPORTEMENT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->positionInLifeScript = *((int16 *)scriptPtr);
+	return 0;
 }
 
 /*0x22*/
 int32 lSET_COMPORTEMENT_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+
+	sceneActors[otherActorIdx].positionInLifeScript = *((int16 *)scriptPtr);
+	actor->positionInLifeScript += 3;
+
+	return 0;
 }
 
 /*0x23*/
 int32 lEND_COMPORTEMENT(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	return 1; // break
 }
 
 /*0x24*/
 int32 lSET_FLAG_GAME(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	int32 flagIdx = *(scriptPtr++);
+	int32 flagValue = *(scriptPtr++);
+
+	gameFlags[flagIdx] = flagValue;
+	actor->positionInLifeScript += 2;
+	
+	return 0;
 }
 
 /*0x25*/
@@ -586,7 +638,15 @@ int32 lSUICIDE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scri
 
 /*0x27*/
 int32 lUSE_ONE_LITTLE_KEY(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	inventoryNumKeys--;
+
+	if (inventoryNumKeys < 0) {
+		inventoryNumKeys = 0;
+	}
+
+	// TODO: add overlay sprite for keys
+	
+	return 0;
 }
 
 /*0x28*/
@@ -596,17 +656,21 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, ui
 
 /*0x29*/
 int32 lEND_LIFE(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->positionInLifeScript = -1;
+	return 1; // break;
 }
 
 /*0x2A*/
 int32 lSTOP_L_TRACK(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->pausedTrackPtr = actor->currentLabelPtr;
+	actor->positionInMoveScript = -1;
+	return 0;
 }
 
 /*0x2B*/
 int32 lRESTORE_L_TRACK(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	actor->positionInMoveScript = actor->pausedTrackPtr;
+	return 0;
 }
 
 /*0x2C*/
@@ -616,7 +680,8 @@ int32 lMESSAGE_OBJ(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *
 
 /*0x2D*/
 int32 lINC_CHAPTER(int32 actorIdx, ActorStruct *actor, uint8 *opcodePtr, uint8 *scriptPtr, int32 scriptPosition) {
-	return -1;
+	gameChapter++;
+	return 0;
 }
 
 /*0x2E*/
