@@ -243,25 +243,26 @@ int32 mSAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *conti
 
 /*0x0F*/
 int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
-	int32 newAngle;
-
 	actor->positionInMoveScript++;
-	currentScriptValue = *(scriptPtr);
 
-	destX = sceneTracks[currentScriptValue].X;
-	destY = sceneTracks[currentScriptValue].Y;
-	destZ = sceneTracks[currentScriptValue].Z;
+	if (actor->staticFlags.bIsSpriteActor) {
+		currentScriptValue = *(scriptPtr);
 
-	newAngle = get_angle(actor->X, actor->Z, destX, destZ);
-	actor->animType = get_angle(actor->Y, 0, destY, moveAngle);
+		destX = sceneTracks[currentScriptValue].X;
+		destY = sceneTracks[currentScriptValue].Y;
+		destZ = sceneTracks[currentScriptValue].Z;
 
-	if (moveAngle > 100) {
-		*continueMove = 0;
-		actor->positionInMoveScript -= 2;
-	} else {
-		actor->X = destX;
-		actor->Y = destY;
-		actor->Z = destZ;
+		actor->angle = get_angle(actor->X, actor->Z, destX, destZ);
+		actor->animType = get_angle(actor->Y, 0, destY, moveAngle);
+
+		if (moveAngle > 100) {
+			*continueMove = 0;
+			actor->positionInMoveScript -= 2;
+		} else {
+			actor->X = destX;
+			actor->Y = destY;
+			actor->Z = destZ;
+		}
 	}
 
 	return 0;
@@ -431,14 +432,14 @@ int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 /*0x1C*/
 int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
-	play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+	play_sample(sampleIdx, 0x1000, 0, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
 	return 0;
 }
 
 /*0x1D*/
 int32 mSAMPLE_STOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition, ActorMoveStruct *move) {
-	stop_samples();
+	stop_samples(); // TODO: stop specific sample
 	actor->positionInMoveScript += 2;
 	return 0;
 }

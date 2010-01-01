@@ -214,18 +214,18 @@ int32 get_real_value(ActorMoveStruct * movePtr) {
 	int32 tempStep;
 
 	if (!movePtr->numOfStep)
-		return (movePtr->to);
+		return movePtr->to;
 
 	if (!(lbaTime - movePtr->timeOfChange < movePtr->numOfStep)) {
 		movePtr->numOfStep = 0;
-		return (movePtr->to);
+		return movePtr->to;
 	}
 
 	tempStep = movePtr->to - movePtr->from;
 	tempStep *= lbaTime - movePtr->timeOfChange;
 	tempStep /= movePtr->numOfStep;
 
-	return (tempStep + movePtr->from);
+	return tempStep + movePtr->from;
 }
 
 /** Rotate actor with a given angle
@@ -430,17 +430,28 @@ void process_actor_movements(int32 actorIdx) {
 
 			}
 			break;
-		/*case kFOLLOW:
+		case kFOLLOW: {
+			int32 newAngle = get_angle(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
+			if (actor->staticFlags.bIsSpriteActor) {
+				actor->angle = newAngle;
+			} else {
+				move_actor(actor->angle, newAngle, actor->speed, &actor->move);
+			}
+		}
 			break;
 		case kTRACK:
+			if (actor->positionInMoveScript == -1) {
+				actor->positionInMoveScript = 0;
+			}
 			break;
-		case kFOLLOW_2:
-			break;
-		case kTRACK_ATTACK:
+		case kFOLLOW_2:		// unused
+		case kTRACK_ATTACK: // unused
 			break;
 		case kSAME_XZ:
+			actor->X = sceneActors[actor->followedActor].X;
+			actor->Z = sceneActors[actor->followedActor].Z;
 			break;
-		case kRANDOM:
+		/*case kRANDOM:
 			break;
 		default:
 			printf("Control mode %d not implemented\n", actor->controlMode);

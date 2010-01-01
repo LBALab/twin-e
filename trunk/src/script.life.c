@@ -199,7 +199,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 
 		if (!targetActor->dynamicFlags.bIsDead) {
-			if (targetActor->Z - actor->Z < 1500) {
+			if (targetActor->Y - actor->Y < 1500) {
 				newAngle = get_angle(actor->X, actor->Z, targetActor->X, targetActor->Z);
 				if (moveAngle > 0x7D00) { // TODO: recheck this
 					moveAngle = 0x7D00;
@@ -479,7 +479,7 @@ int32 lELSE(int32 actorIdx, ActorStruct *actor) {
 /*0x11*/
 int32 lBODY(int32 actorIdx, ActorStruct *actor) {
 	int32 bodyIdx = *(scriptPtr);
-	init_body(bodyIdx, actorIdx);
+	init_model_actor(bodyIdx, actorIdx);
 	scriptPtr++;
 	return 0;
 }
@@ -488,7 +488,7 @@ int32 lBODY(int32 actorIdx, ActorStruct *actor) {
 int32 lBODY_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 	int32 otherBodyIdx = *(scriptPtr++);
-	init_body(otherBodyIdx, otherActorIdx);
+	init_model_actor(otherBodyIdx, otherActorIdx);
 	return 0;
 }
 
