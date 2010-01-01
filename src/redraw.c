@@ -39,6 +39,7 @@
 #include "menu.h"
 #include "animations.h"
 #include "keyboard.h"
+#include "movements.h"
 
 #ifdef GAMEMOD
 #include "debug.scene.h"
@@ -289,7 +290,7 @@ int process_actors_drawlist(int32 bgRedraw) {
 								shadowY = actor->Y - 1;
 								shadowZ = actor->Z;
 							} else {
-								//get_shadow_position(actor->X, actor->Y, actor->Z);
+								get_shadow_position(actor->X, actor->Y, actor->Z);
 							}
 
 							tmpVal--;
@@ -412,15 +413,16 @@ void process_drawing(int32 numDrawingList) {
 					if (actor->staticFlags.bUsesClipping) {
 						draw_over_sprite_actor((actor->lastX + 0x100) >> 9, actor->lastY >> 8, (actor->lastZ + 0x100) >> 9);
 					} else {
-						int tempX, tempZ, tempY;
+						int tmpX, tmpY, tmpZ;
 
-						tempX = (actor->X + actor->boudingBox.X.topRight + 0x100) >> 9;
-						tempZ = actor->Y >> 8;
-						if (actor->brickShape & 0x7F)
-							tempZ++;
-						tempY = (actor->Z + actor->boudingBox.Z.topRight + 0x100) >> 9;
+						tmpX = (actor->X + actor->boudingBox.X.topRight + 0x100) >> 9;
+						tmpY = actor->Y >> 8;
+						if (actor->brickShape & 0x7F) {
+							tmpY++;
+						}
+						tmpZ = (actor->Z + actor->boudingBox.Z.topRight + 0x100) >> 9;
 
-						draw_over_sprite_actor(tempX, tempZ, tempY);
+						draw_over_sprite_actor(tmpX, tmpY, tmpZ);
 					}
 
 					add_redraw_area(textWindowLeft, textWindowTop, textWindowRight, textWindowBottom);
@@ -429,7 +431,7 @@ void process_drawing(int32 numDrawingList) {
 					//draw_button_box(renderLeft, renderTop, renderRight, renderBottom);
 				}
 			}
-			// Drawing extras
+			// Drawing extras bonus
 			else if (flags == 0x1800) {
 
 			}
