@@ -770,7 +770,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 		if (!actor->dynamicFlags.bIsFalling) {
 			if (actor->speed) {
-				int32 angle = get_real_angle(&actor->move);
+				int32 angle = get_real_value(&actor->move);
 				if (!angle) {
 					if (actor->move.to > 0) {
 						angle = 1;
@@ -781,7 +781,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 				
 				rotate_actor(angle, 0, actor->animType);
 
-				processActorY = actor->Y - destY;
+				processActorY = actor->Y - destZ;
 
 				rotate_actor(0, destX, actor->angle);
 
