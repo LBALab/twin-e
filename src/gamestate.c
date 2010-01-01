@@ -38,6 +38,15 @@
 #include "keyboard.h"
 #include "resources.h"
 
+int32 magicLevelStrengthOfHit[] = {
+	MAGIC_STRENGTH_NONE,
+	MAGIC_STRENGTH_YELLOW_BALL,
+	MAGIC_STRENGTH_GREEN_BALL,
+	MAGIC_STRENGTH_RED_BALL,
+	MAGIC_STRENGTH_FIRE_BALL,
+	0
+};
+
 /** Initialize engine 3D projections */
 void init_engine_projections() { // reinitAll1
 	set_ortho_projection(311, 240, 512);

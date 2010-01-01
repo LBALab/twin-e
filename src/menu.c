@@ -982,7 +982,7 @@ void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
 
 	if (set_model_animation(currentAnimState, currentAnim, behaviourEntity, &behaviourAnimData[behaviour])) {
 		currentAnimState++; // keyframe
-		if (currentAnimState == get_num_keyframes(currentAnim)) {
+		if (currentAnimState >= get_num_keyframes(currentAnim)) {
 			currentAnimState = get_start_keyframe(currentAnim);
 		}
 		behaviourAnimState[behaviour] = currentAnimState;

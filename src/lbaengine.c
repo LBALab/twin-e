@@ -77,6 +77,7 @@ int32 run_game_engine() { // mainLoopInteration
 		change_scene();
 	}
 
+	previousLoopPressedKey = loopPressedKey;
 	key  = pressedKey;
 	pKey = skipIntro; // mainLoopVar7
 	loopPressedKey = skipedKey;
@@ -93,7 +94,7 @@ int32 run_game_engine() { // mainLoopInteration
 	// TODO: inventory menu
 	
 	// Show behaviour menu
-	if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == 1) {
+	if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
 		freeze_time();
 		process_behaviour_menu();
 		redraw_engine_actions(1);

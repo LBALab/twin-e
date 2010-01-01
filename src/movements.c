@@ -356,13 +356,70 @@ void process_actor_movements(int32 actorIdx) {
 		case kNO_MOVE:
 			break;
 		case kMANUAL:
-			if (!actorIdx) {
+			if (!actorIdx) { // TODO: take this out when we want to give manual movements to other characters than Hero
 				heroAction = 0;
 
-				//TODO: add action key like in LBA2
+				// If press W for action
+				if (skipIntro == 0x11) {
+					heroAction = 1;
+				}
 
-				//TODO: do behaviour actions
+				// Process hero actions
+				switch (heroBehaviour) {
+				case NORMAL:
+					if (loopPressedKey & 1) {
+						heroAction = 1;
+					}
+					break;
+				case ATHLETIC:
+					if (loopPressedKey & 1) {
+						init_anim(ANIM_JUMP, 1, 0, actorIdx);
+					}
+					break;
+				case AGGRESSIVE:
+					if (loopPressedKey & 1) {
+						if (autoAgressive) {
+							heroMoved = 1;
+							actor->angle = get_real_angle(&actor->move);
+							if (!(previousLoopPressedKey & 1) || !actor->anim) {
+								int32 aggresiveMode = Rnd(3);
+
+								switch (aggresiveMode) {
+								case 0:
+									init_anim(ANIM_KICK, 1, 0, actorIdx);
+									break;
+								case 1:
+									init_anim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
+									break;
+								case 2:
+									init_anim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
+									break;
+								}
+							}
+						} else {
+							if (key & 8) {
+								init_anim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
+							}
+
+							if (key & 4) {
+								init_anim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
+							}
+
+							if (key & 1) {
+								init_anim(ANIM_KICK, 1, 0, actorIdx);
+							}
+						}
+					}
+					break;
+				case DISCRETE:
+					if (loopPressedKey & 1) {
+						init_anim(ANIM_HIDE, 1, 0, actorIdx);
+					}
+					break;
+				}
 			}
+
+			// TODO: sword and magic ball actions
 
 			if (loopPressedKey == 0 || heroAction != 0) {
 				int16 tempAngle;
