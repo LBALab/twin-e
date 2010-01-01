@@ -33,12 +33,19 @@
 #define GAMEFLAG_TUNIC					4
 #define GAMEFLAG_INVENTORY_DISABLED		70
 
+#define MAGIC_STRENGTH_NONE			2
+#define MAGIC_STRENGTH_YELLOW_BALL	3
+#define MAGIC_STRENGTH_GREEN_BALL	4
+#define MAGIC_STRENGTH_RED_BALL		6
+#define MAGIC_STRENGTH_FIRE_BALL	8
 
 /** LBA engine game flags to save quest states */
 uint8 gameFlags[256];
 
 /** LBA engine chapter */
 int16 gameChapter;
+
+extern int32 magicLevelStrengthOfHit[];
 
 /** Magic ball type index */
 int16 magicBallIdx;

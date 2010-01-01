@@ -50,7 +50,8 @@ volatile int32 lbaTime;
 
 ActorMoveStruct loopMovePtr; // mainLoopVar1
 
-int32 loopPressedKey; // mainLoopVar5
+int32 loopPressedKey;         // mainLoopVar5
+int32 previousLoopPressedKey; // mainLoopVar6
 
 int32 loopActorStep; // mainLoopVar17
 

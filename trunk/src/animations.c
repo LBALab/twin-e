@@ -51,7 +51,7 @@ enum ActionType {
 	kSampleRepeat		= 5,
 	kActionUnknown6		= 6,
 	kActionUnknown7		= 7,
-	kActionUnknown8		= 8,
+	kSampleStop			= 8,
 	kActionUnknown9		= 9, // unused
 	kActionUnknown10	= 10,
 	kActionUnknown11	= 11,
@@ -587,10 +587,10 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		// TODO: do next animation actions
 		case kThrowExtraBonus: {
 			animPos = *(data++);
 			data += 11;
+			printf("Actor %d AnimAction[kThrowExtraBonus] not implemented\n", actorIdx);
 		}
 			break;
 		case kThrowMagicBall: {
@@ -600,6 +600,7 @@ void process_anim_actions(int16 actorIdx) {
 			} else {
 				data += 8;
 			}
+			printf("Actor %d AnimAction[kThrowMagicBall] not implemented\n", actorIdx);
 		}
 			break;
 		case kSampleRepeat: {
@@ -617,43 +618,58 @@ void process_anim_actions(int16 actorIdx) {
 		case kActionUnknown6: {
 			animPos = *(data++);
 			data += 6;
+			printf("Actor %d AnimAction[kActionUnknown6] not implemented\n", actorIdx);
 		}
 			break;
 		case kActionUnknown7: {
 			animPos = *(data++);
 			data += 11;
+			printf("Actor %d AnimAction[kActionUnknown7] not implemented\n", actorIdx);
 		}
 			break;
-		case kActionUnknown8: {
+		case kSampleStop: {
 			animPos = *(data++);
+			if (animPos == actor->animPosition) {
+				stop_samples();
+			}
 			data += 2;
 		}
 			break;
 		case kActionUnknown10: {
 			animPos = *(data++);
+			printf("Actor %d AnimAction[kActionUnknown10] not implemented\n", actorIdx);
 		}
 			break;
 		case kActionUnknown11: {
 			animPos = *(data++);
+			printf("Actor %d AnimAction[kActionUnknown11] not implemented\n", actorIdx);
 		}
 			break;
 		case kHeroHitting: {
 			animPos = *(data++);
+			animPos--;
+			if (animPos == actor->animPosition) {
+				actor->strengthOfHit = magicLevelStrengthOfHit[magicLevelIdx];
+				actor->dynamicFlags.bIsHitting = 1;
+			}
 		}
 			break;
 		case kActionUnknown13: {
 			animPos = *(data++);
 			data += 15;
+			printf("Actor %d AnimAction[kActionUnknown13] not implemented\n", actorIdx);
 		}
 			break;
 		case kActionUnknown14: {
 			animPos = *(data++);
 			data += 15;
+			printf("Actor %d AnimAction[kActionUnknown14] not implemented\n", actorIdx);
 		}
 			break;
 		case kActionUnknown15: {
 			animPos = *(data++);
 			data += 11;
+			printf("Actor %d AnimAction[kActionUnknown15] not implemented\n", actorIdx);
 		}
 			break;
 		case kActionUnknown9:

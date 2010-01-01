@@ -60,6 +60,16 @@
 #define ANIM_CLIMB_LADDER	12
 /** Reach top of ladder anim value */
 #define ANIM_TOP_LADDER		13
+/** Jump anim value */
+#define ANIM_JUMP			14
+/** Hide anim value */
+#define ANIM_HIDE			16
+/** Hide anim value */
+#define ANIM_KICK			17
+/** Hide anim value */
+#define ANIM_RIGHT_PUNCH	18
+/** Hide anim value */
+#define ANIM_LEFT_PUNCH		19
 /** Hit anim value */
 #define ANIM_HIT2			22
 
