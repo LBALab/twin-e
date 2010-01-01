@@ -50,11 +50,11 @@ int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2) { // CheckZvOnZv
 	x1Left = processActorX + actor1->boudingBox.X.bottomLeft;
 	x1Right = processActorX + actor1->boudingBox.X.topRight;
 
-	y1Left = processActorZ + actor1->boudingBox.Y.bottomLeft;
-	y1Right = processActorZ + actor1->boudingBox.Y.topRight;
+	y1Left = processActorY + actor1->boudingBox.Y.bottomLeft;
+	y1Right = processActorY + actor1->boudingBox.Y.topRight;
 
-	z1Left = processActorY + actor1->boudingBox.Z.bottomLeft;
-	z1Right = processActorY + actor1->boudingBox.Z.topRight;
+	z1Left = processActorZ + actor1->boudingBox.Z.bottomLeft;
+	z1Right = processActorZ + actor1->boudingBox.Z.topRight;
 
 	// Actor 2
 	x2Left = actor2->X + actor2->boudingBox.X.bottomLeft;
