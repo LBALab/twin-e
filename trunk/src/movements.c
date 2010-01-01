@@ -79,7 +79,7 @@ void get_shadow_position(int32 X, int32 Y, int32 Z) {
 
 		shadowCollisionType = *(tempPtr + *(ptr) * 4);
 
-		//ReajustPos(shadowCollisionType);
+		reajust_actor_position(shadowCollisionType);
 	}
 
 	shadowX = processActorX;
@@ -187,7 +187,7 @@ int32 get_real_angle(ActorMoveStruct * movePtr) {
 
 		if (timePassed >= movePtr->numOfStep) {	// rotation is finished
 			movePtr->numOfStep = 0;
-			return (movePtr->to);
+			return movePtr->to;
 		}
 
 		remainingAngle = movePtr->to - movePtr->from;
@@ -205,7 +205,7 @@ int32 get_real_angle(ActorMoveStruct * movePtr) {
 		return (remainingAngle);
 	}
 
-	return (movePtr->to);
+	return movePtr->to;
 }
 
 /** Get actor step

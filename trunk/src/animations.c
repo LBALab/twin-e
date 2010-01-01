@@ -788,7 +788,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 				processActorX = actor->X + destX;
 				processActorZ = actor->Z + destZ;
 
-				set_actor_angle(0, actor->angle, 50, &actor->move);
+				set_actor_angle(0, actor->speed, 50, &actor->move);
 
 				if (actor->dynamicFlags.bIsSpriteMoving) {
 					if (actor->doorStatus) { // open door
@@ -964,8 +964,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		if (brickShape) {
 			if (brickShape != kSolid) {
 				reajust_actor_position(brickShape);
-			} /*else { 
-				// this shouldn't happen (collision should avoid it)
+			} /*else { // this shouldn't happen (collision should avoid it)
 				actor->Y = processActorY = (processActorY / 256) * 256 + 256; // go upper
 			}*/
 		}
@@ -1025,7 +1024,6 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		}
 
 		brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
-		// var_4 = brickShape;
 		actor->brickShape = brickShape;
 
 		if (brickShape) {
@@ -1051,9 +1049,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					}
 
 					// no Z coordinate issue
-					/*if (!get_brick_shape(processActorX, processActorY, previousActorZ)) {
+					if (!get_brick_shape(processActorX, processActorY, previousActorZ)) {
 						processActorZ = previousActorZ;
-					}*/
+					}
 
 					// no X coordinate issue
 					if (!get_brick_shape(previousActorX, processActorY, processActorZ)) {
