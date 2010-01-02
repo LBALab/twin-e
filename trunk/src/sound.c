@@ -33,6 +33,9 @@
 #include "main.h"
 #include "resources.h"
 #include "hqrdepack.h"
+#include "movements.h"
+#include "grid.h"
+#include "collision.h"
 
 
 /** SDL_Mixer channels */
@@ -92,6 +95,7 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 	@param z unknown z variable */
 void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z) {
 	if (cfgfile.Sound) {
+		//int32 distance;
 		int32 sampSize = 0;
 		SDL_RWops *rw;
 		uint8* sampPtr;
@@ -106,6 +110,11 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 		sample = Mix_LoadWAV_RW(rw, 1);
 
 		sample_volume(-1, cfgfile.WaveVolume);
+
+		/*distance = Abs(get_distance_3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
+		distance = get_average_value(0, distance, 10000, 255);
+
+		Mix_SetDistance(1, distance);*/
 
 		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);

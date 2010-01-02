@@ -31,6 +31,7 @@
 #include "animations.h"
 #include "images.h"
 #include "sdlengine.h"
+#include "sound.h"
 
 int8 * HQR_RESS_FILE			= "ress.hqr";
 int8 * HQR_TEXT_FILE			= "text.hqr";
@@ -79,6 +80,16 @@ void preload_animations() {
 	}
 }
 
+/** Preload all animations */
+void preload_samples() {
+	int32 i;
+	int32 numEntries = hqr_num_entries(HQR_SAMPLES_FILE) - 1;
+
+	for (i = 0; i < numEntries; i++) {
+		samplesSizeTable[i] = hqr_getalloc_entry(&samplesTable[i], HQR_SAMPLES_FILE, i);
+	}
+}
+
 /** Initialize resource pointers */
 void init_resources() {
 	int32 size = 0;
@@ -98,4 +109,5 @@ void init_resources() {
 
 	preload_sprites();
 	preload_animations();
+	//preload_samples();
 }

@@ -150,7 +150,7 @@ int sdl_initialize() {
 	else
 		freq = ORIGINAL_GAME_FREQUENCY;
 
-	if (Mix_OpenAudio(freq, AUDIO_S16, 2, 4096) < 0) {
+	if (Mix_OpenAudio(freq, AUDIO_S16, 2, 256) < 0) {
 		printf("Mix_OpenAudio: %s\n", Mix_GetError());
 		exit(1);
 	}

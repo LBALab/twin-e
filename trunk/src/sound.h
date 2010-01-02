@@ -30,6 +30,14 @@
 
 #include "sys.h"
 
+/** Total number of sprites allowed in the game */
+#define NUM_SAMPLES 243
+
+/** Table with all loaded samples */
+uint8* samplesTable[NUM_SAMPLES];
+/** Table with all loaded samples sizes */
+uint32 samplesSizeTable[NUM_SAMPLES];
+
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */

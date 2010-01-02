@@ -52,6 +52,8 @@ int32 causeActorDamage; //fieldCauseDamage
 	@param actorIdx2 Actor 2 index */
 int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2);
 
+int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3);
+
 /** Reajust actor position in scene according with brick shape bellow actor
 	@param brickShape Shape of brick bellow the actor */
 void reajust_actor_position(int32 brickShape);
