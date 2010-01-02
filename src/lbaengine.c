@@ -255,7 +255,7 @@ int32 run_game_engine() { // mainLoopInteration
 	if (!disableScreenRecenter && !useFreeCamera) {
 		ActorStruct *actor = &sceneActors[currentlyFollowedActor];
 		project_position_on_screen(actor->X - (newCameraX << 9),
-								   actor->Y - (newCameraY << 9),
+								   actor->Y - (newCameraY << 8),
 								   actor->Z - (newCameraZ << 9));
 		if (projPosX < 80 || projPosX > 539 || projPosY < 80 || projPosY > 429) {
 			newCameraX = ((actor->X + 0x100) >> 9) + (((actor->X + 0x100) >> 9) - newCameraX) / 2;

@@ -157,7 +157,7 @@ int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index) {
 		frread(&fr, ptr, realSize);
 	}
 	// compressed: modes (1 & 2)
-	else {
+	else if (mode == 1 || mode == 2) {
 		uint8* compDataPtr = 0;
 		compDataPtr = (uint8*)malloc(compSize);
 		frread(&fr, compDataPtr, compSize);

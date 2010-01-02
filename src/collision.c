@@ -91,8 +91,7 @@ int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2) { // CheckZvOnZv
 	return 1; // standing
 }
 
-int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3)
-{
+int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3) {
 	if (var3 <= 0) {
 		return var0;
 	}
