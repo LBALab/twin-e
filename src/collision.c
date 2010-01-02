@@ -33,6 +33,7 @@
 #include "grid.h"
 #include "main.h"
 #include "animations.h"
+#include "renderer.h"
 
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
@@ -357,22 +358,22 @@ int32 check_collision_with_actors(int32 actorIdx) {
 	}
 
 	if (actor->dynamicFlags.bIsHitting) {
-		rotate_actor(0, 200, actor->angle);
+   		rotate_actor(0, 200, actor->angle);
 
-		xLeft  = processActorX + actor->boudingBox.X.bottomLeft;
-		xRight = processActorX + actor->boudingBox.X.topRight;
+		xLeft  = destX + processActorX + actor->boudingBox.X.bottomLeft;
+		xRight = destX + processActorX + actor->boudingBox.X.topRight;
 
 		yLeft  = processActorY + actor->boudingBox.Y.bottomLeft;
 		yRight = processActorY + actor->boudingBox.Y.topRight;
 
-		zLeft  = processActorZ + actor->boudingBox.Z.bottomLeft;
-		zRight = processActorZ + actor->boudingBox.Z.topRight;
+		zLeft  = destZ + processActorZ + actor->boudingBox.Z.bottomLeft;
+		zRight = destZ + processActorZ + actor->boudingBox.Z.topRight;
 	
 		for (a = 0; a < sceneNumActors; a++) {
 			actorTest = &sceneActors[a];
 
 			// aviod current processed actor
-			if (a != actorIdx && actorTest->entity != -1 && !actor->staticFlags.bIsHidden && actorTest->standOn != actorIdx) {
+			if (a != actorIdx && actorTest->entity != -1 && !actorTest->staticFlags.bIsHidden && actorTest->standOn != actorIdx) {
 				int32 xLeftTest, xRightTest, yLeftTest, yRightTest, zLeftTest, zRightTest;
 
 				xLeftTest  = actorTest->X + actorTest->boudingBox.X.bottomLeft;
