@@ -193,6 +193,7 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->staticFlags.bCanDrown) {
+				actor->brickSound = get_brick_sound_type(actor->X, actor->Y, actor->Z);
 				// TODO process_actor_drown(a)
 			}
 

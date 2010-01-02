@@ -180,7 +180,8 @@ typedef struct ActorStruct {
 	int32 previousAnimIdx;
 	int32 doorStatus;
 	int32 animPosition;
-	int32 animType; // field_78
+	int32 animType;   // field_78
+	int32 brickSound; // field_7A
 
 	ZVBox boudingBox;
 	ActorMoveStruct move;
