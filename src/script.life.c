@@ -652,7 +652,7 @@ int32 lSET_FLAG_GAME(int32 actorIdx, ActorStruct *actor) {
 
 /*0x25*/
 int32 lKILL_OBJ(int32 actorIdx, ActorStruct *actor) {
-	int32 otherActorIdx = *(scriptPtr++); // TODO
+	int32 otherActorIdx = *(scriptPtr++);
 
 	process_actor_carrier(otherActorIdx);
 	actor->dynamicFlags.bIsDead = 1;
@@ -748,7 +748,7 @@ int32 lSET_DOOR_RIGHT(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	actor->angle = 0x100;
-	actor->X = actor->lastX - distance;
+	actor->X = actor->lastX + distance;
 	actor->dynamicFlags.bIsSpriteMoving = 0;
 	actor->speed = 0;
 
@@ -761,7 +761,7 @@ int32 lSET_DOOR_UP(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	actor->angle = 0x200;
-	actor->Z = actor->lastX - distance;
+	actor->Z = actor->lastZ - distance;
 	actor->dynamicFlags.bIsSpriteMoving = 0;
 	actor->speed = 0;
 
@@ -774,7 +774,7 @@ int32 lSET_DOOR_DOWN(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	actor->angle = 0;
-	actor->Z = actor->lastX - distance;
+	actor->Z = actor->lastZ + distance;
 	actor->dynamicFlags.bIsSpriteMoving = 0;
 	actor->speed = 0;
 
@@ -789,20 +789,37 @@ int32 lGIVE_BONUS(int32 actorIdx, ActorStruct *actor) {
 
 /*0x34*/
 int32 lCHANGE_CUBE(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 sceneIdx = *(scriptPtr++);
+	needChangeScene = sceneIdx;
+	heroPositionType = POSITION_TYPE_SCENE;
+	return 0;
 }
 
 /*0x35*/
 int32 lOBJ_COL(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 collision = *(scriptPtr++);
+	if (collision == 0) {
+		actor->staticFlags.bComputeCollisionWithObj = 0;
+	} else {
+		actor->staticFlags.bComputeCollisionWithObj = 1;
+	}
+	return 0;
 }
 
 /*0x36*/
 int32 lBRICK_COL(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 collision = *(scriptPtr++);
+	
+	actor->staticFlags.bComputeCollisionWithBricks = 0;
+	actor->staticFlags.bComputeLowCollision = 0;
+	
+	if (collision == 1) {
+		actor->staticFlags.bComputeCollisionWithBricks = 1;
+	} else if (collision == 2) {
+		actor->staticFlags.bComputeCollisionWithBricks = 1;
+		actor->staticFlags.bComputeLowCollision = 1;
+	}
+	return 0;
 }
 
 /*0x37*/
@@ -819,8 +836,12 @@ int32 lOR_IF(int32 actorIdx, ActorStruct *actor) {
 
 /*0x38*/
 int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor) {
-	actor->staticFlags.bIsHidden = *(scriptPtr);
-	scriptPtr++;
+	int32 hide = *(scriptPtr++);
+	if (hide == 0) {
+		actor->staticFlags.bIsHidden = 0;
+	} else {
+		actor->staticFlags.bIsHidden = 1;
+	}
 	return 0;
 }
 
@@ -847,32 +868,50 @@ int32 lPOS_POINT(int32 actorIdx, ActorStruct *actor) {
 
 /*0x3B*/
 int32 lSET_MAGIC_LEVEL(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	magicLevelIdx = *(scriptPtr++);
+	inventoryMagicPoints = magicLevelIdx * 20;
+	return 0;
 }
 
 /*0x3C*/
 int32 lSUB_MAGIC_POINT(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	inventoryMagicPoints = *(scriptPtr++);
+	if (inventoryMagicPoints < 0) {
+		inventoryMagicPoints = 0;
+	}
+	return 0;
 }
 
 /*0x3D*/
 int32 lSET_LIFE_POINT_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int32 lifeValue = *(scriptPtr++);
+
+	sceneActors[otherActorIdx].life = lifeValue;
+	
+	return 0;
 }
 
 /*0x3E*/
 int32 lSUB_LIFE_POINT_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int32 lifeValue = *(scriptPtr++);
+
+	sceneActors[otherActorIdx].life -= lifeValue;
+
+	if (sceneActors[otherActorIdx].life < 0) {
+		sceneActors[otherActorIdx].life = 0;
+	}
+	
+	return 0;
 }
 
 /*0x3F*/
 int32 lHIT_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int32 strengthOfHit = *(scriptPtr++);
+	hit_actor(actorIdx, otherActorIdx, strengthOfHit, sceneActors[otherActorIdx].angle);
+	return 0;
 }
 
 /*0x40*/
@@ -893,13 +932,19 @@ int32 lPLAY_MIDI(int32 actorIdx, ActorStruct *actor) {
 
 /*0x42*/
 int32 lINC_CLOVER_BOX(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	if (inventoryNumLeafsBox < 10 ) {
+		inventoryNumLeafsBox++;
+	}
+	return 0;
 }
 
 /*0x43*/
 int32 lSET_USED_INVENTORY(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 item = *(scriptPtr++);
+	if (item < 24) {
+		inventoryFlags[item] = 1;
+	}
+	return 0;
 }
 
 /*0x44*/
@@ -944,14 +989,20 @@ int32 lCLR_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
 
 /*0x4A*/
 int32 lADD_FUEL(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	inventoryNumGas += *(scriptPtr++);
+	if ( inventoryNumGas > 100) {
+		inventoryNumGas = 100;
+	}
+	return 0;
 }
 
 /*0x4B*/
 int32 lSUB_FUEL(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	inventoryNumGas -= *(scriptPtr++);
+	if ( inventoryNumGas < 0) {
+		inventoryNumGas = 0;
+	}
+	return 0;
 }
 
 /*0x4C*/
@@ -975,7 +1026,9 @@ int32 lSAY_MESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 
 /*0x4F*/
 int32 lFULL_POINT(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	sceneHero->life = 50;
+	inventoryMagicPoints = magicLevelIdx * 20;
+	return 0;
 }
 
 /*0x50*/
@@ -1037,12 +1090,12 @@ int32 lEXPLODE_OBJ(int32 actorIdx, ActorStruct *actor) {
 
 /*0x59*/
 int32 lBUBBLE_ON(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	return -1; // TODO
 }
 
 /*0x5A*/
 int32 lBUBBLE_OFF(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	return -1; // TODO
 }
 
 /*0x5B*/
@@ -1093,18 +1146,28 @@ int32 lGAME_OVER(int32 actorIdx, ActorStruct *actor) {
 
 /*0x62*/
 int32 lTHE_END(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	inventoryNumLeafs = 0;
+	sceneHero->life = 50;
+	inventoryMagicPoints = 80;
+	currentSceneIdx = 113;
+	heroBehaviour = previousHeroBehaviour;
+	newHeroX = -1;
+	sceneHero->angle = previousHeroAngle;
+	// TODO: save_game();
+	return 1; // break;
 }
 
 /*0x63*/
 int32 lMIDI_OFF(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	stop_midi_music();
+	return 0;
 }
 
 /*0x64*/
 int32 lPLAY_CD_TRACK(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 track = *(scriptPtr++);
+	play_track_music(track);
+	return 0;
 }
 
 /*0x65*/
@@ -1118,7 +1181,7 @@ int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
 
 /*0x66*/
 int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	return -1; // TODO
 }
 
 /*0x67*/
