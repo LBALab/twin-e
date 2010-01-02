@@ -310,19 +310,19 @@ int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int
 	int32 numSeconds, currentTime;
 	actor->positionInMoveScript += 5;
 	
-	numSeconds  = *(scriptPtr);
-	currentTime = *((int32 *)scriptPtr + 1);
+	numSeconds  = *(scriptPtr++);
+	currentTime = *((int32 *)scriptPtr);
 
 	if (currentTime == 0) {
 		currentTime = lbaTime + numSeconds * 50;
-		*((int32 *)scriptPtr + 1) = currentTime;
+		*((int32 *)scriptPtr) = currentTime;
 	}
 
 	if (lbaTime < currentTime) {
 		*continueMove = 0;
 		actor->positionInMoveScript -= 6;
 	} else {
-		*((int32 *)scriptPtr + 1) = 0;
+		*((int32 *)scriptPtr) = 0;
 	}
 
 	return 0;
