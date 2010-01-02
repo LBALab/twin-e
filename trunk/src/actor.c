@@ -476,6 +476,18 @@ void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int3
 				init_anim(ANIM_BIG_HIT, 3, 255, actorIdxAttacked);
 			}
 		}
+
+		// TODO: init_stars(actor->X, actor->Y + 1000, actor->Z, 0);
+
+		if (!actorIdxAttacked) {
+			heroMoved = 1;
+		}
+
+		actor->life -= strengthOfHit;
+
+		if (actor->life < 0) {
+			actor->life = 0;
+		}
 	} else {
 		init_anim(ANIM_HIT, 3, 255, actorIdxAttacked);
 	}
