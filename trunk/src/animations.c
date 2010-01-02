@@ -637,12 +637,18 @@ void process_anim_actions(int16 actorIdx) {
 			break;
 		case kActionUnknown10: {
 			animPos = *(data++);
-			printf("Actor %d AnimAction[kActionUnknown10] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition && actor->brickSound != -16) {
+				int16 sampleIdx = (actor->brickSound + 126) & 0xFF;
+				play_sample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
+			}
 		}
 			break;
 		case kActionUnknown11: {
 			animPos = *(data++);
-			printf("Actor %d AnimAction[kActionUnknown11] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition && actor->brickSound != -16) {
+				int16 sampleIdx = (actor->brickSound + 126) & 0xFF;
+				play_sample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
+			}
 		}
 			break;
 		case kHeroHitting: {
