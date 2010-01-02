@@ -452,7 +452,7 @@ int32 stock_animation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animT
 			*(edi++) = *(esi++);
 
 			esi = (int32 *)(((int8 *) esi) + 30);
-		} while (--counter);
+		} while (counter--);
 
 		return var2;
 	}
@@ -736,7 +736,7 @@ int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
 		set_anim_at_keyframe(0, animTable[animIndex], bodyTable[actor->entity], &actor->animTimerData);
 	} else { // interpolation between animations
 		animBuffer2 += stock_animation(animBuffer2, bodyTable[actor->entity], &actor->animTimerData);
-		if (animBuffer1 + 4488 > animBuffer2)
+		if (animBuffer1 + 4488 < animBuffer2)
 			animBuffer2 = animBuffer1;
 	}
 
