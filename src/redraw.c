@@ -331,10 +331,7 @@ void process_drawing(int32 numDrawingList) {
 			// Drawing actors
 			if (flags < 0xC00) {
 				if (!flags) {
-					if (!actorIdx) { // RECHECK
-					}
-
-					if (actor->previousAnimIdx != -1)
+					//if (actor->previousAnimIdx != -1)
 						set_model_animation(actor->animPosition, animTable[actor->previousAnimIdx], bodyTable[actor->entity], &actor->animTimerData);
 
 					if (!render_iso_model(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ, 0, actor->angle, 0, bodyTable[actor->entity])) {
@@ -376,7 +373,34 @@ void process_drawing(int32 numDrawingList) {
 			}
 			// Drawing shadows
 			else if (flags == 0xC00) {
+				int32 spriteWidth, spriteHeight, tmpX, tmpY, tmpZ;
+				uint8 *spritePtr = spriteTable[actor->entity];
+				DrawListStruct shadow =	drawList[drawListPos];
 
+				// get actor position on screen
+				project_position_on_screen(shadow.X - cameraX, shadow.Y - cameraY, shadow.Z - cameraZ);
+
+				get_sprite_size(shadow.field_A, &spriteWidth, &spriteHeight, spriteShadowPtr);
+
+				// calculate sprite position on screen
+				renderLeft   = projPosX - (spriteWidth  - actorIdx) / 2;
+				renderTop    = projPosY - (spriteHeight - actorIdx) / 2;
+				renderRight  = projPosX + (spriteWidth  - actorIdx) / 2;
+				renderBottom = projPosY + (spriteHeight - actorIdx) / 2;
+
+				set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+					draw_sprite(shadow.field_A, renderLeft, renderTop, spriteShadowPtr);
+				}
+				
+				tmpX = (shadow.X + 0x100) >> 9;
+				tmpY = shadow.Y >> 8;
+				tmpZ = (shadow.Z + 0x100) >> 9;
+
+				draw_over_model_actor(tmpX, tmpY, tmpZ);
+
+				add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
 			}
 			// Drawing unknown
 			else if (flags < 0x1000) {

@@ -104,6 +104,8 @@ void init_resources() {
 	set_font_color(14);
 	set_dialogue_cross_color(136, 143, 2);
 
+	hqr_getalloc_entry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
+
 	// load sprite actors bounding box data
 	size = hqr_getalloc_entry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
 

@@ -78,7 +78,7 @@ const int8* SETUP_FILENAME = "setup.lst";
 	Fill this with all needed configurations at \a lba.cfg file.
 	This engine version allows new type of configurations.
 	Check new config lines at \a lba.cfg file after the first game execution */
-int8 CFGList[][18] = {
+int8 CFGList[][22] = {
 	"Language:",
 	"LanguageCD:",
 	"FlagDisplayText:",
@@ -112,7 +112,11 @@ int8 CFGList[][18] = {
 	"CrossFade:",
 	"Fps:",
 	"Debug:",
-	"UseAutoSaving:"
+	"UseAutoSaving:", // 18
+	"CombatAuto:",
+	"Shadow:",
+	"SceZoom:",
+	"FillDetails:"
 };
 
 
@@ -235,6 +239,18 @@ void init_configurations() {
 				break;
 			case 33:
 				sscanf(buffer, "UseAutoSaving: %d", &cfgfile.UseAutoSaving);
+				break;
+			case 34:
+				sscanf(buffer, "CombatAuto: %d", &cfgfile.AutoAgressive);
+				break;
+			case 35:
+				sscanf(buffer, "Shadow: %d", &cfgfile.ShadowMode);
+				break;
+			case 36:
+				sscanf(buffer, "SceZoom: %d", &cfgfile.SceZoom);
+				break;
+			case 37:
+				sscanf(buffer, "FillDetails: %d", &cfgfile.FillDetails);
 				break;
 			}
 		}
