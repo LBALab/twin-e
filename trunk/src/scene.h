@@ -49,6 +49,7 @@ int32 needChangeScene;
 int32 currentSceneIdx;
 int32 previousSceneIdx;
 
+uint8 *spriteShadowPtr;
 uint8 *spriteBoundingBoxPtr;
 
 int32 currentGameOverScene;

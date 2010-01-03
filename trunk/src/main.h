@@ -104,6 +104,12 @@ typedef struct ConfigFile {
 	int32 UseAutoSaving;
 	/** Shadow mode type */
 	int32 ShadowMode;
+	/** AutoAgressive mode type */
+	int32 AutoAgressive;
+	/** SceZoom mode type */
+	int32 SceZoom;
+	/** FillDetails mode type */
+	int32 FillDetails;
 	/** Flag to quit the game */
 	int32 Quit;
 } ConfigFile;

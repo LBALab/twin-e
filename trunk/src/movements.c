@@ -70,7 +70,7 @@ void get_shadow_position(int32 X, int32 Y, int32 Z) {
 
 	processActorX = X;
 	processActorY = (tempY + 1) << 8;
-	processActorZ = Y;
+	processActorZ = Z;
 
 	if (*ptr) {
 		uint8* tempPtr;
