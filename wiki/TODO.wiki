@@ -4,13 +4,34 @@
 
 This is the place to list every TODO we need to make for this project.
 
+= Main =
 
-= Details =
+  # Text: finish code to show intro screens in fullscreen;
+  # Menu: complete other menu options including volume settings;
 
-  * Refactoring code:
-    # Do endian for reading content from pointers for proper portability.
-    # Comment and reorganize the code for animation and renderer files
-    # Improve Keyboard routines. Its now based in original but will be a mess to port it. Possible way to resolve will still made like original but make a bridge between SDL I/O and LBA I/O.
-  * Sound: animations don't have sound yet. Do Animation Actions.
-  * Menu: complete other menu options including volume settings
-  * Text: finish code to show intro screens in fullscreen.
+
+= In Game =
+
+  * Finish scripting while doing the following tasks:
+  
+  # Extra bonus: Implement extra bonus (coins, keys, magic, leafs);
+  # Overlay: process overlay sprites in screen.
+  # Hit stars: draw stars when actors are hit. 
+  # Animation Actions: Finish animation to process shoot actions and magic ball throw;
+  # Drown: Make Hero to drown;
+  # Found Objects: allow hero to grab inventory items;
+  # Inventory: process and draw inventory menu;
+  # Dialogues: make dialogues interaction in game;
+  # Voice: make dialogues voices;
+  # Game over: process game over model;
+  # Renderer: implement missing rendering types;
+  # Holomap: create holomap routines;
+
+
+= Refactoring =
+
+  # Do endian for reading content from pointers for proper portability;
+  # Comment and reorganize the code for renderer files;
+  # Do a proper resource system, changing each request resource when need it;
+  # Do a proper sound system with cached resources. Also save the sample handle to proper stop/pause/resume it. Take the advantage of Channels. Use panning and distance to all samples in scene;
+  # Improve Keyboard routines. Its now based in original but can be tricky to port it;
