@@ -4,10 +4,11 @@
 
 This is the place to list every TODO we need to make for this project.
 
-= Main =
+= Menu =
 
-  # Text: finish code to show intro screens in fullscreen;
-  # Menu: complete other menu options including volume settings;
+  # Complete other menu options including volume settings;
+  # Do Save/Load routines;
+  # Show credits in the end of game or after some seconds in Main Menu;
 
 
 = In Game =
@@ -21,10 +22,11 @@ This is the place to list every TODO we need to make for this project.
   # Drown: Make Hero to drown;
   # Found Objects: allow hero to grab inventory items;
   # Inventory: process and draw inventory menu;
+  # Images: finish code to show intro screens in fullscreen with dialogues;
   # Dialogues: make dialogues interaction in game;
   # Voice: make dialogues voices;
   # Game over: process game over model;
-  # Renderer: implement missing rendering types;
+  # Renderer: implement missing rendering types and fix rendering issues;
   # Holomap: create holomap routines;
 
 
