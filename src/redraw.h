@@ -30,6 +30,8 @@
 
 #include "sys.h"
 
+#define OVERLAY_MAX_ENTRIES		10
+
 /** Auxiliar object render left position on screen */
 int32 renderLeft;
 /** Auxiliar object render right position on screen */
@@ -43,6 +45,32 @@ int32 renderBottom;
 
 /** Request background redraw */
 int16 reqBgRedraw;
+
+enum OverlayType {
+	koSprite = 0,
+	koNumber = 1,
+	koNumberRange = 2,
+	ko3Dmodel = 3,
+	koText = 4
+};
+
+enum OverlayPosType {
+	koNormal = 0,
+	koFollowActor = 1
+};
+
+/** Overlay list structure */
+typedef struct OverlayListStruct {
+	int16 type;
+	int16 info0; // sprite/3d model entry | number | number range
+	int16 X;
+	int16 Y;
+	int16 info1; // followed actor | total coins
+	int16 posType;
+	int16 lifeTime;
+} OverlayListStruct;
+
+OverlayListStruct overlayList[OVERLAY_MAX_ENTRIES];
 
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */

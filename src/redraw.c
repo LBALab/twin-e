@@ -45,7 +45,6 @@
 #include "debug.scene.h"
 #endif
 
-
 typedef struct RedrawStruct {
 	uint16 left;
 	uint16 top;
@@ -75,6 +74,42 @@ DrawListStruct drawList[150];
 int32 currNumOfRedrawBox; // fullRedrawVar8
 /** Number of redraw regions in the screen */
 int32 numOfRedrawBox;
+
+
+/** */
+void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime) {
+	int32 i;
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->info0 == -1) {
+			overlay->type = type;
+			overlay->info0 = info0;
+			overlay->X = X;
+			overlay->Y = Y;
+			overlay->info1 = info1;
+			overlay->posType = posType;
+			overlay->lifeTime = lbaTime + lifeTime * 50;
+			return;
+		}
+	}
+}
+
+/** */
+void update_overlay_type_position(int16 X1, int16 Y1, int16 X2, int16 Y2) {
+	int32 i;
+	int16 newX, newY;
+
+	newX = X2 - X1;
+	newY = Y2 - Y1;
+
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->type == koFollowActor) {
+			overlay->X = newX;
+			overlay->Y = newY;
+		}
+	}
+}
 
 /** Add a certain region to the current redraw list array
 	@param left start width to redraw the region
