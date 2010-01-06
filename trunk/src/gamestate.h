@@ -43,7 +43,7 @@
 #define MAGIC_STRENGTH_FIRE_BALL	8
 
 /** LBA engine game flags to save quest states */
-uint8 gameFlags[NUM_INVENTORY_ITEMS + 1];
+uint8 gameFlags[256];
 
 /** LBA engine chapter */
 int16 gameChapter;
