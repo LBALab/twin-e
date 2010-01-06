@@ -97,14 +97,6 @@
 /** Master volume button key */
 #define MASTERVOLUME			5
 
-/** Behaviour menu sprite values */
-#define SPRITE_COIN				3
-#define SPRITE_LIFEPOINTS		4
-#define SPRITE_MAGICPOINTS		5
-#define SPRITE_KEY				6
-#define SPRITE_CLOVERLEAF		7
-#define SPRITE_CLOVERLEAFBOX	41
-
 /** Main Menu Settings
 
 	Used to create the game main menu. */
@@ -919,7 +911,7 @@ void draw_info_menu(int16 left, int16 top)
 
 	newBoxLeft2 = left + 9;
 
-	draw_sprite(0, newBoxLeft2, top + 13, spriteTable[SPRITE_LIFEPOINTS]);
+	draw_sprite(0, newBoxLeft2, top + 13, spriteTable[SPRITEHQR_LIFEPOINTS]);
 
 	boxRight = left + 325;
 	newBoxLeft = left + 25;
@@ -933,7 +925,7 @@ void draw_info_menu(int16 left, int16 top)
 	draw_box(left + 25, top + 10, left + 325, top + 10 + 15);
 
 	if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED] && gameFlags[GAMEFLAG_TUNIC]) {
-		draw_sprite(0, newBoxLeft2, top + 36, spriteTable[SPRITE_MAGICPOINTS]);
+		draw_sprite(0, newBoxLeft2, top + 36, spriteTable[SPRITEHQR_MAGICPOINTS]);
 		if(magicLevelIdx > 0) {
 			draw_splitted_box(newBoxLeft, top + 35, cross_dot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
 		}
@@ -943,25 +935,25 @@ void draw_info_menu(int16 left, int16 top)
 	boxLeft = left + 340;
 
 	/** draw coin sprite */
-	draw_sprite(0, boxLeft, top + 15, spriteTable[SPRITE_COIN]);
+	draw_sprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
 	set_font_color(155);
-	display_dialogue_text(left + 370, top + 5, ITOA(inventoryNumCoins));  // amount of coins
+	display_dialogue_text(left + 370, top + 5, ITOA(inventoryNumKashes));  // amount of coins
 
 	/** draw key sprite */
-	draw_sprite(0, boxLeft, top + 55, spriteTable[SPRITE_KEY]);
+	draw_sprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
 	set_font_color(155);
 	display_dialogue_text(left + 370, top + 40, ITOA(inventoryNumKeys));
 
 	// Clover leaf boxes
 	for (i = 0; i < inventoryNumLeafsBox; i++)  // boites à trefles
 	{
-		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITE_CLOVERLEAFBOX]);
+		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITEHQR_CLOVERLEAFBOX]);
 	}
 
 	// Clover leafs
 	for (i = 0; i < inventoryNumLeafs; i++)
 	{
-		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITE_CLOVERLEAF]);
+		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITEHQR_CLOVERLEAF]);
 	}
 
 	copy_block_phys(left, top, left + 450, top + 135);

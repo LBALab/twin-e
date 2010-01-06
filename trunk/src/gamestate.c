@@ -110,7 +110,7 @@ void init_hero_vars() { // reinitAll3
 
 	inventoryNumLeafsBox = 2;
 	inventoryNumLeafs    = 2;
-	inventoryNumCoins    = 0;
+	inventoryNumKashes   = 0;
 	inventoryNumKeys     = 0;
 	inventoryMagicPoints = 0;
 
@@ -143,7 +143,7 @@ void init_engine_vars(int32 save) { // reinitAll
 	inventoryNumLeafs = 0;
 	inventoryNumLeafsBox = 2;
 	inventoryMagicPoints = 0;
-	inventoryNumCoins = 0;
+	inventoryNumKashes = 0;
 	inventoryNumKeys = 0;
 	inventoryNumGas = 0;
 

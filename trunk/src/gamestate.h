@@ -63,8 +63,8 @@ uint8 holomapFlags[150]; // GV14
 
 /** Store the number of inventory keys */
 int16 inventoryNumKeys;
-/** Store the number of inventory coins */
-int16 inventoryNumCoins;
+/** Store the number of inventory kashes */
+int16 inventoryNumKashes;
 /** Store the number of inventory clover leafs boxes */
 int16 inventoryNumLeafsBox;
 /** Store the number of inventory clover leafs */

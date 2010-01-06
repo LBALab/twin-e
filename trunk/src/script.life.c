@@ -42,6 +42,8 @@
 #include "grid.h"
 #include "music.h"
 #include "movies.h"
+#include "resources.h"
+#include "collision.h"
 
 uint8 *scriptPtr; // local script pointer
 uint8 *opcodePtr; // local opcode script pointer
@@ -258,7 +260,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 		break;
 	case kcNUM_GOLD_PIECES:
 		conditionValueSize = 2;
-		currentScriptValue = inventoryNumCoins;
+		currentScriptValue = inventoryNumKashes;
 		break;
 	case kcBEHAVIOUR:
 		currentScriptValue = heroBehaviour;
@@ -681,15 +683,44 @@ int32 lUSE_ONE_LITTLE_KEY(int32 actorIdx, ActorStruct *actor) {
 		inventoryNumKeys = 0;
 	}
 
-	// TODO: add overlay sprite for keys
+	add_overlay(koSprite, SPRITEHQR_KEY, 0, 0, 0, koFollowActor, 1);
 	
 	return 0;
 }
 
 /*0x28*/
 int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int16 kashes, i, hideRange;
+	int16 oldNumKashes = inventoryNumKashes;
+
+	hideRange = 0;
+
+	kashes = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+
+	oldNumKashes -= kashes;
+	if (inventoryNumKashes < 0) {
+		inventoryNumKashes = 0;
+	}
+
+	add_overlay(koSprite, SPRITEHQR_KASHES, 10, 30, 0, koNormal, 3);
+
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->info0 == -1 && overlay->type == koNumberRange) {
+			overlay->info0 = get_average_value(overlay->info1, overlay->info0, 100, overlay->lifeTime - 50);
+			overlay->info1 = inventoryNumKashes;
+			overlay->lifeTime = lbaTime + 150;
+			hideRange = 1;
+			break;
+		}
+	}
+
+	if (!hideRange) {
+		add_overlay(koNumberRange, oldNumKashes, 60, 40, inventoryNumKashes, koNormal, 3);
+	}
+
+	return 0;
 }
 
 /*0x29*/
@@ -1028,8 +1059,17 @@ int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 
 /*04E*/
 int32 lSAY_MESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 3; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int16 textEntry = *((int16 *)scriptPtr++);;
+	scriptPtr += 2;
+
+	add_overlay(koText, textEntry, 0, 0, otherActorIdx, koFollowActor, 2);
+
+	freeze_time();
+	// TODO: set vox file
+	unfreeze_time();
+
+	return 0;
 }
 
 /*0x4F*/
