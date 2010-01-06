@@ -40,6 +40,8 @@
 #include "animations.h"
 #include "keyboard.h"
 #include "movements.h"
+#include "dialogues.h"
+#include "collision.h"
 
 #ifdef GAMEMOD
 #include "debug.scene.h"
@@ -75,41 +77,6 @@ int32 currNumOfRedrawBox; // fullRedrawVar8
 /** Number of redraw regions in the screen */
 int32 numOfRedrawBox;
 
-
-/** */
-void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime) {
-	int32 i;
-	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
-		OverlayListStruct *overlay = &overlayList[i];
-		if (overlay->info0 == -1) {
-			overlay->type = type;
-			overlay->info0 = info0;
-			overlay->X = X;
-			overlay->Y = Y;
-			overlay->info1 = info1;
-			overlay->posType = posType;
-			overlay->lifeTime = lbaTime + lifeTime * 50;
-			return;
-		}
-	}
-}
-
-/** */
-void update_overlay_type_position(int16 X1, int16 Y1, int16 X2, int16 Y2) {
-	int32 i;
-	int16 newX, newY;
-
-	newX = X2 - X1;
-	newY = Y2 - Y1;
-
-	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
-		OverlayListStruct *overlay = &overlayList[i];
-		if (overlay->type == koFollowActor) {
-			overlay->X = newX;
-			overlay->Y = newY;
-		}
-	}
-}
 
 /** Add a certain region to the current redraw list array
 	@param left start width to redraw the region
@@ -501,6 +468,197 @@ void process_drawing(int32 numDrawingList) {
 	}
 }
 
+/** */
+void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime) {
+	int32 i;
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->info0 == -1) {
+			overlay->type = type;
+			overlay->info0 = info0;
+			overlay->X = X;
+			overlay->Y = Y;
+			overlay->info1 = info1;
+			overlay->posType = posType;
+			overlay->lifeTime = lbaTime + lifeTime * 50;
+			return;
+		}
+	}
+}
+
+/** */
+void update_overlay_type_position(int16 X1, int16 Y1, int16 X2, int16 Y2) {
+	int32 i;
+	int16 newX, newY;
+
+	newX = X2 - X1;
+	newY = Y2 - Y1;
+
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->type == koFollowActor) {
+			overlay->X = newX;
+			overlay->Y = newY;
+		}
+	}
+}
+
+/** */
+void process_overlay() {
+	int32 i;
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->info0 != -1) {
+			// process position overlay
+			switch(overlay->posType) {
+			case koNormal:
+				if (lbaTime >= overlay->lifeTime) {
+					overlay->info0 = -1;
+					continue;
+				}
+				break;
+			case koFollowActor: {
+				ActorStruct *actor = &sceneActors[overlay->info1];
+
+				project_position_on_screen(actor->X - cameraX, actor->boudingBox.Y.topRight - cameraY, actor->Z - cameraZ);
+				
+				overlay->X = projPosX;
+				overlay->Y = projPosY;
+
+				if (lbaTime >= overlay->lifeTime) {
+					overlay->info0 = -1;
+					continue;
+				}
+			}
+				break;
+			}
+
+			// process overlay type
+			switch(overlay->type) {
+			case koSprite: {
+				int16 offsetX, offsetY;
+				int32 spriteWidth, spriteHeight;
+				uint8 *spritePtr = spriteTable[overlay->info0];
+
+				get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
+
+				offsetX = *((int16 *)spriteBoundingBoxPtr + (overlay->info0 * 16));
+				offsetY = *((int16 *)spriteBoundingBoxPtr + (overlay->info0 * 16) + 2);
+
+				renderLeft   = offsetX + overlay->X;
+				renderTop    = offsetY + overlay->Y;
+				renderRight  = renderLeft + spriteWidth;
+				renderBottom = renderTop + spriteHeight;
+
+				draw_sprite(0, renderLeft, renderTop, spritePtr);
+
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
+				}
+				
+			}
+				break;
+			case koNumber: {
+				int32 textLength, textHeight;
+				int8 text[10];
+				sprintf(text, "%d", overlay->info0);
+
+				textLength = dialogue_text_size(text);
+				textHeight = 48;
+
+				renderLeft   = overlay->X - (textLength/2);
+				renderTop    = overlay->Y - 24;
+				renderRight  = overlay->X + (textLength/2);
+				renderBottom = overlay->Y + textHeight;
+
+				set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+				set_font_color(overlay->info1);
+
+				display_dialogue_text(renderLeft, renderTop, text);
+
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
+				}
+			}
+				break;
+			case koNumberRange: {
+				int32 textLength, textHeight, range;
+				int8 text[10];
+
+				range = get_average_value(overlay->info1, overlay->info0, 100, overlay->lifeTime - lbaTime - 50);
+
+				sprintf(text, "%d", range);
+
+				textLength = dialogue_text_size(text);
+				textHeight = 48;
+
+				renderLeft   = overlay->X - (textLength/2);
+				renderTop    = overlay->Y - 24;
+				renderRight  = overlay->X + (textLength/2);
+				renderBottom = overlay->Y + textHeight;
+
+				set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+				set_font_color(overlay->info1);
+
+				display_dialogue_text(renderLeft, renderTop, text);
+
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
+				}
+			}
+				break;
+			case koInventoryItem: {
+				// TODO: inventory item overlay
+			}
+				break;
+			case koText: {
+				int32 textLength, textHeight;
+				int8 text[256];
+				
+				get_menu_text(overlay->info0, text);
+
+				textLength = dialogue_text_size(text);
+				textHeight = 48;
+
+				renderLeft   = overlay->X - (textLength/2);
+				renderTop    = overlay->Y - 24;
+				renderRight  = overlay->X + (textLength/2);
+				renderBottom = overlay->Y + textHeight;
+
+				if(renderLeft < 0) {
+					renderLeft = 0;
+				}
+
+				if(renderTop < 0) {
+					renderTop = 0;
+				}
+
+				if(renderRight > SCREEN_TEXTLIMIT_RIGHT) {
+					renderRight = SCREEN_TEXTLIMIT_RIGHT;
+				}
+
+				if(renderBottom > SCREEN_TEXTLIMIT_BOTTOM) {
+					renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
+				}
+
+				set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+				set_font_color(sceneActors[overlay->info1].talkColor);
+
+				display_dialogue_text(renderLeft, renderTop, text);
+
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
+				}
+			}
+				break;
+			}
+		}
+	}
+}
+
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
 void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
@@ -519,7 +677,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 			fade_out(paletteRGBA);
 		clear_screen();
 		redraw_grid();
-		// TODO: Update overlay sprites positions
+		update_overlay_type_position(tmpProjPosX, tmpProjPosY, projPosXScreen, projPosYScreen);
 		copy_screen(frontVideoBuffer, workVideoBuffer);
 		if (needChangeScene != -1 && needChangeScene != -2) {
 			fade_in(paletteRGBA);
@@ -532,10 +690,14 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 	// first loop
 	numDrawingList = process_actors_drawlist(bgRedraw);
 
+	// TODO: process_extras();
+
 	sort_drawing_list(drawList, numDrawingList);
 
 	currNumOfRedrawBox = 0;
 	process_drawing(numDrawingList);
+
+	process_overlay();
 
 #ifdef GAMEMOD
 	display_zones(skipIntro);

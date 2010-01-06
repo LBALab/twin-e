@@ -50,7 +50,7 @@ enum OverlayType {
 	koSprite = 0,
 	koNumber = 1,
 	koNumberRange = 2,
-	ko3Dmodel = 3,
+	koInventoryItem = 3,
 	koText = 4
 };
 
