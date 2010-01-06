@@ -56,7 +56,7 @@ int16 magicBallIdx;
 int16 magicLevelIdx;
 
 /** Inventory used flags */
-uint8 inventoryFlags[28];
+uint8 inventoryFlags[NUM_INVENTORY_ITEMS];
 
 /** Inventory used flags */
 uint8 holomapFlags[150]; // GV14
