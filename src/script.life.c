@@ -1014,8 +1014,16 @@ int32 lSET_GRM(int32 actorIdx, ActorStruct *actor) {
 
 /*0x4D*/
 int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int16 textEntry = *((int16 *)scriptPtr++);;
+	scriptPtr += 2;
+
+	add_overlay(koText, textEntry, 0, 0, actorIdx, koFollowActor, 2);
+
+	freeze_time();
+	// TODO: set vox file
+	unfreeze_time();
+
+	return 0;
 }
 
 /*04E*/

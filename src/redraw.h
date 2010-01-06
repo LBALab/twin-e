@@ -72,6 +72,8 @@ typedef struct OverlayListStruct {
 
 OverlayListStruct overlayList[OVERLAY_MAX_ENTRIES];
 
+void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime);
+
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
 void redraw_engine_actions(int32 bgRedraw);
