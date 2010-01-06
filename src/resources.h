@@ -72,6 +72,14 @@
 #define FILE3DHQR_HERODISCRETE 3
 #define FILE3DHQR_HEROPROTOPACK 4
 
+/** Behaviour menu sprite values */
+#define SPRITEHQR_KASHES			3
+#define SPRITEHQR_LIFEPOINTS		4
+#define SPRITEHQR_MAGICPOINTS		5
+#define SPRITEHQR_KEY				6
+#define SPRITEHQR_CLOVERLEAF		7
+#define SPRITEHQR_CLOVERLEAFBOX		41
+
 extern int8 * HQR_RESS_FILE;
 extern int8 * HQR_TEXT_FILE;
 extern int8 * HQR_FLASAMP_FILE;
