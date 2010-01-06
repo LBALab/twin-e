@@ -60,17 +60,20 @@ void init_scene_vars() {
 	int32 i;
 
 	// TODO: reset extra bonus list
-	// TODO: reset overlay objects list
+	
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		overlayList[i].info0 = -1;
+	}
 
-	for (i = 0; i < 80; i++) {
+	for (i = 0; i < NUM_SCENES_FLAGS; i++) {
 		sceneFlags[i] = 0;
 	}
 
-	for (i = 0; i < 255; i++) {
+	for (i = 0; i < NUM_GAME_FLAGS; i++) {
 		gameFlags[i] = 0;
 	}
 
-	for (i = 0; i < 28; i++) {
+	for (i = 0; i < NUM_INVENTORY_ITEMS; i++) {
 		inventoryFlags[i] = 0;
 	}
 

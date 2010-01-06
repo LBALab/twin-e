@@ -30,6 +30,9 @@
 
 #include "sys.h"
 
+#define NUM_GAME_FLAGS			255
+#define NUM_INVENTORY_ITEMS		28
+
 #define GAMEFLAG_TUNIC					4
 #define GAMEFLAG_INVENTORY_DISABLED		70
 
@@ -40,7 +43,7 @@
 #define MAGIC_STRENGTH_FIRE_BALL	8
 
 /** LBA engine game flags to save quest states */
-uint8 gameFlags[256];
+uint8 gameFlags[NUM_INVENTORY_ITEMS + 1];
 
 /** LBA engine chapter */
 int16 gameChapter;

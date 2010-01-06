@@ -32,6 +32,8 @@
 #include "sys.h"
 #include "actor.h"
 
+#define NUM_SCENES_FLAGS	80
+
 #define NUM_SCENES_ENTRIES	120
 #define NUM_SCENES	NUM_SCENES_ENTRIES-1
 

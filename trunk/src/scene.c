@@ -300,11 +300,13 @@ void reset_scene() {
 
 	// TODO: reset extra bonus list
 
-	for (i = 0; i < 80; i++) {
+	for (i = 0; i < NUM_SCENES_FLAGS; i++) {
 		sceneFlags[i] = 0;
 	}
 
-	// TODO: reset overlay objects list
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		overlayList[i].info0 = -1;
+	}
 
 	currentPositionInBodyPtrTab = 0;
 	// useAlternatePalette = 0;
