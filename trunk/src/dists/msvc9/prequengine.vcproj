@@ -226,6 +226,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\extra.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\extra.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\filereader.c"
 			>
 		</File>

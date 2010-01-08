@@ -34,6 +34,7 @@
 #include "main.h"
 #include "animations.h"
 #include "renderer.h"
+#include "extra.h"
 
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
@@ -400,7 +401,7 @@ int32 check_collision_with_actors(int32 actorIdx) {
 	@param Y Hero Y coordinate 
 	@param Z Hero Z coordinate
 	@param damageMask Cause damage mask */
-void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask) {
+void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask) {
 	int32 brickShape;
 
 	brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
@@ -439,7 +440,7 @@ void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask)
 	@param Y Actor Y coordinate 
 	@param Z Actor Z coordinate
 	@param damageMask Cause damage mask */
-void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask) {
+void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask) {
 	int32 brickShape;
 
 	brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
@@ -500,4 +501,52 @@ void stop_falling() { // ReceptionObj()
 	}
 
 	processActorPtr->dynamicFlags.bIsFalling = 0;
+}
+
+/** Check extra collision with actors
+	@param extra to process
+	@param actorIdx actor to check collision */
+int32 check_extra_collision(ExtraListStruct* extra, int32 actorIdx) {
+	int32 a;
+	int32 xLeft, xRight, yLeft, yRight, zLeft, zRight;
+	int16 * spriteBounding;
+	ActorStruct *actorTest;
+
+	spriteBounding = (int16*)(spriteBoundingBoxPtr + extra->info0 * 16 + 4);
+
+	xLeft  = *(spriteBounding++) + extra->X;
+	xRight = *(spriteBounding++) + extra->X;
+
+	yLeft  = *(spriteBounding++) + extra->Z;
+	yRight = *(spriteBounding++) + extra->Z;
+
+	zLeft  = *(spriteBounding++) + extra->Y;
+	zRight = *(spriteBounding++) + extra->Y;
+
+	for (a = 0; a < sceneNumActors; a++) {
+		actorTest = &sceneActors[a];
+		
+		if (a != actorIdx && actorTest->entity != -1) {
+			int32 xLeftTest, xRightTest, yLeftTest, yRightTest, zLeftTest, zRightTest;
+
+			xLeftTest  = actorTest->X + actorTest->boudingBox.X.bottomLeft;
+			xRightTest = actorTest->X + actorTest->boudingBox.X.topRight;
+
+			yLeftTest  = actorTest->Y + actorTest->boudingBox.Y.bottomLeft;
+			yRightTest = actorTest->Y + actorTest->boudingBox.Y.topRight;
+
+			zLeftTest  = actorTest->Z + actorTest->boudingBox.Z.bottomLeft;
+			zRightTest = actorTest->Z + actorTest->boudingBox.Z.topRight;
+
+			if (xLeft < xRightTest && xRight > xLeftTest && yLeft < yRightTest && yRight > yLeftTest && zLeft < zRightTest && zRight > zLeftTest) {
+				if (extra->strengthOfHit != 0) {
+					hit_actor(actorIdx, a, extra->strengthOfHit, -1);
+				}
+
+				return a;
+			}
+		}
+	}
+
+	return -1;
 }

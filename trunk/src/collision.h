@@ -29,6 +29,7 @@
 #define COLLISION_H
 
 #include "sys.h"
+#include "extra.h"
 
 /** Actor collition X coordinate */
 int32 collisionX; // getPosVar1
@@ -67,16 +68,21 @@ int32 check_collision_with_actors(int32 actorIdx);
 	@param Y Hero Y coordinate 
 	@param Z Hero Z coordinate
 	@param damageMask Cause damage mask */
-void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask);
+void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask);
 
 /** Check other actor collision with bricks
 	@param X Actor X coordinate 
 	@param Y Actor Y coordinate 
 	@param Z Actor Z coordinate
 	@param damageMask Cause damage mask */
-void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int damageMask);
+void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask);
 
 /** Make actor to stop falling */
 void stop_falling();
+
+/** Check extra collision with actors
+	@param extra to process
+	@param actorIdx actor to check collision */
+int32 check_extra_collision(ExtraListStruct* extra, int32 actorIdx);
 
 #endif
