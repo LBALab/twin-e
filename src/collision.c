@@ -506,7 +506,7 @@ void stop_falling() { // ReceptionObj()
 /** Check extra collision with actors
 	@param extra to process
 	@param actorIdx actor to check collision */
-int32 check_extra_collision(ExtraListStruct* extra, int32 actorIdx) {
+int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx) {
 	int32 a;
 	int32 xLeft, xRight, yLeft, yRight, zLeft, zRight;
 	int16 * spriteBounding;
@@ -549,4 +549,31 @@ int32 check_extra_collision(ExtraListStruct* extra, int32 actorIdx) {
 	}
 
 	return -1;
+}
+
+/** Check extra collision with bricks */
+int32 check_extra_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ) {
+	int32 averageX, averageY, averageZ;
+
+	if (get_brick_shape(oldX, oldY, oldZ)) {
+		return 1;
+	}
+
+	averageX = Abs(X + oldX)/2;
+	averageY = Abs(Y + oldY)/2;
+	averageZ = Abs(Z + oldZ)/2;
+
+	if (get_brick_shape(averageX, averageY, averageZ)) {
+		return 1;
+	}
+
+	if (get_brick_shape(Abs(oldX + averageX)/2, Abs(oldY + averageY)/2, Abs(oldZ + averageZ)/2)) {
+		return 1;
+	}
+
+	if (get_brick_shape(Abs(X + averageX)/2, Abs(Y + averageY)/2, Abs(Z + averageZ)/2)) {
+		return 1;
+	}
+
+	return 0;
 }

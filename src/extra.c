@@ -33,6 +33,9 @@
 #include "scene.h"
 #include "movements.h"
 #include "renderer.h"
+#include "grid.h"
+#include "sound.h"
+#include "redraw.h"
 
 int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit) {
 	int32 i;
@@ -57,6 +60,53 @@ int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 ta
 		}
 	}
 	return -1;
+}
+
+void throw_extra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int32 var4) {
+	extra->type |= 2;
+	// TODO do the rest
+}
+
+void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) {
+	int32 i;
+	int16 flag = 0x8000 + type;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == -1) {
+			extra->info0 = flag;
+			extra->info1 = 0;
+
+			if (!flag) {
+				extra->type = 9;
+
+				extra->X = X;
+				extra->Y = Y;
+				extra->Z = Z;
+
+				// same as InitFly
+				throw_extra(extra, Rnd(0x100) + 0x80, Rnd(0x400), 50, 20);
+
+				extra->strengthOfHit = 0;
+				extra->lifeTime = lbaTime;
+				extra->actorIdx = 100;
+
+				return;
+			} else if (flag == 1) {
+				extra->type = 1;
+
+				extra->X = X;
+				extra->Y = Y;
+				extra->Z = Z;
+
+				extra->strengthOfHit = 0;
+				extra->lifeTime = lbaTime;
+				extra->actorIdx = 5;
+
+				return;
+			}
+		}
+	}
 }
 
 /** Process extras */
@@ -182,7 +232,7 @@ void process_extra() {
 
 					set_actor_angle(0, extra->destZ, 50, &extra->trackActorMove);
 
-					if (actorIdxAttacked == check_extra_collision(extra, actorIdx)) {
+					if (actorIdxAttacked == check_extra_collision_with_actors(extra, actorIdx)) {
 						if (i == magicBallIdx) {
 							magicBallIdx = -1;
 						}
@@ -191,15 +241,60 @@ void process_extra() {
 						continue;
 					}
 				}
-				// process magic ball extra aiming for key
-				if (extra->type & 0x200) {
-					// TODO: reverse this part of the code
+			}
+			// process magic ball extra aiming for key
+			if (extra->type & 0x200) {
+				// TODO: reverse this part of the code
+			}
+			// process extra collision with actors
+			if (extra->type & 0x4) {
+				if (check_extra_collision_with_actors(extra, extra->actorIdx) != -1) {
+					// if extra is Magic Ball
+					if (i == magicBallIdx) {
+						int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
+
+						if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
+							spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
+						}
+						if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
+							spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
+						}
+
+						magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+					}
+					
+					extra->info0 = -1;
+					continue;
 				}
-				// process extra collision with actors
-				if (extra->type & 0x4) {
-					if (check_extra_collision(extra, actorIdx) != -1) {
-						// if extra is Magic Ball
-						if (i == magicBallIdx) {
+			}
+			// process extra collision with scene ground
+			if (extra->type & 0x8) {
+				int32 process = 0;
+
+				if (check_extra_collision_with_bricks(currentExtraX, currentExtraY, currentExtraZ, extra->X, extra->Y, extra->Z)) {
+					// if not touch the ground
+					if (!(extra->type & 0x2000)) {
+						process = 1;
+					}
+				} else {
+					// if touch the ground
+					if (extra->type & 0x2000) {
+						extra->type &= 0xDFFF; // set flag out of ground
+					}
+				}
+
+				if (process) {
+					// show explode cloud
+					if (extra->type & 0x100) {
+						add_extra_special(currentExtraX, currentExtraY, currentExtraZ, kExplodeCloud);
+					}
+					// if extra is magic ball
+					if (i == magicBallIdx) {
+						// FIXME: add constant for sample index
+						play_sample(86, Rnd(300) + 3946, 1, extra->X, extra->Y, extra->Z);
+
+						// cant bounce with not magic points
+						if (magicBallNumBounce <= 0) {
 							int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
 
 							if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
@@ -210,13 +305,110 @@ void process_extra() {
 							}
 
 							magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+
+							extra->info0 = -1;
+							continue;
 						}
-						
+
+						// if has magic points
+						if (magicBallNumBounce == 1) {
+							if (!magicBallAuxBounce--) {
+								int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
+
+								if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
+									spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
+								}
+								if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
+									spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
+								}
+
+								magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+
+								extra->info0 = -1;
+								continue;
+							} else {
+								// TODO: process_magicball_bounce(extra, currentExtraX, currentExtraY, currentExtraY);
+							}
+						}
+					} else {
 						extra->info0 = -1;
 						continue;
 					}
 				}
-				
+			}
+			// extra stop moving while collision with bricks
+			if (extra->type & 0x10) {
+				int32 process = 0;
+
+				if (check_extra_collision_with_bricks(currentExtraX, currentExtraY, currentExtraZ, extra->X, extra->Y, extra->Z)) {
+					// if not touch the ground
+					if (!(extra->type & 0x2000)) {
+						process = 1;
+					}
+				} else {
+					// if touch the ground
+					if (extra->type & 0x2000) {
+						extra->type &= 0xDFFF; // set flag out of ground
+					}
+				}
+
+				if (process) {
+					int16 *spriteBounds;
+
+					spriteBounds = (int16 *)(spriteBoundingBoxPtr + extra->info0 * 16 + 8);
+					extra->Y = (collisionY << 8) + 0x100 - *(spriteBounds);
+					extra->type &= 0xFFED;
+					continue;
+				}
+			}
+			// get extras on ground
+			if ((extra->type & 0x20) && !(extra->type & 0x2)) {
+				// if hero touch extra
+				if (check_extra_collision_with_actors(extra, -1) == 0) {
+					// FIXME: add constant for sample index
+					play_sample(97, 0x1000, 1, extra->X, extra->Y, extra->Z);
+
+					if (extra->info1 > 1 && !(loopPressedKey & 2)) {
+						project_position_on_screen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
+						add_overlay(koNumber, extra->info1, projPosX, projPosY, 158, koNormal, 2);
+					}
+
+					add_overlay(koSprite, extra->info0, 10, 30, 158, koNormal, 2);
+
+					if (extra->info0 == SPRITEHQR_KASHES) {
+						inventoryNumKashes += extra->info1;
+						if (inventoryNumKashes > 999) {
+							inventoryNumKashes = 999;
+						}
+					}
+
+					if (extra->info0 == SPRITEHQR_LIFEPOINTS) {
+						sceneHero->life += extra->info1;
+						if (sceneHero->life > 50) {
+							sceneHero->life = 50;
+						}
+					}
+
+					if (extra->info0 == SPRITEHQR_MAGICPOINTS && magicLevelIdx) {
+						inventoryMagicPoints += extra->info1 * 2;
+						if (inventoryMagicPoints > magicLevelIdx * 20) {
+							inventoryMagicPoints = magicLevelIdx * 20;
+						}
+					}
+
+					if (extra->info0 == SPRITEHQR_KEY) {
+						inventoryNumKeys += extra->info1;
+					}
+
+					if (extra->info0 == SPRITEHQR_CLOVERLEAF) {
+						inventoryNumLeafs += extra->info1;
+						if (inventoryNumLeafs > inventoryNumLeafsBox) {
+							inventoryNumLeafs = inventoryNumLeafsBox;
+						}
+					}
+
+					extra->info0 = -1;
+				}
 			}
 		}
 	}

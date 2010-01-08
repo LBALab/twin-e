@@ -83,6 +83,9 @@ void stop_falling();
 /** Check extra collision with actors
 	@param extra to process
 	@param actorIdx actor to check collision */
-int32 check_extra_collision(ExtraListStruct* extra, int32 actorIdx);
+int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx);
+
+/** Check extra collision with bricks */
+int32 check_extra_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ);
 
 #endif

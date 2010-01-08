@@ -52,6 +52,10 @@ extern int32 magicLevelStrengthOfHit[];
 
 /** Magic ball type index */
 int16 magicBallIdx;
+/** Magic ball num bounce */
+int16 magicBallNumBounce;
+/** Magic ball auxiliar bounce number */
+int16 magicBallAuxBounce; // magicBallParam
 /** Magic level index */
 int16 magicLevelIdx;
 
