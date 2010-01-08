@@ -33,8 +33,6 @@
 
 #define EXTRA_MAX_ENTRIES		50
 
-
-
 typedef struct ExtraListStruct
 {
 	int16 info0; // field_0
@@ -61,6 +59,13 @@ typedef struct ExtraListStruct
 
 ExtraListStruct extraList[EXTRA_MAX_ENTRIES];
 
+enum ExtraSpecialType {
+	kHitStars = 0,
+	kExplodeCloud = 1
+};
+
+int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit);
+void add_extra_special(int32 X, int32 Y, int32 Z, int32 type);
 
 /** Process extras */
 void process_extra();
