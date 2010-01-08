@@ -80,6 +80,12 @@
 #define SPRITEHQR_CLOVERLEAF		7
 #define SPRITEHQR_CLOVERLEAFBOX		41
 
+#define SPRITEHQR_MAGICBALL_GREEN			42
+#define SPRITEHQR_MAGICBALL_RED				43
+#define SPRITEHQR_MAGICBALL_YELLOW_TRANS	44  /** transparent */
+#define SPRITEHQR_MAGICBALL_GREEN_TRANS		109 /** transparent */
+#define SPRITEHQR_MAGICBALL_RED_TRANS		110 /** transparent */
+
 extern int8 * HQR_RESS_FILE;
 extern int8 * HQR_TEXT_FILE;
 extern int8 * HQR_FLASAMP_FILE;

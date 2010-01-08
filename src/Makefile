@@ -9,6 +9,7 @@ OBJS=actor.o \
 	debug.grid.o \
 	debug.scene.o \
 	dialogues.o \
+	extra.o \
 	filereader.o \
 	gamestate.o \
 	grid.o \
