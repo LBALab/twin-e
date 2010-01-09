@@ -1028,7 +1028,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 			if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
 				if (get_brick_shape(destX, processActorY + 0x100, destZ)) {
-					// TODO: init_stars(actor->X, actor->Y + 1000, actor->Z, 0);
+					add_extra_special(actor->X, actor->Y + 1000, actor->Z, kHitStars);
 					init_anim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);
 
 					if (currentlyProcessedActorIdx == 0) {
@@ -1055,7 +1055,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					processActorY = (collisionY << 8) + 0x100;
 				} else {
 					if (!actorIdx && heroBehaviour == ATHLETIC && actor->anim == brickShape) {
-						// TODO: init_stars(actor->X, actor->Y + 1000, actor->Z, 0);
+						add_extra_special(actor->X, actor->Y + 1000, actor->Z, kHitStars);
 						init_anim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);	
 
 						if (!actorIdx) {

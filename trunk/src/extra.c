@@ -36,6 +36,73 @@
 #include "grid.h"
 #include "sound.h"
 #include "redraw.h"
+#include "interface.h"
+
+/** Hit Stars shape info */
+int16 hitStarsShapeTable[] = {
+	10,
+	0,
+	-20,
+	4,
+	-6,
+	19,
+	-6,
+	7,
+	2,
+	12,
+	16,
+	0,
+	7,
+	-12,
+	16,
+	-7,
+	2,
+	-19,
+	-6,
+	-4,
+	-6
+};
+
+/** Explode Cloud shape info */
+int16 explodeCloudShapeTable [] = {
+	18,
+	0,
+	-20,
+	6,
+	-16,
+	8,
+	-10,
+	14,
+	-12,
+	20,
+	-4,
+	18,
+	4,
+	12,
+	4,
+	16,
+	8,
+	8,
+	16,
+	2,
+	12,
+	-4,
+	18,
+	-10,
+	16,
+	-12,
+	8,
+	-16,
+	10,
+	-20,
+	4,
+	-12,
+	-8,
+	-6,
+	-6,
+	-10,
+	-12
+};
 
 int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit) {
 	int32 i;
@@ -62,12 +129,38 @@ int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 ta
 	return -1;
 }
 
-void throw_extra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int32 var4) {
-	extra->type |= 2;
-	// TODO do the rest
+/** Reset all used extras */
+void reset_extras() {
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		extra->info0 = -1;
+		extra->info1 = 1;
+	}
 }
 
-void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) {
+void throw_extra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int32 var4) { // InitFly
+	extra->type |= 2;
+	
+	extra->lastX = extra->X;
+	extra->lastY = extra->Y;
+	extra->lastZ = extra->Z;
+
+	rotate_actor(var3, 0, var1);
+
+	extra->destY = -destZ;
+
+	rotate_actor(0, destX, var2);
+
+	extra->destX = destX;
+	extra->destZ = destZ;
+
+	extra->angle = var4;
+	extra->lifeTime = lbaTime;
+}
+
+void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
 	int32 i;
 	int16 flag = 0x8000 + type;
 
@@ -109,8 +202,173 @@ void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) {
 	}
 }
 
+int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount) { // ExtraBonus
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == -1) {
+			extra->info0 = type;
+			extra->type = 0x4071; // old value: 0x4030 
+
+			// This cause an incorrect movement in the Key extra
+			/*if(type != 6) {
+				extra->type = 0x4071;
+			}*/
+
+			extra->X = X;
+			extra->Y = Y;
+			extra->Z = Z;
+
+			// same as InitFly
+			throw_extra(extra, param, angle, 40, 15);
+
+			extra->strengthOfHit = 0;
+			extra->lifeTime = lbaTime;
+			extra->actorIdx = 1000;
+			extra->info1 = bonusAmount;
+
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+void draw_special_shape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 angle, int32 size) {
+	int16 currentShapeTable;
+	int16 var_8;
+	int16 temp1;
+	int32 computedX;
+	int32 computedY;
+	int32 oldComputedX;
+	int32 oldComputedY;
+	int32 numEntries;
+	int32 currentX;
+	int32 currentY;
+
+	currentShapeTable = *(shapeTable++);
+
+	var_8 = ((*(shapeTable++)) * size) >> 4;
+	temp1 = ((*(shapeTable++)) * size) >> 4;
+
+	renderLeft   = 0x7D00;
+	renderRight  = -0x7D00;
+	renderTop    = 0x7D00;
+	renderBottom = -0x7D00;
+
+	rotate_actor(var_8, temp1, angle);
+
+	computedX = destX + X;
+	computedY = destZ + Y;
+
+	if (computedX < renderLeft)
+		renderLeft = computedX;
+
+	if (computedX > renderRight)
+		renderRight = computedX;
+
+	if (computedY < renderTop)
+		renderTop = computedY;
+
+	if (computedY > renderBottom)
+		renderBottom = computedY;
+
+	numEntries = 1;
+
+	currentX = computedX;
+	currentY = computedY;
+
+	while (numEntries < currentShapeTable) {
+		var_8 = ((*(shapeTable++)) * size) >> 4;
+		temp1 = ((*(shapeTable++)) * size) >> 4;
+
+		oldComputedX = currentX;
+		oldComputedY = currentY;
+
+		projPosX = currentX;
+		projPosY = currentY;
+
+		rotate_actor(var_8, temp1, angle);
+
+		currentX = destX + X;
+		currentY = destZ + Y;
+
+		if (currentX < renderLeft)
+		  renderLeft = currentX;
+
+		if (currentX > renderRight)
+		  renderRight = currentX;
+
+		if (currentY < renderTop)
+		  renderTop = currentY;
+
+		if (currentY > renderBottom)
+		  renderBottom = currentY;
+
+		projPosX = currentX;
+		projPosY = currentY;
+
+		draw_line(oldComputedX, oldComputedY, currentX, currentY, color);
+
+		numEntries++;
+
+		currentX = projPosX;
+		currentY = projPosY;
+
+	}
+
+	projPosX = currentX;
+	projPosY = currentY;
+	draw_line(currentX, currentY, computedX, computedY, color);
+}
+
+void draw_extra_special(int32 extraIdx, int32 X, int32 Y) {
+	int32 specialType;
+	ExtraListStruct *extra = &extraList[extraIdx];
+
+	specialType = extra->info0 & 0x7FFF;
+
+	switch(specialType) {
+	case kHitStars:
+		draw_special_shape(hitStarsShapeTable, X, Y, 15, (lbaTime << 5) & 0x300, 4);
+		break;
+	case kExplodeCloud: {
+		int32 cloudTime = 1 + lbaTime - extra->lifeTime;
+
+		if (cloudTime > 32) {
+			cloudTime = 32;
+		}
+
+		draw_special_shape(explodeCloudShapeTable, X, Y, 15, 0, cloudTime);
+	}
+		break;
+	}
+}
+
+void process_magicball_bounce(ExtraListStruct *extra, int32 X, int32 Y, int32 Z) {
+	if (get_brick_shape(X, extra->Y, Z)) {
+		extra->destY = -extra->destY;
+	}
+	if (get_brick_shape(extra->X, Y, Z)) {
+		extra->destX = -extra->destX;
+	}
+	if (get_brick_shape(X, Y, extra->Z)) {
+		extra->destZ = -extra->destZ;
+	}
+
+	extra->X = X;
+	extra->lastX = X;
+	extra->Y = Y;
+	extra->lastY = Y;
+	extra->Z = Z;
+	extra->lastZ = Z;
+
+	extra->lifeTime = lbaTime;
+}
+
 /** Process extras */
-void process_extra() {
+void process_extras() {
 	int32 i;
 
 	int32 currentExtraX = 0;
@@ -327,7 +585,7 @@ void process_extra() {
 								extra->info0 = -1;
 								continue;
 							} else {
-								// TODO: process_magicball_bounce(extra, currentExtraX, currentExtraY, currentExtraY);
+								process_magicball_bounce(extra, currentExtraX, currentExtraY, currentExtraY);
 							}
 						}
 					} else {

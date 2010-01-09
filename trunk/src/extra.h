@@ -65,10 +65,16 @@ enum ExtraSpecialType {
 };
 
 int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit);
+
+/** Reset all used extras */
+void reset_extras();
+
 void add_extra_special(int32 X, int32 Y, int32 Z, int32 type);
+int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount);
+void draw_extra_special(int32 extraIdx, int32 X, int32 Y);
 
 /** Process extras */
-void process_extra();
+void process_extras();
 
 
 #endif
