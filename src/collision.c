@@ -482,11 +482,11 @@ void stop_falling() { // ReceptionObj()
 		fall = heroYBeforeFall - processActorY;
 
 		if (fall >= 0x1000) {
-			// TODO: init_stars(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, 0); // InitSpecial
+			add_extra_special(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
 			processActorPtr->life--;
 			init_anim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
 		} else if (fall >= 0x800) {
-			// TODO: init_stars(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, 0); // InitSpecial
+			add_extra_special(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
 			processActorPtr->life--;
 			init_anim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
 		} else if (fall > 10) {

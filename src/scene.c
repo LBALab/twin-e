@@ -43,6 +43,7 @@
 #include "movements.h"
 #include "sound.h"
 #include "animations.h"
+#include "extra.h"
 
 uint8* currentScene;
 
@@ -298,7 +299,7 @@ int32 init_scene(int32 index) {
 void reset_scene() {
 	int32 i;
 
-	// TODO: reset extra bonus list
+	reset_extras();
 
 	for (i = 0; i < NUM_SCENES_FLAGS; i++) {
 		sceneFlags[i] = 0;

@@ -291,4 +291,7 @@ void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int3
 /** Process actor carrier */
 void process_actor_carrier(int32 actorIdx);
 
+/** Process actor extra bonus */
+void process_actor_extra_bonus(int32 actorIdx);
+
 #endif

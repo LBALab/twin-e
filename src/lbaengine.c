@@ -46,6 +46,7 @@
 #include "sound.h"
 #include "script.life.h"
 #include "script.move.h"
+#include "extra.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -145,7 +146,7 @@ int32 run_game_engine() { // mainLoopInteration
         sceneActors[a].hitBy = -1;
     }
 
-	// TODO: generate extra bonus
+	process_extras();
 
 	for (a = 0; a < sceneNumActors; a++) {
 		ActorStruct *actor = &sceneActors[a];
@@ -164,7 +165,7 @@ int32 run_game_engine() { // mainLoopInteration
 				}
 				
 				if (actor->bonusParameter & 0x1F0 && !(actor->bonusParameter & 1)) {
-					// TODO: give_extra_bonus(a);
+					process_actor_extra_bonus(a);
 				}
 			}
 

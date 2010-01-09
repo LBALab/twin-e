@@ -39,6 +39,9 @@
 #include "animations.h"
 #include "renderer.h"
 #include "movements.h"
+#include "gamestate.h"
+#include "sound.h"
+#include "extra.h"
 
 /** Actors 3D body table - size of NUM_BODIES */
 uint8 *bodyTable[NUM_BODIES];
@@ -477,7 +480,7 @@ void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int3
 			}
 		}
 
-		// TODO: init_stars(actor->X, actor->Y + 1000, actor->Z, 0);
+		add_extra_special(actor->X, actor->Y + 1000, actor->Z, kHitStars);
 
 		if (!actorIdxAttacked) {
 			heroMoved = 1;
@@ -503,6 +506,42 @@ void process_actor_carrier(int32 actorIdx) { // CheckCarrier
 			if (actor->standOn == actorIdx) {
 				actor->standOn = -1;
 			}
+		}
+	}
+}
+
+/** Process actor extra bonus */
+void process_actor_extra_bonus(int32 actorIdx) {
+	int32 a, numBonus;
+	int8 bonusTable[8], currentBonus;
+	ActorStruct *actor = &sceneActors[actorIdx];
+
+	numBonus = 0;
+
+	for (a = 0; a < 5; a++) {
+		if (actor->bonusParameter & (1 << (a + 4))) {
+			bonusTable[numBonus++] = a;
+		}
+	}
+
+	if (numBonus) {
+		currentBonus = bonusTable[Rnd(numBonus)];
+		currentBonus += 3;
+
+		// if bonus is magic an no magic level yet, then give life points
+		if (!magicLevelIdx && currentBonus == 2) {
+			currentBonus = 1;
+		}
+
+		if (actor->dynamicFlags.bIsDead) {
+			add_extra_bonus(actor->X, actor->Y, actor->Z, 0x100, 0, currentBonus, actor->bonusAmount);
+			// FIXME add constant for sample index
+			play_sample(11, 0x1000, 1, actor->X, actor->Y, actor->Z);
+		} else {
+			int32 angle = get_angle(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+			add_extra_bonus(actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z, 200, angle, currentBonus, actor->bonusAmount);
+			// FIXME add constant for sample index
+			play_sample(11, 0x1000, 1, actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z);
 		}
 	}
 }

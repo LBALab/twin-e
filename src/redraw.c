@@ -42,6 +42,7 @@
 #include "movements.h"
 #include "dialogues.h"
 #include "collision.h"
+#include "sound.h"
 
 #ifdef GAMEMOD
 #include "debug.scene.h"
@@ -229,7 +230,7 @@ void sort_drawing_list(DrawListStruct *list, int32 listSize) {
 
 /** Process what objects must the drawn in the screen
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-int process_actors_drawlist(int32 bgRedraw) {
+int32 process_actors_drawlist(int32 bgRedraw) {
 	int32 tmpVal;
 	int32 modelActorPos;  // arg_1A
 	int32 spriteActorPos; // top6
@@ -304,6 +305,50 @@ int process_actors_drawlist(int32 bgRedraw) {
 							drawList[drawListPos].field_A = 2;
 							drawListPos++;
 						}
+					}
+				}
+			}
+		}
+	}
+	return drawListPos;
+}
+
+int32 process_extras_drawlist(int32 drawListPos) {
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 != -1) {
+			if (extra->type & 0x400) {
+				if (lbaTime - extra->lifeTime > 35) {
+					extra->lifeTime = lbaTime;
+					extra->type &= 0xFBFF;
+					// FIXME make constant for sample index
+					play_sample(11, 0x1000, 1, extra->X, extra->Y, extra->Z);
+				}
+			} else {
+				if ((extra->type & 1) || (extra->type & 0x40) || (extra->actorIdx + extra->lifeTime - 150 < lbaTime) || (!((lbaTime + extra->lifeTime) & 8))) {
+					project_position_on_screen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
+
+					if (projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580) {
+						int32 specialType;
+
+						drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ;
+						drawList[drawListPos].index = 0x1800;
+						drawListPos++;
+
+						specialType = extra->info0 & 0x7FFF;
+
+						if (cfgfile.ShadowMode == 2 && (extra->info0 & 0x8000) && specialType != kHitStars && specialType != kExplodeCloud) {
+							get_shadow_position(extra->X, extra->Y, extra->Z);
+			
+							drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ - 1;
+							drawList[drawListPos].index = 0xC00;
+							drawList[drawListPos].X = shadowX;
+							drawList[drawListPos].Y = shadowY;
+							drawList[drawListPos].Z = shadowZ;
+							drawListPos++;
+						}		
 					}
 				}
 			}
@@ -459,7 +504,38 @@ void process_drawing(int32 numDrawingList) {
 			}
 			// Drawing extras bonus
 			else if (flags == 0x1800) {
+				int32 spriteWidth, spriteHeight;
+				ExtraListStruct *extra = &extraList[actorIdx];
+				uint8 *spritePtr = spriteTable[extra->info0];
 
+				project_position_on_screen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
+
+				if (extra->info0 & 0x8000) {
+					draw_extra_special(actorIdx, projPosX, projPosY);
+				} else {
+					get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
+
+					// calculate sprite position on screen
+					renderLeft = projPosX + *(int16 *)(spriteBoundingBoxPtr + extra->info0 * 16);
+					renderTop = projPosY + *(int16 *)(spriteBoundingBoxPtr + extra->info0 * 16 + 2);
+					renderRight = renderLeft + spriteWidth;
+					renderBottom = renderTop + spriteHeight;
+
+					draw_sprite(0, renderLeft, renderTop, spritePtr);
+				}
+
+				set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+					int32 tmpX, tmpY, tmpZ;
+
+					tmpX = (drawList[drawListPos].X + 0x100) >> 9;
+					tmpY = drawList[drawListPos].Y >> 8;
+					tmpZ = (drawList[drawListPos].Z + 0x100) >> 9;
+
+					draw_over_model_actor(tmpX, tmpY, tmpZ);
+					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderTop);
+				}
 			}
 
 			reset_clip();
@@ -689,8 +765,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 	// first loop
 	numDrawingList = process_actors_drawlist(bgRedraw);
-
-	// TODO: process_extras();
+	numDrawingList = process_extras_drawlist(numDrawingList);
 
 	sort_drawing_list(drawList, numDrawingList);
 
