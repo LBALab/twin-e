@@ -707,7 +707,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];
-		if (overlay->info0 == -1 && overlay->type == koNumberRange) {
+		if (overlay->info0 != -1 && overlay->type == koNumberRange) {
 			overlay->info0 = get_average_value(overlay->info1, overlay->info0, 100, overlay->lifeTime - 50);
 			overlay->info1 = inventoryNumKashes;
 			overlay->lifeTime = lbaTime + 150;
@@ -814,8 +814,17 @@ int32 lSET_DOOR_DOWN(int32 actorIdx, ActorStruct *actor) {
 
 /*0x33*/
 int32 lGIVE_BONUS(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 flag = *(scriptPtr++);
+
+	if (actor->bonusParameter & 0x1F0) {
+		process_actor_extra_bonus(actorIdx);
+	}
+
+	if (flag != 0) {
+		actor->bonusParameter |= 1;
+	}
+
+	return 0;
 }
 
 /*0x34*/

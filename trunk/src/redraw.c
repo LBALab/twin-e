@@ -334,7 +334,7 @@ int32 process_extras_drawlist(int32 drawListPos) {
 						int32 specialType;
 
 						drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ;
-						drawList[drawListPos].index = 0x1800 + i;
+						drawList[drawListPos].index = 0x1800;
 						drawListPos++;
 
 						specialType = extra->info0 & 0x7FFF;
@@ -503,7 +503,7 @@ void process_drawing(int32 numDrawingList) {
 				}
 			}
 			// Drawing extras
-			else if (flags >= 0x1800) {
+			else if (flags == 0x1800) {
 				ExtraListStruct *extra = &extraList[actorIdx];
 				
 				project_position_on_screen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
@@ -776,11 +776,13 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 	currNumOfRedrawBox = 0;
 	process_drawing(numDrawingList);
 
-	process_overlay();
-
 #ifdef GAMEMOD
 	display_zones(skipIntro);
 #endif
+
+	process_overlay();
+
+	reset_clip();
 
 	// make celling grid fade
 	// need to be here to fade after drawing all actors in scene

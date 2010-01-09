@@ -438,6 +438,42 @@ void process_environment_sound() {
 	}
 }
 
+/** Process zone extra bonus */
+void process_zone_extra_bonus(ZoneStruct *zone) {
+	int32 a, numBonus;
+	int8 bonusTable[8], currentBonus;
+
+	numBonus = 0;
+
+	// bonus not used yet
+	if (!zone->infoData.generic.info3) {
+		for (a = 0; a < 5; a++) {
+			if (zone->infoData.generic.info1 & (1 << (a + 4))) {
+				bonusTable[numBonus++] = a;
+			}
+		}
+
+		if (numBonus) {
+			int32 angle, index;
+			currentBonus = bonusTable[Rnd(numBonus)];
+
+			// if bonus is magic an no magic level yet, then give life points
+			if (!magicLevelIdx && currentBonus == 2) {
+				currentBonus = 1;
+			}
+
+			angle = get_angle(Abs(zone->topRight.X + zone->bottomLeft.X)/2, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, sceneHero->X, sceneHero->Z);
+			index = add_extra_bonus(Abs(zone->topRight.X + zone->bottomLeft.X)/2, zone->topRight.Y, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, 180, angle, currentBonus + 3, zone->infoData.generic.info2);
+			
+			if (index != -1) {
+				extraList[index].type |= 0x400;
+				zone->infoData.generic.info3 = 1; // set as used
+			}
+		}
+	}
+}
+
+
 /** Process actor zones
 	@param actorIdx Process actor index */
 void process_actor_zones(int32 actorIdx) {
@@ -505,7 +541,10 @@ void process_actor_zones(int32 actorIdx) {
 				}
 				break;
 			case kObject:
-				// TODO: give extra bonus 
+				if (!actorIdx && heroAction != 0) {
+					init_anim(ANIM_ACTION, 1, 0, 0);
+					process_zone_extra_bonus(zone);
+				}
 				break;
 			case kText:
 				// TODO: display text message

@@ -37,6 +37,7 @@
 #include "animations.h"
 #include "keyboard.h"
 #include "resources.h"
+#include "extra.h"
 
 int32 magicLevelStrengthOfHit[] = {
 	MAGIC_STRENGTH_NONE,
@@ -59,7 +60,7 @@ void init_engine_projections() { // reinitAll1
 void init_scene_vars() {
 	int32 i;
 
-	// TODO: reset extra bonus list
+	reset_extras();
 	
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		overlayList[i].info0 = -1;

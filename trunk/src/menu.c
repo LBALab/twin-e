@@ -937,7 +937,7 @@ void draw_info_menu(int16 left, int16 top)
 	/** draw coin sprite */
 	draw_sprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
 	set_font_color(155);
-	display_dialogue_text(left + 370, top + 5, ITOA(inventoryNumKashes));  // amount of coins
+	display_dialogue_text(left + 370, top + 5, ITOA(inventoryNumKashes));
 
 	/** draw key sprite */
 	draw_sprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
@@ -945,7 +945,7 @@ void draw_info_menu(int16 left, int16 top)
 	display_dialogue_text(left + 370, top + 40, ITOA(inventoryNumKeys));
 
 	// Clover leaf boxes
-	for (i = 0; i < inventoryNumLeafsBox; i++)  // boites à trefles
+	for (i = 0; i < inventoryNumLeafsBox; i++)
 	{
 		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITEHQR_CLOVERLEAFBOX]);
 	}
