@@ -46,7 +46,6 @@
 /** Actors 3D body table - size of NUM_BODIES */
 uint8 *bodyTable[NUM_BODIES];
 
-//TODO: add all the needed content here
 /** Restart hero variables while opening new scenes */
 void restart_hero_scene() {
 	sceneHero->controlMode = 1;
@@ -70,7 +69,6 @@ void restart_hero_scene() {
 	set_behaviour(previousHeroBehaviour);
 }
 
-// TODO: finish this
 /** Load hero 3D body and animations */
 void load_hero_entities() {
 	int32 size;
