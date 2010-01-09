@@ -334,7 +334,7 @@ int32 process_extras_drawlist(int32 drawListPos) {
 						int32 specialType;
 
 						drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ;
-						drawList[drawListPos].index = 0x1800;
+						drawList[drawListPos].index = 0x1800 + i;
 						drawListPos++;
 
 						specialType = extra->info0 & 0x7FFF;
@@ -451,7 +451,7 @@ void process_drawing(int32 numDrawingList) {
 			}
 			// Drawing unknown
 			else if (flags < 0x1000) {
-
+				// TODO reverse this part of the code
 			}
 			// Drawing sprite actors
 			else if (flags == 0x1000) {
@@ -499,21 +499,21 @@ void process_drawing(int32 numDrawingList) {
 					add_redraw_area(textWindowLeft, textWindowTop, textWindowRight, textWindowBottom);
 
 					// show clipping area
-					//draw_button_box(renderLeft, renderTop, renderRight, renderBottom);
+					//draw_box(renderLeft, renderTop, renderRight, renderBottom);
 				}
 			}
-			// Drawing extras bonus
-			else if (flags == 0x1800) {
-				int32 spriteWidth, spriteHeight;
+			// Drawing extras
+			else if (flags >= 0x1800) {
 				ExtraListStruct *extra = &extraList[actorIdx];
-				uint8 *spritePtr = spriteTable[extra->info0];
-
+				
 				project_position_on_screen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
 
 				if (extra->info0 & 0x8000) {
 					draw_extra_special(actorIdx, projPosX, projPosY);
 				} else {
-					get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
+					int32 spriteWidth, spriteHeight;
+
+					get_sprite_size(0, &spriteWidth, &spriteHeight, spriteTable[extra->info0]);
 
 					// calculate sprite position on screen
 					renderLeft = projPosX + *(int16 *)(spriteBoundingBoxPtr + extra->info0 * 16);
@@ -521,7 +521,7 @@ void process_drawing(int32 numDrawingList) {
 					renderRight = renderLeft + spriteWidth;
 					renderBottom = renderTop + spriteHeight;
 
-					draw_sprite(0, renderLeft, renderTop, spritePtr);
+					draw_sprite(0, renderLeft, renderTop, spriteTable[extra->info0]);
 				}
 
 				set_clip(renderLeft, renderTop, renderRight, renderBottom);
@@ -534,7 +534,10 @@ void process_drawing(int32 numDrawingList) {
 					tmpZ = (drawList[drawListPos].Z + 0x100) >> 9;
 
 					draw_over_model_actor(tmpX, tmpY, tmpZ);
-					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderTop);
+					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
+
+					// show clipping area
+					//draw_box(renderLeft, renderTop, renderRight, renderBottom);
 				}
 			}
 
@@ -765,6 +768,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 	// first loop
 	numDrawingList = process_actors_drawlist(bgRedraw);
+	// second loop
 	numDrawingList = process_extras_drawlist(numDrawingList);
 
 	sort_drawing_list(drawList, numDrawingList);

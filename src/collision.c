@@ -517,11 +517,11 @@ int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx) 
 	xLeft  = *(spriteBounding++) + extra->X;
 	xRight = *(spriteBounding++) + extra->X;
 
-	yLeft  = *(spriteBounding++) + extra->Z;
-	yRight = *(spriteBounding++) + extra->Z;
+	yLeft  = *(spriteBounding++) + extra->Y;
+	yRight = *(spriteBounding++) + extra->Y;
 
-	zLeft  = *(spriteBounding++) + extra->Y;
-	zRight = *(spriteBounding++) + extra->Y;
+	zLeft  = *(spriteBounding++) + extra->Z;
+	zRight = *(spriteBounding++) + extra->Z;
 
 	for (a = 0; a < sceneNumActors; a++) {
 		actorTest = &sceneActors[a];

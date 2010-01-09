@@ -170,7 +170,7 @@ void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
 			extra->info0 = flag;
 			extra->info1 = 0;
 
-			if (!flag) {
+			if (type == kHitStars) {
 				extra->type = 9;
 
 				extra->X = X;
@@ -185,7 +185,7 @@ void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
 				extra->actorIdx = 100;
 
 				return;
-			} else if (flag == 1) {
+			} else if (type == kExplodeCloud) {
 				extra->type = 1;
 
 				extra->X = X;
@@ -209,12 +209,11 @@ int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32
 		ExtraListStruct *extra = &extraList[i];
 		if (extra->info0 == -1) {
 			extra->info0 = type;
-			extra->type = 0x4071; // old value: 0x4030 
+			extra->type = 0x4030;
 
-			// This cause an incorrect movement in the Key extra
-			/*if(type != 6) {
+			if(type != 6) {
 				extra->type = 0x4071;
-			}*/
+			}
 
 			extra->X = X;
 			extra->Y = Y;
@@ -585,7 +584,7 @@ void process_extras() {
 								extra->info0 = -1;
 								continue;
 							} else {
-								process_magicball_bounce(extra, currentExtraX, currentExtraY, currentExtraY);
+								process_magicball_bounce(extra, currentExtraX, currentExtraY, currentExtraZ);
 							}
 						}
 					} else {
@@ -631,7 +630,7 @@ void process_extras() {
 						add_overlay(koNumber, extra->info1, projPosX, projPosY, 158, koNormal, 2);
 					}
 
-					add_overlay(koSprite, extra->info0, 10, 30, 158, koNormal, 2);
+					add_overlay(koSprite, extra->info0, 10, 30, 0, koNormal, 2);
 
 					if (extra->info0 == SPRITEHQR_KASHES) {
 						inventoryNumKashes += extra->info1;
