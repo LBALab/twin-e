@@ -36,9 +36,13 @@
 #include "redraw.h"
 #include "lbaengine.h"
 
+uint8 *scriptPtr;
+int32 continueMove;
+int32 scriptPosition;
 ActorMoveStruct *move;
 
-typedef int32 ScriptMoveFunc(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition);
+
+typedef int32 ScriptMoveFunc(int32 actorIdx, ActorStruct *actor);
 
 typedef struct ScriptMoveFunction {
 	const uint8 *name;
@@ -49,19 +53,19 @@ typedef struct ScriptMoveFunction {
 
 
 /*0x00*/
-int32 mEND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
-	*continueMove = 0;
+int32 mEND(int32 actorIdx, ActorStruct *actor) {
+	continueMove = 0;
 	actor->positionInMoveScript = -1;
 	return 0;
 }
 
 /*0x01*/
-int32 mNOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mNOP(int32 actorIdx, ActorStruct *actor) {
 	return 0;
 }
 
 /*0x02*/
-int32 mBODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mBODY(int32 actorIdx, ActorStruct *actor) {
 	int32 bodyIdx = *(scriptPtr);
 	init_body(bodyIdx, actorIdx);
 	actor->positionInMoveScript++;
@@ -69,19 +73,19 @@ int32 mBODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 }
 
 /*0x03*/
-int32 mANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mANIM(int32 actorIdx, ActorStruct *actor) {
 	int32 animIdx = *(scriptPtr++);
 	if (init_anim(animIdx, 0, 0, actorIdx)) {
 		actor->positionInMoveScript++;
 	} else {
 		actor->positionInMoveScript = scriptPosition;
-		*continueMove = 0;
+		continueMove = 0;
 	}
 	return 0;
 }
 
 /*0x04*/
-int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor) {
 	int32 newAngle;
 
 	actor->positionInMoveScript++;
@@ -100,7 +104,7 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 	}
 
 	if (moveAngle > 500) {
-		*continueMove = 0;
+		continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	}
 
@@ -108,25 +112,25 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 }
 
 /*0x05*/
-int32 mWAIT_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mWAIT_ANIM(int32 actorIdx, ActorStruct *actor) {
 	if (!actor->dynamicFlags.bAnimEnded) {
-		*continueMove = 0;
+		continueMove = 0;
 		actor->positionInMoveScript--;
 	} else {
-		*continueMove = 0;
+		continueMove = 0;
 		clear_real_angle(actor);
 	}
 	return 0;
 }
 
 /*0x06*/
-int32 mLOOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mLOOP(int32 actorIdx, ActorStruct *actor) {
 	// TODO
 	return -1;
 }
 
 /*0x07*/
-int32 mANGLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mANGLE(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript += 2;
 	if (!actor->staticFlags.bIsSpriteActor) {
 		currentScriptValue = *((int16 *)scriptPtr);
@@ -138,7 +142,7 @@ int32 mANGLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *contin
 }
 
 /*0x08*/
-int32 mPOS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mPOS_POINT(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript++;
 	currentScriptValue = *(scriptPtr);
 
@@ -158,7 +162,7 @@ int32 mPOS_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 }
 
 /*0x09*/
-int32 mLABEL(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mLABEL(int32 actorIdx, ActorStruct *actor) {
 	actor->labelIdx = *(scriptPtr);
 	actor->positionInMoveScript++;
 	actor->currentLabelPtr = actor->positionInMoveScript - 2;
@@ -166,20 +170,20 @@ int32 mLABEL(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *contin
 }
 
 /*0x0A*/
-int32 mGOTO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mGOTO(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript = *((int16 *)scriptPtr);
 	return 0;
 }
 
 /*0x0B*/
-int32 mSTOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
-	*continueMove = 0;
+int32 mSTOP(int32 actorIdx, ActorStruct *actor) {
+	continueMove = 0;
 	actor->positionInMoveScript = -1;
 	return 0;
 }
 
 /*0x0C*/
-int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor) {
 	int32 newAngle;
 
 	actor->positionInMoveScript++;
@@ -198,7 +202,7 @@ int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int3
 	}
 
 	if (moveAngle > 500) {
-		*continueMove = 0;
+		continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	}
 
@@ -206,7 +210,7 @@ int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int3
 }
 
 /*0x0D*/
-int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript += 2;
 
 	if (actor->dynamicFlags.bAnimEnded) {
@@ -220,12 +224,12 @@ int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 		if (animPos == animRepeats) {
 			animPos = 0;
 		} else {
-			*continueMove = 0;
+			continueMove = 0;
 		}
 
 		*(scriptPtr + 1) = animPos;
 	} else {
-		*continueMove = 0;
+		continueMove = 0;
 	}
 
 	if (continueMove == 0) {
@@ -236,7 +240,7 @@ int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 }
 
 /*0x0E*/
-int32 mSAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mSAMPLE(int32 actorIdx, ActorStruct *actor) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
@@ -244,7 +248,7 @@ int32 mSAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *conti
 }
 
 /*0x0F*/
-int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript++;
 
 	if (actor->staticFlags.bIsSpriteActor) {
@@ -258,7 +262,7 @@ int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 		actor->animType = get_angle(actor->Y, 0, destY, moveAngle);
 
 		if (moveAngle > 100) {
-			*continueMove = 0;
+			continueMove = 0;
 			actor->positionInMoveScript -= 2;
 		} else {
 			actor->X = destX;
@@ -271,7 +275,7 @@ int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 }
 
 /*0x10*/
-int32 mSPEED(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mSPEED(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript += 2;
 	actor->speed = *((int16 *)scriptPtr);
 
@@ -283,7 +287,7 @@ int32 mSPEED(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *contin
 }
 
 /*0x11*/
-int32 mBACKGROUND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mBACKGROUND(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript++;
 
 	if (*(scriptPtr) == 0) {
@@ -306,7 +310,7 @@ int32 mBACKGROUND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 }
 
 /*0x12*/
-int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor) {
 	int32 numSeconds, currentTime;
 	actor->positionInMoveScript += 5;
 	
@@ -319,7 +323,7 @@ int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int
 	}
 
 	if (lbaTime < currentTime) {
-		*continueMove = 0;
+		continueMove = 0;
 		actor->positionInMoveScript -= 6;
 	} else {
 		*((int32 *)scriptPtr) = 0;
@@ -329,13 +333,13 @@ int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int
 }
 
 /*0x13*/
-int32 mNO_BODY(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mNO_BODY(int32 actorIdx, ActorStruct *actor) {
 	init_body(-1, actorIdx);
 	return 0;
 }
 
 /*0x14*/
-int32 mBETA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mBETA(int32 actorIdx, ActorStruct *actor) {
 	int16 beta;
 
 	beta = *((int16 *)scriptPtr);
@@ -350,58 +354,60 @@ int32 mBETA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continu
 	return 0;
 }
 
-
-void OPEN_DOOR(int32 opcode, int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+/*0x15*/
+int32 mOPEN_LEFT(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript += 2;
 	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
-		switch(opcode) {
-		case 0x15:
-			actor->angle = 0x300;
-			break;
-		case 0x16:
-			actor->angle = 0x100;
-			break;
-		case 0x17:
-			actor->angle = 0x200;
-			break;
-		case 0x18:
-			actor->angle = 0;
-			break;
-		}
-
+		actor->angle = 0x300;
 		actor->doorStatus = *((int16 *)scriptPtr);
 		actor->dynamicFlags.bIsSpriteMoving = 1;
 		actor->speed = 1000;
 		set_actor_angle(0, 1000, 50, move);
 	}
-}
-
-/*0x15*/
-int32 mOPEN_LEFT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
-	OPEN_DOOR(0x15, actorIdx, actor, scriptPtr, continueMove, scriptPosition);
 	return 0;
 }
 
 /*0x16*/
-int32 mOPEN_RIGHT(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
-	OPEN_DOOR(0x16, actorIdx, actor, scriptPtr, continueMove, scriptPosition);
+int32 mOPEN_RIGHT(int32 actorIdx, ActorStruct *actor) {
+	actor->positionInMoveScript += 2;
+	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
+		actor->angle = 0x100;
+		actor->doorStatus = *((int16 *)scriptPtr);
+		actor->dynamicFlags.bIsSpriteMoving = 1;
+		actor->speed = 1000;
+		set_actor_angle(0, 1000, 50, move);
+	}
 	return 0;
 }
 
 /*0x17*/
-int32 mOPEN_UP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
-	OPEN_DOOR(0x17, actorIdx, actor, scriptPtr, continueMove, scriptPosition);
+int32 mOPEN_UP(int32 actorIdx, ActorStruct *actor) {
+	actor->positionInMoveScript += 2;
+	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
+		actor->angle = 0x200;
+		actor->doorStatus = *((int16 *)scriptPtr);
+		actor->dynamicFlags.bIsSpriteMoving = 1;
+		actor->speed = 1000;
+		set_actor_angle(0, 1000, 50, move);
+	}
 	return 0;
 }
 
 /*0x18*/
-int32 mOPEN_DOWN(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
-	OPEN_DOOR(0x18, actorIdx, actor, scriptPtr, continueMove, scriptPosition);
+int32 mOPEN_DOWN(int32 actorIdx, ActorStruct *actor) {
+	actor->positionInMoveScript += 2;
+	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
+		actor->angle = 0;
+		actor->doorStatus = *((int16 *)scriptPtr);
+		actor->dynamicFlags.bIsSpriteMoving = 1;
+		actor->speed = 1000;
+		set_actor_angle(0, 1000, 50, move);
+	}
 	return 0;
 }
 
 /*0x19*/
-int32 mCLOSE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mCLOSE(int32 actorIdx, ActorStruct *actor) {
 	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
 		actor->doorStatus = 0;
 		actor->dynamicFlags.bIsSpriteMoving = 1;
@@ -412,10 +418,10 @@ int32 mCLOSE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *contin
 }
 
 /*0x1A*/
-int32 mWAIT_DOOR(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mWAIT_DOOR(int32 actorIdx, ActorStruct *actor) {
 	if (actor->staticFlags.bIsSpriteActor && actor->staticFlags.bUsesClipping) {
 		if (actor->speed) {
-			*continueMove = 0;
+			continueMove = 0;
 			actor->positionInMoveScript--;
 		}
 	}
@@ -423,7 +429,7 @@ int32 mWAIT_DOOR(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 }
 
 /*0x1B*/
-int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor) {
 	int32 freq = Rnd(2048) + 2048;
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, freq, 1, actor->X, actor->Y, actor->Z);
@@ -432,7 +438,7 @@ int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *c
 }
 
 /*0x1C*/
-int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, 0x1000, 0, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
@@ -440,27 +446,27 @@ int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 }
 
 /*0x1D*/
-int32 mSAMPLE_STOP(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mSAMPLE_STOP(int32 actorIdx, ActorStruct *actor) {
 	stop_samples(); // TODO: stop specific sample
 	actor->positionInMoveScript += 2;
 	return 0;
 }
 
 /*0x1E*/
-int32 mPLAY_FLA(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 	// TODO
 	return -1;
 }
 
 /*0x1F*/
-int32 mREPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mREPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor) {
 	// TODO
 	actor->positionInMoveScript += 2;
 	return -1;
 }
 
 /*0x20*/
-int32 mSIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mSIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
 	play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
 	actor->positionInMoveScript += 2;
@@ -468,7 +474,7 @@ int32 mSIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32
 }
 
 /*0x21*/
-int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript += 2;
 	if (!actor->staticFlags.bIsSpriteActor) {
 		currentScriptValue = *((int16 *)scriptPtr);
@@ -479,7 +485,7 @@ int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 		}
 
 		if (actor->angle != currentScriptValue) {
-			*continueMove = 0;
+			continueMove = 0;
 			actor->positionInMoveScript -= 3;
 		} else {
 			clear_real_angle(actor);
@@ -490,7 +496,7 @@ int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 }
 
 /*0x22*/
-int32 mANGLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *continueMove, int32 scriptPosition) {
+int32 mANGLE_RND(int32 actorIdx, ActorStruct *actor) {
 	int32 newAngle;
 
 	actor->positionInMoveScript += 4;
@@ -513,7 +519,7 @@ int32 mANGLE_RND(int32 actorIdx, ActorStruct *actor, uint8 *scriptPtr, int32 *co
 		}
 
 		if (actor->angle != currentScriptValue) {
-			*continueMove = 0;
+			continueMove = 0;
 			actor->positionInMoveScript -= 5;
 		} else {
 			clear_real_angle(actor);
@@ -565,8 +571,7 @@ static const ScriptMoveFunction function_map[] = {
 /** Process actor move script
 	@param actorIdx Current processed actor index */
 void process_move_script(int32 actorIdx) {
-	int32 continueMove, scriptPosition, scriptOpcode;
-	uint8 *scriptPtr;
+	int32 scriptOpcode;
 	ActorStruct *actor;
 
 	continueMove = 1;
@@ -580,6 +585,6 @@ void process_move_script(int32 actorIdx) {
 
 		actor->positionInMoveScript++;
 
-		function_map[scriptOpcode].function(actorIdx, actor, scriptPtr, &continueMove, scriptPosition);
+		function_map[scriptOpcode].function(actorIdx, actor);
 	} while(continueMove);
 }

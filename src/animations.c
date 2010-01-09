@@ -814,7 +814,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 				if (actor->dynamicFlags.bIsSpriteMoving) {
 					if (actor->doorStatus) { // open door
-						if (get_distance_2D(processActorX, processActorY, actor->lastX, actor->lastY) >= actor->doorStatus) {
+						if (get_distance_2D(processActorX, processActorZ, actor->lastX, actor->lastZ) >= actor->doorStatus) {
 							if (actor->angle == 0) {
 								processActorZ = actor->lastZ + actor->doorStatus;
 							} else if (actor->angle == 0x100) {
