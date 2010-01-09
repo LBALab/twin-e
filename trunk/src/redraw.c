@@ -264,8 +264,8 @@ int32 process_actors_drawlist(int32 bgRedraw) {
 					// get actor position on screen
 					project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 
-					if (((actor->staticFlags.bUsesClipping) && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) ||
-					        ((!(actor->staticFlags.bUsesClipping)) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
+					if ((actor->staticFlags.bUsesClipping && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) ||
+					        ((!actor->staticFlags.bUsesClipping) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
 						tmpVal = actor->Z + actor->X - cameraX - cameraZ;
 
 						// if actor is above another actor
@@ -334,7 +334,7 @@ int32 process_extras_drawlist(int32 drawListPos) {
 						int32 specialType;
 
 						drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ;
-						drawList[drawListPos].index = 0x1800;
+						drawList[drawListPos].index = 0x1800 + i;
 						drawListPos++;
 
 						specialType = extra->info0 & 0x7FFF;

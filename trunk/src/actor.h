@@ -99,7 +99,6 @@ typedef struct StaticFlagsStruct {
 	uint16 bUseMiniZv							: 1; // 0x8000
 } StaticFlagsStruct;
 
-//TODO: update field names
 /** Actors dynamic flags structure */
 typedef struct DynamicFlagsStruct {
 	uint16 bWaitHitFrame						: 1; // 0x0001 wait for hit frame

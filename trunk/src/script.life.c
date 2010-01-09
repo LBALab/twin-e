@@ -294,11 +294,13 @@ int32 process_life_conditions(ActorStruct *actor) {
 		int32 invItem = *(scriptPtr++);
 		//inventoryFlags[invItem]
 		currentScriptValue = -1; // currentScriptValue = inGameMenuAnswer;
+		printf("DEBUG: Actor condition [kcUSE_INVENTORY] not implemented\n");
 	}
 		break;
 	case kcCHOICE: // TODO
 		conditionValueSize = 2;
 		currentScriptValue = -1; // currentScriptValue = inGameMenuAnswer;
+		printf("DEBUG: Actor condition [kcCHOICE] not implemented\n");
 		break;
 	case kcFUEL:
 		currentScriptValue = inventoryNumGas;
@@ -657,10 +659,10 @@ int32 lKILL_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 
 	process_actor_carrier(otherActorIdx);
-	actor->dynamicFlags.bIsDead = 1;
-	actor->entity = -1;
-	actor->zone = -1;
-	actor->life = 0;
+	sceneActors[otherActorIdx].dynamicFlags.bIsDead = 1;
+	sceneActors[otherActorIdx].entity = -1;
+	sceneActors[otherActorIdx].zone = -1;
+	sceneActors[otherActorIdx].life = 0;
 
 	return 0;
 }
@@ -672,6 +674,7 @@ int32 lSUICIDE(int32 actorIdx, ActorStruct *actor) {
 	actor->entity = -1;
 	actor->zone = -1;
 	actor->life = 0;
+
 	return 0;
 }
 
@@ -698,7 +701,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 	kashes = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	oldNumKashes -= kashes;
+	inventoryNumKashes -= kashes;
 	if (inventoryNumKashes < 0) {
 		inventoryNumKashes = 0;
 	}
@@ -708,7 +711,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];
 		if (overlay->info0 != -1 && overlay->type == koNumberRange) {
-			overlay->info0 = get_average_value(overlay->info1, overlay->info0, 100, overlay->lifeTime - 50);
+			overlay->info0 = get_average_value(overlay->info1, overlay->info0, 100, overlay->lifeTime - lbaTime - 50);
 			overlay->info1 = inventoryNumKashes;
 			overlay->lifeTime = lbaTime + 150;
 			hideRange = 1;
@@ -838,10 +841,10 @@ int32 lCHANGE_CUBE(int32 actorIdx, ActorStruct *actor) {
 /*0x35*/
 int32 lOBJ_COL(int32 actorIdx, ActorStruct *actor) {
 	int32 collision = *(scriptPtr++);
-	if (collision == 0) {
-		actor->staticFlags.bComputeCollisionWithObj = 0;
-	} else {
+	if (collision != 0) {
 		actor->staticFlags.bComputeCollisionWithObj = 1;
+	} else {
+		actor->staticFlags.bComputeCollisionWithObj = 0;
 	}
 	return 0;
 }
@@ -876,12 +879,7 @@ int32 lOR_IF(int32 actorIdx, ActorStruct *actor) {
 
 /*0x38*/
 int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor) {
-	int32 hide = *(scriptPtr++);
-	if (hide == 0) {
-		actor->staticFlags.bIsHidden = 0;
-	} else {
-		actor->staticFlags.bIsHidden = 1;
-	}
+	actor->staticFlags.bIsHidden = *(scriptPtr++);
 	return 0;
 }
 
@@ -1030,7 +1028,7 @@ int32 lCLR_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
 /*0x4A*/
 int32 lADD_FUEL(int32 actorIdx, ActorStruct *actor) {
 	inventoryNumGas += *(scriptPtr++);
-	if ( inventoryNumGas > 100) {
+	if (inventoryNumGas > 100) {
 		inventoryNumGas = 100;
 	}
 	return 0;
@@ -1039,7 +1037,7 @@ int32 lADD_FUEL(int32 actorIdx, ActorStruct *actor) {
 /*0x4B*/
 int32 lSUB_FUEL(int32 actorIdx, ActorStruct *actor) {
 	inventoryNumGas -= *(scriptPtr++);
-	if ( inventoryNumGas < 0) {
+	if (inventoryNumGas < 0) {
 		inventoryNumGas = 0;
 	}
 	return 0;
@@ -1054,7 +1052,7 @@ int32 lSET_GRM(int32 actorIdx, ActorStruct *actor) {
 
 /*0x4D*/
 int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor) {
-	int16 textEntry = *((int16 *)scriptPtr++);;
+	int16 textEntry = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
 	add_overlay(koText, textEntry, 0, 0, actorIdx, koFollowActor, 2);
@@ -1069,7 +1067,7 @@ int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 /*04E*/
 int32 lSAY_MESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
-	int16 textEntry = *((int16 *)scriptPtr++);;
+	int16 textEntry = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
 	add_overlay(koText, textEntry, 0, 0, otherActorIdx, koFollowActor, 2);
