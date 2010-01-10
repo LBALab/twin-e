@@ -381,7 +381,7 @@ void process_extras() {
 		if (extra->info0 != -1) {
 			// process extra life time
 			if (extra->type & 0x1) {
-				if (extra->actorIdx + extra->info1 <= lbaTime) {
+				if (extra->actorIdx + extra->lifeTime <= lbaTime) {
 					extra->info0 = -1;
 					continue;
 				}

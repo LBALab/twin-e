@@ -240,7 +240,7 @@ int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ) {
 				posZ = 0x7FFF;
 
 			projPosX = (cX * cameraPosY) / posZ + orthoProjX;
-			projPosY = (cY * cameraPosZ) / posZ + orthoProjY;
+			projPosY = (-cY * cameraPosZ) / posZ + orthoProjY;
 			projPosZ = posZ;
 			return -1;
 		} else {
@@ -252,7 +252,7 @@ int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ) {
 	} else {
 		projPosX = ((cX - cZ) * 24) / 512 + orthoProjX;
 		projPosY = (((cX + cZ) * 12) - cY * 30) / 512 + orthoProjY;
-		projPosZ = cY - cX - cZ;
+		projPosZ = cZ - cY - cX;
 	}
 
 	return 1;

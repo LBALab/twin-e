@@ -72,13 +72,6 @@ int32 giveup_menu();
 /** Used to run the options menu */
 int32 options_menu();
 
-/** Used to process give up menu while playing game */
-int32 process_giveup_menu();
-
-/** Used to process options menu while playing game
-	@param pKey pressed key */
-void process_options_menu(int16 pKey);
-
 /** Process hero behaviour menu */
 void process_behaviour_menu();
 

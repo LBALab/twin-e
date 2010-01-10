@@ -74,9 +74,9 @@ typedef struct DrawListStruct {
 DrawListStruct drawList[150];
 
 /** Current number of redraw regions in the screen */
-int32 currNumOfRedrawBox; // fullRedrawVar8
+int32 currNumOfRedrawBox = 0; // fullRedrawVar8
 /** Number of redraw regions in the screen */
-int32 numOfRedrawBox;
+int32 numOfRedrawBox = 0;
 
 
 /** Add a certain region to the current redraw list array
@@ -228,9 +228,48 @@ void sort_drawing_list(DrawListStruct *list, int32 listSize) {
 	}
 }
 
-/** Process what objects must the drawn in the screen
+/** */
+void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime) {
+	int32 i;
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->info0 == -1) {
+			overlay->type = type;
+			overlay->info0 = info0;
+			overlay->X = X;
+			overlay->Y = Y;
+			overlay->info1 = info1;
+			overlay->posType = posType;
+			overlay->lifeTime = lbaTime + lifeTime * 50;
+			return;
+		}
+	}
+}
+
+/** */
+void update_overlay_type_position(int16 X1, int16 Y1, int16 X2, int16 Y2) {
+	int32 i;
+	int16 newX, newY;
+
+	newX = X2 - X1;
+	newY = Y2 - Y1;
+
+	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
+		OverlayListStruct *overlay = &overlayList[i];
+		if (overlay->type == koFollowActor) {
+			overlay->X = newX;
+			overlay->Y = newY;
+		}
+	}
+}
+
+/** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-int32 process_actors_drawlist(int32 bgRedraw) {
+void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
+	int16 tmpProjPosX;
+	int16 tmpProjPosY;
+	//int32 numDrawingList;
+	int32 i;
 	int32 tmpVal;
 	int32 modelActorPos;  // arg_1A
 	int32 spriteActorPos; // top6
@@ -238,6 +277,29 @@ int32 process_actors_drawlist(int32 bgRedraw) {
 	int32 drawListPos;    // a12
 	ActorStruct *actor;
 
+	tmpProjPosX = projPosXScreen;
+	tmpProjPosY = projPosYScreen;
+
+	reset_clip();
+
+	if (bgRedraw) {
+		freeze_time();
+		if (needChangeScene != -1 && needChangeScene != -2)
+			fade_out(paletteRGBA);
+		clear_screen();
+		redraw_grid();
+		update_overlay_type_position(tmpProjPosX, tmpProjPosY, projPosXScreen, projPosYScreen);
+		copy_screen(frontVideoBuffer, workVideoBuffer);
+		if (needChangeScene != -1 && needChangeScene != -2) {
+			fade_in(paletteRGBA);
+			set_palette(paletteRGBA);
+		}
+	} else {
+		blit_background_areas();
+	}
+
+	// first loop
+	
 	modelActorPos = 0;
 	drawListPos = 0;
 	spriteActorPos = modelActorPos + 0x1000;
@@ -310,12 +372,8 @@ int32 process_actors_drawlist(int32 bgRedraw) {
 			}
 		}
 	}
-	return drawListPos;
-}
 
-int32 process_extras_drawlist(int32 drawListPos) {
-	int32 i;
-
+	// second loop
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
 		ExtraListStruct *extra = &extraList[i];
 		if (extra->info0 != -1) {
@@ -354,26 +412,21 @@ int32 process_extras_drawlist(int32 drawListPos) {
 			}
 		}
 	}
-	return drawListPos;
-}
 
-/** Process object drawing on screen
+	sort_drawing_list(drawList, drawListPos);
 
-	Objects like 3D actors, sprite actors, extra bonus and shadows
-	@param numDrawingList number of drawing actors in the current screen*/
-void process_drawing(int32 numDrawingList) {
-	int32 drawListPos = 0;
-
+	currNumOfRedrawBox = 0;
 	// if has something to draw
-	if (numDrawingList > 0) {
+	if (drawListPos > 0) {
+		int32 pos = 0;
 		uint32 flags;
 		int32 actorIdx;
 		ActorStruct *actor;
 
 		do {
-			actorIdx = drawList[drawListPos].index & 0x3FF;
+			actorIdx = drawList[pos].index & 0x3FF;
 			actor = &sceneActors[actorIdx];
-			flags = ((uint32) drawList[drawListPos].index) & 0xFC00;
+			flags = ((uint32) drawList[pos].index) & 0xFC00;
 
 			// Drawing actors
 			if (flags < 0xC00) {
@@ -422,7 +475,7 @@ void process_drawing(int32 numDrawingList) {
 			else if (flags == 0xC00) {
 				int32 spriteWidth, spriteHeight, tmpX, tmpY, tmpZ;
 				uint8 *spritePtr = spriteTable[actor->entity];
-				DrawListStruct shadow =	drawList[drawListPos];
+				DrawListStruct shadow =	drawList[pos];
 
 				// get actor position on screen
 				project_position_on_screen(shadow.X - cameraX, shadow.Y - cameraY, shadow.Z - cameraZ);
@@ -529,9 +582,9 @@ void process_drawing(int32 numDrawingList) {
 				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 					int32 tmpX, tmpY, tmpZ;
 
-					tmpX = (drawList[drawListPos].X + 0x100) >> 9;
-					tmpY = drawList[drawListPos].Y >> 8;
-					tmpZ = (drawList[drawListPos].Z + 0x100) >> 9;
+					tmpX = (drawList[pos].X + 0x100) >> 9;
+					tmpY = drawList[pos].Y >> 8;
+					tmpZ = (drawList[pos].Z + 0x100) >> 9;
 
 					draw_over_model_actor(tmpX, tmpY, tmpZ);
 					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
@@ -542,49 +595,14 @@ void process_drawing(int32 numDrawingList) {
 			}
 
 			reset_clip();
-			drawListPos++;
-		} while (drawListPos < numDrawingList);
+			pos++;
+		} while (pos < drawListPos);
 	}
-}
 
-/** */
-void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime) {
-	int32 i;
-	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
-		OverlayListStruct *overlay = &overlayList[i];
-		if (overlay->info0 == -1) {
-			overlay->type = type;
-			overlay->info0 = info0;
-			overlay->X = X;
-			overlay->Y = Y;
-			overlay->info1 = info1;
-			overlay->posType = posType;
-			overlay->lifeTime = lbaTime + lifeTime * 50;
-			return;
-		}
-	}
-}
+#ifdef GAMEMOD
+	display_zones(skipIntro);
+#endif
 
-/** */
-void update_overlay_type_position(int16 X1, int16 Y1, int16 X2, int16 Y2) {
-	int32 i;
-	int16 newX, newY;
-
-	newX = X2 - X1;
-	newY = Y2 - Y1;
-
-	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
-		OverlayListStruct *overlay = &overlayList[i];
-		if (overlay->type == koFollowActor) {
-			overlay->X = newX;
-			overlay->Y = newY;
-		}
-	}
-}
-
-/** */
-void process_overlay() {
-	int32 i;
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];
 		if (overlay->info0 != -1) {
@@ -736,51 +754,6 @@ void process_overlay() {
 			}
 		}
 	}
-}
-
-/** This is responsible for the entire game screen redraw
-	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
-	int16 tmpProjPosX;
-	int16 tmpProjPosY;
-	int32 numDrawingList;
-
-	tmpProjPosX = projPosXScreen;
-	tmpProjPosY = projPosYScreen;
-
-	reset_clip();
-
-	if (bgRedraw) {
-		freeze_time();
-		if (needChangeScene != -1 && needChangeScene != -2)
-			fade_out(paletteRGBA);
-		clear_screen();
-		redraw_grid();
-		update_overlay_type_position(tmpProjPosX, tmpProjPosY, projPosXScreen, projPosYScreen);
-		copy_screen(frontVideoBuffer, workVideoBuffer);
-		if (needChangeScene != -1 && needChangeScene != -2) {
-			fade_in(paletteRGBA);
-			set_palette(paletteRGBA);
-		}
-	} else {
-		blit_background_areas();
-	}
-
-	// first loop
-	numDrawingList = process_actors_drawlist(bgRedraw);
-	// second loop
-	numDrawingList = process_extras_drawlist(numDrawingList);
-
-	sort_drawing_list(drawList, numDrawingList);
-
-	currNumOfRedrawBox = 0;
-	process_drawing(numDrawingList);
-
-#ifdef GAMEMOD
-	display_zones(skipIntro);
-#endif
-
-	process_overlay();
 
 	reset_clip();
 
@@ -794,6 +767,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 	if (bgRedraw) {
 		flip();
 		move_next_areas();
+		unfreeze_time();
 	} else {
 		flip_redraw_areas();
 	}
