@@ -210,13 +210,13 @@ void load_scene() {
 		localScene += 2;
 		sceneActors[i].controlMode = *((uint16*)localScene);
 		localScene += 2;
-		sceneActors[i].info0 = *((uint16*)localScene);
+		sceneActors[i].info0 = *((int16*)localScene);
 		localScene += 2;
-		sceneActors[i].info1 = *((uint16*)localScene);
+		sceneActors[i].info1 = *((int16*)localScene);
 		localScene += 2;
-		sceneActors[i].info2 = *((uint16*)localScene);
+		sceneActors[i].info2 = *((int16*)localScene);
 		localScene += 2;
-		sceneActors[i].info3 = *((uint16*)localScene);
+		sceneActors[i].info3 = *((int16*)localScene);
 		localScene += 2;
 		sceneActors[i].followedActor = sceneActors[i].info3;
 		sceneActors[i].bonusAmount = *(localScene++);

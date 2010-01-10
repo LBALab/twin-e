@@ -290,7 +290,7 @@ int32 mSPEED(int32 actorIdx, ActorStruct *actor) {
 int32 mBACKGROUND(int32 actorIdx, ActorStruct *actor) {
 	actor->positionInMoveScript++;
 
-	if (*(scriptPtr) == 0) {
+	if (*(scriptPtr) != 0) {
 		if (!actor->staticFlags.bIsBackgrounded) {
 			actor->staticFlags.bIsBackgrounded = 1;
 			if (actor->dynamicFlags.bIsVisible) {
