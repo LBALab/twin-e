@@ -37,6 +37,7 @@
 #include "keyboard.h"
 #include "animations.h"
 #include "collision.h"
+#include "gamestate.h"
 
 /** Get shadow position
 	@param X Shadow X coordinate
@@ -347,7 +348,7 @@ void process_actor_movements(int32 actorIdx) {
 		heroPressedKey = key;
 	} else {
 		if (!actor->staticFlags.bIsSpriteActor) {
-			if (actor->controlMode != 1) {
+			if (actor->controlMode != kMANUAL) {
 				actor->angle = get_real_angle(&actor->move);
 			}
 		}
@@ -413,13 +414,36 @@ void process_actor_movements(int32 actorIdx) {
 					break;
 				case DISCRETE:
 					if (loopPressedKey & 1) {
-						init_anim(ANIM_HIDE, 1, 0, actorIdx);
+						init_anim(ANIM_HIDE, 0, 255, actorIdx);
 					}
 					break;
 				}
 			}
 
 			// TODO: sword and magic ball actions
+			if ((loopPressedKey & 8) && !gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
+				if (usingSabre == 0) { // Use Magic Ball
+					if (gameFlags[GAMEFLAG_HAS_MAGICBALL]) {
+						if (magicBallIdx == -1) {
+							init_anim(ANIM_THROW_BALL, 1, 0, actorIdx);
+						}
+
+						heroMoved = 1;
+						actor->angle = get_real_angle(&actor->move);
+					}
+				} else {
+					if (gameFlags[GAMEFLAG_HAS_SABRE]) {
+						if (actor->body != 2) {
+							init_model_actor(2, actorIdx);
+						}
+
+						init_anim(ANIM_SABRE_ATTACK, 1, 0, actorIdx);
+
+						heroMoved = 1;
+						actor->angle = get_real_angle(&actor->move);
+					}
+				}
+			}
 
 			if (loopPressedKey == 0 || heroAction != 0) {
 				int16 tempAngle;
@@ -508,11 +532,12 @@ void process_actor_movements(int32 actorIdx) {
 			actor->X = sceneActors[actor->followedActor].X;
 			actor->Z = sceneActors[actor->followedActor].Z;
 			break;
-		/*case kRANDOM:
+		case kRANDOM:
+			printf("Control mode [kRANDOM] not implemented\n");
 			break;
 		default:
-			printf("Control mode %d not implemented\n", actor->controlMode);
-			break;*/
+			printf("Unknown Control mode %d\n", actor->controlMode);
+			break;
 		}
 	}
 }
