@@ -64,6 +64,8 @@
 #define ANIM_TOP_LADDER		13
 /** Jump anim value */
 #define ANIM_JUMP			14
+/** Magic ball throw anim value */
+#define ANIM_THROW_BALL		15
 /** Hide anim value */
 #define ANIM_HIDE			16
 /** Hide anim value */
@@ -74,6 +76,8 @@
 #define ANIM_LEFT_PUNCH		19
 /** Hit anim value */
 #define ANIM_HIT2			22
+/** Sabre attack anim value */
+#define ANIM_SABRE_ATTACK	23
 
 /** Table with all loaded animations */
 uint8* animTable[NUM_ANIMS];
