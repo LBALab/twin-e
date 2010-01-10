@@ -467,6 +467,10 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 							draw_over_model_actor(tempX, tempY, tempZ);
 
 							add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
+
+							if (actor->staticFlags.bIsBackgrounded && bgRedraw == 1) {
+								blit_box(textWindowLeft, textWindowTop, renderRight, renderBottom, (int8 *) frontVideoBuffer, textWindowLeft, textWindowTop, (int8 *) workVideoBuffer);
+							}
 						}
 					}
 				}
@@ -509,7 +513,6 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 			// Drawing sprite actors
 			else if (flags == 0x1000) {
 				int32 spriteWidth, spriteHeight;
-				//int32 spriteSize = spriteSizeTable[actor->entity];
 				uint8 *spritePtr = spriteTable[actor->entity];
 
 				// get actor position on screen
@@ -518,8 +521,8 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 				get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
 
 				// calculate sprite position on screen
-				renderLeft = projPosX + *(int16 *)(spriteBoundingBoxPtr + actor->entity * 16);
-				renderTop = projPosY + *(int16 *)(spriteBoundingBoxPtr + actor->entity * 16 + 2);
+				renderLeft = projPosX +  *((int16 *)(spriteBoundingBoxPtr + (actor->entity * 16)));
+				renderTop = projPosY + *((int16 *)(spriteBoundingBoxPtr + (actor->entity * 16) + 2));
 				renderRight = renderLeft + spriteWidth;
 				renderBottom = renderTop + spriteHeight;
 
@@ -550,6 +553,10 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 					}
 
 					add_redraw_area(textWindowLeft, textWindowTop, textWindowRight, textWindowBottom);
+
+					if (actor->staticFlags.bIsBackgrounded && bgRedraw == 1) {
+						blit_box(textWindowLeft, textWindowTop, textWindowRight, textWindowBottom, (int8 *) frontVideoBuffer, textWindowLeft, textWindowTop, (int8 *) workVideoBuffer);
+					}
 
 					// show clipping area
 					//draw_box(renderLeft, renderTop, renderRight, renderBottom);
