@@ -858,48 +858,6 @@ int giveup_menu() {
 	return 0;
 }
 
-/** Used to process options menu while playing game
-	@param pKey pressed key */
-int process_giveup_menu() {
-	if (skipIntro == 1) { // && twinsen->life > 0 && twinsen->costumeIndex != -1 && !twinsen->staticFlagsBF.bNoDisplay)
-		freeze_time();
-		if (giveup_menu()) {
-			unfreeze_time();
-			redraw_engine_actions(1);
-			freeze_time();
-			//TODO: save game
-			quitGame = 0;
-			cfgfile.Quit = 0;
-			unfreeze_time();
-			return 1;
-		} else {
-			unfreeze_time();
-			redraw_engine_actions(1);
-		}
-	}
-	return 0;
-}
-
-/** Used to process options menu while playing game
-	@param pKey pressed key */
-void process_options_menu(int16 pKey) {
-	// Press F6
-	if (pKey == 0x40) {
-		int tmpLangCD = cfgfile.LanguageCDId;
-		freeze_time();
-		stop_samples();
-		OptionsMenuSettings[5] = 15;
-		cfgfile.LanguageCDId = 0;
-		init_dialogue_bank(0);
-		options_menu();
-		cfgfile.LanguageCDId = tmpLangCD;
-		init_dialogue_bank(currentTextBank + 3);
-		//TODO: play music
-		unfreeze_time();
-		redraw_engine_actions(1);
-	}
-}
-
 void draw_info_menu(int16 left, int16 top)
 {
 	int32 boxLeft, boxTop, boxRight, boxBottom; // var_4, var_8, var_10, var_C
@@ -1041,8 +999,7 @@ void process_behaviour_menu() {
 	int32 tmpLanguageCD;
 	int32 tmpTextBank;
 	int32 tmpHeroBehaviour;
-
-	freeze_time();
+	int32 tmpTime;
 
 	if (heroBehaviour == PROTOPACK) {
 		stop_samples();
@@ -1075,8 +1032,10 @@ void process_behaviour_menu() {
 	set_anim_at_keyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
 
 	read_keys();
+	
+	tmpTime = lbaTime;
 
-	 while (skipedKey & 4 || (skipIntro > 59 && skipIntro < 62)) {
+	while (skipedKey & 4 || (skipIntro > 59 && skipIntro < 62)) {
 		read_keys();
 		key = pressedKey;
 
@@ -1114,6 +1073,8 @@ void process_behaviour_menu() {
 		lbaTime++;
 	}
 
+	lbaTime = tmpTime;
+
 	set_behaviour(heroBehaviour);
 	init_engine_projections();
 
@@ -1121,6 +1082,4 @@ void process_behaviour_menu() {
 	init_dialogue_bank(currentTextBank + 3);
 
 	cfgfile.LanguageCDIdx = tmpLanguageCD;
-
-	unfreeze_time();
 }

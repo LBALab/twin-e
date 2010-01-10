@@ -87,22 +87,51 @@ int32 run_game_engine() { // mainLoopInteration
 	process_debug(pKey);
 #endif
 
-	if (process_giveup_menu())
-		return 0; // give up
+	// Process give up menu - Press ESC
+	if (skipIntro == 1 && sceneHero->life > 0 && sceneHero->entity != -1 && !sceneHero->staticFlags.bIsHidden) {
+		freeze_time();
+		if (giveup_menu()) {
+			unfreeze_time();
+			redraw_engine_actions(1);
+			freeze_time();
+			//TODO: save game
+			quitGame = 0;
+			cfgfile.Quit = 0;
+			unfreeze_time();
+			return 0;
+		} else {
+			unfreeze_time();
+			redraw_engine_actions(1);
+		}
+	}
 
-	process_options_menu(pKey);
+	// Process options menu - Press F6
+	if (pKey == 0x40) {
+		int tmpLangCD = cfgfile.LanguageCDId;
+		freeze_time();
+		stop_samples();
+		OptionsMenuSettings[5] = 15;
+		cfgfile.LanguageCDId = 0;
+		init_dialogue_bank(0);
+		options_menu();
+		cfgfile.LanguageCDId = tmpLangCD;
+		init_dialogue_bank(currentTextBank + 3);
+		//TODO: play music
+		unfreeze_time();
+		redraw_engine_actions(1);
+	}
 
 	// TODO: inventory menu
-	
-	// Show behaviour menu
+
+	// Process behaviour menu - Press CTRL
+	// TODO: behaviour menu (LBA2 style)
 	if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
 		freeze_time();
 		process_behaviour_menu();
-		redraw_engine_actions(1);
 		unfreeze_time();
+		redraw_engine_actions(1);
 	}
 
-	// TODO: behaviour menu (LBA2 style)
 	// TODO: use Proto-Pack
 
 	// Press Enter to Recenter Screen
@@ -115,7 +144,7 @@ int32 run_game_engine() { // mainLoopInteration
 
 	// TODO: draw holomap
 
-	// Press Pause
+	// Process Pause - Press P
 	if (pKey == 0x19) {
 		freeze_time();
 		set_font_color(15);
@@ -125,9 +154,8 @@ int32 run_game_engine() { // mainLoopInteration
 			read_keys();
 			SDL_Delay(10);
 		} while (skipIntro != 0x19 && !pressedKey);
-		copy_screen(workVideoBuffer, frontVideoBuffer);
-		flip(workVideoBuffer);
 		unfreeze_time();
+		redraw_engine_actions(1);
 	}
 
 	loopActorStep = get_real_value(&loopMovePtr);
@@ -194,7 +222,7 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->staticFlags.bCanDrown) {
-				actor->brickSound = get_brick_sound_type(actor->X, actor->Y, actor->Z);
+				//actor->brickSound = get_brick_sound_type(actor->X, actor->Y, actor->Z);
 				// TODO process_actor_drown(a)
 			}
 
