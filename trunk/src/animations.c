@@ -1038,9 +1038,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					// cause wall damage
 					actor->life--;
 
-					if (cfgfile.Debug == 1) {
+					/*if (cfgfile.Debug == 1) {
 						printf("Wall hit - Type: running\n");
-					}
+					}*/
 				}
 			}
 		}
@@ -1065,9 +1065,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 						// cause wall damage
 						actor->life--;
 
-						if (cfgfile.Debug == 1) {
+						/*if (cfgfile.Debug == 1) {
 							printf("Wall hit - Type: running 2\n");
-						}
+						}*/
 					}
 
 					// no Z coordinate issue

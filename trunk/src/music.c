@@ -87,8 +87,8 @@ void play_track_music_cd(int32 track) {
 		if (CD_INDRIVE(SDL_CDStatus(cdrom)))
 			SDL_CDPlayTracks(cdrom, track, 0, 1, 0);
 
-		if (cfgfile.Debug)
-			printf("Playing track (CD): %d\n", track);
+		/*if (cfgfile.Debug)
+			printf("Playing track (CD): %d\n", track);*/
 	}
 }
 
@@ -98,8 +98,8 @@ void stop_track_music_cd() {
 		if (cdrom != NULL) {
 			SDL_CDStop(cdrom);
 
-			if (cfgfile.Debug)
-				printf("Stop CD track\n");
+			/*if (cfgfile.Debug)
+				printf("Stop CD track\n");*/
 		}
 	}
 }
@@ -121,12 +121,12 @@ void play_track_music_mp3(int32 track) {
 	music_volume(cfgfile.MusicVolume);
 	Mix_PlayMusic(current_track, -1);
 
-	if (cfgfile.Debug) {
+	/*if (cfgfile.Debug) {
 		if (cfgfile.Sound == 2)
 			printf("Playing track (MP3): %s\n", musfile);
 		else
 			printf("Playing track (OGG): %s\n", musfile);
-	}
+	}*/
 }
 
 /** Stop MP3 music */
@@ -135,8 +135,8 @@ void stop_track_music_mp3() {
 		Mix_FreeMusic(current_track);
 		current_track = NULL;
 
-		if (cfgfile.Debug)
-			printf("Stop MP3 track\n");
+		/*if (cfgfile.Debug)
+			printf("Stop MP3 track\n");*/
 	}
 }
 
@@ -210,7 +210,7 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 		if (Mix_PlayMusic(current_track, loop) == -1)
 			printf("Error while playing music: %d \n", midiIdx);
 
-		if (cfgfile.Debug) {
+		/*if (cfgfile.Debug) {
 			if (cfgfile.Sound > 1) {
 				if (cfgfile.Sound == 2)
 					printf("Playing Music (MP3): %d\n", midiIdx);
@@ -218,7 +218,7 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 					printf("Playing Music (OGG): %d\n", midiIdx);
 			} else
 				printf("Playing Music (MIDI): %d\n", midiIdx);
-		}
+		}*/
 	}
 }
 
@@ -231,8 +231,8 @@ void stop_midi_music() {
 			if (midiPtr != NULL)
 				free(midiPtr);
 
-			if (cfgfile.Debug)
-				printf("Stop MIDI music\n");
+			/*if (cfgfile.Debug)
+				printf("Stop MIDI music\n");*/
 		}
 	}
 }

@@ -79,8 +79,8 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
 
-		if (cfgfile.Debug)
-			printf("Playing VOC: Sample %d\n", index);
+		/*if (cfgfile.Debug)
+			printf("Playing VOC: Sample %d\n", index);*/
 
 		free(sampPtr);
 	}
@@ -119,8 +119,8 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
 
-		if (cfgfile.Debug)
-			printf("Playing VOC: Sample %d\n", index);
+		/*if (cfgfile.Debug)
+			printf("Playing VOC: Sample %d\n", index);*/
 
 		free(sampPtr);
 	}
@@ -130,8 +130,8 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 void resume_samples() {
 	if (cfgfile.Sound) {
 		Mix_Resume(-1);
-		if (cfgfile.Debug)
-			printf("Resume VOC samples\n");
+		/*if (cfgfile.Debug)
+			printf("Resume VOC samples\n");*/
 	}
 }
 
@@ -139,8 +139,8 @@ void resume_samples() {
 void pause_samples() {
 	if (cfgfile.Sound) {
 		Mix_HaltChannel(-1);
-		if (cfgfile.Debug)
-			printf("Pause VOC samples\n");
+		/*if (cfgfile.Debug)
+			printf("Pause VOC samples\n");*/
 	}
 }
 
@@ -151,7 +151,7 @@ void stop_samples() {
 		//clean up
 		Mix_FreeChunk(sample);
 		sample = NULL; //make sure we free it
-		if (cfgfile.Debug)
-			printf("Stop VOC samples\n");
+		/*if (cfgfile.Debug)
+			printf("Stop VOC samples\n");*/
 	}
 }
