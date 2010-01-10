@@ -524,12 +524,11 @@ void process_actor_extra_bonus(int32 actorIdx) {
 
 	if (numBonus) {
 		currentBonus = bonusTable[Rnd(numBonus)];
-		currentBonus += 3;
-
 		// if bonus is magic an no magic level yet, then give life points
 		if (!magicLevelIdx && currentBonus == 2) {
 			currentBonus = 1;
 		}
+		currentBonus += 3;
 
 		if (actor->dynamicFlags.bIsDead) {
 			add_extra_bonus(actor->X, actor->Y, actor->Z, 0x100, 0, currentBonus, actor->bonusAmount);

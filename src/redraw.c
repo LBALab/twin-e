@@ -639,8 +639,8 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 				get_sprite_size(0, &spriteWidth, &spriteHeight, spritePtr);
 
-				offsetX = *((int16 *)spriteBoundingBoxPtr + (overlay->info0 * 16));
-				offsetY = *((int16 *)spriteBoundingBoxPtr + (overlay->info0 * 16) + 2);
+				offsetX = *((int16 *)(spriteBoundingBoxPtr + (overlay->info0 * 16)));
+				offsetY = *((int16 *)(spriteBoundingBoxPtr + (overlay->info0 * 16) + 2));
 
 				renderLeft   = offsetX + overlay->X;
 				renderTop    = offsetY + overlay->Y;

@@ -209,11 +209,11 @@ int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32
 		ExtraListStruct *extra = &extraList[i];
 		if (extra->info0 == -1) {
 			extra->info0 = type;
-			extra->type = 0x4030;
+			extra->type = 0x4071;
 
-			if(type != 6) {
-				extra->type = 0x4071;
-			}
+			/*if(type == SPRITEHQR_KEY) {
+				extra->type = 0x4030;
+			}*/
 
 			extra->X = X;
 			extra->Y = Y;
