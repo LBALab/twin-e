@@ -8,7 +8,6 @@ OBJS=actor.o \
 	debug.o \
 	debug.grid.o \
 	debug.scene.o \
-	dialogues.o \
 	extra.o \
 	filereader.o \
 	gamestate.o \
@@ -31,7 +30,8 @@ OBJS=actor.o \
 	script.life.o \
 	script.move.o \
 	sdlengine.o \
-	sound.o
+	sound.o \
+	text.o
 
 LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf
 

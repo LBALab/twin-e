@@ -26,7 +26,7 @@
 */
 
 #include "resources.h"
-#include "dialogues.h"
+#include "text.h"
 #include "scene.h"
 #include "animations.h"
 #include "images.h"
@@ -102,7 +102,7 @@ void init_resources() {
 
 	set_font_parameters(2, 8);
 	set_font_color(14);
-	set_dialogue_cross_color(136, 143, 2);
+	set_text_cross_color(136, 143, 2);
 
 	hqr_getalloc_entry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
 

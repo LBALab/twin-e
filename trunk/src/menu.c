@@ -36,7 +36,7 @@
 #include "sdlengine.h"
 #include "hqrdepack.h"
 #include "lbaengine.h"
-#include "dialogues.h"
+#include "text.h"
 #include "interface.h"
 #include "redraw.h"
 #include "keyboard.h"
@@ -446,8 +446,8 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 
 	set_font_color(15);
 	get_menu_text(value, dialText);
-	textSize = dialogue_text_size(dialText);
-	display_dialogue_text(width - (textSize / 2), topheight - 18, dialText);
+	textSize = get_text_size(dialText);
+	draw_text(width - (textSize / 2), topheight - 18, dialText);
 
 	// TODO: make volume buttons
 
@@ -792,7 +792,7 @@ void main_menu() {
 
 	while (!cfgfile.Quit) {
 		// TODO: RECHECK THIS LATER
-		init_dialogue_bank(0);
+		init_text_bank(0);
 
 		play_track_music(9); // LBA's Theme
 		stop_samples();
@@ -841,13 +841,13 @@ int giveup_menu() {
 	do {
 		//saveLangue = languageCD1;
 		//languageCD1 = 0;
-		init_dialogue_bank(0);
+		init_text_bank(0);
 
 		menuId = process_menu(localMenu);
 
 		//languageCD1 = saveLangue;
 
-		init_dialogue_bank(currentTextBank + 3);
+		init_text_bank(currentTextBank + 3);
 
 		fps_cycles(cfgfile.Fps);
 	} while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
@@ -895,12 +895,12 @@ void draw_info_menu(int16 left, int16 top)
 	/** draw coin sprite */
 	draw_sprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
 	set_font_color(155);
-	display_dialogue_text(left + 370, top + 5, ITOA(inventoryNumKashes));
+	draw_text(left + 370, top + 5, ITOA(inventoryNumKashes));
 
 	/** draw key sprite */
 	draw_sprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
 	set_font_color(155);
-	display_dialogue_text(left + 370, top + 40, ITOA(inventoryNumKeys));
+	draw_text(left + 370, top + 40, ITOA(inventoryNumKeys));
 
 	// Clover leaf boxes
 	for (i = 0; i < inventoryNumLeafsBox; i++)
@@ -962,7 +962,7 @@ void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
 			get_menu_text(heroBehaviour, dialText);
 		}
 
-		display_dialogue_text((650 - dialogue_text_size(dialText)) / 2, 240, dialText);
+		draw_text((650 - get_text_size(dialText)) / 2, 240, dialText);
 	}
 
 	render_behaviour_model(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
@@ -1017,13 +1017,13 @@ void process_behaviour_menu() {
 
 	copy_screen(frontVideoBuffer, workVideoBuffer);
 
-	tmpLanguageCD = cfgfile.LanguageCDIdx;
-	cfgfile.LanguageCDIdx = 0;
+	tmpLanguageCD = cfgfile.LanguageCDId;
+	cfgfile.LanguageCDId = 0;
 
 	tmpTextBank = currentTextBank;
 	currentTextBank = -1;
 
-	init_dialogue_bank(0);
+	init_text_bank(0);
 
 	draw_behaviour_menu(sceneHero->angle);
 
@@ -1079,7 +1079,7 @@ void process_behaviour_menu() {
 	init_engine_projections();
 
 	currentTextBank = tmpTextBank;
-	init_dialogue_bank(currentTextBank + 3);
+	init_text_bank(currentTextBank + 3);
 
-	cfgfile.LanguageCDIdx = tmpLanguageCD;
+	cfgfile.LanguageCDId = tmpLanguageCD;
 }

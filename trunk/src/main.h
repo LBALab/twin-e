@@ -62,8 +62,10 @@ typedef struct ConfigFile {
 	int8 Language[10];
 	/** Language CD name */
 	int8 LanguageCD[10];
-	/** Language CD idx */
-	int16 LanguageCDIdx;
+	/** Language Identification according with Language setting. */
+	int32 LanguageId;
+	/** Language Identification according with Language setting. */
+	int32 LanguageCDId;
 	/** Enable/Disable game dialogues */
 	int8 FlagDisplayText[3];
 	/** Save voice files on hard disk */
@@ -82,10 +84,6 @@ typedef struct ConfigFile {
 	int32 MasterVolume;
 	/** *Game version */
 	int32 Version;
-	/** Language Identification according with Language setting. */
-	int32 LanguageId;
-	/** Language Identification according with Language setting. */
-	int32 LanguageCDId;
 	/** To allow fullscreen or window mode. */
 	int32 FullScreen;
 	/** If you want to use the LBA CD or not */

@@ -1,4 +1,4 @@
-/** @file dialogues.h
+/** @file text.h
 	@brief
 	This file contains dialogues processing. It contains text and font functions.
 
@@ -65,17 +65,17 @@ int32 dialTextBufferSize;
 
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
-void init_dialogue_bank(int32 bankIdx);
+void init_text_bank(int32 bankIdx);
 
 /** Display a certain dialogue text in the screen
 	@param x X coordinate in screen
 	@param y Y coordinate in screen
 	@param dialogue ascii text to display */
-void display_dialogue_text(int32 x, int32 y, int8 *dialogue);
+void draw_text(int32 x, int32 y, int8 *dialogue);
 
 /** Gets dialogue text width size
 	@param dialogue ascii text to display */
-int32 dialogue_text_size(int8 *dialogue);
+int32 get_text_size(int8 *dialogue);
 
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters
@@ -90,7 +90,7 @@ void set_font_color(int32 color);
 	@param stopColor color number to stop
 	@param startColor color number to start
 	@param stepSize step size to change between those colors */
-void set_dialogue_cross_color(int32 stopColor, int32 startColor, int32 stepSize);
+void set_text_cross_color(int32 stopColor, int32 startColor, int32 stepSize);
 
 /** Get dialogue text into text buffer
 	@param index dialogue index */
@@ -99,8 +99,7 @@ int32 get_text(int32 index);
 /** Gets menu dialogue text
 	@param index text index to display
 	@param dialogue dialogue text buffer to display */
-void get_menu_text(int32 index, int8 *dialogue);
-
+void get_menu_text(int32 index, int8 *text);
 
 void display_dialogue_fullscreen(int32 dialog, uint8 color);
 

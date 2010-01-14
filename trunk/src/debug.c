@@ -34,7 +34,7 @@
 #include "sdlengine.h"
 #include "menu.h"
 #include "interface.h"
-#include "dialogues.h"
+#include "text.h"
 #include "lbaengine.h"
 #include "images.h"
 #include "redraw.h"
@@ -479,8 +479,8 @@ void debug_plasma_window(int8 *text, int32 color) {
 	if (!(rand() % 5)) {
 		plasmaEffectPtr[rand() % 320 * 10 + 6400] = 255;
 	}
-	textSize = dialogue_text_size(text);
-	display_dialogue_text((SCREEN_WIDTH / 2) - (textSize / 2), 10, text);
+	textSize = get_text_size(text);
+	draw_text((SCREEN_WIDTH / 2) - (textSize / 2), 10, text);
 	draw_box(5, 5, 634, 50);
 	copy_block_phys(5, 5, 634, 50);
 }

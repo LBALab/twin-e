@@ -44,7 +44,7 @@
 #include "grid.h"
 #include "lbaengine.h"
 #include "redraw.h"
-#include "dialogues.h"
+#include "text.h"
 #include "renderer.h"
 #include "animations.h"
 #include "gamestate.h"
