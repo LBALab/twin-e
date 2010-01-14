@@ -40,7 +40,7 @@
 #include "animations.h"
 #include "keyboard.h"
 #include "movements.h"
-#include "dialogues.h"
+#include "text.h"
 #include "collision.h"
 #include "sound.h"
 
@@ -667,7 +667,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 				int8 text[10];
 				sprintf(text, "%d", overlay->info0);
 
-				textLength = dialogue_text_size(text);
+				textLength = get_text_size(text);
 				textHeight = 48;
 
 				renderLeft   = overlay->X - (textLength/2);
@@ -679,7 +679,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 				set_font_color(overlay->info1);
 
-				display_dialogue_text(renderLeft, renderTop, text);
+				draw_text(renderLeft, renderTop, text);
 
 				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
@@ -694,7 +694,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 				sprintf(text, "%d", range);
 
-				textLength = dialogue_text_size(text);
+				textLength = get_text_size(text);
 				textHeight = 48;
 
 				renderLeft   = overlay->X - (textLength/2);
@@ -706,7 +706,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 				set_font_color(overlay->info1);
 
-				display_dialogue_text(renderLeft, renderTop, text);
+				draw_text(renderLeft, renderTop, text);
 
 				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
@@ -723,7 +723,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 				
 				get_menu_text(overlay->info0, text);
 
-				textLength = dialogue_text_size(text);
+				textLength = get_text_size(text);
 				textHeight = 48;
 
 				renderLeft   = overlay->X - (textLength/2);
@@ -751,7 +751,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 				set_font_color(sceneActors[overlay->info1].talkColor);
 
-				display_dialogue_text(renderLeft, renderTop, text);
+				draw_text(renderLeft, renderTop, text);
 
 				if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
 					add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);

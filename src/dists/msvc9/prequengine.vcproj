@@ -218,14 +218,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\dialogues.c"
-			>
-		</File>
-		<File
-			RelativePath="..\..\dialogues.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\extra.c"
 			>
 		</File>
@@ -419,6 +411,14 @@
 		</File>
 		<File
 			RelativePath="..\..\sys.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\text.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\text.h"
 			>
 		</File>
 	</Files>

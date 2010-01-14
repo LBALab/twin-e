@@ -9,7 +9,6 @@ OBJS=   actor.o \
 	debug.o \
 	debug.grid.o \
 	debug.scene.o \
-	dialogues.o \
 	extra.o \
 	filereader.o \
 	gamestate.o \
@@ -33,7 +32,8 @@ OBJS=   actor.o \
 	script.move.o \
 	sdlengine.o \
 	sound.o \
-	sys.o
+	sys.o \
+	text.o
 
 LIBS=$(LDFLAGS)
 

@@ -28,7 +28,7 @@
 #include "gamestate.h"
 #include "scene.h"
 #include "redraw.h"
-#include "dialogues.h"
+#include "text.h"
 #include "menu.h"
 #include "renderer.h"
 #include "grid.h"

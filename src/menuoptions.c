@@ -31,7 +31,7 @@
 #include "images.h"
 #include "resources.h"
 #include "sdlengine.h"
-#include "dialogues.h"
+#include "text.h"
 #include "gamestate.h"
 
 void new_game() {

@@ -34,7 +34,7 @@
 #include "grid.h"
 #include "main.h"
 #include "lbaengine.h"
-#include "dialogues.h"
+#include "text.h"
 #include "resources.h"
 #include "music.h"
 #include "renderer.h"
@@ -343,7 +343,7 @@ void change_scene() {
 	if (needChangeScene == 116 || needChangeScene == 117)
 		currentTextBank = 10;
 
-	init_dialogue_bank(currentTextBank + 3);
+	init_text_bank(currentTextBank + 3);
 	init_grid(needChangeScene);
 
 	if (heroPositionType == POSITION_TYPE_ZONE) {

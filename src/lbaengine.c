@@ -34,7 +34,7 @@
 #include "scene.h"
 #include "menu.h"
 #include "interface.h"
-#include "dialogues.h"
+#include "text.h"
 #include "redraw.h"
 #include "hqrdepack.h"
 #include "resources.h"
@@ -112,10 +112,10 @@ int32 run_game_engine() { // mainLoopInteration
 		stop_samples();
 		OptionsMenuSettings[5] = 15;
 		cfgfile.LanguageCDId = 0;
-		init_dialogue_bank(0);
+		init_text_bank(0);
 		options_menu();
 		cfgfile.LanguageCDId = tmpLangCD;
-		init_dialogue_bank(currentTextBank + 3);
+		init_text_bank(currentTextBank + 3);
 		//TODO: play music
 		unfreeze_time();
 		redraw_engine_actions(1);
@@ -148,7 +148,7 @@ int32 run_game_engine() { // mainLoopInteration
 	if (pKey == 0x19) {
 		freeze_time();
 		set_font_color(15);
-		display_dialogue_text(5, 446, "Pause"); // no key for pause in Text Bank
+		draw_text(5, 446, "Pause"); // no key for pause in Text Bank
 		copy_block_phys(5, 446, 100, 479);
 		do {
 			read_keys();
