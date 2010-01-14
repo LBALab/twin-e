@@ -35,6 +35,7 @@
 #include "menu.h"
 #include "interface.h"
 #include "lbaengine.h"
+#include "keyboard.h"
 
 // TODO: CHECK THIS LATER
 uint8 textVar2[256];
@@ -246,6 +247,164 @@ int32 get_text_size(int8 *dialogue) {
 	return (dialTextSize);
 }
 
+void init_dialogue_box() { // InitDialWindow
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, frontVideoBuffer);
+
+	if (newGameVar4 != 0) {
+		draw_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+		draw_transparent_box(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
+	}
+
+	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+	printText8Var3 = 0;
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, workVideoBuffer);
+}
+
+// TODO: refactor this code
+void init_text(int32 index) { // initText
+	printTextVar13 = 0;
+
+	if (!get_text(index)) {
+		return;
+	}
+
+	printText8Ptr1 = buf1;
+	printText8Ptr2 = buf2;
+
+	printTextVar13 = 1;
+
+	printText8Var1 = 0;
+	buf1[0] = 0;
+	buf2[0] = 0;
+	printText8Var2 = index;
+	printText8Var3 = 0;
+	TEXT_CurrentLetterX = dialTextBoxLeft + 8;
+	printText8Var5 = 0;
+	printText8Var6 = 0;
+	TEXT_CurrentLetterY = dialTextBoxTop + 8;
+	printText8Var8 = currDialTextPtr;
+
+	// lba font is get while engine start
+	set_font_parameters(2, 7);
+
+	return 0;
+}
+
+// TODO: refactor this code
+int printText10() { // printText10()
+	int32 charWidth, charHeight; // a, b
+
+	if (printTextVar13 == 0) {
+		return 0;
+	}
+
+	if (*(printText8Ptr2) == 0) {
+		if (printText8Var5 != 0) {
+			if (newGameVar5 != 0) {
+				// TODO: printText10Sub();
+			}
+			printTextVar13 = 0;
+			return 0;
+		}
+		if (printText8Var6 != 0) {
+			blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, frontVideoBuffer);
+			copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+			printText8Var3 = 0;
+			printText8Var6 = 0;
+			TEXT_CurrentLetterX = dialTextBoxLeft + 8;
+			TEXT_CurrentLetterY = dialTextBoxTop + 8;
+		}
+		if (*(printText8Var8) == 0) {
+			// TODO: initProgressiveTextBuffer();
+			printText8Var5 = 1;
+			return 1;
+		}
+		// TODO: processTextLine();
+	}
+
+	// TODO: recheck this
+	if (*(printText8Ptr2) == 0) {
+		return 1;
+	}
+
+
+
+	return 0;
+}
+
+// TODO: refactor this code
+void draw_text_fullscreen(int32 index) { // printTextFullScreen
+	int32 printedText;
+	int32 skipText = 0;
+
+	save_clip();
+	reset_clip();
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+
+	// TODO: get right VOX entry index
+	// TODO: if we don't display text, than still plays vox file
+
+	init_text(index);
+	init_dialogue_box();
+
+	do {
+		read_keys();
+		printedText = printText10();
+
+		// TODO: process play vox file
+
+		if (skipIntro == 1) {
+			skipText = 1;
+		}
+
+		// TODO: missing vox processing
+	} while(!skipText);
+
+	printTextVar5 = 0;
+
+	// TODO: missing vox processing
+
+	printTextVar13 = 0;
+
+	if (printedText != 0) {
+		load_clip();
+		return;
+	}
+
+	if (skipText != 0) {
+		load_clip();
+		return;
+	}
+
+	// TODO: recheck this
+	// wait displaying text
+	do {
+		read_keys();
+	} while(skipIntro || skipedKey || pressedKey);
+
+	// TODO: recheck
+	// wait key to display next text
+	do {
+		read_keys();
+		if (skipIntro != 0) {
+			load_clip();
+			return;
+		}
+		if (skipedKey != 0) {
+			load_clip();
+			return;
+		}
+	} while(!pressedKey);
+
+	load_clip();
+}
+
+void set_font(uint8 *font, int32 spaceBetween, int32 charSpace) {
+	fontPtr = font;
+	dialSpaceBetween = spaceBetween;
+	dialCharSpace = charSpace;
+}
+
 //TODO: RECHECK THIS LATER
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters
@@ -274,7 +433,7 @@ void set_text_cross_color(int32 stopColor, int32 startColor, int32 stepSize) {
 
 /** Get dialogue text into text buffer
 	@param index dialogue index */
-int32 get_text(int32 index) {
+int32 get_text(int32 index) { // findString
 	int32 currIdx = 0;
 	int32 orderIdx = 0;
 	int32 numEntries;

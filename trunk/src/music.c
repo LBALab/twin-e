@@ -280,3 +280,9 @@ int init_cdrom() {
 	}
 	return 0;
 }
+
+/** Stop MIDI and Track music */
+void stop_music() {
+	stop_track_music();
+	stop_midi_music();
+}

@@ -62,6 +62,32 @@ int32 dialTextStepSize;
 /** Dialogue text buffer size for cross coloring dialogues */
 int32 dialTextBufferSize;
 
+int32 dialTextBoxLeft;   // dialogueBoxLeft
+int32 dialTextBoxTop;    // dialogueBoxTop
+int32 dialTextBoxRight;  // dialogueBoxRight
+int32 dialTextBoxBottom; // dialogueBoxBottom
+
+int32 dialTextBoxParam1; // dialogueBoxParam1
+int32 dialTextBoxParam2; // dialogueBoxParam2
+
+// TODO: refactor all this variables and related functions
+int32 printTextVar13;
+uint8 buf1[256];
+uint8 buf2[256];
+uint8 *printText8Ptr1;
+uint8 *printText8Ptr2;
+int32 printText8Var1;
+int32 printText8Var2;
+int32 printText8Var3;
+int32 TEXT_CurrentLetterX;
+int32 printText8Var5;
+int32 printText8Var6;
+int32 TEXT_CurrentLetterY;
+uint8 *printText8Var8;
+int32 newGameVar4;
+int32 newGameVar5;
+int32 printTextVar5;
+
 
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
@@ -76,6 +102,8 @@ void draw_text(int32 x, int32 y, int8 *dialogue);
 /** Gets dialogue text width size
 	@param dialogue ascii text to display */
 int32 get_text_size(int8 *dialogue);
+
+void set_font(uint8 *font, int32 spaceBetween, int32 charSpace);
 
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters

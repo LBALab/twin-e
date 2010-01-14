@@ -33,19 +33,48 @@
 #include "sdlengine.h"
 #include "text.h"
 #include "gamestate.h"
+#include "music.h"
+
+void intro_text_clip_full() { // newGame2
+	dialTextBoxLeft = 8;
+	dialTextBoxTop = 8;
+	dialTextBoxRight = 631;
+
+	dialTextBoxBottom = 471;
+	dialTextBoxParam1 = 11;
+	dialTextBoxParam2 = 607;
+}
+
+void intro_text_clip_small() { // newGame4
+	dialTextBoxLeft = 16;
+	dialTextBoxTop = 334;
+	dialTextBoxRight = 623;
+	dialTextBoxBottom = 463;
+	dialTextBoxParam1 = 3;
+	dialTextBoxParam2 = 591;
+}
 
 void new_game() {
-	/* Intro screen */
-	/*load_image( RESSHQR_INTROSCREEN1IMG, 1 );
-	init_dialogue_bank(2);
-	display_dialogue_fullscreen(150, 240);*/
+	int32 tmpFlagDisplayText;
 
-	//delay(1000);
-	/*for(;;)
-	{
-		read_keys();
-	}	*/
-	/* Engine init */
+	stop_music();
+
+	tmpFlagDisplayText = cfgfile.FlagDisplayText;
+	cfgfile.FlagDisplayText = 1;
+
+	// intro screen 1 - twinsun
+	load_image( RESSHQR_INTROSCREEN1IMG, 1 );
+
+	newGameVar4 = 0;
+	newGameVar5 = 1;
+
+	init_text_bank(2);
+	intro_text_clip_full();
+	set_font_color(15);
+	
+	draw_text_fullscreen(150);
+	read_keys();
+
 }
 
 /** Main menu new game options */
