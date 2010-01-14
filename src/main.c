@@ -189,10 +189,15 @@ void init_configurations() {
 				sscanf(buffer, "LanguageCD: %s", cfgfile.LanguageCD);
 				break;
 			case 2:
-				sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayText);
+				sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayTextStr);
+				if (strcmp(cfgfile.FlagDisplayTextStr,"ON")) {
+					cfgfile.FlagDisplayText = 1;
+				} else {
+					cfgfile.FlagDisplayText = 0;
+				}
 				break;
 			case 3:
-				sscanf(buffer, "FlagKeepVoice: %s", cfgfile.FlagKeepVoice);
+				sscanf(buffer, "FlagKeepVoice: %s", cfgfile.FlagKeepVoiceStr);
 				break;
 				// case 4,18: unused
 			case 19:

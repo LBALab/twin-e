@@ -67,9 +67,13 @@ typedef struct ConfigFile {
 	/** Language Identification according with Language setting. */
 	int32 LanguageCDId;
 	/** Enable/Disable game dialogues */
-	int8 FlagDisplayText[3];
+	int8 FlagDisplayTextStr[3];
+	/** Enable/Disable game dialogues */
+	int32 FlagDisplayText;
 	/** Save voice files on hard disk */
-	int8 FlagKeepVoice[3];
+	int8 FlagKeepVoiceStr[3];
+	/** Save voice files on hard disk */
+	int32 FlagKeepVoice;
 	/** Wave volume */
 	int32 WaveVolume;
 	/** Chacters voices volume */

@@ -60,4 +60,7 @@ void stop_midi_music();
 /** Initialize CD-Rom */
 int32 init_cdrom();
 
+/** Stop MIDI and Track music */
+void stop_music();
+
 #endif
