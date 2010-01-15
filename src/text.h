@@ -87,6 +87,7 @@ uint8 *printText8Var8;
 int32 newGameVar4;
 int32 newGameVar5;
 int32 printTextVar5;
+int32 printText10Var1;
 
 
 /** Initialize dialogue
@@ -99,13 +100,13 @@ void init_text_bank(int32 bankIdx);
 	@param dialogue ascii text to display */
 void draw_text(int32 x, int32 y, int8 *dialogue);
 
+void draw_text_fullscreen(int32 index);
+
 /** Gets dialogue text width size
 	@param dialogue ascii text to display */
 int32 get_text_size(int8 *dialogue);
 
-void draw_text_fullscreen(int32 index);
-
-void set_font(uint8 *font, int32 spaceBetween, int32 charSpace);
+void set_font(uint8 *font, int32 charSpace, int32 spaceBetween);
 
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters
@@ -130,8 +131,6 @@ int32 get_text(int32 index);
 	@param index text index to display
 	@param dialogue dialogue text buffer to display */
 void get_menu_text(int32 index, int8 *text);
-
-void display_dialogue_fullscreen(int32 dialog, uint8 color);
 
 
 #endif

@@ -300,7 +300,7 @@ int printText10() { // printText10()
 	if (*(printText8Ptr2) == 0) {
 		if (printText8Var5 != 0) {
 			if (newGameVar5 != 0) {
-				// TODO: printText10Sub();
+				// TODO: printText10Sub(); // Hmmm why call renderer here ??
 			}
 			printTextVar13 = 0;
 			return 0;
@@ -326,9 +326,47 @@ int printText10() { // printText10()
 		return 1;
 	}
 
+	// TODO: printText8Sub4(TEXT_CurrentLetterX, TEXT_CurrentLetterY, *printText8Ptr2);
+	// TODO: printText10Sub2();
+	// TODO: TEXT_GetLetterSize(*printText8Ptr2, &a, &b, lbaFont);
 
+	if (*(printText8Ptr2) != 0x20) {
+		TEXT_CurrentLetterX += charWidth + 2;
+	} else {
+		if (printText10Var1 != 0) {
+			TEXT_CurrentLetterX++;
+			printText10Var1--;
+		}
+		TEXT_CurrentLetterX += dialSpaceBetween;
+	}
 
-	return 0;
+	// next character
+	printText8Ptr2++;
+
+	if (*(printText8Ptr2) != 0)
+		return 1;
+
+	TEXT_CurrentLetterY += 38;
+	TEXT_CurrentLetterX = dialTextBoxLeft + 8;
+
+	if (printText8Var6 == 1 && printText8Var5 == 0) {
+	  // TODO: printText10Sub();
+	  return 2;
+	}
+
+	printText8Var1++;
+	if (printText8Var1 < dialTextBoxParam1) {
+		return 1;
+	}
+
+	// TODO: initProgressiveTextBuffer();
+	printText8Var6 = 1;
+
+	if (*(printText8Var8) == 0) {
+		printText8Var5 = 1;
+	}
+
+	return 1;
 }
 
 // TODO: refactor this code
@@ -398,10 +436,10 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	load_clip();
 }
 
-void set_font(uint8 *font, int32 spaceBetween, int32 charSpace) {
+void set_font(uint8 *font, int32 charSpace, int32 spaceBetween) {
 	fontPtr = font;
-	dialSpaceBetween = spaceBetween;
 	dialCharSpace = charSpace;
+	dialSpaceBetween = spaceBetween;
 }
 
 //TODO: RECHECK THIS LATER
