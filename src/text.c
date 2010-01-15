@@ -36,6 +36,7 @@
 #include "interface.h"
 #include "lbaengine.h"
 #include "keyboard.h"
+#include "images.h"
 
 // TODO: CHECK THIS LATER
 uint8 textVar2[256];
@@ -286,8 +287,6 @@ void init_text(int32 index) { // initText
 
 	// lba font is get while engine start
 	set_font_parameters(2, 7);
-
-	return 0;
 }
 
 // TODO: refactor this code
