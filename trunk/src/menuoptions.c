@@ -72,7 +72,7 @@ void new_game() {
 
 	init_text_bank(2);
 	intro_text_clip_full();
-	set_font_color(15);
+	set_font_cross_color(15);
 	
 	draw_text_fullscreen(150);
 	read_keys();

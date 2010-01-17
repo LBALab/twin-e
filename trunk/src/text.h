@@ -88,6 +88,9 @@ int32 newGameVar4;
 int32 newGameVar5;
 int32 printTextVar5;
 int32 printText10Var1;
+int32 addLineBreakX;
+int16 pt8s4[96];
+int32 printText8PrepareBufferVar2;
 
 
 /** Initialize dialogue
@@ -112,6 +115,10 @@ void set_font(uint8 *font, int32 charSpace, int32 spaceBetween);
 	@param spaceBetween number in pixels of space between characters
 	@param charSpace number in pixels of the character space */
 void set_font_parameters(int32 spaceBetween, int32 charSpace);
+
+/** Set the font cross color
+	@param color color number to choose */
+void set_font_cross_color(int32 color);
 
 /** Set the font color
 	@param color color number to choose */
