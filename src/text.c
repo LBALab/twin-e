@@ -50,6 +50,12 @@ uint8 *dialOrderPtr; // bufOrder
 int16 numDialTextEntries;
 
 
+// TODO: refactor this
+int32 wordSizeChar;
+int32 wordSizePixel;
+
+int8 spaceChar = ' ';
+
 
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
@@ -227,7 +233,7 @@ void draw_text(int32 x, int32 y, int8 *dialogue) { // Font
 
 /** Gets dialogue text width size
 	@param dialogue ascii text to display */
-int32 get_text_size(int8 *dialogue) {
+int32 get_text_size(int8 *dialogue) {  // SizeFont
 	uint8 currChar;
 	dialTextSize = 0;
 
@@ -289,6 +295,174 @@ void init_text(int32 index) { // initText
 	set_font_parameters(2, 7);
 }
 
+void initProgressiveTextBuffer() {
+	int32 i = 0;
+
+	buf2[0] = 0;
+
+	while (i < dialTextBufferSize) {
+		strcat(buf2, " ");
+		i++;
+	};
+
+	printText8Ptr2 = buf2;
+	addLineBreakX = 16;
+	printText8Var1 = 0;
+}
+
+void printText8Sub4(int16 a, int16 b, int16 c) {
+	int32 temp;
+	int32 counter2 = 0;
+	int32 var1;
+	int32 var2;
+
+	if (printText8Var3 < 32) {
+		temp = printText8Var3 * 3;
+		pt8s4[temp] = c;
+		pt8s4[temp+1] = a;
+		pt8s4[temp+2] = b;
+
+		printText8Var3++;
+	} else {
+		while (counter2 < 31) {
+			var1 = (counter2 + 1) * 3;
+			var2 = counter2 * 3;
+			pt8s4[var2] = pt8s4[var1];
+			pt8s4[var2+1] = pt8s4[var1+1];
+			pt8s4[var2+2] = pt8s4[var1+2];
+			counter2++;
+		};
+		pt8s4[93] = c;
+		pt8s4[94] = a;
+		pt8s4[95] = b;
+	}
+}
+
+void getWordSize(uint8 *arg1, uint8 *arg2) {
+	int32 temp = 0;
+	uint8 *arg2Save = arg2;
+
+	while (*arg1 != 0 && *arg1 != 1 && *arg1 != 0x20) {
+		temp++;
+		*arg2++ = *arg1++;
+	}
+
+	wordSizeChar = temp;
+	*arg2 = 0;
+	wordSizePixel = get_text_size(arg2Save);
+}
+
+void processTextLine() {
+	int16 var4;
+	uint8 *buffer;
+	uint8 *temp;
+
+	buffer = printText8Var8;
+	dialSpaceBetween = 7;
+	var4 = 1;
+
+	addLineBreakX = 0;
+	printText8PrepareBufferVar2 = 0;
+	buf2[0] = 0;
+
+	for (;;)
+	{
+		if (*buffer == 0x20) {
+			buffer++;
+			continue;
+		}
+
+		if (*buffer != 0) {
+			printText8Var8 = buffer;
+			getWordSize(buffer, buf1);
+			if (addLineBreakX + dialSpaceBetween + wordSizePixel < dialTextBoxParam2) {
+				temp = buffer + 1;
+				if (*buffer == 1) {
+					var4 = 0;
+					buffer = temp;
+				} else {
+					if (*buf1 == 0x40) {
+						var4 = 0;
+						buffer = temp;
+						if (addLineBreakX == 0) {
+							addLineBreakX = 7;
+							*buf2 = spaceChar;
+						}
+						if (buf1[1] == 0x50) {
+							printText8Var1 = dialTextBoxParam1;
+							buffer++;
+						}
+					} else {
+						buffer += wordSizeChar;
+						printText8Var8 = buffer;
+						strcat(buf2, buf1);
+						strcat(buf2, " ");  // not 100% accurate
+						printText8PrepareBufferVar2++;
+
+						addLineBreakX += wordSizePixel + dialSpaceBetween;
+						if (*printText8Var8 != 0) {
+							printText8Var8++;
+							continue;
+						}
+					}
+				}
+			}
+		}
+		break;
+	}
+
+	if (printText8PrepareBufferVar2 != 0)
+		printText8PrepareBufferVar2--;
+
+	if (*printText8Var8 != 0 && var4 == 1) {
+		dialSpaceBetween += (dialTextBoxParam2 - addLineBreakX) / printText8PrepareBufferVar2;
+		printText10Var1 = dialTextBoxParam2 - addLineBreakX - dialTextBoxParam2 - addLineBreakX;  // stupid... recheck
+	}
+
+	printText8Var8 = buffer;
+
+	printText8Ptr2 = buf2;
+
+}
+
+void printText10Sub2() {
+	int32 currentLetter;
+	int32 currentIndex;
+	int32 counter;
+	int32 counter2;
+	int16 *ptr;
+
+	currentLetter = printText8Var3;
+	currentLetter--;
+
+	currentIndex = currentLetter * 3;
+
+	ptr = pt8s4 + currentIndex;
+
+	// todo: gerer le delay ici...
+
+	counter = printText8Var3;
+	counter2 = dialTextStartColor;
+
+	while (--counter >= 0) {
+		set_font_color(counter2);
+		draw_character_shadow(*(ptr + 1), *(ptr + 2), (uint8)*ptr, counter2);
+		counter2 -= dialTextStepSize;
+		if (counter2 > dialTextStopColor)
+			counter2 = dialTextStopColor;
+		ptr -= 3;
+	};
+
+}
+
+void TEXT_GetLetterSize(int8 character, int32 *pLetterWidth, int32 *pLetterHeight, int8 * pFont) {
+	byte *temp;
+
+	temp = pFont + *((int16 *)(pFont + character * 4));
+	*pLetterWidth = *(temp);
+	*pLetterHeight = *(temp + 1);
+}
+
 // TODO: refactor this code
 int printText10() { // printText10()
 	int32 charWidth, charHeight; // a, b
@@ -314,11 +488,11 @@ int printText10() { // printText10()
 			TEXT_CurrentLetterY = dialTextBoxTop + 8;
 		}
 		if (*(printText8Var8) == 0) {
-			// TODO: initProgressiveTextBuffer();
+			initProgressiveTextBuffer();
 			printText8Var5 = 1;
 			return 1;
 		}
-		// TODO: processTextLine();
+		processTextLine();
 	}
 
 	// TODO: recheck this
@@ -326,9 +500,9 @@ int printText10() { // printText10()
 		return 1;
 	}
 
-	// TODO: printText8Sub4(TEXT_CurrentLetterX, TEXT_CurrentLetterY, *printText8Ptr2);
-	// TODO: printText10Sub2();
-	// TODO: TEXT_GetLetterSize(*printText8Ptr2, &a, &b, lbaFont);
+	printText8Sub4(TEXT_CurrentLetterX, TEXT_CurrentLetterY, *printText8Ptr2);
+	printText10Sub2();
+	TEXT_GetLetterSize(*printText8Ptr2, &charWidth, &charHeight, fontPtr);
 
 	if (*(printText8Ptr2) != 0x20) {
 		TEXT_CurrentLetterX += charWidth + 2;
@@ -350,7 +524,7 @@ int printText10() { // printText10()
 	TEXT_CurrentLetterX = dialTextBoxLeft + 8;
 
 	if (printText8Var6 == 1 && printText8Var5 == 0) {
-	  // TODO: printText10Sub();
+	  // TODO: printText10Sub();  // Hmmm why call renderer here ??
 	  return 2;
 	}
 
@@ -359,7 +533,7 @@ int printText10() { // printText10()
 		return 1;
 	}
 
-	// TODO: initProgressiveTextBuffer();
+	initProgressiveTextBuffer();
 	printText8Var6 = 1;
 
 	if (*(printText8Var8) == 0) {
@@ -449,6 +623,15 @@ void set_font(uint8 *font, int32 charSpace, int32 spaceBetween) {
 void set_font_parameters(int32 spaceBetween, int32 charSpace) {
 	dialSpaceBetween = spaceBetween;
 	dialCharSpace = charSpace;
+}
+
+/** Set the font cross color
+	@param color color number to choose */
+void set_font_cross_color(int32 color) { // TestCoulDial
+	dialTextStepSize = -1;
+	dialTextBufferSize = 14;
+	dialTextStartColor = color << 4;
+	dialTextStopColor = (color << 4) + 12;
 }
 
 /** Set the font color
