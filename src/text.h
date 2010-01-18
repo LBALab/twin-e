@@ -109,7 +109,7 @@ void draw_text_fullscreen(int32 index);
 	@param dialogue ascii text to display */
 int32 get_text_size(int8 *dialogue);
 
-void set_font(uint8 *font, int32 charSpace, int32 spaceBetween);
+void set_font(uint8 *font, int32 spaceBetween, int32 charSpace);
 
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters

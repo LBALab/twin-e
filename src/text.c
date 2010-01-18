@@ -358,7 +358,7 @@ void processTextLine() {
 	uint8 *temp;
 
 	buffer = printText8Var8;
-	dialSpaceBetween = 7;
+	dialCharSpace = 7;
 	var4 = 1;
 
 	addLineBreakX = 0;
@@ -375,7 +375,7 @@ void processTextLine() {
 		if (*buffer != 0) {
 			printText8Var8 = buffer;
 			getWordSize(buffer, buf1);
-			if (addLineBreakX + dialSpaceBetween + wordSizePixel < dialTextBoxParam2) {
+			if (addLineBreakX + dialCharSpace + wordSizePixel < dialTextBoxParam2) {
 				temp = buffer + 1;
 				if (*buffer == 1) {
 					var4 = 0;
@@ -399,7 +399,7 @@ void processTextLine() {
 						strcat(buf2, " ");  // not 100% accurate
 						printText8PrepareBufferVar2++;
 
-						addLineBreakX += wordSizePixel + dialSpaceBetween;
+						addLineBreakX += wordSizePixel + dialCharSpace;
 						if (*printText8Var8 != 0) {
 							printText8Var8++;
 							continue;
@@ -415,7 +415,7 @@ void processTextLine() {
 		printText8PrepareBufferVar2--;
 
 	if (*printText8Var8 != 0 && var4 == 1) {
-		dialSpaceBetween += (dialTextBoxParam2 - addLineBreakX) / printText8PrepareBufferVar2;
+		dialCharSpace += (dialTextBoxParam2 - addLineBreakX) / printText8PrepareBufferVar2;
 		printText10Var1 = dialTextBoxParam2 - addLineBreakX - dialTextBoxParam2 - addLineBreakX;  // stupid... recheck
 	}
 
@@ -439,7 +439,7 @@ void printText10Sub2() {
 
 	ptr = pt8s4 + currentIndex;
 
-	// todo: gerer le delay ici...
+	delay(20);
 
 	counter = printText8Var3;
 	counter2 = dialTextStartColor;
@@ -511,7 +511,7 @@ int printText10() { // printText10()
 			TEXT_CurrentLetterX++;
 			printText10Var1--;
 		}
-		TEXT_CurrentLetterX += dialSpaceBetween;
+		TEXT_CurrentLetterX += dialCharSpace;
 	}
 
 	// next character
@@ -561,8 +561,24 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	do {
 		read_keys();
 		printedText = printText10();
+		
+		if (printedText == 2) {
+			do {
+				read_keys();
+				if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
+					break;
+				}
+				// TODO: process play vox file
+			} while(1);
 
-		// TODO: process play vox file
+			do {
+				read_keys();
+				if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
+					break;
+				}
+				// TODO: process play vox file
+			} while(1);
+		}
 
 		if (skipIntro == 1) {
 			skipText = 1;
@@ -610,7 +626,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	load_clip();
 }
 
-void set_font(uint8 *font, int32 charSpace, int32 spaceBetween) {
+void set_font(uint8 *font, int32 spaceBetween, int32 charSpace) {
 	fontPtr = font;
 	dialCharSpace = charSpace;
 	dialSpaceBetween = spaceBetween;
