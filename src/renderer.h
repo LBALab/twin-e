@@ -51,7 +51,15 @@ int16 *shadeAngleTab1; // tab1
 int16 *shadeAngleTab2; // tab2
 int16 *shadeAngleTab3; // tab3
 
+int16 polyRenderType; //FillVertic_AType;
+int32 numOfVertex;
+int16 vertexCoordinates[193];
+int16 *pRenderV1;
+
 void set_light_vector(int32 angleX, int32 angleY, int32 angleZ);
+
+int compute_polygons();
+void render_polygons(int32 ecx, int32 edi);
 
 void prepare_iso_model(uint8 *bodyPtr); // loadGfxSub
 

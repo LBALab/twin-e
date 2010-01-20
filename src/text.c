@@ -37,6 +37,7 @@
 #include "lbaengine.h"
 #include "keyboard.h"
 #include "images.h"
+#include "renderer.h"
 
 // TODO: CHECK THIS LATER
 uint8 textVar2[256];
@@ -425,7 +426,30 @@ void processTextLine() {
 
 }
 
-void printText10Sub2() {
+// draw next page arrow polygon
+void printText10Sub() { // printText10Sub()
+	vertexCoordinates[0] = dialTextStopColor;
+	vertexCoordinates[1] = dialTextBoxRight - 3;
+	vertexCoordinates[2] = dialTextBoxBottom - 24;
+	vertexCoordinates[3] = dialTextStopColor;
+	vertexCoordinates[4] = dialTextBoxRight - 24;
+	vertexCoordinates[5] = dialTextBoxBottom - 3;
+	vertexCoordinates[6] = dialTextStartColor;
+	vertexCoordinates[7] = vertexCoordinates[1];
+	vertexCoordinates[8] = vertexCoordinates[5];
+
+	polyRenderType = 0; // POLYGONTYPE_FLAT
+	numOfVertex = 3;
+
+	if (compute_polygons())
+	{
+		render_polygons(polyRenderType, dialTextStopColor);
+	}
+
+	copy_block_phys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
+}
+
+void printText10Sub2() { // printText10Sub2()
 	int32 currentLetter;
 	int32 currentIndex;
 	int32 counter;
@@ -455,7 +479,7 @@ void printText10Sub2() {
 
 }
 
-void TEXT_GetLetterSize(int8 character, int32 *pLetterWidth, int32 *pLetterHeight, int8 * pFont) {
+void TEXT_GetLetterSize(int8 character, int32 *pLetterWidth, int32 *pLetterHeight, int8 * pFont) { // TEXT_GetLetterSize
 	byte *temp;
 
 	temp = pFont + *((int16 *)(pFont + character * 4));
@@ -474,7 +498,7 @@ int printText10() { // printText10()
 	if (*(printText8Ptr2) == 0) {
 		if (printText8Var5 != 0) {
 			if (newGameVar5 != 0) {
-				// TODO: printText10Sub(); // Hmmm why call renderer here ??
+				printText10Sub();
 			}
 			printTextVar13 = 0;
 			return 0;
@@ -524,7 +548,7 @@ int printText10() { // printText10()
 	TEXT_CurrentLetterX = dialTextBoxLeft + 8;
 
 	if (printText8Var6 == 1 && printText8Var5 == 0) {
-	  // TODO: printText10Sub();  // Hmmm why call renderer here ??
+	  printText10Sub();
 	  return 2;
 	}
 
@@ -568,7 +592,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 				if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
 					break;
 				}
-				// TODO: process play vox file
+				// TODO: missing vox processing
 			} while(1);
 
 			do {
@@ -576,7 +600,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 				if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
 					break;
 				}
-				// TODO: process play vox file
+				// TODO: missing vox processing
 			} while(1);
 		}
 
@@ -737,6 +761,25 @@ void get_menu_text(int32 index, int8 *text) { // GetMultiText
 
 	currMenuTextIndex = index;
 	currMenuTextBank = currentTextBank;
+}
+
+void text_clip_full() { // newGame2
+	dialTextBoxLeft = 8;
+	dialTextBoxTop = 8;
+	dialTextBoxRight = 631;
+
+	dialTextBoxBottom = 471;
+	dialTextBoxParam1 = 11;
+	dialTextBoxParam2 = 607;
+}
+
+void text_clip_small() { // newGame4
+	dialTextBoxLeft = 16;
+	dialTextBoxTop = 334;
+	dialTextBoxRight = 623;
+	dialTextBoxBottom = 463;
+	dialTextBoxParam1 = 3;
+	dialTextBoxParam2 = 591;
 }
 
 /*

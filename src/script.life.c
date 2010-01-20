@@ -44,6 +44,7 @@
 #include "movies.h"
 #include "resources.h"
 #include "collision.h"
+#include "text.h"
 
 uint8 *scriptPtr; // local script pointer
 uint8 *opcodePtr; // local opcode script pointer
@@ -543,8 +544,18 @@ int32 lSET_TRACK_OBJ(int32 actorIdx, ActorStruct *actor) {
 
 /*0x19*/
 int32 lMESSAGE(int32 actorIdx, ActorStruct *actor) {
+	int32 textIdx = *((int16 *)scriptPtr);
 	scriptPtr += 2;
-	return -1;
+
+	freeze_time();
+	// TODO: draw_bubble(otherActorIdx);
+	set_font_cross_color(actor->talkColor);
+	//talkingActor = actorIdx;
+	draw_text_fullscreen(textIdx);
+	unfreeze_time();
+	redraw_engine_actions(1);
+
+	return 0;
 }
 
 /*0x1A*/
@@ -747,8 +758,19 @@ int32 lRESTORE_L_TRACK(int32 actorIdx, ActorStruct *actor) {
 
 /*0x2C*/
 int32 lMESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 3; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int32 textIdx = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+
+	freeze_time();
+	// TODO: draw_bubble(otherActorIdx);
+	set_font_cross_color(sceneActors[otherActorIdx].talkColor);
+	//talkingActor = otherActorIdx;
+	draw_text_fullscreen(textIdx);
+	unfreeze_time();
+	redraw_engine_actions(1);
+
+	return 0;
 }
 
 /*0x2D*/
@@ -999,8 +1021,20 @@ int32 lASK_CHOICE(int32 actorIdx, ActorStruct *actor) {
 
 /*0x46*/
 int32 lBIG_MESSAGE(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 textIdx = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+
+	freeze_time();
+	text_clip_full();
+	// TODO: draw_bubble(otherActorIdx);
+	set_font_cross_color(actor->talkColor);
+	//talkingActor = actorIdx;
+	draw_text_fullscreen(textIdx);
+	text_clip_small();
+	unfreeze_time();
+	redraw_engine_actions(1);
+
+	return 0;
 }
 
 /*0x47*/
