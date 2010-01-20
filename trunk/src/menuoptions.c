@@ -84,7 +84,7 @@ void new_game() {
 	clear_screen();
 	flip();
 
-	convert_pal_2_RGBA(palette, paletteRGBA);
+	// set main palette back
 	set_palette(paletteRGBA);
 
 	cfgfile.FlagDisplayText = tmpFlagDisplayText;
