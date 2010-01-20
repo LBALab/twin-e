@@ -37,25 +37,6 @@
 #include "keyboard.h"
 #include "movies.h"
 
-void intro_text_clip_full() { // newGame2
-	dialTextBoxLeft = 8;
-	dialTextBoxTop = 8;
-	dialTextBoxRight = 631;
-
-	dialTextBoxBottom = 471;
-	dialTextBoxParam1 = 11;
-	dialTextBoxParam2 = 607;
-}
-
-void intro_text_clip_small() { // newGame4
-	dialTextBoxLeft = 16;
-	dialTextBoxTop = 334;
-	dialTextBoxRight = 623;
-	dialTextBoxBottom = 463;
-	dialTextBoxParam1 = 3;
-	dialTextBoxParam2 = 591;
-}
-
 void new_game() {
 	int32 tmpFlagDisplayText;
 
@@ -71,7 +52,7 @@ void new_game() {
 	newGameVar5 = 1;
 
 	init_text_bank(2);
-	intro_text_clip_full();
+	text_clip_full();
 	set_font_cross_color(15);
 	
 	draw_text_fullscreen(150);
@@ -90,7 +71,7 @@ void new_game() {
 	}
 
 	newGameVar5 = 0;
-	intro_text_clip_small();
+	text_clip_small();
 	newGameVar4 = 1;
 
 	fade_2_black(paletteRGBACustom);

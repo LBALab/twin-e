@@ -198,14 +198,10 @@ renderTabEntry renderTab[1000];
 renderTabEntry renderTabSorted[1000];
 uint8 renderTab7[10000];
 
-int16 polyRenderType; //FillVertic_AType;
 uint8 *renderV19;   // RECHECK THIS
-int32 numOfVertex;
-int16 vertexCoordinates[193];
 
 // render polygon vars
 int16 pRenderV3[96];
-int16 *pRenderV1;
 int16 *pRenderV2;
 int16 numOfVertexRemaining;
 int16 polyCropped;

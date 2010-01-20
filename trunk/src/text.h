@@ -139,5 +139,7 @@ int32 get_text(int32 index);
 	@param dialogue dialogue text buffer to display */
 void get_menu_text(int32 index, int8 *text);
 
+void text_clip_full();
+void text_clip_small();
 
 #endif
