@@ -464,7 +464,7 @@ void printText10Sub2() { // printText10Sub2()
 
 	ptr = pt8s4 + currentIndex;
 
-	delay(20);
+	delay(15);
 
 	counter = printText8Var3;
 	counter2 = dialTextStartColor;

@@ -2206,3 +2206,10 @@ void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 b
 		render_iso_model(0, Y, 0, 0, angle, 0, entityPtr);
 	}
 }
+
+void render_inventory_item(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param) { // Draw3DObject
+	set_camera_position(X, Y, 128, 200, 200);
+	set_camera_angle(0, 0, 0, 60, 0, 0, param);
+
+	render_iso_model(0, 0, 0, 0, angle, 0, itemBodyPtr);
+}

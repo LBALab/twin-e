@@ -547,7 +547,14 @@ void process_actor_zones(int32 actorIdx) {
 				}
 				break;
 			case kText:
-				// TODO: display text message
+				if (!actorIdx && heroAction != 0) {
+					freeze_time();
+					set_font_cross_color(zone->infoData.DisplayText.textColor);
+					//talkingActor = actorIdx;
+					draw_text_fullscreen(zone->infoData.DisplayText.textIdx);
+					unfreeze_time();
+					redraw_engine_actions(1);
+				}
 				break;
 			case kLadder:
 				if (!actorIdx && heroBehaviour != PROTOPACK && (actor->anim == ANIM_FORWARD || actor->anim == ANIM_TOP_LADDER || actor->anim == ANIM_CLIMB_LADDER)) {
