@@ -40,6 +40,7 @@
 #include "renderer.h"
 
 // TODO: CHECK THIS LATER
+int32 currentBankIdx = -1; // textVar1
 uint8 textVar2[256];
 uint8 textVar3;
 
@@ -65,10 +66,10 @@ void init_text_bank(int32 bankIdx) { // InitDial
 	int32 hqrSize;
 
 	// don't load if we already have the dialogue text bank loaded
-	if (bankIdx == currentTextBank)
+	if (bankIdx == currentBankIdx)
 		return;
 
-	currentTextBank = bankIdx;
+	currentBankIdx = bankIdx;
 	// TODO: V V V CHECK THIS LATER
 	textVar2[0] = textVar3;
 
@@ -593,6 +594,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 					break;
 				}
 				// TODO: missing vox processing
+				delay(1);
 			} while(1);
 
 			do {
@@ -601,6 +603,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 					break;
 				}
 				// TODO: missing vox processing
+				delay(1);
 			} while(1);
 		}
 
@@ -609,6 +612,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 		}
 
 		// TODO: missing vox processing
+		delay(1);
 	} while(!skipText);
 
 	printTextVar5 = 0;
@@ -631,6 +635,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	// wait displaying text
 	do {
 		read_keys();
+		delay(1);
 	} while(skipIntro || skipedKey || pressedKey);
 
 	// TODO: recheck
@@ -645,6 +650,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 			load_clip();
 			return;
 		}
+		delay(1);
 	} while(!pressedKey);
 
 	load_clip();
@@ -656,7 +662,6 @@ void set_font(uint8 *font, int32 spaceBetween, int32 charSpace) {
 	dialSpaceBetween = spaceBetween;
 }
 
-//TODO: RECHECK THIS LATER
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters
 	@param charSpace number in pixels of the character space */
