@@ -30,6 +30,7 @@
 
 #include "sys.h"
 #include "hqrdepack.h"
+#include "gamestate.h"
 
 /** RESS.HQR FILE */
 #define RESSHQR_MAINPAL 0
@@ -101,6 +102,12 @@ extern int8 * HQR_SPRITES_FILE;
 extern int8 * HQR_FILE3D_FILE;
 extern int8 * HQR_BODY_FILE;
 extern int8 * HQR_ANIM_FILE;
+extern int8 * HQR_INVOBJ_FILE;
+
+/** Table with all loaded samples */
+uint8* inventoryTable[NUM_INVENTORY_ITEMS];
+/** Table with all loaded samples sizes */
+uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
 /** Initialize resource pointers */
 void init_resources();

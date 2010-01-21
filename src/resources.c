@@ -48,6 +48,7 @@ int8 * HQR_SPRITES_FILE			= "sprites.hqr";
 int8 * HQR_FILE3D_FILE			= "file3d.hqr";
 int8 * HQR_BODY_FILE			= "body.hqr";
 int8 * HQR_ANIM_FILE			= "anim.hqr";
+int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
 
 /** Init palettes */
 void init_palettes() {
@@ -90,6 +91,16 @@ void preload_samples() {
 	}
 }
 
+/** Preload all animations */
+void preload_inventory_items() {
+	int32 i;
+	int32 numEntries = hqr_num_entries(HQR_INVOBJ_FILE) - 1;
+
+	for (i = 0; i < numEntries; i++) {
+		inventorySizeTable[i] = hqr_getalloc_entry(&inventoryTable[i], HQR_INVOBJ_FILE, i);
+	}
+}
+
 /** Initialize resource pointers */
 void init_resources() {
 	int32 size = 0;
@@ -112,4 +123,5 @@ void init_resources() {
 	preload_sprites();
 	preload_animations();
 	//preload_samples();
+	preload_inventory_items();
 }
