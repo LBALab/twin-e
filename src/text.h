@@ -109,6 +109,8 @@ void draw_text_fullscreen(int32 index);
 	@param dialogue ascii text to display */
 int32 get_text_size(int8 *dialogue);
 
+void init_dialogue_box();
+
 void set_font(uint8 *font, int32 spaceBetween, int32 charSpace);
 
 /** Set font type parameters

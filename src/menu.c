@@ -238,6 +238,7 @@ int16 behaviourAnimState[4]; // winTab
 /** Behaviour menu anim data pointer */
 AnimTimerDataStruct behaviourAnimData[4];
 
+int16 itemAngle[255]; // objectRotation
 int32 inventorySelectedColor;
 int32 inventorySelectedItem; // currentSelectedObjectInInventory
 
@@ -1114,10 +1115,19 @@ void draw_item(int32 item) {
 		draw_splitted_box(left, top, right, bottom, 0);
 	}
 
-	if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
+	//if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
 		prepare_iso_model(inventoryTable[item]);
-		// TODO do the rest
-	}
+		itemAngle[item] += 8;
+		render_inventory_item(itemX, itemY, inventoryTable[item], itemAngle[item], 15000);
+
+		if (item == 15) { // has GAS
+			set_font_color(15);
+			draw_text(left + 3, top + 32, ITOA(inventoryNumGas));
+		}
+	//}
+
+	draw_box(left, top, right, bottom);
+	copy_block_phys(left, top, right, bottom);
 }
 
 void draw_inventory_items() {
@@ -1158,11 +1168,16 @@ void process_inventory_menu() {
 	bx = 3;
 
 	set_font_cross_color(4);
-	// InitDialWindow();
-
+	init_dialogue_box();
+inventorySelectedItem=0;
 	do {
 		read_keys();
 		// TODO: item selection
+		prevSelectedItem = inventorySelectedItem;
+
+
+		draw_item(inventorySelectedItem);
+
 		delay(1);
 	} while (skipIntro != 1);
 }
