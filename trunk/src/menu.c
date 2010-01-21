@@ -238,6 +238,9 @@ int16 behaviourAnimState[4]; // winTab
 /** Behaviour menu anim data pointer */
 AnimTimerDataStruct behaviourAnimData[4];
 
+int32 inventorySelectedColor;
+int32 inventorySelectedItem; // currentSelectedObjectInInventory
+
 /** Plasma Effect Initialization */
 void plasma_effect_init() {
 	uint8  *temp1 = 0;
@@ -1082,4 +1085,84 @@ void process_behaviour_menu() {
 	init_text_bank(currentTextBank + 3);
 
 	cfgfile.LanguageCDId = tmpLanguageCD;
+}
+
+/** Draw the entire button box
+	@param left start width to draw the button
+	@param top start height to draw the button
+	@param right end width to draw the button
+	@param bottom end height to draw the button */
+void draw_magicitems_box(int32 left, int32 top, int32 right, int32 bottom, int32 color) { // Rect
+	draw_line(left, top, right, top, color);			// top line
+	draw_line(left, top, left, bottom, color);			// left line
+	draw_line(right, ++top, right, bottom, color);		// right line
+	draw_line(++left, bottom, right, bottom, color);	// bottom line
+}
+
+void draw_item(int32 item) {
+	int32 itemX = (item / 4) * 85 + 64;
+	int32 itemY = (item & 3) * 75 + 52;
+
+	int32 left   = itemX - 37;
+	int32 right  = itemX + 37;
+	int32 top    = itemY - 32;
+	int32 bottom = itemY + 32;
+
+	if (inventorySelectedItem == item) {
+		draw_splitted_box(left, top, right, bottom, inventorySelectedColor);
+	} else {
+		draw_splitted_box(left, top, right, bottom, 0);
+	}
+
+	if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
+		prepare_iso_model(inventoryTable[item]);
+		// TODO do the rest
+	}
+}
+
+void draw_inventory_items() {
+	int32 item;
+
+	draw_transparent_box(17, 10, 622, 320, 4);
+	draw_box(17, 10, 622, 320);
+	draw_magicitems_box(110, 18, 188, 311, 75);
+	copy_block_phys(17, 10, 622, 320);
+
+	for (item = 0; item < NUM_INVENTORY_ITEMS; item++) {
+		draw_item(item);
+	}
+}
+
+/** Process in-game inventory menu */
+void process_inventory_menu() {
+	int32 di = 1;
+	int32 prevSelectedItem, tmpLanguageCD, bx;
+
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+
+	set_light_vector(896, 950, 0);
+
+	inventorySelectedColor = 68;
+
+	if (inventoryNumLeafs > 0) {
+		gameFlags[GAMEFLAG_HAS_CLOVER_LEAF] = 1;
+	}
+
+	draw_inventory_items();
+
+	tmpLanguageCD = cfgfile.LanguageCDId;
+	cfgfile.LanguageCDId = 0;
+
+	init_text_bank(2);
+
+	bx = 3;
+
+	set_font_cross_color(4);
+	// InitDialWindow();
+
+	do {
+		read_keys();
+		// TODO: item selection
+		delay(1);
+	} while (skipIntro != 1);
 }

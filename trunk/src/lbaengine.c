@@ -122,6 +122,13 @@ int32 run_game_engine() { // mainLoopInteration
 	}
 
 	// TODO: inventory menu
+	if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
+		freeze_time();
+		process_inventory_menu();
+		// TODO: process_inventory_usage();
+		unfreeze_time();
+		redraw_engine_actions(1);
+	}
 
 	// Process behaviour menu - Press CTRL
 	// TODO: behaviour menu (LBA2 style)

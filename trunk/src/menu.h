@@ -75,4 +75,7 @@ int32 options_menu();
 /** Process hero behaviour menu */
 void process_behaviour_menu();
 
+/** Process in-game inventory menu */
+void process_inventory_menu();
+
 #endif

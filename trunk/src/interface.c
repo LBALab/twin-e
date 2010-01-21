@@ -244,7 +244,7 @@ void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int3
 	} while (height2 > 0);
 }
 
-void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e) {
+void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e) { // Box
 	uint8 *ptr;
 
 	int32 offset;
