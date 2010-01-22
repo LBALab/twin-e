@@ -167,3 +167,6 @@ void init_engine_vars(int32 save) { // reinitAll
 	}
 }
 
+void process_found_item(int32 item) {
+	
+}
