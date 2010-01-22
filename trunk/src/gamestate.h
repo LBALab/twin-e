@@ -91,4 +91,6 @@ void init_engine_vars(int32 save);
 /** Initialize engine 3D projections */
 void init_engine_projections();
 
+void process_found_item(int32 item);
+
 #endif

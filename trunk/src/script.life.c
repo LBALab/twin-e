@@ -291,11 +291,26 @@ int32 process_life_conditions(ActorStruct *actor) {
 	case 23: // unused
 	case 24:
 		break;
-	case kcUSE_INVENTORY: { // TODO
-		int32 invItem = *(scriptPtr++);
-		//inventoryFlags[invItem]
-		currentScriptValue = -1; // currentScriptValue = inGameMenuAnswer;
-		printf("DEBUG: Actor condition [kcUSE_INVENTORY] not implemented\n");
+	case kcUSE_INVENTORY: {
+		int32 item = *(scriptPtr++);
+
+		if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
+			if (item == loopInventoryItem) {
+				currentScriptValue = 1;
+			} else {
+				if (inventoryFlags[item] == 1 && gameFlags[item] == 1) {
+					currentScriptValue = 1;
+				} else {
+					currentScriptValue = 0;
+				}
+			}
+
+			if (currentScriptValue == 1) {
+				add_overlay(koInventoryItem, item, 0, 0, 0, koNormal, 3);
+			}
+		} else {
+			currentScriptValue = 0;
+		}
 	}
 		break;
 	case kcCHOICE: // TODO
@@ -781,8 +796,14 @@ int32 lINC_CHAPTER(int32 actorIdx, ActorStruct *actor) {
 
 /*0x2E*/
 int32 lFOUND_OBJECT(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 item = *(scriptPtr++);
+	
+	freeze_time();
+	process_found_item(item);
+	unfreeze_time();
+	redraw_engine_actions(1);
+
+	return 0;
 }
 
 /*0x2F*/
