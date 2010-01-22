@@ -110,6 +110,10 @@ void draw_text_fullscreen(int32 index);
 int32 get_text_size(int8 *dialogue);
 
 void init_dialogue_box();
+void init_inventory_dialogue_box();
+
+void init_text(int32 index);
+int printText10();
 
 void set_font(uint8 *font, int32 spaceBetween, int32 charSpace);
 

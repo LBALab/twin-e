@@ -52,6 +52,8 @@ ActorMoveStruct loopMovePtr; // mainLoopVar1
 
 int32 loopPressedKey;         // mainLoopVar5
 int32 previousLoopPressedKey; // mainLoopVar6
+int32 loopCurrentKey;    // mainLoopVar7
+int32 loopInventoryItem; // mainLoopVar9
 
 int32 loopActorStep; // mainLoopVar17
 

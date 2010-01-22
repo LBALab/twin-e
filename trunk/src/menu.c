@@ -1115,7 +1115,7 @@ void draw_item(int32 item) {
 		draw_splitted_box(left, top, right, bottom, 0);
 	}
 
-	//if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
+	if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
 		prepare_iso_model(inventoryTable[item]);
 		itemAngle[item] += 8;
 		render_inventory_item(itemX, itemY, inventoryTable[item], itemAngle[item], 15000);
@@ -1124,7 +1124,7 @@ void draw_item(int32 item) {
 			set_font_color(15);
 			draw_text(left + 3, top + 32, ITOA(inventoryNumGas));
 		}
-	//}
+	}
 
 	draw_box(left, top, right, bottom);
 	copy_block_phys(left, top, right, bottom);
@@ -1146,7 +1146,10 @@ void draw_inventory_items() {
 /** Process in-game inventory menu */
 void process_inventory_menu() {
 	int32 di = 1;
-	int32 prevSelectedItem, tmpLanguageCD, bx;
+	int32 prevSelectedItem, tmpLanguageCD, bx, tmpAlphaLight, tmpBetaLight;
+
+	tmpAlphaLight = alphaLight;
+	tmpBetaLight  = betaLight;
 
 	copy_screen(frontVideoBuffer, workVideoBuffer);
 
@@ -1169,15 +1172,119 @@ void process_inventory_menu() {
 
 	set_font_cross_color(4);
 	init_dialogue_box();
-inventorySelectedItem=0;
-	do {
+
+	while (skipIntro != 1) {
 		read_keys();
-		// TODO: item selection
 		prevSelectedItem = inventorySelectedItem;
 
+		if (!di) {
+			key  = pressedKey;
+			loopPressedKey = skipedKey;
+			loopCurrentKey = skipIntro;
+			
+			if (key != 0 || skipedKey != 0) {
+				di = 1;
+			}
+		} else {
+			loopCurrentKey = 0;
+			key = 0;
+			loopPressedKey = 0;
+			if (!pressedKey && !skipedKey) {
+				di = 0;
+			}
+		}
+
+		if (loopCurrentKey == 1 || loopPressedKey & 0x20)
+			break;
+
+		if (key & 2) { // down
+			inventorySelectedItem++;
+			if (inventorySelectedItem >= NUM_INVENTORY_ITEMS) {
+				inventorySelectedItem = 0;
+			}
+			draw_item(inventorySelectedItem);
+			bx = 3;
+		}
+
+		if (key & 1) { // up
+			inventorySelectedItem--;
+			if (inventorySelectedItem < 0) {
+				inventorySelectedItem = NUM_INVENTORY_ITEMS - 1;
+			}
+			draw_item(inventorySelectedItem);
+			bx = 3;
+		}
+
+		if (key & 4) { // left
+			inventorySelectedItem -= 4;
+			if (inventorySelectedItem < 0) {
+				inventorySelectedItem += NUM_INVENTORY_ITEMS;
+			}
+			draw_item(inventorySelectedItem);
+			bx = 3;
+		}
+
+		if (key & 8) { // right
+			inventorySelectedItem += 4;
+			if (inventorySelectedItem >= NUM_INVENTORY_ITEMS) {
+				inventorySelectedItem -= NUM_INVENTORY_ITEMS;
+			}
+			draw_item(inventorySelectedItem);
+			bx = 3;
+		}
+
+		if (bx == 3) {
+			init_inventory_dialogue_box();
+
+			if (gameFlags[inventorySelectedItem] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && inventorySelectedItem < NUM_INVENTORY_ITEMS) {
+				init_text(inventorySelectedItem + 100);
+			} else {
+				init_text(128);
+			}
+			bx = 0;
+		}
+
+		if (bx != 2) {
+			bx = printText10();
+		}
+
+		if (loopPressedKey & 1) {
+			if (bx == 2) {
+				init_inventory_dialogue_box();
+				bx = 0;
+			} else {
+				if (gameFlags[inventorySelectedItem] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && inventorySelectedItem < NUM_INVENTORY_ITEMS) {
+					init_inventory_dialogue_box();
+					init_text(inventorySelectedItem + 100);
+				}
+			}
+		}
 
 		draw_item(inventorySelectedItem);
 
+		if ((loopPressedKey & 2) && gameFlags[inventorySelectedItem] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && inventorySelectedItem < NUM_INVENTORY_ITEMS) {
+			loopInventoryItem = inventorySelectedItem;
+			inventorySelectedColor = 91;
+			draw_item(inventorySelectedItem);
+			break;
+		}
+
 		delay(1);
-	} while (skipIntro != 1);
+	}
+
+	printTextVar13 = 0;
+
+	alphaLight = tmpAlphaLight;
+	betaLight = tmpBetaLight;
+
+	init_engine_projections();
+
+	cfgfile.LanguageCDId = tmpLanguageCD;
+
+	init_text_bank(currentTextBank + 3);
+
+	while (skipIntro != 0 && skipedKey != 0) {
+		read_keys();
+		delay(1);
+	}
 }
