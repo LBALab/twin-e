@@ -269,6 +269,12 @@ void init_dialogue_box() { // InitDialWindow
 	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, workVideoBuffer);
 }
 
+void init_inventory_dialogue_box() { // SecondInitDialWindow
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, workVideoBuffer);
+	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+	printText8Var3 = 0;
+}
+
 // TODO: refactor this code
 void init_text(int32 index) { // initText
 	printTextVar13 = 0;

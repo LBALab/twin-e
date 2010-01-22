@@ -45,6 +45,7 @@ void new_game() {
 	tmpFlagDisplayText = cfgfile.FlagDisplayText;
 	cfgfile.FlagDisplayText = 1;
 
+
 	// intro screen 1 - twinsun
 	load_image( RESSHQR_INTROSCREEN1IMG, 1 );
 
@@ -54,7 +55,7 @@ void new_game() {
 	init_text_bank(2);
 	text_clip_full();
 	set_font_cross_color(15);
-	
+#ifndef _DEBUG	
 	draw_text_fullscreen(150);
 	read_keys();
 
@@ -69,7 +70,7 @@ void new_game() {
 			draw_text_fullscreen(152);
 		}
 	}
-
+#endif
 	newGameVar5 = 0;
 	text_clip_small();
 	newGameVar4 = 1;
@@ -83,6 +84,7 @@ void new_game() {
 
 	clear_screen();
 	flip();
+
 
 	// set main palette back
 	set_palette(paletteRGBA);

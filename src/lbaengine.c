@@ -71,7 +71,6 @@ void unfreeze_time() {
 	@return true if we want to show credit sequence */
 int32 run_game_engine() { // mainLoopInteration
 	int32 a;
-	int16 pKey; // current pressed key
 	read_keys();
 
 	if (needChangeScene > -1) {
@@ -80,11 +79,11 @@ int32 run_game_engine() { // mainLoopInteration
 
 	previousLoopPressedKey = loopPressedKey;
 	key  = pressedKey;
-	pKey = skipIntro; // mainLoopVar7
 	loopPressedKey = skipedKey;
+	loopCurrentKey = skipIntro;
 
 #ifdef GAMEMOD
-	process_debug(pKey);
+	process_debug(loopCurrentKey);
 #endif
 
 	// Process give up menu - Press ESC
@@ -106,7 +105,7 @@ int32 run_game_engine() { // mainLoopInteration
 	}
 
 	// Process options menu - Press F6
-	if (pKey == 0x40) {
+	if (loopCurrentKey == 0x40) {
 		int tmpLangCD = cfgfile.LanguageCDId;
 		freeze_time();
 		stop_samples();
@@ -152,7 +151,7 @@ int32 run_game_engine() { // mainLoopInteration
 	// TODO: draw holomap
 
 	// Process Pause - Press P
-	if (pKey == 0x19) {
+	if (loopCurrentKey == 0x19) {
 		freeze_time();
 		set_font_color(15);
 		draw_text(5, 446, "Pause"); // no key for pause in Text Bank

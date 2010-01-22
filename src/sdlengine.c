@@ -366,6 +366,7 @@ void read_keys() {
 				localKey = 0x1; // 0x39
 				break;
 			case SDLK_RETURN:
+			case SDLK_KP_ENTER:
 				localKey = 0x1C;
 				break;
 			case SDLK_LSHIFT:
@@ -451,10 +452,10 @@ void read_keys() {
 			case SDLK_RCTRL:
 				localKey = 0x1D;
 				break;
-			case SDLK_LSHIFT:
+			/*case SDLK_LSHIFT:
 			case SDLK_RSHIFT:
 				localKey = 0x36;
-				break;
+				break;*/
 			case SDLK_LALT:
 			case SDLK_RALT:
 				localKey = 0x38;
