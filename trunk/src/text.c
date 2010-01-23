@@ -270,7 +270,7 @@ void init_dialogue_box() { // InitDialWindow
 }
 
 void init_inventory_dialogue_box() { // SecondInitDialWindow
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, workVideoBuffer);
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, frontVideoBuffer);
 	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
 }

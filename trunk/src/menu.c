@@ -1202,7 +1202,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem >= NUM_INVENTORY_ITEMS) {
 				inventorySelectedItem = 0;
 			}
-			draw_item(inventorySelectedItem);
+			draw_item(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1211,7 +1211,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem < 0) {
 				inventorySelectedItem = NUM_INVENTORY_ITEMS - 1;
 			}
-			draw_item(inventorySelectedItem);
+			draw_item(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1220,7 +1220,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem < 0) {
 				inventorySelectedItem += NUM_INVENTORY_ITEMS;
 			}
-			draw_item(inventorySelectedItem);
+			draw_item(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1229,7 +1229,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem >= NUM_INVENTORY_ITEMS) {
 				inventorySelectedItem -= NUM_INVENTORY_ITEMS;
 			}
-			draw_item(inventorySelectedItem);
+			draw_item(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1246,6 +1246,11 @@ void process_inventory_menu() {
 
 		if (bx != 2) {
 			bx = printText10();
+		}
+
+		// TRICKY: 3D model rotation delay - only apply when no text is drawing
+		if (bx == 0 || bx == 2) {
+			delay(15);
 		}
 
 		if (loopPressedKey & 1) {
@@ -1268,8 +1273,6 @@ void process_inventory_menu() {
 			draw_item(inventorySelectedItem);
 			break;
 		}
-
-		delay(1);
 	}
 
 	printTextVar13 = 0;
