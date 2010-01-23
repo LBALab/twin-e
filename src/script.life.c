@@ -202,13 +202,13 @@ int32 process_life_conditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 
 		if (!targetActor->dynamicFlags.bIsDead) {
-			if (targetActor->Y - actor->Y < 1500) {
+			if (targetActor->Y - actor->Y >= 1500) {
+				moveAngle = 0x7D00;
+			} else {
 				newAngle = get_angle(actor->X, actor->Z, targetActor->X, targetActor->Z);
-				if (moveAngle > 0x7D00) { // TODO: recheck this
+				if (moveAngle > 0x7D00) {
 					moveAngle = 0x7D00;
-				} else {
-					moveAngle = 0x7D00;
-				}
+				} 
 
 				if (!targetActorIdx) {
 					int32 heroAngle;
