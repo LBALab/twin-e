@@ -65,6 +65,11 @@ void draw_box(int32 left, int32 top, int32 right, int32 bottom);
 	@param colorAdj index to adjust the transparent box color */
 void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
 
+/** Where the main menu options are processed
+	@param menuSettings menu settings array with the information to build the menu options
+	@return pressed menu button identification */
+int32 process_menu(int16 * menuSettings);
+
 /** Used to run the main menu */
 void main_menu();
 

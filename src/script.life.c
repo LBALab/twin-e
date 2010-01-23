@@ -313,10 +313,9 @@ int32 process_life_conditions(ActorStruct *actor) {
 		}
 	}
 		break;
-	case kcCHOICE: // TODO
+	case kcCHOICE:
 		conditionValueSize = 2;
-		currentScriptValue = -1; // currentScriptValue = inGameMenuAnswer;
-		printf("DEBUG: Actor condition [kcCHOICE] not implemented\n");
+		currentScriptValue = choiceAnswer;
 		break;
 	case kcFUEL:
 		currentScriptValue = inventoryNumGas;
@@ -565,7 +564,7 @@ int32 lMESSAGE(int32 actorIdx, ActorStruct *actor) {
 	freeze_time();
 	// TODO: draw_bubble(otherActorIdx);
 	set_font_cross_color(actor->talkColor);
-	//talkingActor = actorIdx;
+	talkingActor = actorIdx;
 	draw_text_fullscreen(textIdx);
 	unfreeze_time();
 	redraw_engine_actions(1);
@@ -780,7 +779,7 @@ int32 lMESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	freeze_time();
 	// TODO: draw_bubble(otherActorIdx);
 	set_font_cross_color(sceneActors[otherActorIdx].talkColor);
-	//talkingActor = otherActorIdx;
+	talkingActor = otherActorIdx;
 	draw_text_fullscreen(textIdx);
 	unfreeze_time();
 	redraw_engine_actions(1);
@@ -1030,14 +1029,26 @@ int32 lSET_USED_INVENTORY(int32 actorIdx, ActorStruct *actor) {
 
 /*0x44*/
 int32 lADD_CHOICE(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 choiceIdx = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+	gameChoices[numChoices++] = choiceIdx;
+	return 0;
 }
 
 /*0x45*/
 int32 lASK_CHOICE(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 choiceIdx = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+
+	freeze_time();
+	// TODO: bubble
+	set_font_cross_color(actor->talkColor);
+	process_game_choices(choiceIdx);
+	numChoices = 0;
+	unfreeze_time();
+	redraw_engine_actions(1);
+
+	return 0;
 }
 
 /*0x46*/
@@ -1049,7 +1060,7 @@ int32 lBIG_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 	text_clip_full();
 	// TODO: draw_bubble(otherActorIdx);
 	set_font_cross_color(actor->talkColor);
-	//talkingActor = actorIdx;
+	talkingActor = actorIdx;
 	draw_text_fullscreen(textIdx);
 	text_clip_small();
 	unfreeze_time();
@@ -1210,8 +1221,19 @@ int32 lBUBBLE_OFF(int32 actorIdx, ActorStruct *actor) {
 
 /*0x5B*/
 int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 3; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	int32 choiceIdx = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+
+	freeze_time();
+	// TODO: bubble
+	set_font_cross_color(sceneActors[otherActorIdx].talkColor);
+	process_game_choices(choiceIdx);
+	numChoices = 0;
+	unfreeze_time();
+	redraw_engine_actions(1);
+
+	return 0;
 }
 
 /*0x5C*/
