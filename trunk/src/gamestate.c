@@ -38,6 +38,9 @@
 #include "keyboard.h"
 #include "resources.h"
 #include "extra.h"
+#include "sound.h"
+#include "images.h"
+#include "music.h"
 
 int32 magicLevelStrengthOfHit[] = {
 	MAGIC_STRENGTH_NONE,
@@ -168,5 +171,157 @@ void init_engine_vars(int32 save) { // reinitAll
 }
 
 void process_found_item(int32 item) {
+	int32 itemCameraX, itemCameraY, itemCameraZ; // objectXYZ
+	int32 itemX, itemY, itemZ; // object2XYZ
+	int32 boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY;
+	int32 textState, quitItem, currentAnimState;
+	uint8 *currentAnim;
+	AnimTimerDataStruct tmpAnimTimer;
+
+	newCameraX = (sceneHero->X + 0x100) >> 9;
+	newCameraY = (sceneHero->Y + 0x100) >> 8;
+	newCameraZ = (sceneHero->Z + 0x100) >> 9;
+
+	// Hide hero in scene
+	sceneHero->staticFlags.bIsHidden = 1;
+	redraw_engine_actions(1);
+	sceneHero->staticFlags.bIsHidden = 0;
+
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+
+	itemCameraX = newCameraX << 9;
+	itemCameraY = newCameraY << 8;
+	itemCameraZ = newCameraZ << 9;
+
+	render_iso_model(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
+	set_clip(renderLeft, renderTop, renderRight, renderBottom);
+
+	itemX = (sceneHero->X + 0x100) >> 9;
+	itemY = sceneHero->Y >> 8;
+	if (sceneHero->brickShape & 0x7F) {
+		itemY++;
+	}
+	itemZ = (sceneHero->Z + 0x100) >> 9;
+
+	draw_over_model_actor(itemX, itemY, itemZ);
+	flip();
+
+	project_position_on_screen(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ);
+	projPosY -= 150;
+
+	boxTopLeftX = projPosX - 65;
+	boxTopLeftY = projPosY - 65;
+
+	boxBottomRightX = projPosX + 65;
+	boxBottomRightY = projPosY + 65;
+
+	play_sample(41, 0x1000, 1, 0x80, 0x80, 0x80);
+
+	// TODO: process vox play
+	{
+		int32 tmpLanguageCDId;
+		stop_music();
+		tmpLanguageCDId = cfgfile.LanguageCDId;
+		cfgfile.LanguageCDId = 0;
+		init_text_bank(2);
+		cfgfile.LanguageCDId = tmpLanguageCDId;
+	}
+
+	reset_clip();
+	init_text(item);
+	init_dialogue_box();
+
+	textState = 1;
+	quitItem = 0;
+
+	// TODO: process vox play
+
+	currentAnim = animTable[get_body_anim_index(ANIM_FOUND_ITEM, 0)];
+
+	tmpAnimTimer = sceneHero->animTimerData;
 	
+	animBuffer2 += stock_animation(animBuffer2, bodyTable[sceneHero->entity], &sceneHero->animTimerData);
+	if (animBuffer1 + 4488 < animBuffer2) {
+		animBuffer2 = animBuffer1;
+	}
+
+	currentAnimState = 0;
+
+	prepare_iso_model(inventoryTable[item]);
+	numOfRedrawBox = 0;
+
+	while (!quitItem) {
+		reset_clip();
+		currNumOfRedrawBox = 0;
+		blit_background_areas();
+		draw_transparent_box(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY, 4);
+
+		set_clip(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
+
+		itemAngle[item] += 8;
+
+		render_inventory_item(projPosX, projPosY, inventoryTable[item], itemAngle[item], 10000);
+
+		draw_box(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
+		add_redraw_area(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
+		reset_clip();
+		init_engine_projections();
+
+		if (set_model_animation(currentAnimState, currentAnim, bodyTable[sceneHero->entity], &sceneHero->animTimerData)) {
+			currentAnimState++; // keyframe
+			if (currentAnimState >= get_num_keyframes(currentAnim)) {
+				currentAnimState = get_start_keyframe(currentAnim);
+			}
+		}
+
+		render_iso_model(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
+		set_clip(renderLeft, renderTop, renderRight, renderBottom);
+		draw_over_model_actor(itemX, itemY, itemZ);
+		add_redraw_area(renderLeft, renderTop, renderRight, renderBottom);
+
+		if (textState) {
+			reset_clip();
+			textState = printText10();
+		}
+
+		if (textState == 0 || textState == 2) {
+			delay(15);
+		}
+
+		flip_redraw_areas();
+		
+		read_keys();
+		if (skipedKey) {
+			if (!textState) {
+				quitItem = 1;
+			}
+
+			if (textState == 2) {
+				textState = 1;
+			}
+		}
+
+		lbaTime++;
+	}
+
+	// TODO: process vox play
+	/*{
+		while (printText11()) {
+			read_keys();
+			if (skipIntro == 1) {
+				break;
+			}
+			delay(1);
+		}
+	}*/
+
+	init_engine_projections();
+	init_text_bank(currentTextBank + 3);
+
+	/*do {
+		read_keys();
+		delay(1);
+	} while (!skipIntro);*/
+
+	sceneHero->animTimerData = tmpAnimTimer;
 }

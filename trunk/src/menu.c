@@ -238,7 +238,6 @@ int16 behaviourAnimState[4]; // winTab
 /** Behaviour menu anim data pointer */
 AnimTimerDataStruct behaviourAnimData[4];
 
-int16 itemAngle[255]; // objectRotation
 int32 inventorySelectedColor;
 int32 inventorySelectedItem; // currentSelectedObjectInInventory
 

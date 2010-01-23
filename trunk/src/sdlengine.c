@@ -196,7 +196,7 @@ void delay(uint32 time) {
 			break;
 		stopTicks = SDL_GetTicks() - startTicks;
 		SDL_Delay(1);
-		lbaTime++;
+		//lbaTime++;
 	} while (stopTicks <= time);
 }
 
@@ -363,7 +363,10 @@ void read_keys() {
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
-				localKey = 0x1; // 0x39
+				localKey = 0x1;
+				break;
+			case SDLK_SPACE:
+				localKey = 0x39;
 				break;
 			case SDLK_RETURN:
 			case SDLK_KP_ENTER:
