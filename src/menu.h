@@ -35,6 +35,8 @@ int32 currMenuTextIndex;
 int32 currMenuTextBank;
 int8  currMenuTextBuffer[256];
 
+int16 itemAngle[255]; // objectRotation
+
 extern int16 OptionsMenuSettings[];
 
 /** Behaviour menu move pointer */

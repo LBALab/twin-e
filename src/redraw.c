@@ -73,11 +73,6 @@ typedef struct DrawListStruct {
 /** Draw list array to grab the necessary */
 DrawListStruct drawList[150];
 
-/** Current number of redraw regions in the screen */
-int32 currNumOfRedrawBox = 0; // fullRedrawVar8
-/** Number of redraw regions in the screen */
-int32 numOfRedrawBox = 0;
-
 
 /** Add a certain region to the current redraw list array
 	@param left start width to redraw the region

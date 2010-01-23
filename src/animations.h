@@ -74,6 +74,8 @@
 #define ANIM_RIGHT_PUNCH	18
 /** Hide anim value */
 #define ANIM_LEFT_PUNCH		19
+/** Found item anim value */
+#define ANIM_FOUND_ITEM		20
 /** Hit anim value */
 #define ANIM_HIT2			22
 /** Sabre attack anim value */
@@ -134,6 +136,12 @@ int32 set_model_animation(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTim
 	@param animIdx Entity animation index
 	@param actorIdx Actor index */
 int32 get_body_anim_index(int32 animIdx, int16 actorIdx);
+
+/** Stock animation - copy the next keyFrame from a different buffer
+	@param animPtr Animation pointer
+	@param bodyPtr Body model poitner 
+	@param animTimerDataPtr Animation time data */
+int32 stock_animation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
 
 /** Verify animation at keyframe
 	@param animIdx Animation index
