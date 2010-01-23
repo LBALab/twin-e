@@ -550,7 +550,7 @@ void process_actor_zones(int32 actorIdx) {
 				if (!actorIdx && heroAction != 0) {
 					freeze_time();
 					set_font_cross_color(zone->infoData.DisplayText.textColor);
-					//talkingActor = actorIdx;
+					talkingActor = actorIdx;
 					draw_text_fullscreen(zone->infoData.DisplayText.textIdx);
 					unfreeze_time();
 					redraw_engine_actions(1);

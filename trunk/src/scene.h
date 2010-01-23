@@ -104,6 +104,8 @@ int16 currentActorInZone; // currentActorInZoneProcess
 /** Current actor manipulated in scripts */
 int16 currentScriptValue; // manipActorResult
 
+int16 talkingActor;
+
 // ZONES
 
 typedef struct ScenePoint {

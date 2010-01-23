@@ -517,7 +517,7 @@ void draw_button(int16 *menuSettings, int32 mode) {
 /** Where the main menu options are processed
 	@param menuSettings menu settings array with the information to build the menu options
 	@return pressed menu button identification */
-int process_menu(int16 * menuSettings) {
+int32 process_menu(int16 * menuSettings) {
 	int32 localTime;
 	int32 numEntry;
 	int32 buttonNeedRedraw;
@@ -666,7 +666,7 @@ int process_menu(int16 * menuSettings) {
 }
 
 /** Used to run the advanced options menu */
-int advoptions_menu() {
+int32 advoptions_menu() {
 	int32 ret = 0;
 
 	copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -690,7 +690,7 @@ int advoptions_menu() {
 }
 
 /** Used to run the save game management menu */
-int savemanage_menu() {
+int32 savemanage_menu() {
 	int32 ret = 0;
 
 	copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -714,7 +714,7 @@ int savemanage_menu() {
 }
 
 /** Used to run the volume menu */
-int volume_menu() {
+int32 volume_menu() {
 	int32 ret = 0;
 
 	copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -738,7 +738,7 @@ int volume_menu() {
 }
 
 /** Used to run the options menu */
-int options_menu() {
+int32 options_menu() {
 	int32 ret = 0;
 
 	copy_screen(workVideoBuffer, frontVideoBuffer);
@@ -829,7 +829,7 @@ void main_menu() {
 }
 
 /** Used to process give up menu while playing game */
-int giveup_menu() {
+int32 giveup_menu() {
 	//int32 saveLangue=0;
 	int32 menuId;
 	int16 * localMenu;

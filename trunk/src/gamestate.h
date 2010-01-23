@@ -84,9 +84,12 @@ int16 inventoryNumGas;
 /** Its using FunFrock Sabre */
 int16 usingSabre;
 
+int8 savePlayerName[30]; // playerName
 
-int8 savePlayerName[30];
-
+int32 gameChoices[10]; // inGameMenuData
+int32 numChoices;      // numOfOptionsInChoice
+int16 gameChoicesSettings[18]; // choiceTab -  same structure as menu settings
+int32 choiceAnswer; // inGameMenuAnswer
 
 /** Initialize all engine variables */
 void init_engine_vars(int32 save);
@@ -98,5 +101,7 @@ void process_found_item(int32 item);
 
 void load_game();
 void save_game();
+
+void process_game_choices(int32 choiceIdx);
 
 #endif

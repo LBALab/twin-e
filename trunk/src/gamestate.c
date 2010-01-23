@@ -432,3 +432,27 @@ void process_found_item(int32 item) {
 
 	sceneHero->animTimerData = tmpAnimTimer;
 }
+
+void process_game_choices(int32 choiceIdx) {
+	int32 i;
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+
+	gameChoicesSettings[0] = 0;	// Current loaded button (button number)
+	gameChoicesSettings[1] = numChoices; // Num of buttons
+	gameChoicesSettings[2] = 0; // Buttons box height
+	gameChoicesSettings[3] = currentTextBank + 3;
+
+	if (numChoices > 0) {
+		for(i = 0; i < numChoices; i++) {
+			gameChoicesSettings[i * 2 + 4] = 0;
+			gameChoicesSettings[i * 2 + 5] = gameChoices[i];
+		}
+	}
+
+	draw_ask_question(choiceIdx);
+
+	process_menu(gameChoicesSettings);
+	choiceAnswer = gameChoices[gameChoicesSettings[0]];
+
+	// TODO: process vox play
+}

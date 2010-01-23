@@ -793,8 +793,46 @@ void text_clip_small() { // newGame4
 	dialTextBoxParam2 = 591;
 }
 
-/*
+void draw_ask_question(int32 index) { // MyDial
+	int32 textStatus = 1;
 
+	// TODO: get right VOX entry index
+
+	init_text(index);
+	init_dialogue_box();
+
+	do {
+		read_keys();
+		textStatus = printText10();
+		
+		if (textStatus == 2) {
+			do {
+				read_keys();
+				// TODO: missing vox processing
+				delay(1);
+			} while(skipIntro || skipedKey || pressedKey);
+
+			do {
+				read_keys();
+				// TODO: missing vox processing
+				delay(1);
+			} while(!skipIntro && !skipedKey && !pressedKey);
+		}
+
+		// TODO: missing vox processing
+		delay(1);
+	} while(textStatus);
+
+	// TODO: missing vox processing
+
+	printTextVar5 = 0;
+
+	// TODO: missing vox processing
+
+	printTextVar13 = 0;
+}
+
+/*
 // Internal representation for drawn strings
 typedef struct PrintedTextBuf {
 	uint8* ptBuffer;

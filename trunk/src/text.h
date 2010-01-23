@@ -148,4 +148,6 @@ void get_menu_text(int32 index, int8 *text);
 void text_clip_full();
 void text_clip_small();
 
+void draw_ask_question(int32 index);
+
 #endif
