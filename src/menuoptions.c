@@ -45,10 +45,10 @@ void new_game() {
 	tmpFlagDisplayText = cfgfile.FlagDisplayText;
 	cfgfile.FlagDisplayText = 1;
 
-
+#ifndef _DEBUG	
 	// intro screen 1 - twinsun
 	load_image( RESSHQR_INTROSCREEN1IMG, 1 );
-
+#endif
 	newGameVar4 = 0;
 	newGameVar5 = 1;
 
@@ -74,14 +74,14 @@ void new_game() {
 	newGameVar5 = 0;
 	text_clip_small();
 	newGameVar4 = 1;
-
+#ifndef _DEBUG
 	fade_2_black(paletteRGBACustom);
 	clear_screen();
 	flip();
 	
 	play_midi_music(1, 0);
 	play_movie(FLA_INTROD);
-
+#endif
 	clear_screen();
 	flip();
 

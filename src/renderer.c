@@ -337,7 +337,7 @@ void set_base_rotation(int32 X, int32 Y, int32 Z) {
 	get_base_rotation_position(baseTransPosX, baseTransPosY, baseTransPosZ);
 
 	baseRotPosX = destX;
-	baseRotPosY = destY; // TODO: recheck Y coordinate
+	baseRotPosY = destY;
 	baseRotPosZ = destZ;
 }
 
@@ -352,9 +352,9 @@ void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 r
 	baseTransPosY = transPosY;
 	baseTransPosZ = transPosZ;
 
-	get_base_rotation_position(rotPosX, rotPosY, rotPosZ);
+	set_base_rotation(rotPosX, rotPosY, rotPosZ);
 
-	baseRotPosY += param6; // RECHECK THIS
+	baseRotPosZ += param6;
 
 	get_camera_angle_positions(baseRotPosX, baseRotPosY, baseRotPosZ);
 
@@ -2103,7 +2103,7 @@ int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int3
 	renderBottom = -32767;
 
 	if (isUsingOrhoProjection == 0) {
-		set_base_rotation(X, Y, Z);
+		get_base_rotation_position(X, Y, Z);
 
 		renderX = destX - baseRotPosX;
 		renderY = destY - baseRotPosY; // RECHECK
