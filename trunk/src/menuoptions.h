@@ -31,4 +31,7 @@
 /** Main menu new game options */
 void new_game_menu();
 
+/** Main menu continue game options */
+void continue_game_menu();
+
 #endif

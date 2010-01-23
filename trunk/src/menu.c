@@ -806,6 +806,7 @@ void main_menu() {
 			break;
 		}
 		case MAINMENU_CONTINUEGAME: {
+			continue_game_menu();
 			break;
 		}
 		case MAINMENU_OPTIONS: {
