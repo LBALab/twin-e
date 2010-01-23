@@ -93,7 +93,7 @@ int32 run_game_engine() { // mainLoopInteration
 			unfreeze_time();
 			redraw_engine_actions(1);
 			freeze_time();
-			//TODO: save game
+			save_game(); // auto save game
 			quitGame = 0;
 			cfgfile.Quit = 0;
 			unfreeze_time();
@@ -120,7 +120,7 @@ int32 run_game_engine() { // mainLoopInteration
 		redraw_engine_actions(1);
 	}
 
-	// TODO: inventory menu
+	// inventory menu
 	if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
 		freeze_time();
 		process_inventory_menu();
@@ -268,7 +268,7 @@ int32 run_game_engine() { // mainLoopInteration
 								currentSceneIdx = previousSceneIdx;
 							}
 
-							// TODO: save game
+							save_game();
 							// TODO: show game over animation
 						}
 					}

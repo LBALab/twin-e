@@ -97,8 +97,20 @@ void new_game_menu() {
 	//TODO: process players name
 	//if(process_player_name(42))
 	{
-		// TODO: create new saved game
 		init_engine_vars(1);
+		new_game();
+		if (game_engine_loop()) {
+			//TODO: Show credit sequence
+		}
+	}
+}
+
+/** Main menu continue game options */
+void continue_game_menu() {
+	//TODO: get list of saved games
+	//if(chooseSave(21))
+	{
+		init_engine_vars(-1); // will load game
 		new_game();
 		if (game_engine_loop()) {
 			//TODO: Show credit sequence

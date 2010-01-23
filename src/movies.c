@@ -298,7 +298,7 @@ void play_fla_movie(int8 *filename) {
 	fadeOut = -1;
 	fadeOutFrames = 0;
 
-	if (!fropen(&frFla, filename))
+	if (!fropen(&frFla, filename, "rb"))
 		return;
 
 	if (cfgfile.Debug)

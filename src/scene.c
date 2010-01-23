@@ -367,7 +367,7 @@ void change_scene() {
 	if (previousSceneIdx != needChangeScene) {
 		previousHeroBehaviour = heroBehaviour;
 		previousHeroAngle = sceneHero->angle;
-		// TODO: save game
+		save_game();
 	}
 
 	restart_hero_scene();

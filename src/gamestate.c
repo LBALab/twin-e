@@ -1,6 +1,6 @@
 /** @file gamestate.c
 	@brief
-	This file contains movies routines
+	This file contains game state routines
 
 	Prequengine: a Little Big Adventure engine
 
@@ -41,6 +41,9 @@
 #include "sound.h"
 #include "images.h"
 #include "music.h"
+#include "filereader.h"
+
+#define SAVE_DIR "save//"
 
 int32 magicLevelStrengthOfHit[] = {
 	MAGIC_STRENGTH_NONE,
@@ -163,11 +166,115 @@ void init_engine_vars(int32 save) { // reinitAll
 	previousHeroBehaviour = 0;
 
 	if (save == -1) {
-		// TODO: load game
+		load_game();
 		if (newHeroX == -1) {
 			heroPositionType = POSITION_TYPE_NONE;	
 		}
 	}
+}
+
+void load_game() {
+	FileReader fr;
+	uint8 data;
+	int8* namePtr;
+
+	if (!fropen(&fr, SAVE_DIR "S9999.LBA", "rb")) {
+		printf("Can't load S9999.LBA saved game!\n");
+		return;
+	}
+
+	namePtr = savePlayerName;
+
+	frread(&fr, &data, 1); // save game id
+
+	do {
+		frread(&fr, &data, 1); // get save player name characters
+		*(namePtr++) = data;
+	} while (data);
+
+	frread(&fr, &data, 1); // number of game flags, always 0xFF
+	frread(&fr, gameFlags, data);
+	frread(&fr, &needChangeScene, 1); // scene index
+	frread(&fr, &gameChapter, 1);
+
+	frread(&fr, &heroBehaviour, 1);
+	previousHeroBehaviour = heroBehaviour;
+	frread(&fr, &sceneHero->life, 1);
+	frread(&fr, &inventoryNumKashes, 2);
+	frread(&fr, &magicLevelIdx, 1);
+	frread(&fr, &inventoryMagicPoints, 1);
+	frread(&fr, &inventoryNumLeafsBox, 1);
+	frread(&fr, &newHeroX, 2);
+	frread(&fr, &newHeroY, 2);
+	frread(&fr, &newHeroZ, 2);
+	frread(&fr, &sceneHero->angle, 2);
+	previousHeroAngle = sceneHero->angle;
+	frread(&fr, &sceneHero->body, 1);
+
+	frread(&fr, &data, 1); // number of holomap locations, always 0x96
+	frread(&fr, holomapFlags, data);
+
+	frread(&fr, &inventoryNumGas, 1);
+
+	frread(&fr, &data, 1); // number of used inventory items, always 0x1C
+	frread(&fr, inventoryFlags, data);
+
+	frread(&fr, &inventoryNumLeafs, 1);
+	frread(&fr, &usingSabre, 1);
+
+	frclose(&fr);
+
+	currentSceneIdx = -1;
+	heroPositionType = POSITION_TYPE_REBORN;
+}
+
+void save_game() {
+	FileReader fr;
+	int8 data;
+
+	if (!fropen(&fr, SAVE_DIR "S9999.LBA", "wb+")) {
+		printf("Can't save S9999.LBA saved game!\n");
+		return;
+	}
+
+	data = 0x03;
+	frwrite(&fr, &data, 1, 1);
+
+	data = 0x00;
+	frwrite(&fr, "PrequengineSave", 16, 1);
+
+	data = 0xFF; // number of game flags
+	frwrite(&fr, &data, 1, 1);
+	frwrite(&fr, gameFlags, 255, 1);
+
+	frwrite(&fr, &currentSceneIdx, 1, 1);
+	frwrite(&fr, &gameChapter, 1, 1);
+	frwrite(&fr, &heroBehaviour, 1, 1);
+	frwrite(&fr, &sceneHero->life, 1, 1);
+	frwrite(&fr, &inventoryNumKashes, 2, 1);
+	frwrite(&fr, &magicLevelIdx, 1, 1);
+	frwrite(&fr, &inventoryMagicPoints, 1, 1);
+	frwrite(&fr, &inventoryNumLeafsBox, 1, 1);
+	frwrite(&fr, &newHeroX, 2, 1);
+	frwrite(&fr, &newHeroY, 2, 1);
+	frwrite(&fr, &newHeroZ, 2, 1);
+	frwrite(&fr, &sceneHero->angle, 2, 1);
+	frwrite(&fr, &sceneHero->body, 1, 1);
+
+	data = 0x96; // number of holomap locations
+	frwrite(&fr, &data, 1, 1);
+	frwrite(&fr, holomapFlags, 150, 1);
+
+	frwrite(&fr, &inventoryNumGas, 1, 1);
+
+	data = 0x1C; // number of inventory items
+	frwrite(&fr, &data, 1, 1);
+	frwrite(&fr, inventoryFlags, 28, 1);
+
+	frwrite(&fr, &inventoryNumLeafs, 1, 1);
+	frwrite(&fr, &usingSabre, 1, 1);
+
+	frclose(&fr);
 }
 
 void process_found_item(int32 item) {

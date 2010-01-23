@@ -1,6 +1,6 @@
-/** @file state.h
+/** @file gamestate.h
 	@brief
-	This file contains movies routines
+	This file contains game state routines
 
 	Prequengine: a Little Big Adventure engine
 
@@ -85,6 +85,9 @@ int16 inventoryNumGas;
 int16 usingSabre;
 
 
+int8 savePlayerName[30];
+
+
 /** Initialize all engine variables */
 void init_engine_vars(int32 save);
 
@@ -92,5 +95,8 @@ void init_engine_vars(int32 save);
 void init_engine_projections();
 
 void process_found_item(int32 item);
+
+void load_game();
+void save_game();
 
 #endif
