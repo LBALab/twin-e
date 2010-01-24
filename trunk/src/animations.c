@@ -587,7 +587,7 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kThrowExtraBonus: { // add_extra_throw
+		case kThrowExtraBonus: {
 			animPos = *(data++);
 			if (animPos == actor->animPosition) {
 				int32 yHeight, var_C, var_24, var_14, cx, dx, var;
@@ -610,7 +610,7 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kThrowMagicBall: {
+		case kThrowMagicBall: { 
 			if (magicBallIdx == -1) {
 				animPos = *(data++);
 				data += 7;
@@ -634,11 +634,24 @@ void process_anim_actions(int16 actorIdx) {
 			break;
 		case kActionUnknown6: {
 			animPos = *(data++);
-			data += 6;
-			printf("Actor %d AnimAction[kActionUnknown6] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition) {
+				int32 var_8, var_C, dx, var_24, temp;
+
+				var_8 = *((int16 *)data);
+				data += 2;
+				var_C = *(data++);
+				dx = *(data++);
+				var_24 = *((int16 *)data);
+				data += 2;
+				temp = *(data++);
+
+				add_extra_aiming(actorIdx, actor->X, actor->Y + var_8, actor->Z, var_C, dx, var_24, temp);
+			} else {
+				data+=6;
+			}
 		}
 			break;
-		case kActionUnknown7: { // add_extra_throw
+		case kActionUnknown7: {
 			animPos = *(data++);
 			if (animPos == actor->animPosition) {
 				int32 yHeight, var_C, var_24, var_14, cx, dx, distance, angle, var;
@@ -662,7 +675,6 @@ void process_anim_actions(int16 actorIdx) {
 			} else {
 				data += 11;
 			}
-			printf("Actor %d AnimAction[kActionUnknown7] not implemented\n", actorIdx);
 		}
 			break;
 		case kSampleStop: {
@@ -698,7 +710,7 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kActionUnknown13: { // add_extra_throw
+		case kActionUnknown13: {
 			animPos = *(data++);
 			if (animPos == actor->animPosition) {
 				int32 throwX, throwY, throwZ;
@@ -737,7 +749,7 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kActionUnknown14: { // add_extra_throw
+		case kActionUnknown14: {
 			animPos = *(data++);
 			if (animPos == actor->animPosition) {
 				int32 newAngle, throwX, throwY, throwZ;
@@ -780,8 +792,29 @@ void process_anim_actions(int16 actorIdx) {
 			break;
 		case kActionUnknown15: {
 			animPos = *(data++);
-			data += 11;
-			printf("Actor %d AnimAction[kActionUnknown15] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition) {
+				int32 distanceX, distanceY, distanceZ;
+				int32 spriteIdx, targetActor, param3, param4;
+
+				distanceX = *((int16 *)data);
+				data += 2;
+				distanceY = *((int16 *)data);
+				data += 2;
+				distanceZ = *((int16 *)data);
+				data += 2;
+
+				rotate_actor( distanceX, distanceZ, actor->angle);
+
+				spriteIdx = *(data++);
+				targetActor = *(data++);
+				param3 = *((int16 *)data);
+				data += 2;
+				param4 = *(data++);
+
+				add_extra_aiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx, targetActor, param3, param4);
+			} else {
+				data+=11;
+			}
 		}
 			break;
 		case kActionUnknown9:
