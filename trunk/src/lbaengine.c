@@ -56,6 +56,17 @@
 int32 isTimeFreezed = 0;
 int32 saveFreezedTime = 0;
 
+enum InventoryItems {
+	kiHolomap = 0,
+	kiMagicBall = 1,
+	kiUseSabre = 2,
+	kiBookOfBu = 5,
+	kiProtoPack = 12,
+	kiPinguin = 14,
+	kiBonusList = 26,
+	kiCloverLeaf = 27
+};
+
 void freeze_time() {
 	if (!isTimeFreezed)
 		saveFreezedTime = lbaTime;
@@ -137,7 +148,95 @@ int32 run_game_engine() { // mainLoopInteration
 		if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
 			freeze_time();
 			process_inventory_menu();
-			// TODO: process_inventory_usage();
+			
+			switch (loopInventoryItem) {
+			case kiHolomap:
+				printf("Use Inventory [kiHolomap] not implemented!\n");
+				break;
+			case kiMagicBall:
+				if (usingSabre == 1) {
+					init_model_actor(0, 0);
+				}
+				usingSabre = 0;
+				break;
+			case kiUseSabre:
+				if (sceneHero->body == 2) {
+					if (heroBehaviour == PROTOPACK) {
+						set_behaviour(NORMAL);
+					}
+					init_model_actor(2, 0);
+					init_anim(24, 1, 0, 0);
+
+					usingSabre = 1;
+				}
+				break;
+			case kiBookOfBu: {
+				int32 tmpFlagDisplayText;
+
+				fade_2_black(paletteRGBA);
+				load_image(RESSHQR_INTROSCREEN1IMG, 1);
+				init_text_bank(2);
+				newGameVar4 = 0;
+				text_clip_full();
+				set_font_cross_color(15);
+				tmpFlagDisplayText = cfgfile.FlagDisplayText;
+				cfgfile.FlagDisplayText = 1;
+				draw_text_fullscreen(161);
+				cfgfile.FlagDisplayText = tmpFlagDisplayText;
+				text_clip_small();
+				newGameVar4 = 1;
+				init_text_bank(currentTextBank + 3);
+				fade_2_black(paletteRGBACustom);
+				clear_screen();
+				flip();
+				set_palette(paletteRGBA);
+			}							 
+				break;
+			case kiProtoPack:
+				if (gameFlags[GAMEFLAG_BOOKOFBU]) {
+					sceneHero->body = 0;
+				} else {
+					sceneHero->body = 1;
+				}
+
+				if (heroBehaviour == PROTOPACK) {
+					set_behaviour(NORMAL);
+				} else {
+					set_behaviour(PROTOPACK);
+				}
+				break;
+			case kiPinguin:
+				printf("Use Inventory [kiPinguin] not implemented!\n");
+				break;
+			case kiBonusList: {
+				int32 tmpLanguageCDIdx;
+				tmpLanguageCDIdx = cfgfile.LanguageCDId;
+				unfreeze_time();
+				redraw_engine_actions(1);
+				freeze_time();
+				cfgfile.LanguageCDId = 0;
+				init_text_bank(2);
+				text_clip_full();
+				set_font_cross_color(15);
+				draw_text_fullscreen(162);
+				text_clip_small();
+				cfgfile.LanguageCDId = tmpLanguageCDIdx;
+				init_text_bank(currentTextBank + 3);
+			}
+				break;
+			case kiCloverLeaf:
+				if (sceneHero->life < 50) {
+					if (inventoryNumLeafs > 0) {
+						sceneHero->life = 50;
+						inventoryMagicPoints = magicLevelIdx * 20;
+						inventoryNumLeafs--;
+						add_overlay(koInventoryItem, 27, 0, 0, 0, koNormal, 3);
+					}
+				}
+				break;
+			}
+
+
 			unfreeze_time();
 			redraw_engine_actions(1);
 		}
