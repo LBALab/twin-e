@@ -31,6 +31,13 @@
 
 #include "sys.h"
 
+/** Definition for European version */
+#define EUROPE_VERSION 0
+/** Definition for American version */
+#define USA_VERSION 1
+/** Definition for Modification version */
+#define MODIFICATION_VERSION 2
+
 /** Original screen width */
 #define DEFAULT_SCREEN_WIDTH			640
 /** Original screen height */

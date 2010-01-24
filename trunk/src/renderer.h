@@ -58,13 +58,14 @@ int16 *pRenderV1;
 
 void set_light_vector(int32 angleX, int32 angleY, int32 angleZ);
 
-int compute_polygons();
+int32 compute_polygons();
 void render_polygons(int32 ecx, int32 edi);
 
 void prepare_iso_model(uint8 *bodyPtr); // loadGfxSub
 
 int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ);
 void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
+void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6);
 void set_base_translation(int32 X, int32 Y, int32 Z);
 void set_base_rotation(int32 X, int32 Y, int32 Z);
 void set_ortho_projection(int32 X, int32 Y, int32 Z);

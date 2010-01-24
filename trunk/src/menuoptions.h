@@ -28,6 +28,10 @@
 #ifndef MENUOPTIONS_H
 #define MENUOPTIONS_H
 
+#include "sys.h"
+
+int32 showCredits;
+
 /** Main menu new game options */
 void new_game_menu();
 

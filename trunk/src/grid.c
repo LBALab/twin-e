@@ -807,9 +807,8 @@ void redraw_grid() {
 		brickInfoBuffer[i] = 0;
 	}
 
-	// TODO: check this later
-	//if (changeRoomVar10 == 0)
-	//		return;
+	if (changeRoomVar10 == 0)
+		return;
 
 	for (z = 0; z < GRID_SIZE_Z; z++) {
 		for (x = 0; x < GRID_SIZE_X; x++) {

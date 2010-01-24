@@ -301,9 +301,6 @@ void play_fla_movie(int8 *filename) {
 	if (!fropen(&frFla, filename, "rb"))
 		return;
 
-	if (cfgfile.Debug)
-		printf("Playing FLA: %s ", filename);
-
 	workVideoBufferCopy = workVideoBuffer;
 
 	frread(&frFla, &flaHeaderData.version, 6);
@@ -317,9 +314,6 @@ void play_fla_movie(int8 *filename) {
 
 	// TODO: to remove
 	samplesInFla &= 0xFFFF;
-
-	if (cfgfile.Debug)
-		printf("- Frames: %d - Speed: %d - Samples: %d\n", flaHeaderData.numOfFrames, flaHeaderData.speed, samplesInFla);
 
 	for (i = 0; i < samplesInFla; i++) {
 		//flaSampleTable[i] = *((int16 *)flaPtr); flaPtr+=4;

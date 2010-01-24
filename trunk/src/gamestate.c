@@ -42,6 +42,7 @@
 #include "images.h"
 #include "music.h"
 #include "filereader.h"
+#include "menuoptions.h"
 
 #define SAVE_DIR "save//"
 
@@ -144,8 +145,9 @@ void init_engine_vars(int32 save) { // reinitAll
 
 	currentSceneIdx = -1;
 	needChangeScene = 0;
-	//brutalExit = -1;
+	quitGame = -1;
 	mecaPinguinIdx = -1;
+	showCredits = 0;
 		
 	inventoryNumLeafs = 0;
 	inventoryNumLeafsBox = 2;
