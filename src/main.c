@@ -54,14 +54,6 @@
 /** Engine current version */
 const int8* ENGINE_VERSION = "0.1.0";
 
-/** Definition for European version */
-#define EUROPE_VERSION 0
-/** Definition for American version */
-#define USA_VERSION 1
-/** Definition for Modification version */
-#define MODIFICATION_VERSION 2
-
-
 /** Engine configuration filename */
 const int8* CONFIG_FILENAME = "lba.cfg";
 

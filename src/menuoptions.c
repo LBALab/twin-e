@@ -36,6 +36,7 @@
 #include "music.h"
 #include "keyboard.h"
 #include "movies.h"
+#include "scene.h"
 
 void new_game() {
 	int32 tmpFlagDisplayText;
@@ -92,6 +93,34 @@ void new_game() {
 	cfgfile.FlagDisplayText = tmpFlagDisplayText;
 }
 
+void show_credits() {
+	int32 tmpShadowMode, tmpLanguageCDIdx;
+	
+	showCredits = 1;
+	tmpShadowMode = cfgfile.ShadowMode;
+	tmpLanguageCDIdx = cfgfile.LanguageCDId;
+	cfgfile.ShadowMode = 0;
+	cfgfile.LanguageCDId = 0;
+	init_engine_vars(1);
+	currentSceneIdx = 119;
+	needChangeScene = 119;
+	
+	game_engine_loop();
+
+	showCredits = 0;
+	cfgfile.ShadowMode = tmpShadowMode;
+	cfgfile.LanguageCDId = tmpLanguageCDIdx;
+	
+	clear_screen();
+	flip();
+
+	play_movie(FLA_THEEND);
+
+	clear_screen();
+	flip();
+	set_palette(paletteRGBA);
+}
+
 /** Main menu new game options */
 void new_game_menu() {
 	//TODO: process players name
@@ -99,9 +128,19 @@ void new_game_menu() {
 	{
 		init_engine_vars(1);
 		new_game();
+
 		if (game_engine_loop()) {
-			//TODO: Show credit sequence
+			show_credits();
 		}
+		
+		copy_screen(frontVideoBuffer, workVideoBuffer);
+		// TODO: recheck this
+		do {
+			read_keys();
+			do {
+				read_keys();
+			} while(skipedKey != 0);
+		} while(skipIntro != 0);
 	}
 }
 
@@ -112,8 +151,18 @@ void continue_game_menu() {
 	{
 		init_engine_vars(-1); // will load game
 		new_game();
+
 		if (game_engine_loop()) {
-			//TODO: Show credit sequence
+			show_credits();
 		}
+
+		copy_screen(frontVideoBuffer, workVideoBuffer);
+		// TODO: recheck this
+		do {
+			read_keys();
+			do {
+				read_keys();
+			} while(skipedKey != 0);
+		} while(skipIntro != 0);
 	}
 }

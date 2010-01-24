@@ -47,6 +47,7 @@
 #include "script.life.h"
 #include "script.move.h"
 #include "extra.h"
+#include "menuoptions.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -86,82 +87,95 @@ int32 run_game_engine() { // mainLoopInteration
 	process_debug(loopCurrentKey);
 #endif
 
-	// Process give up menu - Press ESC
-	if (skipIntro == 1 && sceneHero->life > 0 && sceneHero->entity != -1 && !sceneHero->staticFlags.bIsHidden) {
-		freeze_time();
-		if (giveup_menu()) {
-			unfreeze_time();
-			redraw_engine_actions(1);
-			freeze_time();
-			save_game(); // auto save game
-			quitGame = 0;
-			cfgfile.Quit = 0;
-			unfreeze_time();
+	if(showCredits != 0) {
+		// TODO: if current music playing != 8, than play_track(8);
+		if (skipIntro != 0) {
 			return 0;
-		} else {
+		}
+		if (pressedKey != 0) {
+			return 0;
+		}
+		if (skipedKey != 0) {
+			return 0;
+		}
+	} else {
+		// Process give up menu - Press ESC
+		if (skipIntro == 1 && sceneHero->life > 0 && sceneHero->entity != -1 && !sceneHero->staticFlags.bIsHidden) {
+			freeze_time();
+			if (giveup_menu()) {
+				unfreeze_time();
+				redraw_engine_actions(1);
+				freeze_time();
+				save_game(); // auto save game
+				quitGame = 0;
+				cfgfile.Quit = 0;
+				unfreeze_time();
+				return 0;
+			} else {
+				unfreeze_time();
+				redraw_engine_actions(1);
+			}
+		}
+
+		// Process options menu - Press F6
+		if (loopCurrentKey == 0x40) {
+			int tmpLangCD = cfgfile.LanguageCDId;
+			freeze_time();
+			stop_samples();
+			OptionsMenuSettings[5] = 15;
+			cfgfile.LanguageCDId = 0;
+			init_text_bank(0);
+			options_menu();
+			cfgfile.LanguageCDId = tmpLangCD;
+			init_text_bank(currentTextBank + 3);
+			//TODO: play music
 			unfreeze_time();
 			redraw_engine_actions(1);
 		}
-	}
 
-	// Process options menu - Press F6
-	if (loopCurrentKey == 0x40) {
-		int tmpLangCD = cfgfile.LanguageCDId;
-		freeze_time();
-		stop_samples();
-		OptionsMenuSettings[5] = 15;
-		cfgfile.LanguageCDId = 0;
-		init_text_bank(0);
-		options_menu();
-		cfgfile.LanguageCDId = tmpLangCD;
-		init_text_bank(currentTextBank + 3);
-		//TODO: play music
-		unfreeze_time();
-		redraw_engine_actions(1);
-	}
+		// inventory menu
+		if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
+			freeze_time();
+			process_inventory_menu();
+			// TODO: process_inventory_usage();
+			unfreeze_time();
+			redraw_engine_actions(1);
+		}
 
-	// inventory menu
-	if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
-		freeze_time();
-		process_inventory_menu();
-		// TODO: process_inventory_usage();
-		unfreeze_time();
-		redraw_engine_actions(1);
-	}
+		// Process behaviour menu - Press CTRL
+		// TODO: behaviour menu (LBA2 style)
+		if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
+			freeze_time();
+			process_behaviour_menu();
+			unfreeze_time();
+			redraw_engine_actions(1);
+		}
 
-	// Process behaviour menu - Press CTRL
-	// TODO: behaviour menu (LBA2 style)
-	if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
-		freeze_time();
-		process_behaviour_menu();
-		unfreeze_time();
-		redraw_engine_actions(1);
-	}
+		// TODO: use Proto-Pack
 
-	// TODO: use Proto-Pack
+		// Press Enter to Recenter Screen
+		if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
+			newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
+			newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
+			newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
+			reqBgRedraw = 1;
+		}
 
-	// Press Enter to Recenter Screen
-	if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
-		newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
-		newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
-		newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
-		reqBgRedraw = 1;
-	}
+		// TODO: draw holomap
 
-	// TODO: draw holomap
-
-	// Process Pause - Press P
-	if (loopCurrentKey == 0x19) {
-		freeze_time();
-		set_font_color(15);
-		draw_text(5, 446, "Pause"); // no key for pause in Text Bank
-		copy_block_phys(5, 446, 100, 479);
-		do {
-			read_keys();
-			SDL_Delay(10);
-		} while (skipIntro != 0x19 && !pressedKey);
-		unfreeze_time();
-		redraw_engine_actions(1);
+		// Process Pause - Press P
+		if (loopCurrentKey == 0x19) {
+			freeze_time();
+			set_font_color(15);
+			draw_text(5, 446, "Pause"); // no key for pause in Text Bank
+			copy_block_phys(5, 446, 100, 479);
+			do {
+				read_keys();
+				SDL_Delay(10);
+			} while (skipIntro != 0x19 && !pressedKey);
+			unfreeze_time();
+			redraw_engine_actions(1);
+		}
 	}
 
 	loopActorStep = get_real_value(&loopMovePtr);
@@ -223,8 +237,8 @@ int32 run_game_engine() { // mainLoopInteration
 				process_life_script(a);
 			}
 
-			if (quitGame == -1) {
-				return -1;
+			if (quitGame != -1) {
+				return quitGame;
 			}
 
 			if (actor->staticFlags.bCanDrown) {
@@ -322,12 +336,11 @@ int32 run_game_engine() { // mainLoopInteration
 int32 game_engine_loop() { // mainLoop
 	uint32 start;
 
-	quitGame = 1;
 	reqBgRedraw = 1;
 	// TODO lockPalette = 1;
 	set_actor_angle(0, -256, 5, &loopMovePtr);
 
-	while (quitGame) {
+	while (quitGame == -1) {
 		start = SDL_GetTicks();
 
 		while (SDL_GetTicks() < start + cfgfile.Fps) {

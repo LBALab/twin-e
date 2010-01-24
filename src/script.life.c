@@ -45,9 +45,16 @@
 #include "resources.h"
 #include "collision.h"
 #include "text.h"
+#include "images.h"
+#include "sdlengine.h"
+#include "keyboard.h"
+#include "interface.h"
 
 uint8 *scriptPtr; // local script pointer
 uint8 *opcodePtr; // local opcode script pointer
+
+int32 drawVar1;
+int8 textStr[256]; // string
 
 /** Returns:
 	   -1 - TODO
@@ -999,6 +1006,9 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 	int8 *movie = (int8 *)scriptPtr;
 	int32 nameSize = strlen(movie);
 	play_movie(movie);
+	clear_screen();
+	flip();
+	set_palette(paletteRGBA);
 	scriptPtr += nameSize + 1;
 	return 0;
 }
@@ -1248,7 +1258,31 @@ int32 lSET_NORMAL_PAL(int32 actorIdx, ActorStruct *actor) {
 
 /*0x5E*/
 int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	int32 tmpFlagDisplayText;
+
+	freeze_time();
+	fade_2_black(paletteRGBA);
+	load_image(25, 1);
+	text_clip_full();
+	set_font_cross_color(15);
+	newGameVar4 = 0;
+	tmpFlagDisplayText = cfgfile.FlagDisplayText;
+	cfgfile.FlagDisplayText = 1;
+	draw_text_fullscreen(6);
+	newGameVar4 = 1;
+	text_clip_small();
+	fade_2_black(paletteRGBACustom);
+	clear_screen();
+	set_palette(paletteRGBA);
+	cfgfile.FlagDisplayText = tmpFlagDisplayText;
+
+	do {
+		read_keys();
+	} while (skipIntro || skipedKey);
+
+	unfreeze_time();
+	
+	return 0;
 }
 
 /*0x5F*/
@@ -1278,6 +1312,7 @@ int32 lGAME_OVER(int32 actorIdx, ActorStruct *actor) {
 
 /*0x62*/
 int32 lTHE_END(int32 actorIdx, ActorStruct *actor) {
+	quitGame = 1;
 	inventoryNumLeafs = 0;
 	sceneHero->life = 50;
 	inventoryMagicPoints = 80;
@@ -1285,7 +1320,7 @@ int32 lTHE_END(int32 actorIdx, ActorStruct *actor) {
 	heroBehaviour = previousHeroBehaviour;
 	newHeroX = -1;
 	sceneHero->angle = previousHeroAngle;
-	// TODO: save_game();
+	save_game();
 	return 1; // break;
 }
 
@@ -1313,22 +1348,58 @@ int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
 
 /*0x66*/
 int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
-	return -1; // TODO
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+	flip();
+	changeRoomVar10 = 0;
+
+	set_camera_position(320, 240, 128, 1024, 1024);
+	set_camera_angle(0, 1500, 0, 25, -128, 0, 13000);
+	set_light_vector(896, 950, 0);
+
+	init_text_bank(1);
+
+	return 0;
 }
 
 /*0x67*/
 int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr += 2; // TODO
-	return -1;
+	int32 textSize, textBoxRight;
+	int32 textIdx = *((int16 *)scriptPtr);
+	scriptPtr += 2;
+
+	if (drawVar1 < 440) {
+		if (cfgfile.Version == USA_VERSION) {
+			if (!textIdx) {
+				textIdx = 16;
+			}
+		}
+
+		get_menu_text(textIdx, textStr);
+		textSize = textBoxRight = get_text_size(textStr);
+		set_font_color(15);
+		draw_text(0, drawVar1, textStr);
+		if (textSize > 639) {
+			textBoxRight = 639;
+		}
+		
+		drawVar1 += 40;
+		copy_block_phys(0, drawVar1, textBoxRight, drawVar1);
+	}
+
+	return 0;
 }
 
 /*0x68*/
 int32 lCLEAR_TEXT(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	drawVar1 = 0;
+	draw_splitted_box(0, 0, 639, 240, 0);
+	copy_block_phys(0, 0, 639, 240);
+	return 0;
 }
 
 /*0x69*/
 int32 lBRUTAL_EXIT(int32 actorIdx, ActorStruct *actor) {
+	quitGame = 0;
 	return 1; // break
 }
 
