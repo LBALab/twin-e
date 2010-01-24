@@ -251,6 +251,19 @@ int32 run_game_engine() { // mainLoopInteration
 		}
 
 		// TODO: use Proto-Pack
+		if (loopCurrentKey == 0x24 && gameFlags[GAMEFLAG_PROTOPACK] == 1) {
+			if (gameFlags[GAMEFLAG_BOOKOFBU]) {
+				sceneHero->body = 0;
+			} else {
+				sceneHero->body = 1;
+			}
+
+			if (heroBehaviour == PROTOPACK) {
+				set_behaviour(NORMAL);
+			} else {
+				set_behaviour(PROTOPACK);
+			}
+		}
 
 		// Press Enter to Recenter Screen
 		if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
