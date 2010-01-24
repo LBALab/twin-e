@@ -234,6 +234,33 @@ int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32
 	return -1;
 }
 
+int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 var2, int32 var3, int32 var4, int32 var5, int32 strengthOfHit) { // ThrowExtra
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == -1) {
+			extra->info0 = sprite;
+			extra->type = 0x210C;
+			extra->X = X;
+			extra->Y = Y;
+			extra->Z = Z;
+
+			// same as InitFly
+			throw_extra(extra, var2, var3, var4, var5);
+
+			extra->strengthOfHit = strengthOfHit;
+			extra->lifeTime = lbaTime;
+			extra->actorIdx = actorIdx;
+			extra->info1 = 0;
+
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void draw_special_shape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 angle, int32 size) {
 	int16 currentShapeTable;
 	int16 var_8;

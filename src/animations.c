@@ -587,10 +587,27 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kThrowExtraBonus: {
+		case kThrowExtraBonus: { // add_extra_throw
 			animPos = *(data++);
-			data += 11;
-			printf("Actor %d AnimAction[kThrowExtraBonus] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition) {
+				int32 yHeight, var_C, var_24, var_14, cx, dx, var;
+
+				yHeight = *((int16 *)data);
+				data+=2;
+				var_C = *(data++);
+				cx = *((int16 *)data);
+				data+=2;
+				dx = actor->angle + *((int16 *)data);
+				data+=2;
+				var_24 = *((int16 *)data);
+				data+=2;
+				var_14 = *(data++);
+				var = *(data++);
+
+				add_extra_throw(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, cx, dx, var_24, var_14, var);
+			} else {
+				data += 11;
+			}
 		}
 			break;
 		case kThrowMagicBall: {
@@ -621,9 +638,30 @@ void process_anim_actions(int16 actorIdx) {
 			printf("Actor %d AnimAction[kActionUnknown6] not implemented\n", actorIdx);
 		}
 			break;
-		case kActionUnknown7: {
+		case kActionUnknown7: { // add_extra_throw
 			animPos = *(data++);
-			data += 11;
+			if (animPos == actor->animPosition) {
+				int32 yHeight, var_C, var_24, var_14, cx, dx, distance, angle, var;
+
+				distance = get_distance_2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+				angle = get_angle(actor->Y, 0, sceneHero->Y, distance);
+
+				yHeight = *((int16 *)data);
+				data+=2;
+				var_C = *(data++);
+				dx = *((int16 *)data);
+				data+=2;
+				cx = actor->angle + *((int16 *)data);
+				data+=2;
+				var_24 = *((int16 *)data);
+				data+=2;
+				var_14 = *(data++);
+				var = *(data++);
+
+				add_extra_throw(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, dx, cx, var_24, var_14, var);
+			} else {
+				data += 11;
+			}
 			printf("Actor %d AnimAction[kActionUnknown7] not implemented\n", actorIdx);
 		}
 			break;
@@ -660,16 +698,84 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kActionUnknown13: {
+		case kActionUnknown13: { // add_extra_throw
 			animPos = *(data++);
-			data += 15;
-			printf("Actor %d AnimAction[kActionUnknown13] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition) {
+				int32 throwX, throwY, throwZ;
+				int32 distanceX, distanceY, distanceZ;
+				int32 spriteIdx, strength;
+				int32 param1, param2, param3, param4;
+
+				distanceX = *((int16 *)data);
+				data += 2;
+				distanceY = *((int16 *)data);
+				data += 2;
+				distanceZ = *((int16 *)data);
+				data += 2;
+
+				rotate_actor(distanceX, distanceZ, actor->angle);
+
+				throwX = destX + actor->X;
+				throwY = distanceY + actor->Y;
+				throwZ = destZ + actor->Z;
+
+				spriteIdx = *(data++);
+
+				param1 = *((int16 *)data);
+				data += 2;
+				param2 = *((int16 *)data) + actor->angle;
+				data += 2;
+				param3 = *((int16 *)data);
+				data += 2;
+				param4 = *(data++);
+
+				strength = *(data++);
+
+				add_extra_throw(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
+			} else {
+				data += 15;
+			}
 		}
 			break;
-		case kActionUnknown14: {
+		case kActionUnknown14: { // add_extra_throw
 			animPos = *(data++);
-			data += 15;
-			printf("Actor %d AnimAction[kActionUnknown14] not implemented\n", actorIdx);
+			if (animPos == actor->animPosition) {
+				int32 newAngle, throwX, throwY, throwZ;
+				int32 distanceX, distanceY, distanceZ;
+				int32 spriteIdx, strength;
+				int32 param1, param2, param3, param4;
+
+				newAngle = get_angle(actor->Y, 0, sceneHero->Y, get_distance_2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
+
+				distanceX = *((int16 *)data);
+				data += 2;
+				distanceY = *((int16 *)data);
+				data += 2;
+				distanceZ = *((int16 *)data);
+				data += 2;
+
+				rotate_actor(distanceX, distanceZ, actor->angle);
+
+				throwX = destX + actor->X;
+				throwY = distanceY + actor->Y;
+				throwZ = destZ + actor->Z;
+
+				spriteIdx = *(data++);
+
+				param1 = *((int16 *)data) + newAngle;
+				data += 2;
+				param2 = *((int16 *)data) + actor->angle;
+				data += 2;
+				param3 = *((int16 *)data);
+				data += 2;
+				param4 = *(data++);
+
+				strength = *(data++);
+
+				add_extra_throw(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
+			} else {
+				data += 15;
+			}
 		}
 			break;
 		case kActionUnknown15: {
