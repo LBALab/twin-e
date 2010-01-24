@@ -261,6 +261,32 @@ int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, i
 	return -1;
 }
 
+int32 add_extra_aiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 targetActorIdx, int32 maxSpeed, int32 strengthOfHit) { // ExtraSearch
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == -1) {
+			extra->info0 = spriteIdx;
+			extra->type = 0x80;
+			extra->info1 = 0;
+			extra->X = X;
+			extra->Y = Y;
+			extra->Z = Z;
+			extra->actorIdx = actorIdx;
+			extra->lifeTime = targetActorIdx;
+			extra->destZ = maxSpeed;
+			extra->strengthOfHit = strengthOfHit;
+			set_actor_angle(0, maxSpeed, 50, &extra->trackActorMove);
+			extra->angle = get_angle(X, Z, sceneActors[targetActorIdx].X, sceneActors[targetActorIdx].Z);	
+
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void draw_special_shape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 angle, int32 size) {
 	int16 currentShapeTable;
 	int16 var_8;
@@ -507,7 +533,7 @@ void process_extras() {
 						pos = 1;
 					}
 
-					rotate_actor(1, 0, angle);
+					rotate_actor(pos, 0, angle);
 					extra->Y -= destZ;
 
 					rotate_actor(0, destX, tmpAngle);

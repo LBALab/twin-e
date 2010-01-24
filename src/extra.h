@@ -72,6 +72,7 @@ void reset_extras();
 void add_extra_special(int32 X, int32 Y, int32 Z, int32 type);
 int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount);
 int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 var2, int32 var3, int32 var4, int32 var5, int32 strengthOfHit);
+int32 add_extra_aiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 targetActorIdx, int32 maxSpeed, int32 strengthOfHit);
 
 void draw_extra_special(int32 extraIdx, int32 X, int32 Y);
 
