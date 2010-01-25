@@ -25,6 +25,8 @@
 	$Id$
 */
 
+#include <stdio.h>
+
 #include "extra.h"
 #include "lbaengine.h"
 #include "collision.h"
@@ -285,6 +287,60 @@ int32 add_extra_aiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteId
 	}
 
 	return -1;
+}
+
+void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 angle, int32 param2, int32 param3) { // ThrowMagicBall
+	int32 ballSprite = -1;
+	int32 ballStrength = 0;
+
+	switch (magicLevelIdx) {
+	case 0:
+	case 1:
+		ballSprite = 1;
+		ballStrength = 4;
+		break;
+	case 2:
+		ballSprite = 42;
+		ballStrength = 6;
+		break;
+	case 3:
+		ballSprite = 43;
+		ballStrength = 8;
+		break;
+	case 4:
+		ballSprite = 13;
+		ballStrength = 10;
+		break;
+	}
+
+	magicBallNumBounce = ((inventoryMagicPoints - 1) / 20) + 1;
+	if (inventoryMagicPoints == 0) {
+		magicBallNumBounce = 0;
+	}
+
+	switch (magicBallNumBounce) {
+	case 0:
+		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
+		break;
+	case 1:
+		magicBallAuxBounce = 4;
+		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
+		break;
+	case 2:
+	case 3:
+	case 4:
+		magicBallNumBounce = 1;
+		magicBallAuxBounce = 4;
+		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
+		break;
+	case 5: // TODO
+      printf("Magic ball extra aim for key not implemented!\n");
+      break;
+	}
+
+	if (inventoryMagicPoints > 0) {
+		inventoryMagicPoints--;
+	}
 }
 
 void draw_special_shape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 angle, int32 size) {

@@ -610,14 +610,27 @@ void process_anim_actions(int16 actorIdx) {
 			}
 		}
 			break;
-		case kThrowMagicBall: { 
+		case kThrowMagicBall: {
 			if (magicBallIdx == -1) {
 				animPos = *(data++);
-				data += 7;
+				if (animPos == actor->animPosition) {
+					int32 var_8, dx, var_24, var_14;
+
+					var_8 = *((int16 *)data);
+					data += 2;
+					dx = *((int16 *)data);
+					data += 2;
+					var_24 = *((int16 *)data);
+					data += 2;
+					var_14 = *(data++);
+
+					add_extra_throw_magicball(actor->X, actor->Y + var_8, actor->Z, dx, actor->angle, var_24, var_14);
+				} else {
+					data += 7;
+				}
 			} else {
 				data += 8;
 			}
-			printf("Actor %d AnimAction[kThrowMagicBall] not implemented\n", actorIdx);
 		}
 			break;
 		case kSampleRepeat: {
