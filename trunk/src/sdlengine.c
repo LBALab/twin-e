@@ -69,18 +69,20 @@ TTF_Font *font;
 
 /** SDL exit callback */
 static void atexit_callback(void) {
-	stop_track_music();
-	stop_midi_music();
-	Mix_CloseAudio();
-	SDL_Quit();
+	sdl_close();
 }
 
-/** Close everything in the game */
 void sdl_close() {
 	stop_track_music();
 	stop_midi_music();
-	atexit(atexit_callback);
+	Mix_CloseAudio();
+#ifdef GAMEMOD
+	TTF_Quit();
+#endif
+	SDL_Quit();
+	exit(0);
 }
+
 
 /** SDL initializer
 	@return SDL init state */
@@ -109,13 +111,12 @@ int sdl_initialize() {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
-
+	
 #ifdef GAMEMOD
 	if (TTF_Init() < 0) {
 		fprintf(stderr, "Couldn't initialize TTF: %s\n", SDL_GetError());
 		exit(1);
 	}
-	atexit(TTF_Quit);
 
 	font = TTF_OpenFont("verdana.ttf", 12);
 
@@ -140,7 +141,7 @@ int sdl_initialize() {
 		printf("Running with SDL version: %d.%d.%d\n\n", link_version->major, link_version->minor, link_version->patch);
 	}
 
-	sdl_close();
+	
 
 	printf("Initialising SDL device. Please wait...\n");
 
@@ -174,6 +175,8 @@ int sdl_initialize() {
 	for (i = 0; i < 16; i++) {
 		surfaceTable[i] = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 32, rmask, gmask, bmask, 0);
 	}
+
+	atexit(SDL_Quit);
 
 	return 0;
 }
@@ -347,6 +350,9 @@ void read_keys() {
 
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
+		case SDL_QUIT:
+			sdl_close();
+			break;
 		case SDL_MOUSEBUTTONDOWN:
 			switch (event.button.button) {
 			case SDL_BUTTON_RIGHT:
