@@ -52,7 +52,7 @@
 #include "actor.h"
 
 /** Engine current version */
-const int8* ENGINE_VERSION = "0.1.0";
+const int8* ENGINE_VERSION = "0.1.1";
 
 /** Engine configuration filename */
 const int8* CONFIG_FILENAME = "lba.cfg";
