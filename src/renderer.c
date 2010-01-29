@@ -374,7 +374,7 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix) {
 
 	if (renderAngleX) {
 		angleVar2 = shadeAngleTab1[renderAngleX & 0x3FF];
-		angleVar1 = shadeAngleTab1[(renderAngleX+0x100) & 0x3FF];
+		angleVar1 = shadeAngleTab1[((renderAngleX & 0x3FF)+0x100) & 0x3FF];
 
 		matrix1[0] = currentMatrix[0];
 		matrix1[3] = currentMatrix[3];
@@ -395,7 +395,7 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix) {
 
 	if (renderAngleZ) {
 		angleVar2 = shadeAngleTab1[renderAngleZ & 0x3FF];
-		angleVar1 = shadeAngleTab1[(renderAngleZ+0x100) & 0x3FF];
+		angleVar1 = shadeAngleTab1[((renderAngleZ & 0x3FF)+0x100) & 0x3FF];
 
 		matrix2[2] = matrix1[2];
 		matrix2[5] = matrix1[5];
@@ -416,7 +416,7 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix) {
 
 	if (renderAngleY) {
 		angleVar2 = shadeAngleTab1[renderAngleY & 0x3FF];			// esi
-		angleVar1 = shadeAngleTab1[(renderAngleY+0x100) & 0x3FF];	// ecx
+		angleVar1 = shadeAngleTab1[((renderAngleY & 0x3FF)+0x100) & 0x3FF];	// ecx
 
 		tempMatrix[1] = matrix2[1];
 		tempMatrix[4] = matrix2[4];
