@@ -354,8 +354,38 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->staticFlags.bCanDrown) {
-				//actor->brickSound = get_brick_sound_type(actor->X, actor->Y, actor->Z);
-				// TODO process_actor_drown(a)
+				/*int32 brickSound;
+				brickSound = get_brick_sound_type(actor->X, actor->Y, actor->Z);
+				actor->brickSound = brickSound;
+
+				if ((brickSound & 0xF0) == 0xF0) {
+					if ((brickSound & 0xF) == 1) {
+						if (a) { // all other actors
+							int32 rnd = Rnd(2000) + 3096;
+							play_sample(0x25, rnd, 1, actor->X, actor->Y, actor->Z);
+							if (actor->bonusParameter & 0x1F0) {
+								if (!(actor->bonusParameter & 1)) {
+									process_actor_extra_bonus(a);
+								}
+								actor->life = 0;
+							}
+						} else { // if Hero
+							if (heroBehaviour != 4 || (brickSound & 0x0F) != actor->anim) {
+								// if (!cropBottomScreen) TODO
+								{
+									init_anim(ANIM_DRAWN, 4, 0, 0);
+									project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
+									//cropBottomScreen = projPosY; TODO
+								}
+								project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
+								actor->controlMode = 0;
+								actor->life = -1;
+								//cropBottomScreen = projPosY; TODO
+								actor->staticFlags.bCanDrown |= 0x10;
+							}
+						}
+					}
+				}*/
 			}
 
 			if (actor->life <= 0) {
@@ -382,7 +412,7 @@ int32 run_game_engine() { // mainLoopInteration
 						} else { // game over
 							inventoryNumLeafsBox = 2;
 							inventoryNumLeafs = 1;
-							inventoryMagicPoints = magicLevelIdx * 20; // TODO: recheck this
+							inventoryMagicPoints = magicLevelIdx * 20;
 							heroBehaviour = previousHeroBehaviour;
 							actor->angle  = previousHeroAngle;
 							actor->life = 50;

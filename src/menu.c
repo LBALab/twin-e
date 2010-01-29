@@ -533,7 +533,7 @@ int32 process_menu(int16 * menuSettings) {
 	buttonNeedRedraw = 1;
 
 	numEntry = localData[1];
-	currentButton = localData[0];
+	currentButton = 0; // localData[0];
 	localTime = lbaTime;
 	maxButton = numEntry - 1;
 
@@ -794,7 +794,6 @@ void main_menu() {
 	hqr_get_entry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
 	while (!cfgfile.Quit) {
-		// TODO: RECHECK THIS LATER
 		init_text_bank(0);
 
 		play_track_music(9); // LBA's Theme

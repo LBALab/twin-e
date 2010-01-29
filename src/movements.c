@@ -420,7 +420,6 @@ void process_actor_movements(int32 actorIdx) {
 				}
 			}
 
-			// TODO: sword and magic ball actions
 			if ((loopPressedKey & 8) && !gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
 				if (usingSabre == 0) { // Use Magic Ball
 					if (gameFlags[GAMEFLAG_HAS_MAGICBALL]) {
@@ -445,7 +444,7 @@ void process_actor_movements(int32 actorIdx) {
 				}
 			}
 
-			if (loopPressedKey == 0 || heroAction != 0) {
+			if (!loopPressedKey || heroAction) {
 				int16 tempAngle;
 
 				if (key & 3) {  // if continue walking
@@ -453,7 +452,7 @@ void process_actor_movements(int32 actorIdx) {
 				}
 
 				if (key != heroPressedKey || loopPressedKey != heroPressedKey2) {
-					if (heroMoved != 0) {
+					if (heroMoved) {
 						init_anim(ANIM_STANDING, 0, 255, actorIdx);
 					}
 				}
@@ -461,7 +460,7 @@ void process_actor_movements(int32 actorIdx) {
 				heroMoved = 0;
 
 				if (key & 1) { // walk forward
-					if (currentActorInZone == 0) {
+					if (!currentActorInZone) {
 						init_anim(ANIM_FORWARD, 0, 255, actorIdx);
 					}
 					heroMoved = 1;
@@ -508,7 +507,6 @@ void process_actor_movements(int32 actorIdx) {
 
 				heroPressedKey  = key;
 				heroPressedKey2 = loopPressedKey;
-
 			}
 			break;
 		case kFOLLOW: {

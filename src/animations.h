@@ -76,6 +76,8 @@
 #define ANIM_LEFT_PUNCH		19
 /** Found item anim value */
 #define ANIM_FOUND_ITEM		20
+/** Drawn anim value */
+#define ANIM_DRAWN			21
 /** Hit anim value */
 #define ANIM_HIT2			22
 /** Sabre attack anim value */

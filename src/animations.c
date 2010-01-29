@@ -977,7 +977,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 								processActorX = actor->lastX - actor->doorStatus;
 							}
 
-							actor->dynamicFlags.bIsSpriteMoving = 0; // TODO: recheck this
+							actor->dynamicFlags.bIsSpriteMoving = 0;
 							actor->speed = 0;
 						}
 					} else { // close door
@@ -1006,7 +1006,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 							processActorY = actor->lastY;
 							processActorZ = actor->lastZ;
 
-							actor->dynamicFlags.bIsSpriteMoving = 0; // TODO: recheck this
+							actor->dynamicFlags.bIsSpriteMoving = 0;
 							actor->speed = 0;
 						}
 					}
