@@ -509,7 +509,7 @@ void process_actor_carrier(int32 actorIdx) { // CheckCarrier
 }
 
 /** Process actor extra bonus */
-void process_actor_extra_bonus(int32 actorIdx) {
+void process_actor_extra_bonus(int32 actorIdx) { // GiveExtraBonus
 	int32 a, numBonus;
 	int8 bonusTable[8], currentBonus;
 	ActorStruct *actor = &sceneActors[actorIdx];

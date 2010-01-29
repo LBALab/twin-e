@@ -948,7 +948,7 @@ int32 get_brick_shape_full(int32 x, int32 y, int32 z, int32 y2) {
 int32 get_brick_sound_type(int32 x, int32 y, int32 z) { // getPos2
 	uint8 blockIdx;
 	uint8 *blockBufferPtr;
-
+	
 	blockBufferPtr = blockBuffer;
 
 	collisionX = (x + 0x100) >> 9;
@@ -956,30 +956,34 @@ int32 get_brick_sound_type(int32 x, int32 y, int32 z) { // getPos2
 	collisionZ = (z + 0x100) >> 9;
 
 	if (collisionX < 0 || collisionX >= 64)
-		return -16;
+		return 0;
 
 	if (collisionY <= -1)
-		return -16;
+		return 1;
 
 	if (collisionY < 0 || collisionY > 24 || collisionZ < 0 || collisionZ >= 64)
-		return -16;
+		return 0;
 
-	blockBufferPtr += collisionX * 3200;
+	blockBufferPtr += collisionX * 50;
 	blockBufferPtr += collisionY * 2;
-	blockBufferPtr += collisionZ * 50;
+	blockBufferPtr += (collisionZ << 7) * 25;
 
 	blockIdx = *blockBufferPtr; 
-	
+
 	if (blockIdx) {
 		uint8 *blockPtr;
-		int32 tmpBlockIdx;
+		uint8 tmpBrickIdx;
 		
 		blockPtr = currentBll;
 
-		tmpBlockIdx = *(uint32 *)(blockPtr + blockIdx * 4 - 4);
+		blockPtr += *(uint32 *)(blockPtr + blockIdx * 4 - 4);
+		blockPtr += 3;
+		
+		tmpBrickIdx = *(blockBufferPtr + 1);
+		blockPtr = blockPtr + tmpBrickIdx * 4;
 
-		return *(blockPtr + 4 + tmpBlockIdx);
-	} else {
-		return -16;
+		return *(blockPtr + 1);
 	}
+
+	return 0x0F0;
 }
