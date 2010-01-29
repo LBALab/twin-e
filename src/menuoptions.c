@@ -150,7 +150,13 @@ void continue_game_menu() {
 	//if(chooseSave(21))
 	{
 		init_engine_vars(-1); // will load game
-		new_game();
+		if (gameChapter == 0 && currentSceneIdx == 0) {
+			new_game();
+		} else {
+			newGameVar5 = 0;
+			text_clip_small();
+			newGameVar4 = 1;
+		}
 
 		if (game_engine_loop()) {
 			show_credits();

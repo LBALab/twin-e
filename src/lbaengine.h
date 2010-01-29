@@ -32,6 +32,12 @@
 #include "sys.h"
 #include "actor.h"
 
+int32 quitGame;
+volatile int32 lbaTime;
+
+int16 leftMouse;
+int16 rightMouse;
+
 /** Work video buffer */
 uint8 *workVideoBuffer;
 /** Main game video buffer */
@@ -41,12 +47,6 @@ uint8 *frontVideoBufferbis;
 
 /** temporary screen table */
 int32 screenLockupTable[2000];
-
-int16 leftMouse;
-int16 rightMouse;
-
-int32 quitGame;
-volatile int32 lbaTime;
 
 ActorMoveStruct loopMovePtr; // mainLoopVar1
 

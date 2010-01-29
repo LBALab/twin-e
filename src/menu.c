@@ -863,12 +863,12 @@ int32 giveup_menu() {
 
 void draw_info_menu(int16 left, int16 top)
 {
-	int32 boxLeft, boxTop, boxRight, boxBottom; // var_4, var_8, var_10, var_C
+	int32 boxLeft, boxTop, boxRight, boxBottom;
 	int32 newBoxLeft, newBoxLeft2, i;
 
 	reset_clip();
-	draw_box(left, top, left + 450, top + 80); //80; 115
-	draw_splitted_box(left + 1, top + 1, left + 449, top + 79, 0); //79
+	draw_box(left, top, left + 450, top + 80);
+	draw_splitted_box(left + 1, top + 1, left + 449, top + 79, 0);
 
 	newBoxLeft2 = left + 9;
 
@@ -881,16 +881,14 @@ void draw_info_menu(int16 left, int16 top)
 	boxTop = top + 10;
 	boxBottom = top + 25;
 	draw_splitted_box(newBoxLeft, boxTop, boxLeft, boxBottom, 91);
-	draw_splitted_box(boxLeft, boxTop, boxRight, boxBottom, 0);
-
-	draw_box(left + 25, top + 10, left + 325, top + 10 + 15);
+	draw_box(left + 25, top + 10, left + 324, top + 10 + 14);
 
 	if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED] && gameFlags[GAMEFLAG_TUNIC]) {
 		draw_sprite(0, newBoxLeft2, top + 36, spriteTable[SPRITEHQR_MAGICPOINTS]);
 		if(magicLevelIdx > 0) {
 			draw_splitted_box(newBoxLeft, top + 35, cross_dot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
 		}
-		draw_box(left + 25, top + 35, left + magicLevelIdx * 80, top + 35 + 15);
+		draw_box(left + 25, top + 35, left + magicLevelIdx * 80 + 20, top + 35 + 15);
 	}
 
 	boxLeft = left + 340;
