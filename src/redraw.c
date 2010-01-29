@@ -699,7 +699,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 				set_clip(renderLeft, renderTop, renderRight, renderBottom);
 
-				set_font_color(overlay->info1);
+				set_font_color(155);
 
 				draw_text(renderLeft, renderTop, text);
 
