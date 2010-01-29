@@ -112,14 +112,12 @@ void load_scene() {
 
 	alphaLight = *((uint16*)localScene);
 	localScene += 2;
-
-	// FIXME: Workaround to fix lighting issue - not using proper dark light
-	if (alphaLight < 896) {
-		alphaLight = 896;
-	}
-	
 	betaLight = *((uint16*)localScene);
 	localScene += 2;
+
+	// FIXME: Workaround to fix lighting issue - not using proper dark light
+	alphaLight = 896;
+	betaLight = 950;
 
 	sampleAmbiance[0] = *((uint16*)localScene);
 	localScene += 2;
