@@ -738,7 +738,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 		inventoryNumKashes = 0;
 	}
 
-	add_overlay(koSprite, SPRITEHQR_KASHES, 10, 30, 0, koNormal, 3);
+	add_overlay(koSprite, SPRITEHQR_KASHES, 10, 15, 0, koNormal, 3);
 
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];
@@ -752,7 +752,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 	}
 
 	if (!hideRange) {
-		add_overlay(koNumberRange, oldNumKashes, 60, 40, inventoryNumKashes, koNormal, 3);
+		add_overlay(koNumberRange, oldNumKashes, 50, 20, inventoryNumKashes, koNormal, 3);
 	}
 
 	return 0;
