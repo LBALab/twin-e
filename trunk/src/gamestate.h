@@ -53,8 +53,6 @@ uint8 gameFlags[256];
 /** LBA engine chapter */
 int16 gameChapter;
 
-extern int32 magicLevelStrengthOfHit[];
-
 /** Magic ball type index */
 int16 magicBallIdx;
 /** Magic ball num bounce */
@@ -63,12 +61,6 @@ int16 magicBallNumBounce;
 int16 magicBallAuxBounce; // magicBallParam
 /** Magic level index */
 int16 magicLevelIdx;
-
-/** Inventory used flags */
-uint8 inventoryFlags[NUM_INVENTORY_ITEMS];
-
-/** Inventory used flags */
-uint8 holomapFlags[150]; // GV14
 
 /** Store the number of inventory keys */
 int16 inventoryNumKeys;
@@ -86,12 +78,20 @@ int16 inventoryNumGas;
 /** Its using FunFrock Sabre */
 int16 usingSabre;
 
+/** Inventory used flags */
+uint8 inventoryFlags[NUM_INVENTORY_ITEMS];
+
+/** Inventory used flags */
+uint8 holomapFlags[150]; // GV14
+
 int8 savePlayerName[30]; // playerName
 
 int32 gameChoices[10]; // inGameMenuData
 int32 numChoices;      // numOfOptionsInChoice
 int16 gameChoicesSettings[18]; // choiceTab -  same structure as menu settings
 int32 choiceAnswer; // inGameMenuAnswer
+
+extern int32 magicLevelStrengthOfHit[];
 
 /** Initialize all engine variables */
 void init_engine_vars(int32 save);

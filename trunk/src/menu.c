@@ -903,6 +903,11 @@ void draw_info_menu(int16 left, int16 top)
 	set_font_color(155);
 	draw_text(left + 370, top + 40, ITOA(inventoryNumKeys));
 
+	// prevent 
+	if (inventoryNumLeafs > inventoryNumLeafsBox) {
+		inventoryNumLeafs = inventoryNumLeafsBox;
+	}
+
 	// Clover leaf boxes
 	for (i = 0; i < inventoryNumLeafsBox; i++)
 	{
