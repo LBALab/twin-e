@@ -49,6 +49,8 @@
 #include "sdlengine.h"
 #include "keyboard.h"
 #include "interface.h"
+#include "holomap.h"
+
 
 uint8 *scriptPtr; // local script pointer
 uint8 *opcodePtr; // local opcode script pointer
@@ -1093,14 +1095,21 @@ int32 lINIT_PINGOUIN(int32 actorIdx, ActorStruct *actor) {
 
 /*0x48*/
 int32 lSET_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 location = *(scriptPtr++);
+	
+	set_holomap_position(location);
+	if (gameFlags[GAMEFLAG_HAS_HOLOMAP]) {
+		add_overlay(koInventoryItem, 0, 0, 0, 0, koNormal, 3);
+	}
+
+	return 0;
 }
 
 /*0x49*/
 int32 lCLR_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 location = *(scriptPtr++);
+	clear_holomap_position(location);
+	return 0;
 }
 
 /*0x4A*/
