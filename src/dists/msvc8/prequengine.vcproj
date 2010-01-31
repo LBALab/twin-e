@@ -255,6 +255,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\holomap.c"
+			>
+		</File>
+		<File
+			RelativePath="..\..\holomap.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\hqrdepack.c"
 			>
 		</File>

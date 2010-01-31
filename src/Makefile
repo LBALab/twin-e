@@ -12,6 +12,7 @@ OBJS=actor.o \
 	filereader.o \
 	gamestate.o \
 	grid.o \
+	holomap.o \
 	hqrdepack.o \
 	images.o \
 	interface.o \
