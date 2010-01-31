@@ -1005,11 +1005,13 @@ int32 lHIT_OBJ(int32 actorIdx, ActorStruct *actor) {
 int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 	int8 *movie = (int8 *)scriptPtr;
 	int32 nameSize = strlen(movie);
+	scriptPtr += nameSize + 1;
+
 	play_movie(movie);
+	set_palette(paletteRGBA);
 	clear_screen();
 	flip();
-	set_palette(paletteRGBA);
-	scriptPtr += nameSize + 1;
+	
 	return 0;
 }
 

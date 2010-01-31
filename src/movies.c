@@ -375,7 +375,15 @@ void play_fla_movie(int8 *filename) {
 /** Generic play movies, according with the settings
 	@param movie - movie file path */
 void play_movie(int8 *movie) {
+	int32 i;
 	int8 fileBuf[256];
+
+	// take extension if movie name has it
+	for (i = 0; i < (int32)strlen(movie); i++) {
+		if(movie[i] == '.') {
+			movie[i] = 0;
+		}
+	}
 
 	switch(cfgfile.Movie) {
 	case CONF_MOVIE_NONE:
