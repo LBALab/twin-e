@@ -145,6 +145,7 @@ int32 run_game_engine() { // mainLoopInteration
 		}
 
 		// inventory menu
+		loopInventoryItem = -1;
 		if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
 			freeze_time();
 			process_inventory_menu();
