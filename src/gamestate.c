@@ -394,7 +394,7 @@ void process_found_item(int32 item) {
 		}
 
 		if (textState == 0 || textState == 2) {
-			delay(15);
+			delaySkip(15);
 		}
 
 		flip_redraw_areas();
@@ -420,7 +420,7 @@ void process_found_item(int32 item) {
 			if (skipIntro == 1) {
 				break;
 			}
-			delay(1);
+			delaySkip(1);
 		}
 	}*/
 
@@ -429,7 +429,7 @@ void process_found_item(int32 item) {
 
 	/*do {
 		read_keys();
-		delay(1);
+		delaySkip(1);
 	} while (!skipIntro);*/
 
 	sceneHero->animTimerData = tmpAnimTimer;

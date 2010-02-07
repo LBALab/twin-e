@@ -190,6 +190,12 @@ void fps_cycles(int32 fps) {
 /** Deplay certain seconds till proceed
 	@param time time in seconds to delay */
 void delay(uint32 time) {
+	SDL_Delay(time);
+}
+
+/** Deplay certain seconds till proceed - Can skip delay
+	@param time time in seconds to delay */
+void delaySkip(uint32 time) {
 	uint32 startTicks = SDL_GetTicks();
 	uint32 stopTicks = 0;
 	skipIntro = 0;
@@ -295,7 +301,7 @@ void cross_fade(uint8 *buffer, uint8 *palette) {
 		SDL_BlitSurface(newSurface, NULL, surfaceTable[i], NULL);
 		SDL_BlitSurface(surfaceTable[i], NULL, screen, NULL);
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		delay(50);
+		delaySkip(50);
 	}
 
 	SDL_BlitSurface(newSurface, NULL, screen, NULL);

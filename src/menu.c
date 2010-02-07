@@ -448,6 +448,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 	draw_box(left, top, right, bottom);
 
 	set_font_color(15);
+	set_font_parameters(2, 8);
 	get_menu_text(value, dialText);
 	textSize = get_text_size(dialText);
 	draw_text(width - (textSize / 2), topheight - 18, dialText);
@@ -510,7 +511,7 @@ void draw_button(int16 *menuSettings, int32 mode) {
 		topHeight += 56; // increase button top height
 
 		// slow down the CPU
-		fps_cycles(1000);
+		delay(1);
 	} while (currentButton < maxButton);
 }
 
@@ -1252,7 +1253,7 @@ void process_inventory_menu() {
 
 		// TRICKY: 3D model rotation delay - only apply when no text is drawing
 		if (bx == 0 || bx == 2) {
-			delay(15);
+			delaySkip(15);
 		}
 
 		if (loopPressedKey & 1) {
@@ -1290,6 +1291,6 @@ void process_inventory_menu() {
 
 	while (skipIntro != 0 && skipedKey != 0) {
 		read_keys();
-		delay(1);
+		delaySkip(1);
 	}
 }

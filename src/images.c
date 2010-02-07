@@ -43,7 +43,7 @@ void adeline_logo() {
 	play_midi_music(31, 0);
 
 	load_image(RESSHQR_ADELINEIMG, 1);
-	delay(7000); //TODO: adjust frames per second using cfgfile.Fps value
+	delaySkip(7000); //TODO: adjust frames per second using cfgfile.Fps value
 	fade_out(paletteRGBACustom);
 	palCustom = 1;
 }
@@ -87,7 +87,7 @@ void load_image(int32 index, int16 fade_in) {
 	@param time number of seconds to delay */
 void load_image_delay(int32 index, int32 time) {
 	load_image(index, 1);
-	delay(1000*time);
+	delaySkip(1000*time);
 	fade_out(paletteRGBACustom);
 }
 
