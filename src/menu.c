@@ -1253,7 +1253,7 @@ void process_inventory_menu() {
 
 		// TRICKY: 3D model rotation delay - only apply when no text is drawing
 		if (bx == 0 || bx == 2) {
-			delaySkip(15);
+			delay(15);
 		}
 
 		if (loopPressedKey & 1) {
@@ -1291,6 +1291,6 @@ void process_inventory_menu() {
 
 	while (skipIntro != 0 && skipedKey != 0) {
 		read_keys();
-		delaySkip(1);
+		delay(1);
 	}
 }

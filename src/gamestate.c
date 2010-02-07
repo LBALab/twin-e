@@ -394,7 +394,7 @@ void process_found_item(int32 item) {
 		}
 
 		if (textState == 0 || textState == 2) {
-			delaySkip(15);
+			delay(15);
 		}
 
 		flip_redraw_areas();
