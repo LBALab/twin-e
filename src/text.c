@@ -56,7 +56,7 @@ int16 numDialTextEntries;
 int32 wordSizeChar;
 int32 wordSizePixel;
 
-int8 spaceChar = ' ';
+int16 spaceChar = 0x20;
 
 
 /** Initialize dialogue
@@ -394,7 +394,7 @@ void processTextLine() {
 						buffer = temp;
 						if (addLineBreakX == 0) {
 							addLineBreakX = 7;
-							*buf2 = spaceChar;
+							*((int16 *)buf2) = spaceChar;
 						}
 						if (buf1[1] == 0x50) {
 							printText8Var1 = dialTextBoxParam1;
