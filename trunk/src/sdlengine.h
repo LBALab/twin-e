@@ -50,6 +50,10 @@ void fps_cycles(int32 fps);
 	@param time time in seconds to delay */
 void delay(uint32 time);
 
+/** Deplay certain seconds till proceed - Can also Skip this delay
+	@param time time in seconds to delay */
+void delaySkip(uint32 time);
+
 /** Set a new palette in the SDL screen buffer
 	@param palette palette to set */
 void set_palette(uint8 * palette);
