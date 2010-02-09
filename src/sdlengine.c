@@ -411,6 +411,18 @@ void read_keys() {
 			case SDLK_w: // Especial key to do the action
 				localKey = 0x11;
 				break;
+			case SDLK_F1:
+				localKey = 0x3B;
+				break;
+			case SDLK_F2:
+				localKey = 0x3C;
+				break;
+			case SDLK_F3:
+				localKey = 0x3D;
+				break;
+			case SDLK_F4:
+				localKey = 0x3E;
+				break;
 			case SDLK_F6:
 				localKey = 0x40;
 				break;
@@ -519,9 +531,9 @@ void read_keys() {
 			}
 		}
 
-		if (found==0) {
+		//if (found==0) {
 			skipIntro = localKey;
-		}
+		//}
 	}
 }
 
