@@ -263,7 +263,6 @@ void update_overlay_type_position(int16 X1, int16 Y1, int16 X2, int16 Y2) {
 void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 	int16 tmpProjPosX;
 	int16 tmpProjPosY;
-	//int32 numDrawingList;
 	int32 i;
 	int32 tmpVal;
 	int32 modelActorPos;  // arg_1A
@@ -285,6 +284,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 		redraw_grid();
 		update_overlay_type_position(tmpProjPosX, tmpProjPosY, projPosXScreen, projPosYScreen);
 		copy_screen(frontVideoBuffer, workVideoBuffer);
+
 		if (needChangeScene != -1 && needChangeScene != -2) {
 			fade_in(paletteRGBA);
 			set_palette(paletteRGBA);
@@ -426,8 +426,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 			// Drawing actors
 			if (flags < 0xC00) {
 				if (!flags) {
-					//if (actor->previousAnimIdx != -1)
-						set_model_animation(actor->animPosition, animTable[actor->previousAnimIdx], bodyTable[actor->entity], &actor->animTimerData);
+					set_model_animation(actor->animPosition, animTable[actor->previousAnimIdx], bodyTable[actor->entity], &actor->animTimerData);
 
 					if (!render_iso_model(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ, 0, actor->angle, 0, bodyTable[actor->entity])) {
 						if (renderLeft < 0)
@@ -462,7 +461,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 							draw_over_model_actor(tempX, tempY, tempZ);
 
 							if(cropBottomScreen) {
-								renderBottom = cropBottomScreen + 10;
+								renderBottom = textWindowBottom = cropBottomScreen + 10;
 							}
 
 							add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
