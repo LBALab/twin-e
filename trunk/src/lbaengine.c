@@ -427,7 +427,9 @@ int32 run_game_engine() { // mainLoopInteration
 							}
 
 							save_game();
-							//process_gameover_animation();
+							process_gameover_animation();
+							quitGame = 0;
+							return 0;
 						}
 					}
 				} else {
@@ -462,12 +464,19 @@ int32 run_game_engine() { // mainLoopInteration
 			if(newCameraZ >= 64) {
 				newCameraZ = 63;
 			}
-
+			
 			reqBgRedraw = 1;
 		}
 	}
 
 	redraw_engine_actions(reqBgRedraw);
+
+	// workaround to fix hero redraw after drowning
+	if(cropBottomScreen && reqBgRedraw == 1) {
+		sceneHero->staticFlags.bIsHidden = 1;
+		redraw_engine_actions(1);
+		sceneHero->staticFlags.bIsHidden = 0;
+	}
 
 	needChangeScene = -1;
 	reqBgRedraw = 0;

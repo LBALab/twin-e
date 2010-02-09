@@ -468,11 +468,17 @@ void process_gameover_animation() { // makeGameOver
 
 	tmpLbaTime = lbaTime;
 
+	// workaround to fix hero redraw after drowning
+	sceneHero->staticFlags.bIsHidden = 1;
+	redraw_engine_actions(1);
+	sceneHero->staticFlags.bIsHidden = 0;
+
 	// TODO: drawInGameTransBox
 	set_palette(paletteRGBA);
 	copy_screen(frontVideoBuffer, workVideoBuffer);
 	gameOverPtr = malloc(hqr_entry_size(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
 	hqr_get_entry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
+
 	if (gameOverPtr) {
 		int32 avg, cdot;
 
@@ -494,21 +500,23 @@ void process_gameover_animation() { // makeGameOver
 			copy_block_phys(120, 120, 519, 359);
 
 			lbaTime++;
-			delay(1);
+			delay(15);
 		}
 
 		play_sample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);
 		blit_box(120, 120, 519, 359, workVideoBuffer, 120, 120, frontVideoBuffer);
-		set_camera_angle(0, 0, 0, 0, 0, 0, avg);
+		set_camera_angle(0, 0, 0, 0, 0, 0, 3200);
 		render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
 		copy_block_phys(120, 120, 519, 359);
 
-		delaySkip(150); //TODO recheck this
+		delaySkip(2000);
 
 		reset_clip();
 		free(gameOverPtr);
 		copy_screen(workVideoBuffer, frontVideoBuffer);
 		flip();
 		init_engine_projections();
+
+		lbaTime = tmpLbaTime;
 	}
 }
