@@ -146,7 +146,7 @@ int32 run_game_engine() { // mainLoopInteration
 
 		// inventory menu
 		loopInventoryItem = -1;
-		if (loopPressedKey & 0x20 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
+		if (loopCurrentKey == 0x36 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
 			freeze_time();
 			process_inventory_menu();
 			
@@ -243,15 +243,32 @@ int32 run_game_engine() { // mainLoopInteration
 		}
 
 		// Process behaviour menu - Press CTRL
-		// TODO: behaviour menu (LBA2 style)
-		if (loopPressedKey & 4 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
+		if ((loopCurrentKey == 0x1D || loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) { // F1..F4 Keys
 			freeze_time();
 			process_behaviour_menu();
 			unfreeze_time();
 			redraw_engine_actions(1);
 		}
 
-		// TODO: use Proto-Pack
+		// Process behavior menu - F1..F4 Keys + Interface Style
+		if (loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) {
+			switch (cfgfile.InterfaceStyle) {
+			case 0:
+				heroBehaviour = loopCurrentKey - 0x3B;
+				freeze_time();
+				process_behaviour_menu();
+				unfreeze_time();
+				redraw_engine_actions(1);
+				break;
+			case 1:
+			case 2: {
+			}
+				break;
+			}
+		}
+		
+
+		// use Proto-Pack
 		if (loopCurrentKey == 0x24 && gameFlags[GAMEFLAG_PROTOPACK] == 1) {
 			if (gameFlags[GAMEFLAG_BOOKOFBU]) {
 				sceneHero->body = 0;
@@ -267,7 +284,7 @@ int32 run_game_engine() { // mainLoopInteration
 		}
 
 		// Press Enter to Recenter Screen
-		if ((loopPressedKey & 2) && disableScreenRecenter == 0) {
+		if ((loopCurrentKey == 0x1C) && disableScreenRecenter == 0) {
 			newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
 			newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
 			newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;

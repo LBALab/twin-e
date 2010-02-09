@@ -121,6 +121,8 @@ typedef struct ConfigFile {
 	int32 FillDetails;
 	/** Flag to quit the game */
 	int32 Quit;
+	/** Flag to change interface style */
+	int32 InterfaceStyle;
 } ConfigFile;
 
 /** Configuration file structure

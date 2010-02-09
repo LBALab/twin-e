@@ -368,17 +368,17 @@ void process_actor_movements(int32 actorIdx) {
 				// Process hero actions
 				switch (heroBehaviour) {
 				case NORMAL:
-					if (loopPressedKey & 1) {
+					if (skipIntro == 0x39) {
 						heroAction = 1;
 					}
 					break;
 				case ATHLETIC:
-					if (loopPressedKey & 1) {
+					if (skipIntro == 0x39) {
 						init_anim(ANIM_JUMP, 1, 0, actorIdx);
 					}
 					break;
 				case AGGRESSIVE:
-					if (loopPressedKey & 1) {
+					if (skipIntro == 0x39) {
 						if (autoAgressive) {
 							heroMoved = 1;
 							actor->angle = get_real_angle(&actor->move);
@@ -413,7 +413,7 @@ void process_actor_movements(int32 actorIdx) {
 					}
 					break;
 				case DISCRETE:
-					if (loopPressedKey & 1) {
+					if (skipIntro == 0x39) {
 						init_anim(ANIM_HIDE, 0, 255, actorIdx);
 					}
 					break;

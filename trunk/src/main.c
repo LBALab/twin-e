@@ -108,7 +108,8 @@ int8 CFGList[][22] = {
 	"CombatAuto:",
 	"Shadow:",
 	"SceZoom:",
-	"FillDetails:"
+	"FillDetails:",
+	"InterfaceStyle"
 };
 
 
@@ -248,6 +249,9 @@ void init_configurations() {
 				break;
 			case 37:
 				sscanf(buffer, "FillDetails: %d", &cfgfile.FillDetails);
+				break;
+			case 38:
+				sscanf(buffer, "InterfaceStyle: %d", &cfgfile.InterfaceStyle);
 				break;
 			}
 		}
