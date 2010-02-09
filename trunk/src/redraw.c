@@ -73,6 +73,7 @@ typedef struct DrawListStruct {
 /** Draw list array to grab the necessary */
 DrawListStruct drawList[150];
 
+int16 overlayRotation = 0;
 
 /** Add a certain region to the current redraw list array
 	@param left start width to redraw the region
@@ -712,7 +713,23 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 			}
 				break;
 			case koInventoryItem: {
-				// TODO: inventory item overlay
+				int32 item = overlay->info0;
+
+				draw_splitted_box(10, 10, 69, 69, 0);
+				set_clip(10, 10, 69, 69);
+
+				prepare_iso_model(inventoryTable[item]);
+				set_camera_position(40, 40, 128, 200, 200);
+				set_camera_angle(0, 0, 0, 60, 0, 0, 16000);
+
+				overlayRotation += 8;
+
+				render_iso_model(0, 0, 0, 0, overlayRotation, 0, inventoryTable[item]);
+				draw_box(10, 10, 69, 69);
+				add_redraw_area(10, 10, 69, 69);
+				init_engine_projections();
+
+				delay(15);
 			}
 				break;
 			case koText: {
