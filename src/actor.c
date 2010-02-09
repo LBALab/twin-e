@@ -67,6 +67,8 @@ void restart_hero_scene() {
 
 	set_actor_angle_safe(sceneHero->angle, sceneHero->angle, 0, &sceneHero->move);
 	set_behaviour(previousHeroBehaviour);
+	
+	cropBottomScreen = 0;
 }
 
 /** Load hero 3D body and animations */

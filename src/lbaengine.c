@@ -355,8 +355,8 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (actor->staticFlags.bCanDrown) {
-				/*int32 brickSound;
-				brickSound = get_brick_sound_type(actor->X, actor->Y, actor->Z);
+				int32 brickSound;
+				brickSound = get_brick_sound_type(actor->X, actor->Y - 1, actor->Z);
 				actor->brickSound = brickSound;
 
 				if ((brickSound & 0xF0) == 0xF0) {
@@ -372,21 +372,21 @@ int32 run_game_engine() { // mainLoopInteration
 							}
 						} else { // if Hero
 							if (heroBehaviour != 4 || (brickSound & 0x0F) != actor->anim) {
-								// if (!cropBottomScreen) TODO
+								if (!cropBottomScreen)
 								{
 									init_anim(ANIM_DRAWN, 4, 0, 0);
 									project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
-									//cropBottomScreen = projPosY; TODO
+									cropBottomScreen = projPosY;
 								}
 								project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 								actor->controlMode = 0;
 								actor->life = -1;
-								//cropBottomScreen = projPosY; TODO
+								cropBottomScreen = projPosY;
 								actor->staticFlags.bCanDrown |= 0x10;
 							}
 						}
 					}
-				}*/
+				}
 			}
 
 			if (actor->life <= 0) {
@@ -410,6 +410,7 @@ int32 run_game_engine() { // mainLoopInteration
 							reqBgRedraw = 1;
 							// TODO: lockPalette = 1;
 							inventoryNumLeafs--;
+							cropBottomScreen = 0;
 						} else { // game over
 							inventoryNumLeafsBox = 2;
 							inventoryNumLeafs = 1;

@@ -155,6 +155,8 @@ void init_engine_vars(int32 save) { // reinitAll
 	inventoryNumKashes = 0;
 	inventoryNumKeys = 0;
 	inventoryNumGas = 0;
+	
+	cropBottomScreen = 0;
 
 	magicLevelIdx = 0;
 	usingSabre = 0;

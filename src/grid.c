@@ -981,9 +981,10 @@ int32 get_brick_sound_type(int32 x, int32 y, int32 z) { // getPos2
 		
 		tmpBrickIdx = *(blockBufferPtr + 1);
 		blockPtr = blockPtr + tmpBrickIdx * 4;
+		blockPtr++;
 
-		return *(blockPtr + 1);
+		return *((int16 *)blockPtr);
 	}
 
-	return 0x0F0;
+	return 0xF0;
 }

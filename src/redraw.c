@@ -441,7 +441,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 						if (renderBottom >= SCREEN_HEIGHT)
 							renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
-
+						
 						set_clip(renderLeft, renderTop, renderRight, renderBottom);
 
 						if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
@@ -461,6 +461,10 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 
 							draw_over_model_actor(tempX, tempY, tempZ);
 
+							if(cropBottomScreen) {
+								renderBottom = cropBottomScreen + 10;
+							}
+
 							add_redraw_area(textWindowLeft, textWindowTop, renderRight, renderBottom);
 
 							if (actor->staticFlags.bIsBackgrounded && bgRedraw == 1) {
@@ -471,7 +475,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 				}
 			}
 			// Drawing shadows
-			else if (flags == 0xC00) {
+			else if (flags == 0xC00 && !cropBottomScreen) {
 				int32 spriteWidth, spriteHeight, tmpX, tmpY, tmpZ;
 				uint8 *spritePtr = spriteTable[actor->entity];
 				DrawListStruct shadow =	drawList[pos];

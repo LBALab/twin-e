@@ -205,6 +205,8 @@ int16 previousHeroBehaviour;
 /** Previous Hero angle */
 int16 previousHeroAngle;
 
+int16 cropBottomScreen;
+
 /** Hero 3D entity for normal behaviour */
 uint8 *heroEntityNORMAL;	 // file3D0
 /** Hero 3D entity for athletic behaviour */
