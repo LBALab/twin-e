@@ -53,8 +53,8 @@ enum ActionType {
 	kActionUnknown7		= 7,
 	kSampleStop			= 8,
 	kActionUnknown9		= 9, // unused
-	kActionUnknown10	= 10,
-	kActionUnknown11	= 11,
+	kSampleBrick1		= 10,
+	kSampleBrick2		= 11,
 	kHeroHitting		= 12,
 	kActionUnknown13	= 13,
 	kActionUnknown14	= 14,
@@ -698,18 +698,18 @@ void process_anim_actions(int16 actorIdx) {
 			data += 2;
 		}
 			break;
-		case kActionUnknown10: {
+		case kSampleBrick1: {
 			animPos = *(data++);
-			if (animPos == actor->animPosition && actor->brickSound != -16) {
-				int16 sampleIdx = (actor->brickSound + 126) & 0xFF;
+			if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
+				int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
 				play_sample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
 			}
 		}
 			break;
-		case kActionUnknown11: {
+		case kSampleBrick2: {
 			animPos = *(data++);
-			if (animPos == actor->animPosition && actor->brickSound != -16) {
-				int16 sampleIdx = (actor->brickSound + 126) & 0xFF;
+			if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
+				int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
 				play_sample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
 			}
 		}
