@@ -107,4 +107,6 @@ void save_game();
 
 void process_game_choices(int32 choiceIdx);
 
+void process_gameover_animation();
+
 #endif

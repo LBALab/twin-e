@@ -134,7 +134,7 @@ void fade_out(uint8 * palette) {
 	@param param unknown
 	@param intensity intensity value to adjust
 	@return new color component*/
-int cross_dot(int32 modifier, int32 color, int32 param, int32 intensity) {
+int32 cross_dot(int32 modifier, int32 color, int32 param, int32 intensity) {
 	if (!param)
 		return (color);
 	return (((color - modifier) * intensity) / param) + modifier;
