@@ -392,7 +392,7 @@ int32 run_game_engine() { // mainLoopInteration
 			if (actor->life <= 0) {
 				if (!a) { // if its Hero
 					if (actor->dynamicFlags.bAnimEnded) {
-						if (inventoryNumLeafsBox > 0) { // use clover leaf automaticaly
+						if (inventoryNumLeafs > 0) { // use clover leaf automaticaly
 							sceneHero->X = newHeroX;
 							sceneHero->Y = newHeroY;
 							sceneHero->Z = newHeroZ;
@@ -427,7 +427,7 @@ int32 run_game_engine() { // mainLoopInteration
 							}
 
 							save_game();
-							// TODO: show game over animation
+							//process_gameover_animation();
 						}
 					}
 				} else {

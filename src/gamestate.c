@@ -43,6 +43,7 @@
 #include "music.h"
 #include "filereader.h"
 #include "menuoptions.h"
+#include "collision.h"
 
 #define SAVE_DIR "save//"
 
@@ -459,4 +460,55 @@ void process_game_choices(int32 choiceIdx) {
 	choiceAnswer = gameChoices[gameChoicesSettings[0]];
 
 	// TODO: process vox play
+}
+
+void process_gameover_animation() { // makeGameOver
+	int32 tmpLbaTime, startLbaTime;
+	uint8 *gameOverPtr;
+
+	tmpLbaTime = lbaTime;
+
+	// TODO: drawInGameTransBox
+	set_palette(paletteRGBA);
+	copy_screen(frontVideoBuffer, workVideoBuffer);
+	gameOverPtr = malloc(hqr_entry_size(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
+	hqr_get_entry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
+	if (gameOverPtr) {
+		int32 avg, cdot;
+
+		prepare_iso_model(gameOverPtr);
+		stop_samples();
+		stop_midi_music(); // stop fade music
+		set_camera_position(320, 240, 128, 200, 200);
+		startLbaTime = lbaTime;
+		set_clip(120, 120, 519, 359);
+		
+		while(skipIntro != 1 && (lbaTime - startLbaTime) <= 0x1F4) {
+			read_keys();
+			
+			avg = get_average_value(40000, 3200, 500, lbaTime - startLbaTime);
+			cdot = cross_dot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
+			blit_box(120, 120, 519, 359, workVideoBuffer, 120, 120, frontVideoBuffer);
+			set_camera_angle(0, 0, 0, 0, -cdot, 0, avg);
+			render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
+			copy_block_phys(120, 120, 519, 359);
+
+			lbaTime++;
+			delay(1);
+		}
+
+		play_sample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);
+		blit_box(120, 120, 519, 359, workVideoBuffer, 120, 120, frontVideoBuffer);
+		set_camera_angle(0, 0, 0, 0, 0, 0, avg);
+		render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
+		copy_block_phys(120, 120, 519, 359);
+
+		delaySkip(150); //TODO recheck this
+
+		reset_clip();
+		free(gameOverPtr);
+		copy_screen(workVideoBuffer, frontVideoBuffer);
+		flip();
+		init_engine_projections();
+	}
 }
