@@ -13,6 +13,8 @@ Prequengine: a Little Big Adventure engine Changes
 	- [FIXED] (issue #15) Text empty lines was drawing with previous displayed text
 	- [FIXED] (issue #20) Reset menu font paremeters
 	- [FIXED] (issue #24) There was a problem in delay function that was incorrectly ask for skipped delays. This adds the issue that blocks skip intros, found objects and text correctly
+	- [FIXED] (issue #21,22,23) Animation initialization didn't work for ids higher than 127
+	- [FIXED] (issue #27) Music was always stopping if Hero die, and didn't restart.
 
 	- [ADDED] Holomap set and clear locations funcionality. It allows to save game properly and to be used in other engines like LbaWin
 	- [ADDED] (issue #4) Hero drowning while standing on water bricks
