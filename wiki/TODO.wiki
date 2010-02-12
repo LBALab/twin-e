@@ -11,19 +11,15 @@ This is the place to list every TODO we need to make for this project.
   # Show credits in the end of game or after some seconds in Main Menu;
 
 
-= In Game =
+= In-Game =
 
   * Finish scripting while doing the following tasks:
   
-  # Animation Actions: Finish animation to process shoot actions and magic ball throw;
-  # Drown: Make Hero to drown;
-  # Found Objects: allow hero to grab inventory items;
-  # Inventory: process and draw inventory menu;
-  # Dialogues: make dialogues choices menu in game;
+  # Actors: implement meca-pinguin support;
   # Voice: play dialogues voices;
-  # Game over: process game over model;
-  # Renderer: implement missing rendering types and fix rendering issues;
+  # Text: implement bubble hint when text option is disabled;
   # Holomap: create holomap routines;
+  # Renderer: implement missing rendering types and fix rendering issues;
 
 
 = Refactoring =
