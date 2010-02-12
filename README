@@ -24,28 +24,74 @@ Welcome to Prequengine project.
 This project allows you to play Little Big Adventure 1 (LBA1 for short) game.
 It will allow other project modifications to build different games using this engine.
 
-To use it, you just need to copy the application engine and lba.cfg file to LBA1 
-(or other projects) game directory to play it. You will need the original game
+Will be release various public versions during development for testing proposes.
+We appreciate everyone's help to fix all the issues the game may have.
+
+
+# - Not available original features (yet) -
+
+Currently, most of the game features are implemented, the ones that makes you finish the 
+entire game. Although, there are still some particulary features not yet implemented:
+	- Show Holomap locations;
+	- Play voice samples while displaying text;
+	- Show bubble hint while playing voices without text;
+	- Use Meca-Pinguins.
+
+
+# - How to use it -
+
+For public releases, you just need to copy all package content to LBA1 (or other projects)
+game directory. Some files must be overriden to properly run the application engine.
+
+For the compiled version, you just need to copy the application engine and lba.cfg file 
+to LBA1 (or other projects) game directory to play it. You will need the original game
 to play with this engine and also midi_mi_win.hqr file created by LbaWin project
-so you can play and listening MIDI files.
+so you can play and listening MIDI files (this need to be change in future revisions).
 
-# compiling:
 
-You need libSDL, libSDL_Mixer and libSDL_ttf in order to properly compile prequengine.
+# - High Quality Music - 
 
-on GNU/Linux:
+All musics in game (midi, CD) can be replace with MP3/OGG files with better sound
+quality. 
 
-After installing the libsdl and libsdl_mixer development packages, go to the trunk/src directory and type "make" (without the quotes, off course). This will compile the source code and create a file caller "prequengine". Copy this file to the same place in your system where you have made a copy of the "lba" directory from the LBA1 CDROM. Also copy the "lba.cfg" file to that location. Go to that dir and type "./prequengine"
+For CD tracks, just create a folder named "music" and inside all CD tracks 
+names like: 1.mp3, 4.mp3, 8.ogg.
+
+For Midi, just create new HQR file with all MP3/OGG files inside. HQR file must 
+be named "midi_mi_win_mp3.hqr" or "midi_mi_win_ogg.hqr".
+
+
+# - Compiling -
+
+You need libSDL, libSDL_Mixer in order to properly compile prequengine.
+As addicional for in-game debug you need libSDL_ttf.
+
+# on GNU/Linux:
+
+After installing the libsdl and libsdl_mixer development packages, go to the trunk/src directory
+and type "make" (without the quotes, off course). This will compile the source code and create a
+file caller "prequengine". Copy this file to the same place in your system where you have made a
+copy of the "lba" directory from the LBA1 CDROM. Also copy the "lba.cfg" file to that location. 
+Go to that dir and type "./prequengine"
 
 If you are a Ubuntu user, the procedure should look like this:
 
 sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 cd trunk/src
 make
-cp ./lba.sfg ~/Desktop/lba/
+cp ./lba.cfg ~/Desktop/lba/
 cp ./prequengine ~/Desktop/lba/
 cd ~/Desktop/lba
 ./prequengine
 
 (supposing that you have made a copy of the LBA1 CDROM's "lba" directory in your Desktop)
 
+
+# - License -
+
+Refer COPYING file for full license descriptions.
+
+
+# - Authors -
+
+Refer AUTHORS file for a full list of contributions on this project.
