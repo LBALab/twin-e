@@ -2,7 +2,7 @@
 
 = Introduction =
 
-TwinEngine, or twin-e for short, is a LBA opensource reimplementation made by Vicent Hamm (aka yaz0r). Its a completely reverse engineer of the original executables files.
+TwinEngine, or twin-e for short, is a LBA opensource reimplementation made by Vincent Hamm (aka yaz0r). Its a completely reverse engineer of the original executables files.
 
 The project can be found at http://sourceforge.net/projects/twin-e
 
