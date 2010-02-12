@@ -148,7 +148,7 @@ void play_track_music(int32 track) {
 			return;
 		currentMusic = track;
 
-		stop_midi_music();
+		stop_music();
 
 		if (cfgfile.Sound > 1)
 			play_track_music_mp3(track);
@@ -177,10 +177,10 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 		int8 filename[256];
 		SDL_RWops *rw;
 
-		stop_track_music();
-
 		if (midiIdx == currentMusic)
 			return;
+
+		stop_music();
 		currentMusic = midiIdx;
 
 		if (cfgfile.Sound > 1) {
