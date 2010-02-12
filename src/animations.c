@@ -367,7 +367,7 @@ int32 set_model_animation(int32 animState, uint8 *animPtr, uint8 *bodyPtr, AnimT
 /** Get entity anim index (This is taken from File3D entities)
 	@param anim Entity animation index
 	@param actorIdx Actor index */
-int32 get_body_anim_index(int32 animIdx, int16 actorIdx) {
+int32 get_body_anim_index(int32 animIdx, int32 actorIdx) {
 	int8 type;
 	uint16 realAnimIdx;
 	uint8 *bodyPtr;
@@ -535,7 +535,7 @@ int32 verify_anim_at_keyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, Ani
 
 /** Process acotr animation actions
 	@param actorIdx Actor index */
-void process_anim_actions(int16 actorIdx) {
+void process_anim_actions(int32 actorIdx) {
 	int32 startAnimEntityIdx, endAnimEntityIdx, actionType, animPos;
 	uint8 *data;
 	ActorStruct *actor;
@@ -843,7 +843,7 @@ void process_anim_actions(int16 actorIdx) {
 	@param animType animation type
 	@param animExtra animation actions extra data
 	@param actorIdx actor index */
-int32 init_anim(int8 newAnim, int16 animType, uint8 animExtra, int16 actorIdx) {
+int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) {
 	ActorStruct *actor;
 	int32 animIndex;
 
