@@ -1,7 +1,7 @@
 Prequengine: a Little Big Adventure engine Changes
 - List of all changes during public version releases
 
-# 0.1.1 - (not yet release):
+# 0.1.1 - 13.02.2010:
 	- [FIXED] (issue #8) Application window close button didn't quit the game
 	- [FIXED] (issue #9) Menu "Continue game" was always playing intro screens. It nows only plays if we are at Chapter 1 (Still at Prison in Citaldel Island)
 	- [FIXED] (issue #10) Wrong bar size of Magic Level (blue bar)
