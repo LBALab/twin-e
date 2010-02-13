@@ -603,7 +603,7 @@ void translate_group(int16 ax, int16 bx, int16 cx) {
 	eax *= ecx;
 	eax += edi;
 	eax >>= 14;
-	destY = eax; // TODO: recheck Z
+	destY = eax;
 
 	ebp *= shadeMatrix[6];
 	ebx *= shadeMatrix[7];
@@ -611,7 +611,7 @@ void translate_group(int16 ax, int16 bx, int16 cx) {
 	ebx += ebp;
 	ebx += ecx;
 	ebx >>= 14;
-	destZ = eax; // TODO: recheck Y
+	destZ = eax;
 }
 
 void set_light_vector(int32 angleX, int32 angleY, int32 angleZ) {

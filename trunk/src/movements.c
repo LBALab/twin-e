@@ -530,8 +530,23 @@ void process_actor_movements(int32 actorIdx) {
 			actor->X = sceneActors[actor->followedActor].X;
 			actor->Z = sceneActors[actor->followedActor].Z;
 			break;
-		case kRANDOM:
-			printf("Control mode [kRANDOM] not implemented\n");
+		case kRANDOM: {
+			if (!actor->dynamicFlags.bIsRotationByAnim) {
+				if (actor->brickShape & 0x80) {
+					move_actor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF ), actor->speed, &actor->move);                     
+					actor->info0 = Rnd(300) + lbaTime + 300;
+					init_anim(0, 0, 255, actorIdx);
+				}
+
+				if (!actor->move.numOfStep) {
+					init_anim(1, 0, 255, actorIdx);
+					if(lbaTime > actor->info0) {
+						move_actor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF), actor->speed, &actor->move);
+                        actor->info0 = Rnd(300) + lbaTime + 300;
+                    }
+				}
+			}
+		}
 			break;
 		default:
 			printf("Unknown Control mode %d\n", actor->controlMode);

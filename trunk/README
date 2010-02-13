@@ -32,10 +32,14 @@ We appreciate everyone's help to fix all the issues the game may have.
 
 Currently, most of the game features are implemented, the ones that makes you finish the 
 entire game. Although, there are still some particulary features not yet implemented:
+	- Few AI scripts commands;
 	- Show Holomap locations;
 	- Play voice samples while displaying text;
-	- Show bubble hint while playing voices without text;
-	- Use Meca-Pinguins.
+	- Show bubble cloud while playing voices without text;
+	- Use Meca-Pinguins;
+	- Magicball aiming for keys;
+	- Finish main menu;
+	- Few rendering types;
 
 
 # - How to use it -
