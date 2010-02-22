@@ -52,10 +52,10 @@
 #include "actor.h"
 
 /** Engine current version */
-const int8* ENGINE_VERSION = "0.1.1";
+const int8* ENGINE_VERSION = (int8*) "0.1.1";
 
 /** Engine configuration filename */
-const int8* CONFIG_FILENAME = "lba.cfg";
+const int8* CONFIG_FILENAME = (int8*) "lba.cfg";
 
 /** Engine install setup filename
 
@@ -63,7 +63,7 @@ const int8* CONFIG_FILENAME = "lba.cfg";
 	This is only used for original games. For mod games project you can
 	used \a lba.cfg file \b Version tag. If this tag is set for original game
 	it will be used instead of \a setup.lst file. */
-const int8* SETUP_FILENAME = "setup.lst";
+const int8* SETUP_FILENAME = (int8*) "setup.lst";
 
 /** Configuration types at \a lba.cfg file
 
@@ -137,8 +137,8 @@ void allocate_video_memory() {
 	@return config type index */
 int get_config_type_index(int8* lineBuffer) {
 	int32 i;
-	int8 buffer[256];
-	int8* ptr;
+	char buffer[256];
+	char* ptr;
 
 	strcpy(buffer, lineBuffer);
 
