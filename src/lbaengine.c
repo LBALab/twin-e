@@ -297,7 +297,7 @@ int32 run_game_engine() { // mainLoopInteration
 		if (loopCurrentKey == 0x19) {
 			freeze_time();
 			set_font_color(15);
-			draw_text(5, 446, "Pause"); // no key for pause in Text Bank
+			draw_text(5, 446, (int8*)"Pause"); // no key for pause in Text Bank
 			copy_block_phys(5, 446, 100, 479);
 			do {
 				read_keys();
