@@ -918,7 +918,7 @@ int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) 
 	@param actorIdx Actor index */
 void process_actor_animations(int32 actorIdx) { // DoAnim
 	int16 numKeyframe;
-	int8 *animPtr;
+	uint8 *animPtr;
 	ActorStruct *actor;
 
 	actor = &sceneActors[actorIdx];
@@ -1033,7 +1033,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 			int32 keyFramePassed;
 			animPtr = animTable[actor->previousAnimIdx];
 
-			keyFramePassed = verify_anim_at_keyframe(actor->animPosition, animPtr, (int8*)bodyTable[actor->entity], &actor->animTimerData);
+			keyFramePassed = verify_anim_at_keyframe(actor->animPosition, animPtr, bodyTable[actor->entity], &actor->animTimerData);
 
 			if (processRotationByAnim) {
 				actor->dynamicFlags.bIsRotationByAnim = 1;
