@@ -288,7 +288,7 @@ int32 check_collision_with_actors(int32 actorIdx) {
 								if (newAngle >= 0x280 && newAngle < 0x380) {
 									processActorX = xRightTest - actor->boudingBox.X.bottomLeft;
 								}
-								if (newAngle >= 0x380 || newAngle < 0x380 && newAngle < 0x80) {
+								if (newAngle >= 0x380 || (newAngle < 0x380 && newAngle < 0x80)) {
 									processActorZ = zLeftTest - actor->boudingBox.Z.topRight;
 								}
 							} else {
@@ -342,7 +342,7 @@ int32 check_collision_with_actors(int32 actorIdx) {
 						if (newAngle >= 0x280 && newAngle < 0x380) {
 							processActorX = xRightTest - actor->boudingBox.X.bottomLeft;
 						}
-						if (newAngle >= 0x380 || newAngle < 0x380 && newAngle < 0x80) {
+						if (newAngle >= 0x380 || (newAngle < 0x380 && newAngle < 0x80)) {
 							processActorZ = zLeftTest - actor->boudingBox.Z.topRight;
 						}
 					} else {
