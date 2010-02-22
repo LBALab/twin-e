@@ -70,7 +70,7 @@ void frseek(FileReader* fr, uint32 seekPosition);
 	@param fr FileReader pointer
 	@param filename file path
 	@return true if file open and false if error occurred */
-int32 fropen(FileReader* fr, const int8* filename, int8* mode);
+int32 fropen(FileReader* fr, const char* filename, const char* mode);
 
 /** Write file
 	@param fr FileReader pointer
