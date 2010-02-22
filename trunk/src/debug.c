@@ -384,7 +384,7 @@ void debug_set_actions(int32 type) {
 	}
 }
 
-void debug_add_button(int32 window, int32 left, int32 top, int32 right, int32 bottom, int8 * text, int32 textLeft, int32 textTop, int32 isActive, int32 color, int32 activeColor, int32 submenu, int32 type) {
+void debug_add_button(int32 window, int32 left, int32 top, int32 right, int32 bottom, int8 *text, int32 textLeft, int32 textTop, int32 isActive, int32 color, int32 activeColor, int32 submenu, int32 type) {
 	int32 button = debugWindows[window].numButtons;
 	debugWindows[window].debugButtons[button].left = left;
 	debugWindows[window].debugButtons[button].top = top;
@@ -421,38 +421,38 @@ void debug_add_window(int32 left, int32 top, int32 right, int32 bottom, int32 al
 void debug_left_menu() {
 	// left menu window
 	debug_add_window(5, 60, 200, 474, 4, 1);
-	debug_add_button(0, 5, 55, 160, 75, "Use free camera", 30, 60, 0, 87, 119, NO_MENU, FREE_CAMERA);
-	debug_add_button(0, 161, 55, 200, 75, "info", 171, 60, 0, 87, 119, FREE_CAMERA_INFO_MENU, -1);
-	debug_add_button(0, 5, 76, 160, 96, "Change scenes", 30, 81, 0, 87, 119, NO_MENU, CHANGE_SCENE);
-	debug_add_button(0, 161, 76, 200, 96, "info", 171, 81, 0, 87, 119, CHANGE_SCENE_INFO_MENU, -2);
-	debug_add_button(0, 5, 97, 200, 117, "Show celling grids", 30, 102, 0, 87, 119, NO_MENU, 3);
-	debug_add_button(0, 5, 118, 200, 138, "Show zones", 30, 123, 0, 87, 119, ZONES_MENU, SHOW_ZONES);
+	debug_add_button(0, 5, 55, 160, 75, (int8*) "Use free camera", 30, 60, 0, 87, 119, NO_MENU, FREE_CAMERA);
+	debug_add_button(0, 161, 55, 200, 75, (int8*) "info", 171, 60, 0, 87, 119, FREE_CAMERA_INFO_MENU, -1);
+	debug_add_button(0, 5, 76, 160, 96, (int8*) "Change scenes", 30, 81, 0, 87, 119, NO_MENU, CHANGE_SCENE);
+	debug_add_button(0, 161, 76, 200, 96, (int8*) "info", 171, 81, 0, 87, 119, CHANGE_SCENE_INFO_MENU, -2);
+	debug_add_button(0, 5, 97, 200, 117, (int8*) "Show celling grids", 30, 102, 0, 87, 119, NO_MENU, 3);
+	debug_add_button(0, 5, 118, 200, 138, (int8*) "Show zones", 30, 123, 0, 87, 119, ZONES_MENU, SHOW_ZONES);
 
 	// add submenu windows
 	//   - free camera window
 	debug_add_window(205, 55, 634, 160, 4, 0);
-	debug_add_window_text(FREE_CAMERA_INFO_MENU, "When enable, use the following keys to browse through the scenes:");
-	debug_add_window_text(FREE_CAMERA_INFO_MENU, "           - S to go North");
-	debug_add_window_text(FREE_CAMERA_INFO_MENU, "           - X to go South");
-	debug_add_window_text(FREE_CAMERA_INFO_MENU, "           - Z to go West");
-	debug_add_window_text(FREE_CAMERA_INFO_MENU, "           - C to go East");
+	debug_add_window_text(FREE_CAMERA_INFO_MENU, (int8*) "When enable, use the following keys to browse through the scenes:");
+	debug_add_window_text(FREE_CAMERA_INFO_MENU, (int8*) "           - S to go North");
+	debug_add_window_text(FREE_CAMERA_INFO_MENU, (int8*) "           - X to go South");
+	debug_add_window_text(FREE_CAMERA_INFO_MENU, (int8*) "           - Z to go West");
+	debug_add_window_text(FREE_CAMERA_INFO_MENU, (int8*) "           - C to go East");
 
 	//   - change scene window
 	debug_add_window(205, 55, 634, 137, 4, 0);
-	debug_add_window_text(CHANGE_SCENE_INFO_MENU, "When enable, use the following keys to change to another scene:");
-	debug_add_window_text(CHANGE_SCENE_INFO_MENU, "           - R to go Next Scene");
-	debug_add_window_text(CHANGE_SCENE_INFO_MENU, "           - F to go Previous Scene");
+	debug_add_window_text(CHANGE_SCENE_INFO_MENU, (int8*) "When enable, use the following keys to change to another scene:");
+	debug_add_window_text(CHANGE_SCENE_INFO_MENU, (int8*) "           - R to go Next Scene");
+	debug_add_window_text(CHANGE_SCENE_INFO_MENU, (int8*) "           - F to go Previous Scene");
 
 	//   - zones window
 	debug_add_window(205, 55, 634, 97, 4, 0);
-	debug_add_window_text(ZONES_MENU, "You can enable or disable each zone type:");
-	debug_add_button(ZONES_MENU, 205, 118, 350, 138, "Cube Zones", 215, 123, 1, 87, 119, 0, SHOW_ZONE_CUBE);
-	debug_add_button(ZONES_MENU, 205, 139, 350, 159, "Camera Zones", 215, 144, 2, 87, 119, 0, SHOW_ZONE_CAMERA);
-	debug_add_button(ZONES_MENU, 205, 160, 350, 180, "Scenaric Zones", 215, 165, 3, 87, 119, 0, SHOW_ZONE_SCENARIC);
-	debug_add_button(ZONES_MENU, 205, 181, 350, 201, "Celling Grid Zones", 215, 186, 4, 87, 119, 0, SHOW_ZONE_CELLINGGRID);
-	debug_add_button(ZONES_MENU, 205, 202, 350, 222, "Object Zones", 215, 207, 5, 87, 119, 0, SHOW_ZONE_OBJECT);
-	debug_add_button(ZONES_MENU, 205, 223, 350, 243, "Text Zones", 215, 228, 6, 87, 119, 0, SHOW_ZONE_TEXT);
-	debug_add_button(ZONES_MENU, 205, 244, 350, 264, "Ladder Zones", 215, 249, 7, 87, 119, 0, SHOW_ZONE_LADDER);
+	debug_add_window_text(ZONES_MENU, (int8*) "You can enable or disable each zone type:");
+	debug_add_button(ZONES_MENU, 205, 118, 350, 138, (int8*) "Cube Zones", 215, 123, 1, 87, 119, 0, SHOW_ZONE_CUBE);
+	debug_add_button(ZONES_MENU, 205, 139, 350, 159, (int8*) "Camera Zones", 215, 144, 2, 87, 119, 0, SHOW_ZONE_CAMERA);
+	debug_add_button(ZONES_MENU, 205, 160, 350, 180, (int8*) "Scenaric Zones", 215, 165, 3, 87, 119, 0, SHOW_ZONE_SCENARIC);
+	debug_add_button(ZONES_MENU, 205, 181, 350, 201, (int8*) "Celling Grid Zones", 215, 186, 4, 87, 119, 0, SHOW_ZONE_CELLINGGRID);
+	debug_add_button(ZONES_MENU, 205, 202, 350, 222, (int8*) "Object Zones", 215, 207, 5, 87, 119, 0, SHOW_ZONE_OBJECT);
+	debug_add_button(ZONES_MENU, 205, 223, 350, 243, (int8*) "Text Zones", 215, 228, 6, 87, 119, 0, SHOW_ZONE_TEXT);
+	debug_add_button(ZONES_MENU, 205, 244, 350, 264, (int8*) "Ladder Zones", 215, 249, 7, 87, 119, 0, SHOW_ZONE_LADDER);
 }
 
 int32 debug_process_button(int32 X, int32 Y) {
@@ -488,7 +488,7 @@ void debug_plasma_window(int8 *text, int32 color) {
 void debug_process_window() {
 	if (rightMouse) {
 		int32 quit = 0;
-		int8 * text = "Game Debug Window";
+		int8* text = (int8*) "Game Debug Window";
 		int32 color = 64;
 		int32 colorIdx = 4;
 		int32 count = 0;
