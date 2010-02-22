@@ -85,8 +85,8 @@ void frseek(FileReader* fr, uint32 seekPosition) {
 	@param fr FileReader pointer
 	@param filename file path
 	@return true if file open and false if error occurred */
-int32 fropen(FileReader* fr, const int8* filename, int8* mode) {
-	fr->fd = fopen((const int8*)filename, mode);
+int32 fropen(FileReader* fr, const char* filename, const char* mode) {
+	fr->fd = fopen(filename, mode);
 
 	if (fr->fd) {
 		fr->currSector = 0;
