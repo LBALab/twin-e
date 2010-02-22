@@ -257,7 +257,7 @@ int32 get_text_size(int8 *dialogue) {  // SizeFont
 }
 
 void init_dialogue_box() { // InitDialWindow
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, frontVideoBuffer);
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
 
 	if (newGameVar4 != 0) {
 		draw_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
@@ -266,11 +266,11 @@ void init_dialogue_box() { // InitDialWindow
 
 	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, workVideoBuffer);
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)workVideoBuffer);
 }
 
 void init_inventory_dialogue_box() { // SecondInitDialWindow
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, frontVideoBuffer);
+	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
 	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
 }
@@ -309,7 +309,7 @@ void initProgressiveTextBuffer() {
 	buf2[0] = 0;
 
 	while (i < dialTextBufferSize) {
-		strcat(buf2, " ");
+		strcat((char*)buf2, " ");
 		i++;
 	};
 
@@ -357,7 +357,7 @@ void getWordSize(uint8 *arg1, uint8 *arg2) {
 
 	wordSizeChar = temp;
 	*arg2 = 0;
-	wordSizePixel = get_text_size(arg2Save);
+	wordSizePixel = get_text_size((int8*)arg2Save);
 }
 
 void processTextLine() {
@@ -403,8 +403,8 @@ void processTextLine() {
 					} else {
 						buffer += wordSizeChar;
 						printText8Var8 = buffer;
-						strcat(buf2, buf1);
-						strcat(buf2, " ");  // not 100% accurate
+						strcat((char*)buf2, (char*)buf1);
+						strcat((char*)buf2, " ");  // not 100% accurate
 						printText8PrepareBufferVar2++;
 
 						addLineBreakX += wordSizePixel + dialCharSpace;
@@ -489,7 +489,7 @@ void printText10Sub2() { // printText10Sub2()
 void TEXT_GetLetterSize(int8 character, int32 *pLetterWidth, int32 *pLetterHeight, int8 * pFont) { // TEXT_GetLetterSize
 	byte *temp;
 
-	temp = pFont + *((int16 *)(pFont + character * 4));
+	temp = (byte*) (pFont + *((int16 *)(pFont + character * 4)));
 	*pLetterWidth = *(temp);
 	*pLetterHeight = *(temp + 1);
 }
@@ -511,7 +511,7 @@ int printText10() { // printText10()
 			return 0;
 		}
 		if (printText8Var6 != 0) {
-			blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, frontVideoBuffer);
+			blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
 			copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 			printText8Var3 = 0;
 			printText8Var6 = 0;
@@ -533,7 +533,7 @@ int printText10() { // printText10()
 
 	printText8Sub4(TEXT_CurrentLetterX, TEXT_CurrentLetterY, *printText8Ptr2);
 	printText10Sub2();
-	TEXT_GetLetterSize(*printText8Ptr2, &charWidth, &charHeight, fontPtr);
+	TEXT_GetLetterSize(*printText8Ptr2, &charWidth, &charHeight, (int8*)fontPtr);
 
 	if (*(printText8Ptr2) != 0x20) {
 		TEXT_CurrentLetterX += charWidth + 2;
