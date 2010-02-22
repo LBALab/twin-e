@@ -494,7 +494,7 @@ void process_gameover_animation() { // makeGameOver
 			
 			avg = get_average_value(40000, 3200, 500, lbaTime - startLbaTime);
 			cdot = cross_dot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
-			blit_box(120, 120, 519, 359, workVideoBuffer, 120, 120, frontVideoBuffer);
+			blit_box(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 			set_camera_angle(0, 0, 0, 0, -cdot, 0, avg);
 			render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
 			copy_block_phys(120, 120, 519, 359);
@@ -504,7 +504,7 @@ void process_gameover_animation() { // makeGameOver
 		}
 
 		play_sample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);
-		blit_box(120, 120, 519, 359, workVideoBuffer, 120, 120, frontVideoBuffer);
+		blit_box(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 		set_camera_angle(0, 0, 0, 0, 0, 0, 3200);
 		render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
 		copy_block_phys(120, 120, 519, 359);
