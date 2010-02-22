@@ -72,11 +72,12 @@ As addicional for in-game debug you need libSDL_ttf.
 
 # on GNU/Linux:
 
-After installing the libsdl and libsdl_mixer development packages, go to the trunk/src directory
-and type "make" (without the quotes, off course). This will compile the source code and create a
-file caller "prequengine". Copy this file to the same place in your system where you have made a
-copy of the "lba" directory from the LBA1 CDROM. Also copy the "lba.cfg" file to that location. 
-Go to that dir and type "./prequengine"
+After installing the libsdl, libsdl_mixer and libsdl_ttf development packages,
+go to the trunk/src directory and type "make" (without the quotes, off course).
+This will compile the source code and create an executable file called
+"prequengine". Copy this file to the same place in your system where you have
+made a copy of the "lba" directory from the LBA1 CDROM. Also copy the "lba.cfg"
+file to that location. Go to that dir and type "./prequengine"
 
 If you are a Ubuntu user, the procedure should look like this:
 
