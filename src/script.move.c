@@ -49,7 +49,7 @@ typedef struct ScriptMoveFunction {
 	ScriptMoveFunc *function;
 } ScriptMoveFunction;
 
-#define MAPFUNC(name, func) {name, func}
+#define MAPFUNC(name, func) {(uint8*)name, func}
 
 
 /*0x00*/

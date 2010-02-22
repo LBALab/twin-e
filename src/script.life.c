@@ -69,7 +69,7 @@ typedef struct ScriptLifeFunction {
 	ScriptLifeFunc *function;
 } ScriptLifeFunction;
 
-#define MAPFUNC(name, func) {name, func}
+#define MAPFUNC(name, func) {(uint8*)name, func}
 
 /** Script condition operators */
 enum LifeScriptOperators {
