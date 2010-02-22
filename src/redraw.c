@@ -477,7 +477,7 @@ void redraw_engine_actions(int32 bgRedraw) { // fullRedraw
 			// Drawing shadows
 			else if (flags == 0xC00 && !cropBottomScreen) {
 				int32 spriteWidth, spriteHeight, tmpX, tmpY, tmpZ;
-				uint8 *spritePtr = spriteTable[actor->entity];
+				// uint8 *spritePtr = spriteTable[actor->entity];
 				DrawListStruct shadow =	drawList[pos];
 
 				// get actor position on screen

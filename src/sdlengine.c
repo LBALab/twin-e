@@ -47,7 +47,7 @@
 #include "redraw.h"
 
 /** SDL exit callback */
-static void atexit_callback(void);
+//static void atexit_callback(void);
 
 /** Original audio frequency */
 #define ORIGINAL_GAME_FREQUENCY		11025
@@ -68,9 +68,9 @@ TTF_Font *font;
 #endif
 
 /** SDL exit callback */
-static void atexit_callback(void) {
-	sdl_close();
-}
+//static void atexit_callback(void) {
+//	sdl_close();
+//}
 
 void sdl_close() {
 	stop_track_music();
