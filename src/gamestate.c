@@ -183,7 +183,7 @@ void load_game() {
 	uint8 data;
 	int8* namePtr;
 
-	if (!fropen(&fr, SAVE_DIR "S9999.LBA", "rb")) {
+	if (!fropen2(&fr, SAVE_DIR "S9999.LBA", "rb")) {
 		printf("Can't load S9999.LBA saved game!\n");
 		return;
 	}
@@ -237,7 +237,7 @@ void save_game() {
 	FileReader fr;
 	int8 data;
 
-	if (!fropen(&fr, SAVE_DIR "S9999.LBA", "wb+")) {
+	if (!fropen2(&fr, SAVE_DIR "S9999.LBA", "wb+")) {
 		printf("Can't save S9999.LBA saved game!\n");
 		return;
 	}

@@ -26,7 +26,11 @@
 */
 
 #include <SDL/SDL.h>
+#ifndef MACOSX
 #include <SDL/SDL_mixer.h>
+#else
+#include <SDL_mixer/SDL_mixer.h>
+#endif
 
 #include "sound.h"
 #include "movies.h"

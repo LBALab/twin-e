@@ -1157,9 +1157,9 @@ void render_polygons(int32 ecx, int32 edi) {
 	case POLYGONTYPE_MARBLE: { // TODO: implement this
 		break;
 	}
-	case POLYGONTYPE_TELE: { // TODO: implement this
+	/*case POLYGONTYPE_TELE: { // TODO: implement this
 		break;
-	}
+	}*/
 	case POLYGONTYPE_TRAS: { // TODO: implement this
 		break;
 	}
@@ -1201,6 +1201,7 @@ void render_polygons(int32 ecx, int32 edi) {
 		} while (--vsize);
 		break;
 	}
+            case POLYGONTYPE_TELE:
 	case POLYGONTYPE_GOURAUD: {
 		renderLoop = vsize;
 		currentLine = vtop;

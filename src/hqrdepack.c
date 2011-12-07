@@ -124,7 +124,7 @@ int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index) {
 	if (!filename)
 		return 0;
 
-	if (!fropen(&fr, (char*)filename, "rb"))
+	if (!fropen2(&fr, (char*)filename, "rb"))
 		printf("HQR: %s can't be found !\n", filename);
 
 	frread(&fr, &headerSize, 4);
@@ -182,7 +182,7 @@ int hqr_entry_size(int8 *filename, int32 index) {
 	if (!filename)
 		return 0;
 
-	if (!fropen(&fr, (char*)filename, "rb")) {
+	if (!fropen2(&fr, (char*)filename, "rb")) {
 		printf("HQR: %s can't be found !\n", filename);
 		exit(1);
 	}
@@ -215,7 +215,7 @@ int hqr_num_entries(int8 *filename) {
 	if (!filename)
 		return 0;
 
-	if (!fropen(&fr, (char*)filename, "rb")) {
+	if (!fropen2(&fr, (char*)filename, "rb")) {
 		printf("HQR: %s can't be found !\n", filename);
 		exit(1);
 	}
