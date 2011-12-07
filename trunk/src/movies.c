@@ -298,7 +298,7 @@ void play_fla_movie(int8 *filename) {
 	fadeOut = -1;
 	fadeOutFrames = 0;
 
-	if (!fropen(&frFla, filename, "rb"))
+	if (!fropen2(&frFla, filename, "rb"))
 		return;
 
 	workVideoBufferCopy = workVideoBuffer;

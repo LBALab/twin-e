@@ -31,10 +31,19 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
+#ifndef MACOSX
 #include <SDL/SDL_mixer.h>
+#else
+#include <SDL_mixer/SDL_mixer.h>
+#endif
 
 #ifdef GAMEMOD
+#ifndef MACOSX
 #include <SDL/SDL_ttf.h>
+#else
+#include <SDL_ttf/SDL_ttf.h>
+#endif
+
 #endif
 
 #include "sdlengine.h"
