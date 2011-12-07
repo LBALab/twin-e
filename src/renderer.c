@@ -1060,6 +1060,7 @@ void render_polygons(int32 ecx, int32 edi) {
 	color = edi;
 
 	switch (ecx) {
+	case POLYGONTYPE_TELE: // FIXME temporary fix
 	case POLYGONTYPE_FLAT: {
 		currentLine = vtop;
 		do {
@@ -1201,7 +1202,6 @@ void render_polygons(int32 ecx, int32 edi) {
 		} while (--vsize);
 		break;
 	}
-            case POLYGONTYPE_TELE:
 	case POLYGONTYPE_GOURAUD: {
 		renderLoop = vsize;
 		currentLine = vtop;
