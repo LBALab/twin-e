@@ -48,6 +48,7 @@
 #include "script.move.h"
 #include "extra.h"
 #include "menuoptions.h"
+#include "collision.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -208,21 +209,23 @@ int32 run_game_engine() { // mainLoopInteration
 				break;
 			case kiPinguin: {
 				ActorStruct *pinguin = &sceneActors[mecaPinguinIdx];
-				//rotate_actor()
+				
 				pinguin->X = destX + sceneHero->X;
 				pinguin->Y = sceneHero->Y;
 				pinguin->Z = destZ + sceneHero->Z;
 				pinguin->angle = sceneHero->angle;
 
+				rotate_actor(0, 800, pinguin->angle);
+
 				if (check_collision_with_actors(mecaPinguinIdx)) {
 					pinguin->life = 50;
-					pinguin->body = -1; // *(_BYTE *)a1 = -1; // reset body
+					pinguin->body = -1;
 					init_model_actor(0, mecaPinguinIdx);
-					set_actor_staticflags(mecaPinguinIdx, 0xDF); // *(_BYTE *)(a1 + 98) &= 0xDFu; // dynamic flag
-                    pinguin->brickShape = 0; // *(_BYTE *)(a1 + 3) = 0; // brickshape
+					pinguin->dynamicFlags.bIsDead = 0; // &= 0xDF
+                    pinguin->brickShape = 0;
 					move_actor(pinguin->angle, pinguin->angle, pinguin->speed, &pinguin->move);
-					//byte_50D89 = 0;
-                    pinguin->animTimerData.time = lbaTime + 1500; //*(_DWORD *)(a1 + 78) = time + 1500
+					//byte_50D89 = 0; // TODO what is this ?!
+                    pinguin->info0 = lbaTime + 1500;
 				}
 			}
 				break;
