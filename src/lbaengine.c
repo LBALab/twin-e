@@ -214,18 +214,16 @@ int32 run_game_engine() { // mainLoopInteration
 				pinguin->Z = destZ + sceneHero->Z;
 				pinguin->angle = sceneHero->angle;
 
-				/*if ( sub_12E90(mecaPinguinIdx) )*/ {
+				if (check_collision_with_actors(mecaPinguinIdx)) {
 					pinguin->life = 50;
-					// *(_BYTE *)a1 = -1; // reset StaticFlag ?!
+					pinguin->body = -1; // *(_BYTE *)a1 = -1; // reset body
 					init_model_actor(0, mecaPinguinIdx);
-					// *(_BYTE *)(a1 + 98) &= 0xDFu;
-                    // *(_BYTE *)(a1 + 3) = 0;
+					set_actor_staticflags(mecaPinguinIdx, 0xDF); // *(_BYTE *)(a1 + 98) &= 0xDFu; // dynamic flag
+                    pinguin->brickShape = 0; // *(_BYTE *)(a1 + 3) = 0; // brickshape
 					move_actor(pinguin->angle, pinguin->angle, pinguin->speed, &pinguin->move);
 					//byte_50D89 = 0;
-					//*(_DWORD *)(a1 + 78) = time + 1500;
+                    pinguin->animTimerData.time = lbaTime + 1500; //*(_DWORD *)(a1 + 78) = time + 1500
 				}
-
-				printf("Use Inventory [kiPinguin] not implemented!\n");
 			}
 				break;
 			case kiBonusList: {
