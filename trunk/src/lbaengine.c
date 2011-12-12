@@ -192,6 +192,7 @@ int32 run_game_engine() { // mainLoopInteration
 				clear_screen();
 				flip();
 				set_palette(paletteRGBA);
+				// lockPalette = 1; // TODO
 			}							 
 				break;
 			case kiProtoPack:
@@ -224,7 +225,7 @@ int32 run_game_engine() { // mainLoopInteration
 					pinguin->dynamicFlags.bIsDead = 0; // &= 0xDF
                     pinguin->brickShape = 0;
 					move_actor(pinguin->angle, pinguin->angle, pinguin->speed, &pinguin->move);
-					//byte_50D89 = 0; // TODO what is this ?!
+					gameFlags[GAMEFLAG_MECA_PINGUIN] = 0; // byte_50D89 = 0;
                     pinguin->info0 = lbaTime + 1500;
 				}
 			}
