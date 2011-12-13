@@ -359,7 +359,7 @@ int32 run_game_engine() { // mainLoopInteration
 					play_sample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z);
 
 					if (a == mecaPinguinIdx) {
-						// TODO: explode extra	
+						add_extra_explode(actor->X, actor->Y, actor->Z);
 					}
 				}
 				
