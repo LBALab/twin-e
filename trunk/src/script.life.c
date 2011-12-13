@@ -59,7 +59,7 @@ int32 drawVar1;
 int8 textStr[256]; // string
 
 /** Returns:
-	   -1 - TODO
+	   -1 - Need implementation
 		0 - Completed
 		1 - Break script */
 typedef int32 ScriptLifeFunc(int32 actorIdx, ActorStruct *actor);
@@ -118,7 +118,7 @@ enum LifeScriptConditions {
 
 
 /** Returns:
-	   -1 - TODO
+	   -1 - Need implementation
 		1 - Condition value size (1 byte)
 		2 - Condition value size (2 byes) */
 int32 process_life_conditions(ActorStruct *actor) {
@@ -344,7 +344,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 }
 
 /** Returns:
-	   -1 - TODO
+	   -1 - Need implementation
 		0 - Condition false
 		1 - Condition true */
 int32 process_life_operators(int32 valueSize) {
@@ -358,7 +358,7 @@ int32 process_life_operators(int32 valueSize) {
 		conditionValue = *((int16 *)scriptPtr);
 		scriptPtr += 2;
 	} else {
-		// TODO: add message
+		printf("ERROR: Unknown operator value size %d\n", valueSize);
 		return 0;
 	}
 
@@ -936,7 +936,7 @@ int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor) {
 
 /*0x39*/
 int32 lZOOM(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
+	scriptPtr++; // TODO implement zoon image
 	return -1;
 }
 
@@ -1226,8 +1226,12 @@ int32 lFADE_PAL_ALARM(int32 actorIdx, ActorStruct *actor) {
 
 /*0x58*/
 int32 lEXPLODE_OBJ(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO
-	return -1;
+	int32 otherActorIdx = *(scriptPtr++);
+	ActorStruct *otherActor = &sceneActors[actorIdx];
+
+	add_extra_explode(otherActor->X, otherActor->Y, otherActor->Z); // RECHECK this
+
+	return 0;
 }
 
 /*0x59*/
