@@ -294,6 +294,7 @@ void play_fla_movie(int8 *filename) {
 	int32 i;
 	int32 quit = 0;
 	int32 currentFrame;
+	int16 tmpValue;
 
 	fadeOut = -1;
 	fadeOutFrames = 0;
@@ -310,13 +311,10 @@ void play_fla_movie(int8 *filename) {
 	frread(&frFla, &flaHeaderData.xsize, 2);
 	frread(&frFla, &flaHeaderData.ysize, 2);
 
-	frread(&frFla, &samplesInFla, 4);
-
-	// TODO: to remove
-	samplesInFla &= 0xFFFF;
+	frread(&frFla, &samplesInFla, 2);
+	frread(&frFla, &tmpValue, 2);
 
 	for (i = 0; i < samplesInFla; i++) {
-		//flaSampleTable[i] = *((int16 *)flaPtr); flaPtr+=4;
 		int16 var0;
 		int16 var1;
 		frread(&frFla, &var0, 2);
