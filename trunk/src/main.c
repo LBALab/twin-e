@@ -309,7 +309,6 @@ void init_engine() {
 	} else if (cfgfile.Version == MODIFICATION_VERSION) {
 		// Modification screen
 		load_image_delay(RESSHQR_RELLENTIMG, 2);
-		// TODO: add necessary screens here
 	}
 
 	play_movie(FLA_DRAGON3);

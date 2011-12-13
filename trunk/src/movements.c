@@ -357,7 +357,7 @@ void process_actor_movements(int32 actorIdx) {
 		case kNO_MOVE:
 			break;
 		case kMANUAL:
-			if (!actorIdx) { // TODO: take this out when we want to give manual movements to other characters than Hero
+			if (!actorIdx) { // take this out when we want to give manual movements to other characters than Hero
 				heroAction = 0;
 
 				// If press W for action

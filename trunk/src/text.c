@@ -39,7 +39,7 @@
 #include "images.h"
 #include "renderer.h"
 
-// TODO: CHECK THIS LATER
+// RECHECK THIS LATER
 int32 currentBankIdx = -1; // textVar1
 uint8 textVar2[256];
 uint8 textVar3;
@@ -70,7 +70,7 @@ void init_text_bank(int32 bankIdx) { // InitDial
 		return;
 
 	currentBankIdx = bankIdx;
-	// TODO: V V V CHECK THIS LATER
+	// RECHECK THIS LATER
 	textVar2[0] = textVar3;
 
 	// get index according with language
@@ -526,7 +526,7 @@ int printText10() { // printText10()
 		processTextLine();
 	}
 
-	// TODO: recheck this
+	// RECHECK this later
 	if (*(printText8Ptr2) == 0) {
 		return 1;
 	}
@@ -637,14 +637,14 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 		return;
 	}
 
-	// TODO: recheck this
+	// RECHECK this later
 	// wait displaying text
 	do {
 		read_keys();
 		delay(1);
 	} while(skipIntro || skipedKey || pressedKey);
 
-	// TODO: recheck
+	// RECHECK this later
 	// wait key to display next text
 	do {
 		read_keys();
