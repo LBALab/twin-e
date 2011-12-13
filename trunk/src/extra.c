@@ -131,6 +131,31 @@ int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 ta
 	return -1;
 }
 
+/** Add extra explosion
+	@param X Explostion X coordinate 
+	@param Y Explostion Y coordinate
+	@param Z Explostion Z coordinate */
+int32 add_extra_explode(int32 X, int32 Y, int32 Z) {
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == -1) {
+			extra->info0 = 0x61;
+			extra->type = 0x1001;
+			extra->info1 = 0;
+			extra->X = X;
+			extra->Y = Y;
+			extra->Z = Z;
+			extra->actorIdx = 0x28;
+			extra->lifeTime = lbaTime;
+			extra->strengthOfHit = 0;
+			return i;
+		}
+	}
+	return -1;
+}
+
 /** Reset all used extras */
 void reset_extras() {
 	int32 i;

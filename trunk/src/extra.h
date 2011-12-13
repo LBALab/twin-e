@@ -66,6 +66,12 @@ enum ExtraSpecialType {
 
 int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit);
 
+/** Add extra explosion
+	@param X Explostion X coordinate 
+	@param Y Explostion Y coordinate
+	@param Z Explostion Z coordinate */
+int32 add_extra_explode(int32 X, int32 Y, int32 Z);
+
 /** Reset all used extras */
 void reset_extras();
 
