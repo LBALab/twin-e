@@ -43,7 +43,7 @@ void adeline_logo() {
 	play_midi_music(31, 0);
 
 	load_image(RESSHQR_ADELINEIMG, 1);
-	delaySkip(7000); //TODO: adjust frames per second using cfgfile.Fps value
+	delaySkip(7000);
 	fade_out(paletteRGBACustom);
 	palCustom = 1;
 }
@@ -189,7 +189,7 @@ void fade_2_black(uint8 *palette) {
 	if (palReseted == 0) {
 		for (i = 100; i >= 0; i -= 3) {
 			adjust_palette(0, 0, 0, (uint8 *) palette, i);
-			fps_cycles(50); //TODO: adjust frames per second using cfgfile.Fps value
+			fps_cycles(50);
 		}
 	}
 
@@ -203,7 +203,7 @@ void fade_2_pal(uint8 *palette) {
 
 	for (i = 0; i <= 100; i += 3) {
 		adjust_palette(0, 0, 0, (uint8 *) palette, i);
-		fps_cycles(50); //TODO: adjust frames per second using cfgfile.Fps value
+		fps_cycles(50);
 	}
 
 	set_palette((uint8*)palette);
