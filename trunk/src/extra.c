@@ -314,9 +314,20 @@ int32 add_extra_aiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteId
 	return -1;
 }
 
+int32 findExtraKey() {
+	// TODO cseg01:00018168
+	return -1;
+}
+
+int32 add_extra_aiming_at_key(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 extraIdx) { // addMagicBallAimingAtKey
+	// TODO cseg01:00018250
+	return -1;
+}
+
 void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 angle, int32 param2, int32 param3) { // ThrowMagicBall
 	int32 ballSprite = -1;
 	int32 ballStrength = 0;
+	int32 extraIdx = -1;
 
 	switch (magicLevelIdx) {
 	case 0:
@@ -343,6 +354,11 @@ void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 an
 		magicBallNumBounce = 0;
 	}
 
+	extraIdx = findExtraKey();
+	if (extraIdx != -1) { // there is a key to aim
+		magicBallNumBounce = 5;
+	}
+
 	switch (magicBallNumBounce) {
 	case 0:
 		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
@@ -358,8 +374,8 @@ void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 an
 		magicBallAuxBounce = 4;
 		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
 		break;
-	case 5: // TODO
-      printf("Magic ball extra aim for key not implemented!\n");
+	case 5:
+		magicBallIdx = add_extra_aiming_at_key(0, X, Y, Z, ballSprite, extraIdx);
       break;
 	}
 
