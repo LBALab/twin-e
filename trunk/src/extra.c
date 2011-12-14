@@ -123,8 +123,8 @@ int32 addExtra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 tar
 			extra->destZ = maxSpeed;
 			extra->strengthOfHit = strengthOfHit;
 
-			set_actor_angle(0, maxSpeed, 50, &extra->trackActorMove);
-			extra->angle = get_angle(X, Z, sceneActors[targetActor].X, sceneActors[targetActor].Z);
+			setActorAngle(0, maxSpeed, 50, &extra->trackActorMove);
+			extra->angle = getAngle(X, Z, sceneActors[targetActor].X, sceneActors[targetActor].Z);
 			return i;
 		}
 	}
@@ -174,11 +174,11 @@ void throwExtra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int3
 	extra->lastY = extra->Y;
 	extra->lastZ = extra->Z;
 
-	rotate_actor(var3, 0, var1);
+	rotateActor(var3, 0, var1);
 
 	extra->destY = -destZ;
 
-	rotate_actor(0, destX, var2);
+	rotateActor(0, destX, var2);
 
 	extra->destX = destX;
 	extra->destZ = destZ;
@@ -304,8 +304,8 @@ int32 addExtraAiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx,
 			extra->lifeTime = targetActorIdx;
 			extra->destZ = maxSpeed;
 			extra->strengthOfHit = strengthOfHit;
-			set_actor_angle(0, maxSpeed, 50, &extra->trackActorMove);
-			extra->angle = get_angle(X, Z, sceneActors[targetActorIdx].X, sceneActors[targetActorIdx].Z);	
+			setActorAngle(0, maxSpeed, 50, &extra->trackActorMove);
+			extra->angle = getAngle(X, Z, sceneActors[targetActorIdx].X, sceneActors[targetActorIdx].Z);	
 
 			return i;
 		}
@@ -406,7 +406,7 @@ void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 an
 	renderTop    = 0x7D00;
 	renderBottom = -0x7D00;
 
-	rotate_actor(var_8, temp1, angle);
+	rotateActor(var_8, temp1, angle);
 
 	computedX = destX + X;
 	computedY = destZ + Y;
@@ -438,7 +438,7 @@ void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 an
 		projPosX = currentX;
 		projPosY = currentY;
 
-		rotate_actor(var_8, temp1, angle);
+		rotateActor(var_8, temp1, angle);
 
 		currentX = destX + X;
 		currentY = destZ + Y;
@@ -458,7 +458,7 @@ void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 an
 		projPosX = currentX;
 		projPosY = currentY;
 
-		draw_line(oldComputedX, oldComputedY, currentX, currentY, color);
+		drawLine(oldComputedX, oldComputedY, currentX, currentY, color);
 
 		numEntries++;
 
@@ -469,7 +469,7 @@ void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 an
 
 	projPosX = currentX;
 	projPosY = currentY;
-	draw_line(currentX, currentY, computedX, computedY, color);
+	drawLine(currentX, currentY, computedX, computedY, color);
 }
 
 void drawExtraSpecial(int32 extraIdx, int32 X, int32 Y) {
@@ -605,7 +605,7 @@ void processExtras() {
 				currentExtraY = sceneActors[actorIdxAttacked].Y + 1000;
 				currentExtraZ = sceneActors[actorIdxAttacked].Z;
 
-				tmpAngle = get_angle(extra->X, extra->Z, currentExtraX, currentExtraZ);
+				tmpAngle = getAngle(extra->X, extra->Z, currentExtraX, currentExtraZ);
 				angle = (tmpAngle - extra->angle) & 0x3FF;
 
 				if (angle > 400 && angle < 600) {
@@ -622,22 +622,22 @@ void processExtras() {
 				} else {
 					int32 angle, pos;
 
-					angle = get_angle(extra->Y, 0, currentExtraY, moveAngle);
+					angle = getAngle(extra->Y, 0, currentExtraY, moveAngle);
 
-					pos = get_real_angle(&extra->trackActorMove);
+					pos = getRealAngle(&extra->trackActorMove);
 
 					if (!pos) {
 						pos = 1;
 					}
 
-					rotate_actor(pos, 0, angle);
+					rotateActor(pos, 0, angle);
 					extra->Y -= destZ;
 
-					rotate_actor(0, destX, tmpAngle);
+					rotateActor(0, destX, tmpAngle);
 					extra->X += destX;
 					extra->Z += destZ;
 
-					set_actor_angle(0, extra->destZ, 50, &extra->trackActorMove);
+					setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
 
 					if (actorIdxAttacked == checkExtraCollisionWithActors(extra, actorIdx)) {
 						if (i == magicBallIdx) {
@@ -698,7 +698,7 @@ void processExtras() {
 					// if extra is magic ball
 					if (i == magicBallIdx) {
 						// FIXME: add constant for sample index
-						play_sample(86, Rnd(300) + 3946, 1, extra->X, extra->Y, extra->Z);
+						playSample(86, Rnd(300) + 3946, 1, extra->X, extra->Y, extra->Z);
 
 						// cant bounce with not magic points
 						if (magicBallNumBounce <= 0) {
@@ -773,14 +773,14 @@ void processExtras() {
 				// if hero touch extra
 				if (checkExtraCollisionWithActors(extra, -1) == 0) {
 					// FIXME: add constant for sample index
-					play_sample(97, 0x1000, 1, extra->X, extra->Y, extra->Z);
+					playSample(97, 0x1000, 1, extra->X, extra->Y, extra->Z);
 
 					if (extra->info1 > 1 && !(loopPressedKey & 2)) {
-						project_position_on_screen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
-						add_overlay(koNumber, extra->info1, projPosX, projPosY, 158, koNormal, 2);
+						projectPositionOnScreen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
+						addOverlay(koNumber, extra->info1, projPosX, projPosY, 158, koNormal, 2);
 					}
 
-					add_overlay(koSprite, extra->info0, 10, 30, 0, koNormal, 2);
+					addOverlay(koSprite, extra->info0, 10, 30, 0, koNormal, 2);
 
 					if (extra->info0 == SPRITEHQR_KASHES) {
 						inventoryNumKashes += extra->info1;

@@ -62,9 +62,9 @@ int16 disableScreenRecenter;
 
 
 
-void freeze_time();
-void unfreeze_time();
+void freezeTime();
+void unfreezeTime();
 
-int32 game_engine_loop();
+int32 gameEngineLoop();
 
 #endif

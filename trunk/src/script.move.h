@@ -32,6 +32,6 @@
 
 /** Process actor move script
 	@param actorIdx Current processed actor index */
-void process_move_script(int32 actorIdx);
+void processMoveScript(int32 actorIdx);
 
 #endif

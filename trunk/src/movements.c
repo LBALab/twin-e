@@ -43,7 +43,7 @@
 	@param X Shadow X coordinate
 	@param Y Shadow Y coordinate
 	@param Z Shadow Z coordinate */
-void get_shadow_position(int32 X, int32 Y, int32 Z) {
+void getShadowPosition(int32 X, int32 Y, int32 Z) {
 	int32 tempX;
 	int32 tempY;
 	int32 tempZ;
@@ -102,7 +102,7 @@ void setActorAngleSafe(int16 startAngle, int16 endAngle, int16 stepAngle, ActorM
 
 /** Clear actors safe angle
 	@param actorPtr actor pointer */
-void clear_real_angle(ActorStruct * actorPtr) {
+void clearRealAngle(ActorStruct * actorPtr) {
 	setActorAngleSafe(actorPtr->angle, actorPtr->angle, 0, &actorPtr->move);
 }
 
@@ -111,7 +111,7 @@ void clear_real_angle(ActorStruct * actorPtr) {
 	@param endAngle end angle
 	@param stepAngle number of steps
 	@param movePtr Pointer to process movements */
-void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr) {
+void setActorAngle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr) {
 	movePtr->from = startAngle;
 	movePtr->to = endAngle;
 	movePtr->numOfStep = stepAngle;
@@ -123,7 +123,7 @@ void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMov
 	@param z1 Actor 1 Z
 	@param x2 Actor 2 X
 	@param z2 Actor 2 Z */
-int32 get_angle(int32 x1, int32 z1, int32 x2, int32 z2) {
+int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2) {
 	int32 newX, newZ, difX, difZ, tmpX, tmpZ, tmpEx, flag, destAngle, startAngle, stopAngle, finalAngle;
 
 	difZ = tmpZ = z2 - z1;
@@ -179,7 +179,7 @@ int32 get_angle(int32 x1, int32 z1, int32 x2, int32 z2) {
 
 /** Get actor real angle
 	@param movePtr Pointer to process movements */
-int32 get_real_angle(ActorMoveStruct * movePtr) {
+int32 getRealAngle(ActorMoveStruct * movePtr) {
 	int32 timePassed;
 	int32 remainingAngle;
 
@@ -211,7 +211,7 @@ int32 get_real_angle(ActorMoveStruct * movePtr) {
 
 /** Get actor step
 	@param movePtr Pointer to process movements */
-int32 get_real_value(ActorMoveStruct * movePtr) {
+int32 getRealValue(ActorMoveStruct * movePtr) {
 	int32 tempStep;
 
 	if (!movePtr->numOfStep)
@@ -233,7 +233,7 @@ int32 get_real_value(ActorMoveStruct * movePtr) {
 	@param X Actor current X coordinate
 	@param Z Actor current Z coordinate
 	@param angle Actor angle to rotate */
-void rotate_actor(int32 X, int32 Z, int32 angle) {
+void rotateActor(int32 X, int32 Z, int32 angle) {
 	int32 angle1;
 	int32 angle2;
 
@@ -254,7 +254,7 @@ void rotate_actor(int32 X, int32 Z, int32 angle) {
 	@param z1 Actor 1 Z coordinate
 	@param x2 Actor 2 X coordinate
 	@param z2 Actor 2 Z coordinate */
-int32 get_distance_2D(int32 x1, int32 z1, int32 x2, int32 z2) {
+int32 getDistance2D(int32 x1, int32 z1, int32 x2, int32 z2) {
 	int32 newX;
 	int32 newZ;
 
@@ -274,7 +274,7 @@ int32 get_distance_2D(int32 x1, int32 z1, int32 x2, int32 z2) {
 	@param x2 Actor 2 X coordinate
 	@param y2 Actor 2 Y coordinate
 	@param z2 Actor 2 Z coordinate */
-int32 get_distance_3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2) {
+int32 getDistance3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2) {
 	int32 newX;
 	int32 newY;
 	int32 newZ;
@@ -296,7 +296,7 @@ int32 get_distance_3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2
 	@param angleTo Angle to rotate
 	@param speed Rotate speed
 	@param movePtr Pointer to process movements */
-void move_actor(int32 angleFrom, int32 angleTo, int32 speed, ActorMoveStruct *movePtr) { // ManualRealAngle
+void moveActor(int32 angleFrom, int32 angleTo, int32 speed, ActorMoveStruct *movePtr) { // ManualRealAngle
 	int32 numOfStepInt;
 	int16 numOfStep;
 	int16 from;
@@ -325,7 +325,7 @@ void move_actor(int32 angleFrom, int32 angleTo, int32 speed, ActorMoveStruct *mo
 	movePtr->timeOfChange = lbaTime;
 }
 
-void process_actor_movements(int32 actorIdx) {
+void processActorMovements(int32 actorIdx) {
 	ActorStruct *actor = &sceneActors[actorIdx];
 
 	if (actor->entity == -1)
@@ -343,13 +343,13 @@ void process_actor_movements(int32 actorIdx) {
 		if (key & 8)
 			tempAngle = -0x100;
 
-		move_actor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->move);
+		moveActor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->move);
 
 		heroPressedKey = key;
 	} else {
 		if (!actor->staticFlags.bIsSpriteActor) {
 			if (actor->controlMode != kMANUAL) {
-				actor->angle = get_real_angle(&actor->move);
+				actor->angle = getRealAngle(&actor->move);
 			}
 		}
 
@@ -381,7 +381,7 @@ void process_actor_movements(int32 actorIdx) {
 					if (skipIntro == 0x39) {
 						if (autoAgressive) {
 							heroMoved = 1;
-							actor->angle = get_real_angle(&actor->move);
+							actor->angle = getRealAngle(&actor->move);
 							if (!(previousLoopPressedKey & 1) || !actor->anim) {
 								int32 aggresiveMode = Rnd(3);
 
@@ -428,7 +428,7 @@ void process_actor_movements(int32 actorIdx) {
 						}
 
 						heroMoved = 1;
-						actor->angle = get_real_angle(&actor->move);
+						actor->angle = getRealAngle(&actor->move);
 					}
 				} else {
 					if (gameFlags[GAMEFLAG_HAS_SABRE]) {
@@ -439,7 +439,7 @@ void process_actor_movements(int32 actorIdx) {
 						initAnim(ANIM_SABRE_ATTACK, 1, 0, actorIdx);
 
 						heroMoved = 1;
-						actor->angle = get_real_angle(&actor->move);
+						actor->angle = getRealAngle(&actor->move);
 					}
 				}
 			}
@@ -477,7 +477,7 @@ void process_actor_movements(int32 actorIdx) {
 						initAnim(ANIM_TURNLEFT, 0, 255, actorIdx);
 					} else {
 						if (!actor->dynamicFlags.bIsRotationByAnim) {
-							actor->angle = get_real_angle(&actor->move);
+							actor->angle = getRealAngle(&actor->move);
 						}
 					}
 				}
@@ -488,7 +488,7 @@ void process_actor_movements(int32 actorIdx) {
 						initAnim(ANIM_TURNRIGHT, 0, 255, actorIdx);
 					} else {
 						if (!actor->dynamicFlags.bIsRotationByAnim) {
-							actor->angle = get_real_angle(&actor->move);
+							actor->angle = getRealAngle(&actor->move);
 						}
 					}
 				}
@@ -503,18 +503,18 @@ void process_actor_movements(int32 actorIdx) {
 					tempAngle = -0x100;
 				}
 
-				move_actor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->move);
+				moveActor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->move);
 
 				heroPressedKey  = key;
 				heroPressedKey2 = loopPressedKey;
 			}
 			break;
 		case kFOLLOW: {
-			int32 newAngle = get_angle(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
+			int32 newAngle = getAngle(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
 			if (actor->staticFlags.bIsSpriteActor) {
 				actor->angle = newAngle;
 			} else {
-				move_actor(actor->angle, newAngle, actor->speed, &actor->move);
+				moveActor(actor->angle, newAngle, actor->speed, &actor->move);
 			}
 		}
 			break;
@@ -533,7 +533,7 @@ void process_actor_movements(int32 actorIdx) {
 		case kRANDOM: {
 			if (!actor->dynamicFlags.bIsRotationByAnim) {
 				if (actor->brickShape & 0x80) {
-					move_actor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF ), actor->speed, &actor->move);                     
+					moveActor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF ), actor->speed, &actor->move);                     
 					actor->info0 = Rnd(300) + lbaTime + 300;
 					initAnim(0, 0, 255, actorIdx);
 				}
@@ -541,7 +541,7 @@ void process_actor_movements(int32 actorIdx) {
 				if (!actor->move.numOfStep) {
 					initAnim(1, 0, 255, actorIdx);
 					if(lbaTime > actor->info0) {
-						move_actor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF), actor->speed, &actor->move);
+						moveActor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF), actor->speed, &actor->move);
                         actor->info0 = Rnd(300) + lbaTime + 300;
                     }
 				}

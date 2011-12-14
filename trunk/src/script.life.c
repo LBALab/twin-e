@@ -121,7 +121,7 @@ enum LifeScriptConditions {
 	   -1 - Need implementation
 		1 - Condition value size (1 byte)
 		2 - Condition value size (2 byes) */
-int32 process_life_conditions(ActorStruct *actor) {
+int32 processLifeConditions(ActorStruct *actor) {
 	int32 conditionOpcode, conditionValueSize;
 
 	conditionValueSize = 1;
@@ -153,7 +153,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 			if (Abs(otherActor->Y - actor->Y) >= 1500) {
 				currentScriptValue = 0x7D00;	
 			} else {
-				currentScriptValue = get_distance_2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
+				currentScriptValue = getDistance2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
 				if (currentScriptValue > 0x7D00) {
 					currentScriptValue = 0x7D00;
 				}
@@ -214,7 +214,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 			if (targetActor->Y - actor->Y >= 1500) {
 				moveAngle = 0x7D00;
 			} else {
-				newAngle = get_angle(actor->X, actor->Z, targetActor->X, targetActor->Z);
+				newAngle = getAngle(actor->X, actor->Z, targetActor->X, targetActor->Z);
 				if (moveAngle > 0x7D00) {
 					moveAngle = 0x7D00;
 				} 
@@ -288,7 +288,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 
 		if (!targetActor->dynamicFlags.bIsDead) {
-			currentScriptValue = get_distance_3D(actor->X, actor->Y, actor->Z, targetActor->X, targetActor->Y, targetActor->Z);		
+			currentScriptValue = getDistance3D(actor->X, actor->Y, actor->Z, targetActor->X, targetActor->Y, targetActor->Z);		
 			if (currentScriptValue > 0x7D00) { // TODO: recheck this
 				currentScriptValue = 0x7D00;
 			}
@@ -315,7 +315,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 			}
 
 			if (currentScriptValue == 1) {
-				add_overlay(koInventoryItem, item, 0, 0, 0, koNormal, 3);
+				addOverlay(koInventoryItem, item, 0, 0, 0, koNormal, 3);
 			}
 		} else {
 			currentScriptValue = 0;
@@ -347,7 +347,7 @@ int32 process_life_conditions(ActorStruct *actor) {
 	   -1 - Need implementation
 		0 - Condition false
 		1 - Condition true */
-int32 process_life_operators(int32 valueSize) {
+int32 processLifeOperators(int32 valueSize) {
 	int32 operatorCode, conditionValue;
 
 	operatorCode = *(scriptPtr++);
@@ -422,8 +422,8 @@ int32 lNOP(int32 actorIdx, ActorStruct *actor) {
 
 /*0x02*/
 int32 lSNIF(int32 actorIdx, ActorStruct *actor) {
-	int32 valueSize = process_life_conditions(actor);
-	if (!process_life_operators(valueSize)) {
+	int32 valueSize = processLifeConditions(actor);
+	if (!processLifeOperators(valueSize)) {
 		*opcodePtr = 13; // SWIF
 	}
 	scriptPtr = actor->lifeScript + *((int16 *)scriptPtr); // condition offset
@@ -438,8 +438,8 @@ int32 lOFFSET(int32 actorIdx, ActorStruct *actor) {
 
 /*0x04*/
 int32 lNEVERIF(int32 actorIdx, ActorStruct *actor) {
-	int32 valueSize = process_life_conditions(actor);
-	process_life_operators(valueSize);	
+	int32 valueSize = processLifeConditions(actor);
+	processLifeOperators(valueSize);	
 	scriptPtr = actor->lifeScript + *((int16 *)scriptPtr); // condition offset
 	return 0;
 }
@@ -462,8 +462,8 @@ int32 lRETURN(int32 actorIdx, ActorStruct *actor) {
 
 /*0x0C*/
 int32 lIF(int32 actorIdx, ActorStruct *actor) {
-	int32 valueSize = process_life_conditions(actor);
-	if (!process_life_operators(valueSize)) {
+	int32 valueSize = processLifeConditions(actor);
+	if (!processLifeOperators(valueSize)) {
 		scriptPtr = actor->lifeScript + *((int16 *)scriptPtr); // condition offset
 	} else {
 		scriptPtr += 2;
@@ -474,8 +474,8 @@ int32 lIF(int32 actorIdx, ActorStruct *actor) {
 
 /*0x0D*/
 int32 lSWIF(int32 actorIdx, ActorStruct *actor) {
-	int32 valueSize = process_life_conditions(actor);
-	if (!process_life_operators(valueSize)) {
+	int32 valueSize = processLifeConditions(actor);
+	if (!processLifeOperators(valueSize)) {
 		scriptPtr = actor->lifeScript + *((int16 *)scriptPtr); // condition offset
 	} else {
 		scriptPtr += 2;
@@ -487,8 +487,8 @@ int32 lSWIF(int32 actorIdx, ActorStruct *actor) {
 
 /*0x0E*/
 int32 lONEIF(int32 actorIdx, ActorStruct *actor) {
-	int32 valueSize = process_life_conditions(actor);
-	if (!process_life_operators(valueSize)) {
+	int32 valueSize = processLifeConditions(actor);
+	if (!processLifeOperators(valueSize)) {
 		scriptPtr = actor->lifeScript + *((int16 *)scriptPtr); // condition offset
 	} else {
 		scriptPtr += 2;
@@ -570,13 +570,13 @@ int32 lMESSAGE(int32 actorIdx, ActorStruct *actor) {
 	int32 textIdx = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	freeze_time();
+	freezeTime();
 	// TODO: draw_bubble(otherActorIdx);
-	set_font_cross_color(actor->talkColor);
+	setFontCrossColor(actor->talkColor);
 	talkingActor = actorIdx;
-	draw_text_fullscreen(textIdx);
-	unfreeze_time();
-	redraw_engine_actions(1);
+	drawTextFullscreen(textIdx);
+	unfreezeTime();
+	redrawEngineActions(1);
 
 	return 0;
 }
@@ -720,7 +720,7 @@ int32 lUSE_ONE_LITTLE_KEY(int32 actorIdx, ActorStruct *actor) {
 		inventoryNumKeys = 0;
 	}
 
-	add_overlay(koSprite, SPRITEHQR_KEY, 0, 0, 0, koFollowActor, 1);
+	addOverlay(koSprite, SPRITEHQR_KEY, 0, 0, 0, koFollowActor, 1);
 	
 	return 0;
 }
@@ -740,7 +740,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 		inventoryNumKashes = 0;
 	}
 
-	add_overlay(koSprite, SPRITEHQR_KASHES, 10, 15, 0, koNormal, 3);
+	addOverlay(koSprite, SPRITEHQR_KASHES, 10, 15, 0, koNormal, 3);
 
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];
@@ -754,7 +754,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 	}
 
 	if (!hideRange) {
-		add_overlay(koNumberRange, oldNumKashes, 50, 20, inventoryNumKashes, koNormal, 3);
+		addOverlay(koNumberRange, oldNumKashes, 50, 20, inventoryNumKashes, koNormal, 3);
 	}
 
 	return 0;
@@ -785,13 +785,13 @@ int32 lMESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 textIdx = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	freeze_time();
+	freezeTime();
 	// TODO: draw_bubble(otherActorIdx);
-	set_font_cross_color(sceneActors[otherActorIdx].talkColor);
+	setFontCrossColor(sceneActors[otherActorIdx].talkColor);
 	talkingActor = otherActorIdx;
-	draw_text_fullscreen(textIdx);
-	unfreeze_time();
-	redraw_engine_actions(1);
+	drawTextFullscreen(textIdx);
+	unfreezeTime();
+	redrawEngineActions(1);
 
 	return 0;
 }
@@ -806,10 +806,10 @@ int32 lINC_CHAPTER(int32 actorIdx, ActorStruct *actor) {
 int32 lFOUND_OBJECT(int32 actorIdx, ActorStruct *actor) {
 	int32 item = *(scriptPtr++);
 	
-	freeze_time();
+	freezeTime();
 	processFoundItem(item);
-	unfreeze_time();
-	redraw_engine_actions(1);
+	unfreezeTime();
+	redrawEngineActions(1);
 
 	return 0;
 }
@@ -918,8 +918,8 @@ int32 lBRICK_COL(int32 actorIdx, ActorStruct *actor) {
 
 /*0x37*/
 int32 lOR_IF(int32 actorIdx, ActorStruct *actor) {
-	int32 valueSize = process_life_conditions(actor);
-	if (process_life_operators(valueSize)) {
+	int32 valueSize = processLifeConditions(actor);
+	if (processLifeOperators(valueSize)) {
 		scriptPtr = actor->lifeScript + *((int16 *)scriptPtr); // condition offset
 	} else {
 		scriptPtr += 2;
@@ -1054,13 +1054,13 @@ int32 lASK_CHOICE(int32 actorIdx, ActorStruct *actor) {
 	int32 choiceIdx = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	freeze_time();
+	freezeTime();
 	// TODO: bubble
-	set_font_cross_color(actor->talkColor);
+	setFontCrossColor(actor->talkColor);
 	processGameChoices(choiceIdx);
 	numChoices = 0;
-	unfreeze_time();
-	redraw_engine_actions(1);
+	unfreezeTime();
+	redrawEngineActions(1);
 
 	return 0;
 }
@@ -1070,15 +1070,15 @@ int32 lBIG_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 	int32 textIdx = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	freeze_time();
-	text_clip_full();
+	freezeTime();
+	textClipFull();
 	// TODO: draw_bubble(otherActorIdx);
-	set_font_cross_color(actor->talkColor);
+	setFontCrossColor(actor->talkColor);
 	talkingActor = actorIdx;
-	draw_text_fullscreen(textIdx);
-	text_clip_small();
-	unfreeze_time();
-	redraw_engine_actions(1);
+	drawTextFullscreen(textIdx);
+	textClipSmall();
+	unfreezeTime();
+	redrawEngineActions(1);
 
 	return 0;
 }
@@ -1099,7 +1099,7 @@ int32 lSET_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
 	
 	setHolomapPosition(location);
 	if (gameFlags[GAMEFLAG_HAS_HOLOMAP]) {
-		add_overlay(koInventoryItem, 0, 0, 0, 0, koNormal, 3);
+		addOverlay(koInventoryItem, 0, 0, 0, 0, koNormal, 3);
 	}
 
 	return 0;
@@ -1142,11 +1142,11 @@ int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 	int16 textEntry = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	add_overlay(koText, textEntry, 0, 0, actorIdx, koFollowActor, 2);
+	addOverlay(koText, textEntry, 0, 0, actorIdx, koFollowActor, 2);
 
-	freeze_time();
+	freezeTime();
 	// TODO: set vox file
-	unfreeze_time();
+	unfreezeTime();
 
 	return 0;
 }
@@ -1157,11 +1157,11 @@ int32 lSAY_MESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int16 textEntry = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	add_overlay(koText, textEntry, 0, 0, otherActorIdx, koFollowActor, 2);
+	addOverlay(koText, textEntry, 0, 0, otherActorIdx, koFollowActor, 2);
 
-	freeze_time();
+	freezeTime();
 	// TODO: set vox file
-	unfreeze_time();
+	unfreezeTime();
 
 	return 0;
 }
@@ -1178,7 +1178,7 @@ int32 lBETA(int32 actorIdx, ActorStruct *actor) {
 	int32 newAngle = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 	actor->angle = newAngle;
-	clear_real_angle(actor);
+	clearRealAngle(actor);
 	return 0;
 }
 
@@ -1188,7 +1188,7 @@ int32 lGRM_OFF(int32 actorIdx, ActorStruct *actor) {
 		useCellingGrid = -1;
 		cellingGridIdx = -1;
 		createGridMap();
-		redraw_engine_actions(1);
+		redrawEngineActions(1);
 	}
 	
 	return 0;
@@ -1250,13 +1250,13 @@ int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 choiceIdx = *((int16 *)scriptPtr);
 	scriptPtr += 2;
 
-	freeze_time();
+	freezeTime();
 	// TODO: bubble
-	set_font_cross_color(sceneActors[otherActorIdx].talkColor);
+	setFontCrossColor(sceneActors[otherActorIdx].talkColor);
 	processGameChoices(choiceIdx);
 	numChoices = 0;
-	unfreeze_time();
-	redraw_engine_actions(1);
+	unfreezeTime();
+	redrawEngineActions(1);
 
 	return 0;
 }
@@ -1275,17 +1275,17 @@ int32 lSET_NORMAL_PAL(int32 actorIdx, ActorStruct *actor) {
 int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
 	int32 tmpFlagDisplayText;
 
-	freeze_time();
+	freezeTime();
 	fadeToBlack(paletteRGBA);
 	loadImage(25, 1);
-	text_clip_full();
-	set_font_cross_color(15);
+	textClipFull();
+	setFontCrossColor(15);
 	newGameVar4 = 0;
 	tmpFlagDisplayText = cfgfile.FlagDisplayText;
 	cfgfile.FlagDisplayText = 1;
-	draw_text_fullscreen(6);
+	drawTextFullscreen(6);
 	newGameVar4 = 1;
-	text_clip_small();
+	textClipSmall();
 	fadeToBlack(paletteRGBACustom);
 	clearScreen();
 	setPalette(paletteRGBA);
@@ -1295,7 +1295,7 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
 		readKeys();
 	} while (skipIntro || skipedKey);
 
-	unfreeze_time();
+	unfreezeTime();
 	
 	return 0;
 }
@@ -1341,23 +1341,23 @@ int32 lTHE_END(int32 actorIdx, ActorStruct *actor) {
 
 /*0x63*/
 int32 lMIDI_OFF(int32 actorIdx, ActorStruct *actor) {
-	stop_midi_music();
+	stopMidiMusic();
 	return 0;
 }
 
 /*0x64*/
 int32 lPLAY_CD_TRACK(int32 actorIdx, ActorStruct *actor) {
 	int32 track = *(scriptPtr++);
-	play_track_music(track);
+	playTrackMusic(track);
 	return 0;
 }
 
 /*0x65*/
 int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
-	set_ortho_projection(311, 240, 512);
-	set_base_translation(0, 0, 0);
-	set_base_rotation(0, 0, 0);
-	set_light_vector(alphaLight, betaLight, 0);
+	setOrthoProjection(311, 240, 512);
+	setBaseTranslation(0, 0, 0);
+	setBaseRotation(0, 0, 0);
+	setLightVector(alphaLight, betaLight, 0);
 	return 0;
 }
 
@@ -1367,11 +1367,11 @@ int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
 	flip();
 	changeRoomVar10 = 0;
 
-	set_camera_position(320, 240, 128, 1024, 1024);
-	set_camera_angle(0, 1500, 0, 25, -128, 0, 13000);
-	set_light_vector(896, 950, 0);
+	setCameraPosition(320, 240, 128, 1024, 1024);
+	setCameraAngle(0, 1500, 0, 25, -128, 0, 13000);
+	setLightVector(896, 950, 0);
 
-	init_text_bank(1);
+	initTextBank(1);
 
 	return 0;
 }
@@ -1389,10 +1389,10 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
 			}
 		}
 
-		get_menu_text(textIdx, textStr);
-		textSize = textBoxRight = get_text_size(textStr);
-		set_font_color(15);
-		draw_text(0, drawVar1, textStr);
+		getMenuText(textIdx, textStr);
+		textSize = textBoxRight = getTextSize(textStr);
+		setFontColor(15);
+		drawText(0, drawVar1, textStr);
 		if (textSize > 639) {
 			textBoxRight = 639;
 		}
@@ -1407,7 +1407,7 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
 /*0x68*/
 int32 lCLEAR_TEXT(int32 actorIdx, ActorStruct *actor) {
 	drawVar1 = 0;
-	draw_splitted_box(0, 0, 639, 240, 0);
+	drawSplittedBox(0, 0, 639, 240, 0);
 	copyBlockPhys(0, 0, 639, 240);
 	return 0;
 }
@@ -1529,7 +1529,7 @@ static const ScriptLifeFunction function_map[] = {
 
 /** Process actor move script
 	@param actorIdx Current processed actor index */
-void process_life_script(int32 actorIdx) {
+void processLifeScript(int32 actorIdx) {
 	int32 end, scriptOpcode;
 	ActorStruct *actor;
 

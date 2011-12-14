@@ -58,10 +58,10 @@ int32 magicLevelStrengthOfHit[] = {
 
 /** Initialize engine 3D projections */
 void initEngineProjections() { // reinitAll1
-	set_ortho_projection(311, 240, 512);
-	set_base_translation(0, 0, 0);
-	set_base_rotation(0, 0, 0);
-	set_light_vector(alphaLight, betaLight, 0);
+	setOrthoProjection(311, 240, 512);
+	setBaseTranslation(0, 0, 0);
+	setBaseRotation(0, 0, 0);
+	setLightVector(alphaLight, betaLight, 0);
 }
 
 /** Initialize variables */
@@ -132,7 +132,7 @@ void initHeroVars() { // reinitAll3
 
 /** Initialize all engine variables */
 void initEngineVars(int32 save) { // reinitAll
-	reset_clip();
+	resetClip();
 
 	alphaLight = 896;
 	betaLight = 950;
@@ -148,7 +148,7 @@ void initEngineVars(int32 save) { // reinitAll
 	needChangeScene = 0;
 	quitGame = -1;
 	mecaPinguinIdx = -1;
-	showCredits = 0;
+	canShowCredits = 0;
 		
 	inventoryNumLeafs = 0;
 	inventoryNumLeafsBox = 2;
@@ -296,7 +296,7 @@ void processFoundItem(int32 item) {
 
 	// Hide hero in scene
 	sceneHero->staticFlags.bIsHidden = 1;
-	redraw_engine_actions(1);
+	redrawEngineActions(1);
 	sceneHero->staticFlags.bIsHidden = 0;
 
 	copyScreen(frontVideoBuffer, workVideoBuffer);
@@ -305,8 +305,8 @@ void processFoundItem(int32 item) {
 	itemCameraY = newCameraY << 8;
 	itemCameraZ = newCameraZ << 9;
 
-	render_iso_model(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
-	set_clip(renderLeft, renderTop, renderRight, renderBottom);
+	renderIsoModel(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
+	setClip(renderLeft, renderTop, renderRight, renderBottom);
 
 	itemX = (sceneHero->X + 0x100) >> 9;
 	itemY = sceneHero->Y >> 8;
@@ -318,7 +318,7 @@ void processFoundItem(int32 item) {
 	drawOverModelActor(itemX, itemY, itemZ);
 	flip();
 
-	project_position_on_screen(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ);
+	projectPositionOnScreen(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ);
 	projPosY -= 150;
 
 	boxTopLeftX = projPosX - 65;
@@ -327,21 +327,21 @@ void processFoundItem(int32 item) {
 	boxBottomRightX = projPosX + 65;
 	boxBottomRightY = projPosY + 65;
 
-	play_sample(41, 0x1000, 1, 0x80, 0x80, 0x80);
+	playSample(41, 0x1000, 1, 0x80, 0x80, 0x80);
 
 	// TODO: process vox play
 	{
 		int32 tmpLanguageCDId;
-		stop_music();
+		stopMusic();
 		tmpLanguageCDId = cfgfile.LanguageCDId;
 		cfgfile.LanguageCDId = 0;
-		init_text_bank(2);
+		initTextBank(2);
 		cfgfile.LanguageCDId = tmpLanguageCDId;
 	}
 
-	reset_clip();
-	init_text(item);
-	init_dialogue_box();
+	resetClip();
+	initText(item);
+	initDialogueBox();
 
 	textState = 1;
 	quitItem = 0;
@@ -359,24 +359,24 @@ void processFoundItem(int32 item) {
 
 	currentAnimState = 0;
 
-	prepare_iso_model(inventoryTable[item]);
+	prepareIsoModel(inventoryTable[item]);
 	numOfRedrawBox = 0;
 
 	while (!quitItem) {
-		reset_clip();
+		resetClip();
 		currNumOfRedrawBox = 0;
-		blit_background_areas();
-		draw_transparent_box(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY, 4);
+		blitBackgroundAreas();
+		drawTransparentBox(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY, 4);
 
-		set_clip(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
+		setClip(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
 
 		itemAngle[item] += 8;
 
-		render_inventory_item(projPosX, projPosY, inventoryTable[item], itemAngle[item], 10000);
+		renderInventoryItem(projPosX, projPosY, inventoryTable[item], itemAngle[item], 10000);
 
-		draw_box(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
-		add_redraw_area(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
-		reset_clip();
+		drawBox(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
+		addRedrawArea(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
+		resetClip();
 		initEngineProjections();
 
 		if (setModelAnimation(currentAnimState, currentAnim, bodyTable[sceneHero->entity], &sceneHero->animTimerData)) {
@@ -386,13 +386,13 @@ void processFoundItem(int32 item) {
 			}
 		}
 
-		render_iso_model(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
-		set_clip(renderLeft, renderTop, renderRight, renderBottom);
+		renderIsoModel(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
+		setClip(renderLeft, renderTop, renderRight, renderBottom);
 		drawOverModelActor(itemX, itemY, itemZ);
-		add_redraw_area(renderLeft, renderTop, renderRight, renderBottom);
+		addRedrawArea(renderLeft, renderTop, renderRight, renderBottom);
 
 		if (textState) {
-			reset_clip();
+			resetClip();
 			textState = printText10();
 		}
 
@@ -400,7 +400,7 @@ void processFoundItem(int32 item) {
 			delay(15);
 		}
 
-		flip_redraw_areas();
+		flipRedrawAreas();
 		
 		readKeys();
 		if (skipedKey) {
@@ -428,7 +428,7 @@ void processFoundItem(int32 item) {
 	}*/
 
 	initEngineProjections();
-	init_text_bank(currentTextBank + 3);
+	initTextBank(currentTextBank + 3);
 
 	/*do {
 		readKeys();
@@ -454,9 +454,9 @@ void processGameChoices(int32 choiceIdx) {
 		}
 	}
 
-	draw_ask_question(choiceIdx);
+	drawAskQuestion(choiceIdx);
 
-	process_menu(gameChoicesSettings);
+	processMenu(gameChoicesSettings);
 	choiceAnswer = gameChoices[gameChoicesSettings[0]];
 
 	// TODO: process vox play
@@ -470,48 +470,48 @@ void processGameoverAnimation() { // makeGameOver
 
 	// workaround to fix hero redraw after drowning
 	sceneHero->staticFlags.bIsHidden = 1;
-	redraw_engine_actions(1);
+	redrawEngineActions(1);
 	sceneHero->staticFlags.bIsHidden = 0;
 
 	// TODO: drawInGameTransBox
 	setPalette(paletteRGBA);
 	copyScreen(frontVideoBuffer, workVideoBuffer);
-	gameOverPtr = malloc(hqr_entry_size(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
+	gameOverPtr = malloc(hqrEntrySize(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
 	hqrGetEntry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
 
 	if (gameOverPtr) {
 		int32 avg, cdot;
 
-		prepare_iso_model(gameOverPtr);
-		stop_samples();
-		stop_midi_music(); // stop fade music
-		set_camera_position(320, 240, 128, 200, 200);
+		prepareIsoModel(gameOverPtr);
+		stopSamples();
+		stopMidiMusic(); // stop fade music
+		setCameraPosition(320, 240, 128, 200, 200);
 		startLbaTime = lbaTime;
-		set_clip(120, 120, 519, 359);
+		setClip(120, 120, 519, 359);
 		
 		while(skipIntro != 1 && (lbaTime - startLbaTime) <= 0x1F4) {
 			readKeys();
 			
 			avg = getAverageValue(40000, 3200, 500, lbaTime - startLbaTime);
 			cdot = crossDot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
-			blit_box(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
-			set_camera_angle(0, 0, 0, 0, -cdot, 0, avg);
-			render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
+			blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
+			setCameraAngle(0, 0, 0, 0, -cdot, 0, avg);
+			renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
 			copyBlockPhys(120, 120, 519, 359);
 
 			lbaTime++;
 			delay(15);
 		}
 
-		play_sample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);
-		blit_box(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
-		set_camera_angle(0, 0, 0, 0, 0, 0, 3200);
-		render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
+		playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);
+		blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
+		setCameraAngle(0, 0, 0, 0, 0, 0, 3200);
+		renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
 		copyBlockPhys(120, 120, 519, 359);
 
 		delaySkip(2000);
 
-		reset_clip();
+		resetClip();
 		free(gameOverPtr);
 		copyScreen(workVideoBuffer, frontVideoBuffer);
 		flip();

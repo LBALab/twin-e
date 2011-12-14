@@ -41,7 +41,7 @@ uint32 samplesSizeTable[NUM_SAMPLES];
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */
-void sample_volume(int32 channel, int32 volume);
+void sampleVolume(int32 channel, int32 volume);
 
 /** Play FLA movie samples
 	@param index sample index under flasamp.hqr file
@@ -58,12 +58,12 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 	@param x unknown x variable
 	@param y unknown y variable
 	@param z unknown z variable */
-void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z);
+void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z);
 
 /** Pause samples */
-void pause_samples();
+void pauseSamples();
 
 /** Stop samples */
-void stop_samples();
+void stopSamples();
 
 #endif

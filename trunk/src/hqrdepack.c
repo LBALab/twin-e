@@ -39,7 +39,7 @@ FileReader fr;
 	@param src compressed data pointer
 	@decompsize real file size after decompression
 	@mode compression mode used */
-void hqr_decompress_entry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
+void hqrDecompressEntry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
 	uint8 b;
 	int32 lenght, d, i;
 	uint16 offset;
@@ -71,7 +71,7 @@ void hqr_decompress_entry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode
 	@param src compressed data pointer
 	@decompsize real file size after decompression
 	@mode compression mode used */
-void hqr_decompress_lz_entry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
+void hqrDecompressLZEntry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
 	uint16 offset;
 	int32 lenght;
 	uint8 *ptr;
@@ -161,7 +161,7 @@ int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index) {
 		uint8* compDataPtr = 0;
 		compDataPtr = (uint8*)malloc(compSize);
 		frread(&fr, compDataPtr, compSize);
-		hqr_decompress_entry(ptr, compDataPtr, realSize, mode);
+		hqrDecompressEntry(ptr, compDataPtr, realSize, mode);
 		free(compDataPtr);
 	}
 
@@ -174,7 +174,7 @@ int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index) {
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int hqr_entry_size(int8 *filename, int32 index) {
+int hqrEntrySize(int8 *filename, int32 index) {
 	uint32 headerSize;
 	uint32 offsetToData;
 	uint32 realSize;
@@ -209,7 +209,7 @@ int hqr_entry_size(int8 *filename, int32 index) {
 /** Get a HQR total number of entries
 	@param filename HQR file name
 	@return total number of entries */
-int hqr_num_entries(int8 *filename) {
+int hqrNumEntries(int8 *filename) {
 	uint32 headerSize;
 
 	if (!filename)
@@ -232,7 +232,7 @@ int hqr_num_entries(int8 *filename) {
 	@return entry real size */
 int32 hqrGetallocEntry(uint8 ** ptr, int8 *filename, int32 index) {
 	int32 size;
-	size = hqr_entry_size(filename, index);
+	size = hqrEntrySize(filename, index);
 
 	*ptr = (uint8*)malloc(size * sizeof(uint8));
 	if (!*ptr) {

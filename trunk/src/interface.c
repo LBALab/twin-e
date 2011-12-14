@@ -36,7 +36,7 @@
 	@param endWidth width value where the line ends
 	@param endHeight height value where the line ends
 	@param lineColor line color in the current palette */
-void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor) {
+void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor) {
 	int32 temp;
 	int16 flag;
 	int32 flag2;
@@ -149,7 +149,7 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	@param leftDest start width to draw the button in destination buffer
 	@param topDest start height to draw the button in destination buffer
 	@dest destination screen buffer, in this case front buffer */
-void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest) {
+void blitBox(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest) {
 	int32 width;
 	int32 height;
 	int8 *s;
@@ -187,7 +187,7 @@ void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, in
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj) {
+void drawTransparentBox(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj) {
 	uint8 *pos;
 	int32 width;
 	int32 height;
@@ -244,7 +244,7 @@ void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int3
 	} while (height2 > 0);
 }
 
-void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e) { // Box
+void drawSplittedBox(int32 left, int32 top, int32 right, int32 bottom, uint8 e) { // Box
 	uint8 *ptr;
 
 	int32 offset;
@@ -274,7 +274,7 @@ void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e
 	}
 }
 
-void set_clip(int32 left, int32 top, int32 right, int32 bottom) {
+void setClip(int32 left, int32 top, int32 right, int32 bottom) {
 	if (left < 0)
 		left = 0;
 	textWindowLeft = left;
@@ -292,21 +292,21 @@ void set_clip(int32 left, int32 top, int32 right, int32 bottom) {
 	textWindowBottom = bottom;
 }
 
-void save_clip() { // saveTextWindow
+void saveClip() { // saveTextWindow
 	textWindowLeftSave = textWindowLeft;
 	textWindowTopSave = textWindowTop;
 	textWindowRightSave = textWindowRight;
 	textWindowBottomSave = textWindowBottom;
 }
 
-void load_clip() { // loadSavedTextWindow
+void loadClip() { // loadSavedTextWindow
 	textWindowLeft = textWindowLeftSave;
 	textWindowTop = textWindowTopSave;
 	textWindowRight = textWindowRightSave;
 	textWindowBottom = textWindowBottomSave;
 }
 
-void reset_clip() {
+void resetClip() {
 	textWindowTop = textWindowLeft = SCREEN_TEXTLIMIT_TOP;
 	textWindowRight = SCREEN_TEXTLIMIT_RIGHT;
 	textWindowBottom = SCREEN_TEXTLIMIT_BOTTOM;

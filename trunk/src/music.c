@@ -63,20 +63,20 @@ uint8 * midiPtr;
 
 /** Music volume
 	@param current volume number */
-void music_volume(int32 volume) {
+void musicVolume(int32 volume) {
 	// div 2 because LBA use 255 range and SDL_mixer use 128 range
 	Mix_VolumeMusic(volume / 2);
 }
 
 /** Fade music in
 	@param loops number of*/
-void music_fadeIn(int32 loops, int32 ms) {
+void musicFadeIn(int32 loops, int32 ms) {
 	Mix_FadeInMusic(current_track, loops, ms);
 }
 
 /** Fade music out
 	@param ms number of miliseconds to fade*/
-void music_fadeOut(int32 ms) {
+void musicFadeOut(int32 ms) {
 	while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
 		SDL_Delay(100);
 	}
@@ -86,7 +86,7 @@ void music_fadeOut(int32 ms) {
 
 /** Play CD music
 	@param track track number to play */
-void play_track_music_cd(int32 track) {
+void playTrackMusicCd(int32 track) {
 	if (cdrom->numtracks == 10) {
 		if (CD_INDRIVE(SDL_CDStatus(cdrom)))
 			SDL_CDPlayTracks(cdrom, track, 0, 1, 0);
@@ -97,7 +97,7 @@ void play_track_music_cd(int32 track) {
 }
 
 /** Stop CD music */
-void stop_track_music_cd() {
+void stopTrackMusicCd() {
 	if (cfgfile.UseCD) {
 		if (cdrom != NULL) {
 			SDL_CDStop(cdrom);
@@ -110,19 +110,19 @@ void stop_track_music_cd() {
 
 /** Play MP3 music
 	@param track track number to play */
-void play_track_music_mp3(int32 track) {
+void playTrackMusicMp3(int32 track) {
 	int8 musfile[256];
 	if (cfgfile.Sound == 2)
 		sprintf(musfile, MUSIC_FOLDER "//%d.mp3", track);
 	else
 		sprintf(musfile, MUSIC_FOLDER "//%d.ogg", track);
 
-	stop_track_music_mp3();
+	stopTrackMusicMp3();
 
-	music_fadeIn(1, FADE_MS);
+	musicFadeIn(1, FADE_MS);
 
 	current_track = Mix_LoadMUS(musfile);
-	music_volume(cfgfile.MusicVolume);
+	musicVolume(cfgfile.MusicVolume);
 	Mix_PlayMusic(current_track, -1);
 
 	/*if (cfgfile.Debug) {
@@ -134,7 +134,7 @@ void play_track_music_mp3(int32 track) {
 }
 
 /** Stop MP3 music */
-void stop_track_music_mp3() {
+void stopTrackMusicMp3() {
 	if (current_track != NULL) {
 		Mix_FreeMusic(current_track);
 		current_track = NULL;
@@ -146,30 +146,30 @@ void stop_track_music_mp3() {
 
 /** Generic play music, according with settings it plays CD or MP3 instead
 	@param track track number to play */
-void play_track_music(int32 track) {
+void playTrackMusic(int32 track) {
 	if (cfgfile.Sound) {
 		if (track == currentMusic)
 			return;
 		currentMusic = track;
 
-		stop_music();
+		stopMusic();
 
 		if (cfgfile.Sound > 1)
-			play_track_music_mp3(track);
+			playTrackMusicMp3(track);
 		else if (cfgfile.UseCD)
-			play_track_music_cd(track);
+			playTrackMusicCd(track);
 	}
 }
 
 /** Generic stop music according with settings */
-void stop_track_music() {
+void stopTrackMusic() {
 	if (cfgfile.Sound) {
-		music_fadeOut(FADE_MS);
+		musicFadeOut(FADE_MS);
 
 		if (cfgfile.Sound > 1)
-			stop_track_music_mp3();
+			stopTrackMusicMp3();
 		else if (cfgfile.UseCD)
-			stop_track_music_cd();
+			stopTrackMusicCd();
 	}
 }
 
@@ -184,7 +184,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 		if (midiIdx == currentMusic)
 			return;
 
-		stop_music();
+		stopMusic();
 		currentMusic = midiIdx;
 
 		if (cfgfile.Sound > 1) {
@@ -196,8 +196,8 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 			sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
 
 		if (midiPtr) {
-			music_fadeOut(FADE_MS / 2);
-			stop_midi_music();
+			musicFadeOut(FADE_MS / 2);
+			stopMidiMusic();
 			//free(midiPtr);
 		}
 
@@ -207,9 +207,9 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 
 		current_track = Mix_LoadMUS_RW(rw);
 
-		music_fadeIn(1, FADE_MS);
+		musicFadeIn(1, FADE_MS);
 
-		music_volume(cfgfile.MusicVolume);
+		musicVolume(cfgfile.MusicVolume);
 
 		if (Mix_PlayMusic(current_track, loop) == -1)
 			printf("Error while playing music: %d \n", midiIdx);
@@ -227,7 +227,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 }
 
 /** Stop MIDI music */
-void stop_midi_music() {
+void stopMidiMusic() {
 	if (cfgfile.Sound) {
 		if (current_track != NULL) {
 			Mix_FreeMusic(current_track);
@@ -286,7 +286,7 @@ int initCdrom() {
 }
 
 /** Stop MIDI and Track music */
-void stop_music() {
-	stop_track_music();
-	stop_midi_music();
+void stopMusic() {
+	stopTrackMusic();
+	stopMidiMusic();
 }

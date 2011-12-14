@@ -50,7 +50,7 @@ Mix_Chunk *sample;
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */
-void sample_volume(int32 channel, int32 volume) {
+void sampleVolume(int32 channel, int32 volume) {
 	Mix_Volume(channel, volume / 2);
 }
 
@@ -78,7 +78,7 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		sample_volume(-1, cfgfile.WaveVolume);
+		sampleVolume(-1, cfgfile.WaveVolume);
 
 		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
@@ -97,7 +97,7 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 	@param x unknown x variable
 	@param y unknown y variable
 	@param z unknown z variable */
-void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z) {
+void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z) {
 	if (cfgfile.Sound) {
 		//int32 distance;
 		int32 sampSize = 0;
@@ -113,9 +113,9 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		sample_volume(-1, cfgfile.WaveVolume);
+		sampleVolume(-1, cfgfile.WaveVolume);
 
-		/*distance = Abs(get_distance_3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
+		/*distance = Abs(getDistance3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
 		distance = getAverageValue(0, distance, 10000, 255);
 
 		Mix_SetDistance(1, distance);*/
@@ -131,7 +131,7 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 }
 
 /** Resume samples */
-void resume_samples() {
+void resumeSamples() {
 	if (cfgfile.Sound) {
 		Mix_Resume(-1);
 		/*if (cfgfile.Debug)
@@ -140,7 +140,7 @@ void resume_samples() {
 }
 
 /** Pause samples */
-void pause_samples() {
+void pauseSamples() {
 	if (cfgfile.Sound) {
 		Mix_HaltChannel(-1);
 		/*if (cfgfile.Debug)
@@ -149,7 +149,7 @@ void pause_samples() {
 }
 
 /** Stop samples */
-void stop_samples() {
+void stopSamples() {
 	if (cfgfile.Sound) {
 		Mix_HaltChannel(-1);
 		//clean up

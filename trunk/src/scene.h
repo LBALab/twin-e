@@ -177,13 +177,13 @@ int16 changeRoomVar11;
 uint8 sceneFlags[80]; // cubeFlags
 
 /** Change to another scene */
-void change_scene();
+void changeScene();
 
 /** Process scene environment sound */
-void process_environment_sound();
+void processEnvironmentSound();
 
 /** Process actor zones
 	@param actorIdx Process actor index */
-void process_actor_zones(int32 actorIdx);
+void processActorZones(int32 actorIdx);
 
 #endif

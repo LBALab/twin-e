@@ -68,13 +68,13 @@ enum InventoryItems {
 	kiCloverLeaf = 27
 };
 
-void freeze_time() {
+void freezeTime() {
 	if (!isTimeFreezed)
 		saveFreezedTime = lbaTime;
 	isTimeFreezed++;
 }
 
-void unfreeze_time() {
+void unfreezeTime() {
 	--isTimeFreezed;
 	if (isTimeFreezed == 0)
 		lbaTime = saveFreezedTime;
@@ -82,12 +82,12 @@ void unfreeze_time() {
 
 /** Game engine main loop
 	@return true if we want to show credit sequence */
-int32 run_game_engine() { // mainLoopInteration
+int32 runGameEngine() { // mainLoopInteration
 	int32 a;
 	readKeys();
 
 	if (needChangeScene > -1) {
-		change_scene();
+		changeScene();
 	}
 
 	previousLoopPressedKey = loopPressedKey;
@@ -99,7 +99,7 @@ int32 run_game_engine() { // mainLoopInteration
 	processDebug(loopCurrentKey);
 #endif
 
-	if(showCredits != 0) {
+	if(canShowCredits != 0) {
 		// TODO: if current music playing != 8, than play_track(8);
 		if (skipIntro != 0) {
 			return 0;
@@ -113,43 +113,43 @@ int32 run_game_engine() { // mainLoopInteration
 	} else {
 		// Process give up menu - Press ESC
 		if (skipIntro == 1 && sceneHero->life > 0 && sceneHero->entity != -1 && !sceneHero->staticFlags.bIsHidden) {
-			freeze_time();
-			if (giveup_menu()) {
-				unfreeze_time();
-				redraw_engine_actions(1);
-				freeze_time();
+			freezeTime();
+			if (giveupMenu()) {
+				unfreezeTime();
+				redrawEngineActions(1);
+				freezeTime();
 				saveGame(); // auto save game
 				quitGame = 0;
 				cfgfile.Quit = 0;
-				unfreeze_time();
+				unfreezeTime();
 				return 0;
 			} else {
-				unfreeze_time();
-				redraw_engine_actions(1);
+				unfreezeTime();
+				redrawEngineActions(1);
 			}
 		}
 
 		// Process options menu - Press F6
 		if (loopCurrentKey == 0x40) {
 			int tmpLangCD = cfgfile.LanguageCDId;
-			freeze_time();
-			stop_samples();
+			freezeTime();
+			stopSamples();
 			OptionsMenuSettings[5] = 15;
 			cfgfile.LanguageCDId = 0;
-			init_text_bank(0);
-			options_menu();
+			initTextBank(0);
+			optionsMenu();
 			cfgfile.LanguageCDId = tmpLangCD;
-			init_text_bank(currentTextBank + 3);
+			initTextBank(currentTextBank + 3);
 			//TODO: play music
-			unfreeze_time();
-			redraw_engine_actions(1);
+			unfreezeTime();
+			redrawEngineActions(1);
 		}
 
 		// inventory menu
 		loopInventoryItem = -1;
 		if (loopCurrentKey == 0x36 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
-			freeze_time();
-			process_inventory_menu();
+			freezeTime();
+			processInventoryMenu();
 			
 			switch (loopInventoryItem) {
 			case kiHolomap:
@@ -177,17 +177,17 @@ int32 run_game_engine() { // mainLoopInteration
 
 				fadeToBlack(paletteRGBA);
 				loadImage(RESSHQR_INTROSCREEN1IMG, 1);
-				init_text_bank(2);
+				initTextBank(2);
 				newGameVar4 = 0;
-				text_clip_full();
-				set_font_cross_color(15);
+				textClipFull();
+				setFontCrossColor(15);
 				tmpFlagDisplayText = cfgfile.FlagDisplayText;
 				cfgfile.FlagDisplayText = 1;
-				draw_text_fullscreen(161);
+				drawTextFullscreen(161);
 				cfgfile.FlagDisplayText = tmpFlagDisplayText;
-				text_clip_small();
+				textClipSmall();
 				newGameVar4 = 1;
-				init_text_bank(currentTextBank + 3);
+				initTextBank(currentTextBank + 3);
 				fadeToBlack(paletteRGBACustom);
 				clearScreen();
 				flip();
@@ -216,7 +216,7 @@ int32 run_game_engine() { // mainLoopInteration
 				pinguin->Z = destZ + sceneHero->Z;
 				pinguin->angle = sceneHero->angle;
 
-				rotate_actor(0, 800, pinguin->angle);
+				rotateActor(0, 800, pinguin->angle);
 
 				if (checkCollisionWithActors(mecaPinguinIdx)) {
 					pinguin->life = 50;
@@ -224,7 +224,7 @@ int32 run_game_engine() { // mainLoopInteration
 					initModelActor(0, mecaPinguinIdx);
 					pinguin->dynamicFlags.bIsDead = 0; // &= 0xDF
                     pinguin->brickShape = 0;
-					move_actor(pinguin->angle, pinguin->angle, pinguin->speed, &pinguin->move);
+					moveActor(pinguin->angle, pinguin->angle, pinguin->speed, &pinguin->move);
 					gameFlags[GAMEFLAG_MECA_PINGUIN] = 0; // byte_50D89 = 0;
                     pinguin->info0 = lbaTime + 1500;
 				}
@@ -233,17 +233,17 @@ int32 run_game_engine() { // mainLoopInteration
 			case kiBonusList: {
 				int32 tmpLanguageCDIdx;
 				tmpLanguageCDIdx = cfgfile.LanguageCDId;
-				unfreeze_time();
-				redraw_engine_actions(1);
-				freeze_time();
+				unfreezeTime();
+				redrawEngineActions(1);
+				freezeTime();
 				cfgfile.LanguageCDId = 0;
-				init_text_bank(2);
-				text_clip_full();
-				set_font_cross_color(15);
-				draw_text_fullscreen(162);
-				text_clip_small();
+				initTextBank(2);
+				textClipFull();
+				setFontCrossColor(15);
+				drawTextFullscreen(162);
+				textClipSmall();
 				cfgfile.LanguageCDId = tmpLanguageCDIdx;
-				init_text_bank(currentTextBank + 3);
+				initTextBank(currentTextBank + 3);
 			}
 				break;
 			case kiCloverLeaf:
@@ -252,23 +252,23 @@ int32 run_game_engine() { // mainLoopInteration
 						sceneHero->life = 50;
 						inventoryMagicPoints = magicLevelIdx * 20;
 						inventoryNumLeafs--;
-						add_overlay(koInventoryItem, 27, 0, 0, 0, koNormal, 3);
+						addOverlay(koInventoryItem, 27, 0, 0, 0, koNormal, 3);
 					}
 				}
 				break;
 			}
 
 
-			unfreeze_time();
-			redraw_engine_actions(1);
+			unfreezeTime();
+			redrawEngineActions(1);
 		}
 
 		// Process behaviour menu - Press CTRL
 		if ((loopCurrentKey == 0x1D || loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) { // F1..F4 Keys
-			freeze_time();
-			process_behaviour_menu();
-			unfreeze_time();
-			redraw_engine_actions(1);
+			freezeTime();
+			processBehaviourMenu();
+			unfreezeTime();
+			redrawEngineActions(1);
 		}
 
 		// Process behavior menu - F1..F4 Keys + Interface Style
@@ -276,10 +276,10 @@ int32 run_game_engine() { // mainLoopInteration
 			switch (cfgfile.InterfaceStyle) {
 			case 0:
 				heroBehaviour = loopCurrentKey - 0x3B;
-				freeze_time();
-				process_behaviour_menu();
-				unfreeze_time();
-				redraw_engine_actions(1);
+				freezeTime();
+				processBehaviourMenu();
+				unfreezeTime();
+				redrawEngineActions(1);
 				break;
 			case 1:
 			case 2: {
@@ -316,28 +316,28 @@ int32 run_game_engine() { // mainLoopInteration
 
 		// Process Pause - Press P
 		if (loopCurrentKey == 0x19) {
-			freeze_time();
-			set_font_color(15);
-			draw_text(5, 446, (int8*)"Pause"); // no key for pause in Text Bank
+			freezeTime();
+			setFontColor(15);
+			drawText(5, 446, (int8*)"Pause"); // no key for pause in Text Bank
 			copyBlockPhys(5, 446, 100, 479);
 			do {
 				readKeys();
 				SDL_Delay(10);
 			} while (skipIntro != 0x19 && !pressedKey);
-			unfreeze_time();
-			redraw_engine_actions(1);
+			unfreezeTime();
+			redrawEngineActions(1);
 		}
 	}
 
-	loopActorStep = get_real_value(&loopMovePtr);
+	loopActorStep = getRealValue(&loopMovePtr);
 	if (!loopActorStep) {
 		loopActorStep = 1;
 	}
 
-	set_actor_angle(0, -256, 5, &loopMovePtr);
+	setActorAngle(0, -256, 5, &loopMovePtr);
 	disableScreenRecenter = 0;
 
-	process_environment_sound();
+	processEnvironmentSound();
 
 	// Reset HitBy state
 	for (a = 0; a < sceneNumActors; a++)
@@ -356,7 +356,7 @@ int32 run_game_engine() { // mainLoopInteration
 					initAnim(ANIM_LANDDEATH, 4, 0, 0);
 					actor->controlMode = 0;
 				} else {
-					play_sample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z);
+					playSample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z);
 
 					if (a == mecaPinguinIdx) {
 						addExtraExplode(actor->X, actor->Y, actor->Z);
@@ -368,24 +368,24 @@ int32 run_game_engine() { // mainLoopInteration
 				}
 			}
 
-			process_actor_movements(a);
+			processActorMovements(a);
 
 			actor->collisionX = actor->X;
 			actor->collisionY = actor->Y;
 			actor->collisionZ = actor->Z;
 
 			if (actor->positionInMoveScript != -1) {
-				process_move_script(a);
+				processMoveScript(a);
 			}
 
 			processActorAnimations(a);
 
 			if (actor->staticFlags.bIsZonable) {
-				process_actor_zones(a);
+				processActorZones(a);
 			}
 
 			if (actor->positionInLifeScript != -1) {
-				process_life_script(a);
+				processLifeScript(a);
 			}
 
 			if (quitGame != -1) {
@@ -401,7 +401,7 @@ int32 run_game_engine() { // mainLoopInteration
 					if ((brickSound & 0xF) == 1) {
 						if (a) { // all other actors
 							int32 rnd = Rnd(2000) + 3096;
-							play_sample(0x25, rnd, 1, actor->X, actor->Y, actor->Z);
+							playSample(0x25, rnd, 1, actor->X, actor->Y, actor->Z);
 							if (actor->bonusParameter & 0x1F0) {
 								if (!(actor->bonusParameter & 1)) {
 									processActorExtraBonus(a);
@@ -413,10 +413,10 @@ int32 run_game_engine() { // mainLoopInteration
 								if (!cropBottomScreen)
 								{
 									initAnim(ANIM_DRAWN, 4, 0, 0);
-									project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
+									projectPositionOnScreen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 									cropBottomScreen = projPosY;
 								}
-								project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
+								projectPositionOnScreen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 								actor->controlMode = 0;
 								actor->life = -1;
 								cropBottomScreen = projPosY;
@@ -487,7 +487,7 @@ int32 run_game_engine() { // mainLoopInteration
 	// recenter screen automatically
 	if (!disableScreenRecenter && !useFreeCamera) {
 		ActorStruct *actor = &sceneActors[currentlyFollowedActor];
-		project_position_on_screen(actor->X - (newCameraX << 9),
+		projectPositionOnScreen(actor->X - (newCameraX << 9),
 								   actor->Y - (newCameraY << 8),
 								   actor->Z - (newCameraZ << 9));
 		if (projPosX < 80 || projPosX > 539 || projPosY < 80 || projPosY > 429) {
@@ -507,12 +507,12 @@ int32 run_game_engine() { // mainLoopInteration
 		}
 	}
 
-	redraw_engine_actions(reqBgRedraw);
+	redrawEngineActions(reqBgRedraw);
 
 	// workaround to fix hero redraw after drowning
 	if(cropBottomScreen && reqBgRedraw == 1) {
 		sceneHero->staticFlags.bIsHidden = 1;
-		redraw_engine_actions(1);
+		redrawEngineActions(1);
 		sceneHero->staticFlags.bIsHidden = 0;
 	}
 
@@ -524,18 +524,18 @@ int32 run_game_engine() { // mainLoopInteration
 
 /** Game engine main loop
 	@return true if we want to show credit sequence */
-int32 game_engine_loop() { // mainLoop
+int32 gameEngineLoop() { // mainLoop
 	uint32 start;
 
 	reqBgRedraw = 1;
 	// TODO lockPalette = 1;
-	set_actor_angle(0, -256, 5, &loopMovePtr);
+	setActorAngle(0, -256, 5, &loopMovePtr);
 
 	while (quitGame == -1) {
 		start = SDL_GetTicks();
 
 		while (SDL_GetTicks() < start + cfgfile.Fps) {
-			if (run_game_engine())
+			if (runGameEngine())
 				return 1;
 			SDL_Delay(1);
 		}

@@ -223,7 +223,7 @@ int32 renderLoop;
 
 
 
-int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ) {
+int32 projectPositionOnScreen(int32 cX, int32 cY, int32 cZ) {
 	if (!isUsingOrhoProjection) {
 		cX -= baseRotPosX;
 		cY -= baseRotPosY;
@@ -254,7 +254,7 @@ int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ) {
 	return 1;
 }
 
-void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ) {
+void setCameraPosition(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ) {
 	orthoProjX = X;
 	orthoProjY = Y;
 
@@ -265,13 +265,13 @@ void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ) {
 	isUsingOrhoProjection = 0;
 }
 
-void set_base_translation(int32 X, int32 Y, int32 Z) {
+void setBaseTranslation(int32 X, int32 Y, int32 Z) {
 	baseTransPosX = X;
 	baseTransPosY = Y;
 	baseTransPosZ = Z;
 }
 
-void set_ortho_projection(int32 X, int32 Y, int32 Z) {
+void setOrthoProjection(int32 X, int32 Y, int32 Z) {
 	orthoProjX = X;
 	orthoProjY = Y;
 	orthoProjZ = Z;
@@ -279,13 +279,13 @@ void set_ortho_projection(int32 X, int32 Y, int32 Z) {
 	isUsingOrhoProjection = 1;
 }
 
-void get_base_rotation_position(int32 X, int32 Y, int32 Z) {
+void getBaseRotationPosition(int32 X, int32 Y, int32 Z) {
 	destX = (baseMatrix[0] * X + baseMatrix[1] * Y + baseMatrix[2] * Z) >> 14;
 	destY = (baseMatrix[3] * X + baseMatrix[4] * Y + baseMatrix[5] * Z) >> 14;
 	destZ = (baseMatrix[6] * X + baseMatrix[7] * Y + baseMatrix[8] * Z) >> 14;
 }
 
-void set_base_rotation(int32 X, int32 Y, int32 Z) {
+void setBaseRotation(int32 X, int32 Y, int32 Z) {
 	int32 angleXCos;
 	int32 angleXSin;
 
@@ -334,29 +334,29 @@ void set_base_rotation(int32 X, int32 Y, int32 Z) {
 	baseMatrix[6] = ((angleYSin * matrixElem) - (angleXSin * angleYCos)) >> 14;
 	baseMatrix[8] = ((angleYCos * matrixElem) + (angleXSin * angleYSin)) >> 14;
 
-	get_base_rotation_position(baseTransPosX, baseTransPosY, baseTransPosZ);
+	getBaseRotationPosition(baseTransPosX, baseTransPosY, baseTransPosZ);
 
 	baseRotPosX = destX;
 	baseRotPosY = destY;
 	baseRotPosZ = destZ;
 }
 
-void get_camera_angle_positions(int32 X, int32 Y, int32 Z) {
+void getCameraAnglePositions(int32 X, int32 Y, int32 Z) {
 	destX = (baseMatrix[0] * X + baseMatrix[3] * Y + baseMatrix[6] * Z) >> 14;
 	destY = (baseMatrix[1] * X + baseMatrix[4] * Y + baseMatrix[7] * Z) >> 14;
 	destZ = (baseMatrix[2] * X + baseMatrix[5] * Y + baseMatrix[8] * Z) >> 14;
 }
 
-void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6) {
+void setCameraAngle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6) {
 	baseTransPosX = transPosX;
 	baseTransPosY = transPosY;
 	baseTransPosZ = transPosZ;
 
-	set_base_rotation(rotPosX, rotPosY, rotPosZ);
+	setBaseRotation(rotPosX, rotPosY, rotPosZ);
 
 	baseRotPosZ += param6;
 
-	get_camera_angle_positions(baseRotPosX, baseRotPosY, baseRotPosZ);
+	getCameraAnglePositions(baseRotPosX, baseRotPosY, baseRotPosZ);
 
 	baseTransPosX = destX;
 	baseTransPosY = destY;
@@ -365,7 +365,7 @@ void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 r
 
 // ------------------------------------------------------------------------------------------------------
 
-void apply_rotation(int32 *tempMatrix, int32 *currentMatrix) {
+void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 	int32 angleVar1;    // esi
 	int32 angleVar2;    // ecx
 
@@ -437,7 +437,7 @@ void apply_rotation(int32 *tempMatrix, int32 *currentMatrix) {
 	}
 }
 
-void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *rotationMatrix) {
+void applyPointsRotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *rotationMatrix) {
 	int16 tmpX;
 	int16 tmpY;
 	int16 tmpZ;
@@ -464,7 +464,7 @@ void apply_points_rotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * de
 	} while (--numOfPoints);
 }
 
-void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *elemPtr) { // unsigned char * elemPtr) // loadPart
+void processRotatedElement(int32 rotZ, int32 rotY, int32 rotX, elementEntry *elemPtr) { // unsigned char * elemPtr) // loadPart
 	int32 *currentMatrix;
 	int16 baseElement;
 
@@ -499,16 +499,16 @@ void process_rotated_element(int32 rotZ, int32 rotY, int32 rotX, elementEntry *e
 		destZ = computedPoints[pointIdx].Z;
 	}
 
-	apply_rotation((int32 *) currentMatrixTableEntry, currentMatrix);
+	applyRotation((int32 *) currentMatrixTableEntry, currentMatrix);
 
 	if (!numOfPoints) {
 		printf("RENDER WARNING: No points in this model!\n");
 	}
 
-	apply_points_rotation(pointsPtr + firstPoint, numOfPoints, &computedPoints[firstPoint / 6], (int32 *) currentMatrixTableEntry);
+	applyPointsRotation(pointsPtr + firstPoint, numOfPoints, &computedPoints[firstPoint / 6], (int32 *) currentMatrixTableEntry);
 }
 
-void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *translationMatrix) {
+void applyPointsTranslation(uint8 *firstPointsPtr, int32 numPoints, pointTab * destPoints, int32 *translationMatrix) {
 	int16 tmpX;
 	int16 tmpY;
 	int16 tmpZ;
@@ -535,7 +535,7 @@ void apply_points_translation(uint8 *firstPointsPtr, int32 numPoints, pointTab *
 	} while (--numOfPoints);
 }
 
-void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry *elemPtr) {
+void processTranslatedElement(int32 rotX, int32 rotY, int32 rotZ, elementEntry *elemPtr) {
 	int32 *dest;
 	int32 *source;
 
@@ -568,10 +568,10 @@ void process_translated_element(int32 rotX, int32 rotY, int32 rotZ, elementEntry
 			dest[i] = source[i];
 	}
 
-	apply_points_translation(pointsPtr + elemPtr->firstPoint, elemPtr->numOfPoints, &computedPoints[elemPtr->firstPoint / 6], (int *) currentMatrixTableEntry);
+	applyPointsTranslation(pointsPtr + elemPtr->firstPoint, elemPtr->numOfPoints, &computedPoints[elemPtr->firstPoint / 6], (int *) currentMatrixTableEntry);
 }
 
-void translate_group(int16 ax, int16 bx, int16 cx) {
+void translateGroup(int16 ax, int16 bx, int16 cx) {
 	int32 ebp;
 	int32 ebx;
 	int32 ecx;
@@ -614,7 +614,7 @@ void translate_group(int16 ax, int16 bx, int16 cx) {
 	destZ = eax;
 }
 
-void set_light_vector(int32 angleX, int32 angleY, int32 angleZ) {
+void setLightVector(int32 angleX, int32 angleY, int32 angleZ) {
 	shadeAngleTab1 = &shadeAngleTable[0];
 	shadeAngleTab2 = &shadeAngleTable[256];
 	shadeAngleTab3 = &shadeAngleTable[384];
@@ -628,8 +628,8 @@ void set_light_vector(int32 angleX, int32 angleY, int32 angleZ) {
 	renderAngleY = angleY;
 	renderAngleZ = angleZ;
 
-	apply_rotation(shadeMatrix, baseMatrix);
-	translate_group(0, 0, 59);
+	applyRotation(shadeMatrix, baseMatrix);
+	translateGroup(0, 0, 59);
 
 	lightX = destX;
 	lightY = destY;
@@ -638,7 +638,7 @@ void set_light_vector(int32 angleX, int32 angleY, int32 angleZ) {
 
 // ------------------------------------------------------------------------------------------------------
 
-int compute_polygons() {
+int computePolygons() {
 	int16 vertexX, vertexY;
 	int16 *ptr1, *ptr3;
 	int32 i;
@@ -1015,7 +1015,7 @@ int compute_polygons() {
 	return (1);
 }
 
-void render_polygons(int32 ecx, int32 edi) {
+void renderPolygons(int32 ecx, int32 edi) {
 	uint8 *out, *out2;
 	int16 *ptr1;
 	int16 *ptr2;
@@ -1408,7 +1408,7 @@ void render_polygons(int32 ecx, int32 edi) {
 	};
 }
 
-void circle_fill(int32 x, int32 y, int32 radius, int8 color) {
+void circleFill(int32 x, int32 y, int32 radius, int8 color) {
 	int32 currentLine;
 
 	radius += 1;
@@ -1427,11 +1427,11 @@ void circle_fill(int32 x, int32 y, int32 radius, int8 color) {
 		if (width < 0)
 			width = - width;
 
-		draw_line((int32)(x - width), currentLine + y, (int32)(x + width), currentLine + y, color);
+		drawLine((int32)(x - width), currentLine + y, (int32)(x + width), currentLine + y, color);
 	}
 }
 
-int32 render_model_elements(uint8 *esi) {
+int32 renderModelElements(uint8 *esi) {
 	uint8 *edi;
 	int16 temp;
 	int32 eax, ecx;
@@ -1754,7 +1754,7 @@ int32 render_model_elements(uint8 *esi) {
 				x2 = *((int16*)(uint16*) & lineCoordinatesPtr->x2);
 				y2 = *((int16*)(uint16*) & lineCoordinatesPtr->y2);
 
-				draw_line(x1, y1, x2, y2, color);
+				drawLine(x1, y1, x2, y2, color);
 				break;
 			}
 			case RENDERTYPE_DRAWPOLYGON: { // draw a polygon
@@ -1773,8 +1773,8 @@ int32 render_model_elements(uint8 *esi) {
 					esi += 2;
 				}
 
-				if (compute_polygons() != ERROR_OUT_OF_SCREEN) {
-					render_polygons(polyRenderType, color);
+				if (computePolygons() != ERROR_OUT_OF_SCREEN) {
+					renderPolygons(polyRenderType, color);
 				}
 
 				break;
@@ -1815,7 +1815,7 @@ int32 render_model_elements(uint8 *esi) {
 
 				circleParam3 -= 3;
 
-				circle_fill(circleParam4, circleParam5, circleParam3, circleParam1);
+				circleFill(circleParam4, circleParam5, circleParam3, circleParam1);
 			}
 			default: {
 				break;
@@ -1836,7 +1836,7 @@ int32 render_model_elements(uint8 *esi) {
 	return (0);
 }
 
-int32 render_animated_model(uint8 *bodyPtr) {
+int32 renderAnimatedModel(uint8 *bodyPtr) {
 	elementEntry *elemEntryPtr;
 	pointTab *pointPtr;
 	pointTab *pointPtrDest;
@@ -1860,7 +1860,7 @@ int32 render_animated_model(uint8 *bodyPtr) {
 
 	currentMatrixTableEntry = (uint8 *) matricesTable;
 
-	process_rotated_element(renderAngleX, renderAngleY, renderAngleZ, (elementEntry *) elementsPtr);
+	processRotatedElement(renderAngleX, renderAngleY, renderAngleZ, (elementEntry *) elementsPtr);
 
 	elementsPtr += 38;
 
@@ -1874,9 +1874,9 @@ int32 render_animated_model(uint8 *bodyPtr) {
 			int boneType = elemEntryPtr->flag;
 
 			if (boneType == 0) {
-				process_rotated_element(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr);  // rotation
+				processRotatedElement(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr);  // rotation
 			} else if (boneType == 1) {
-				process_translated_element(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr); // translation
+				processTranslatedElement(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr); // translation
 			}
 
 			currentMatrixTableEntry += 36;
@@ -2047,10 +2047,10 @@ int32 render_animated_model(uint8 *bodyPtr) {
 		} while (--numOfPrimitives);
 	}
 
-	return render_model_elements((uint8 *) shadePtr);
+	return renderModelElements((uint8 *) shadePtr);
 }
 
-void prepare_iso_model(uint8 *bodyPtr) { // loadGfxSub
+void prepareIsoModel(uint8 *bodyPtr) { // loadGfxSub
 	bodyHeaderStruct *bodyHeader;
 	int16 offsetToData;
 	uint8 *bodyDataPtr;
@@ -2085,7 +2085,7 @@ void prepare_iso_model(uint8 *bodyPtr) { // loadGfxSub
 	}
 }
 
-int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr) { // AffObjetIso
+int renderIsoModel(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr) { // AffObjetIso
 	uint8 *ptr;
 	int16 bodyHeader;
 
@@ -2104,7 +2104,7 @@ int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int3
 	renderBottom = -32767;
 
 	if (isUsingOrhoProjection == 0) {
-		get_base_rotation_position(X, Y, Z);
+		getBaseRotationPosition(X, Y, Z);
 
 		renderX = destX - baseRotPosX;
 		renderY = destY - baseRotPosY; // RECHECK
@@ -2128,7 +2128,7 @@ int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int3
 
 	if (bodyHeader & 2) { // if animated
 		// the mostly used renderer code
-		return (render_animated_model(ptr));
+		return (renderAnimatedModel(ptr));
 	} else {
 		printf("Unsupported unanimated model render!\n");
 		exit(1);
@@ -2137,7 +2137,7 @@ int render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int3
 	return (0);
 }
 
-void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest) {
+void copyActorInternAnim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest) {
 	int16 cx;
 	int16 ax;
 	int32 i;
@@ -2179,7 +2179,7 @@ void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest) {
 	}
 }
 
-void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 boxBottom, int32 Y, int32 angle, uint8 *entityPtr) {
+void renderBehaviourModel(int32 boxLeft, int32 boxTop, int32 boxRight, int32 boxBottom, int32 Y, int32 angle, uint8 *entityPtr) {
 	int tmpBoxRight;
     int x;
     int y;
@@ -2193,24 +2193,24 @@ void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 b
     x = boxRight + boxLeft;
     x >>= 1;
 
-    set_ortho_projection(x, y, 0);
-	set_clip(boxLeft, boxTop, tmpBoxRight, boxBottom);
+    setOrthoProjection(x, y, 0);
+	setClip(boxLeft, boxTop, tmpBoxRight, boxBottom);
 
 	if (angle == -1) {
-		newAngle = get_real_angle(&moveMenu);
+		newAngle = getRealAngle(&moveMenu);
 		if (moveMenu.numOfStep == 0) {
 			setActorAngleSafe(newAngle, newAngle - 256, 50, &moveMenu);
 		}
-		render_iso_model(0, Y, 0, 0, newAngle, 0, entityPtr);
+		renderIsoModel(0, Y, 0, 0, newAngle, 0, entityPtr);
 	}
 	else {
-		render_iso_model(0, Y, 0, 0, angle, 0, entityPtr);
+		renderIsoModel(0, Y, 0, 0, angle, 0, entityPtr);
 	}
 }
 
-void render_inventory_item(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param) { // Draw3DObject
-	set_camera_position(X, Y, 128, 200, 200);
-	set_camera_angle(0, 0, 0, 60, 0, 0, param);
+void renderInventoryItem(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param) { // Draw3DObject
+	setCameraPosition(X, Y, 128, 200, 200);
+	setCameraAngle(0, 0, 0, 60, 0, 0, param);
 
-	render_iso_model(0, 0, 0, 0, angle, 0, itemBodyPtr);
+	renderIsoModel(0, 0, 0, 0, angle, 0, itemBodyPtr);
 }

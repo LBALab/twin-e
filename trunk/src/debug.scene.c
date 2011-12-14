@@ -37,7 +37,7 @@ int32 showingZones = 0;
 int32 typeZones = 127; // all zones on as default
 
 void drawBoundingBoxProjectPoints(ScenePoint* pPoint3d, ScenePoint* pPoint3dProjected) {
-	project_position_on_screen(pPoint3d->X, pPoint3d->Y, pPoint3d->Z);
+	projectPositionOnScreen(pPoint3d->X, pPoint3d->Y, pPoint3d->Z);
 
 	pPoint3dProjected->X = projPosX;
 	pPoint3dProjected->Y = projPosY;
@@ -177,28 +177,28 @@ void displayZones(int16 pKey) {
 				color = 15 * 3 + zonePtr->type * 16;
 
 				// draw front part
-				draw_line(frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, color);
-				draw_line(frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, frontTopRightPoint2D.X, frontTopRightPoint2D.Y, color);
-				draw_line(frontTopRightPoint2D.X, frontTopRightPoint2D.Y, frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, color);
-				draw_line(frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, color);
+				drawLine(frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, color);
+				drawLine(frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, frontTopRightPoint2D.X, frontTopRightPoint2D.Y, color);
+				drawLine(frontTopRightPoint2D.X, frontTopRightPoint2D.Y, frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, color);
+				drawLine(frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, color);
 
 				// draw top part
-				draw_line(frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, backTopLeftPoint2D.X, backTopLeftPoint2D.Y, color);
-				draw_line(backTopLeftPoint2D.X, backTopLeftPoint2D.Y, backTopRightPoint2D.X, backTopRightPoint2D.Y, color);
-				draw_line(backTopRightPoint2D.X, backTopRightPoint2D.Y, frontTopRightPoint2D.X, frontTopRightPoint2D.Y, color);
-				draw_line(frontTopRightPoint2D.X, frontTopRightPoint2D.Y, frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, color);
+				drawLine(frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, backTopLeftPoint2D.X, backTopLeftPoint2D.Y, color);
+				drawLine(backTopLeftPoint2D.X, backTopLeftPoint2D.Y, backTopRightPoint2D.X, backTopRightPoint2D.Y, color);
+				drawLine(backTopRightPoint2D.X, backTopRightPoint2D.Y, frontTopRightPoint2D.X, frontTopRightPoint2D.Y, color);
+				drawLine(frontTopRightPoint2D.X, frontTopRightPoint2D.Y, frontTopLeftPoint2D.X, frontTopLeftPoint2D.Y, color);
 
 				// draw back part
-				draw_line(backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, backTopLeftPoint2D.X, backTopLeftPoint2D.Y, color);
-				draw_line(backTopLeftPoint2D.X, backTopLeftPoint2D.Y, backTopRightPoint2D.X, backTopRightPoint2D.Y, color);
-				draw_line(backTopRightPoint2D.X, backTopRightPoint2D.Y, backBottomRightPoint2D.X, backBottomRightPoint2D.Y, color);
-				draw_line(backBottomRightPoint2D.X, backBottomRightPoint2D.Y, backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, color);
+				drawLine(backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, backTopLeftPoint2D.X, backTopLeftPoint2D.Y, color);
+				drawLine(backTopLeftPoint2D.X, backTopLeftPoint2D.Y, backTopRightPoint2D.X, backTopRightPoint2D.Y, color);
+				drawLine(backTopRightPoint2D.X, backTopRightPoint2D.Y, backBottomRightPoint2D.X, backBottomRightPoint2D.Y, color);
+				drawLine(backBottomRightPoint2D.X, backBottomRightPoint2D.Y, backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, color);
 
 				// draw bottom part
-				draw_line(frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, color);
-				draw_line(backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, backBottomRightPoint2D.X, backBottomRightPoint2D.Y, color);
-				draw_line(backBottomRightPoint2D.X, backBottomRightPoint2D.Y, frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, color);
-				draw_line(frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, color);
+				drawLine(frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, color);
+				drawLine(backBottomLeftPoint2D.X, backBottomLeftPoint2D.Y, backBottomRightPoint2D.X, backBottomRightPoint2D.Y, color);
+				drawLine(backBottomRightPoint2D.X, backBottomRightPoint2D.Y, frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, color);
+				drawLine(frontBottomRightPoint2D.X, frontBottomRightPoint2D.Y, frontBottomLeftPoint2D.X, frontBottomLeftPoint2D.Y, color);
 			}
 		}
 	}

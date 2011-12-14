@@ -38,10 +38,10 @@
 #include "movies.h"
 #include "scene.h"
 
-void new_game() {
+void newGame() {
 	int32 tmpFlagDisplayText;
 
-	stop_music();
+	stopMusic();
 
 	tmpFlagDisplayText = cfgfile.FlagDisplayText;
 	cfgfile.FlagDisplayText = 1;
@@ -53,27 +53,27 @@ void new_game() {
 	newGameVar4 = 0;
 	newGameVar5 = 1;
 
-	init_text_bank(2);
-	text_clip_full();
-	set_font_cross_color(15);
+	initTextBank(2);
+	textClipFull();
+	setFontCrossColor(15);
 #ifndef _DEBUG	
-	draw_text_fullscreen(150);
+	drawTextFullscreen(150);
 	readKeys();
 
 	if (skipIntro != 1) {
 		// intro screen 1 - twinsun
 		loadImage( RESSHQR_INTROSCREEN2IMG, 1 );
-		draw_text_fullscreen(151);
+		drawTextFullscreen(151);
 		readKeys();
 
 		if (skipIntro != 1) {
 			loadImage( RESSHQR_INTROSCREEN3IMG, 1 );
-			draw_text_fullscreen(152);
+			drawTextFullscreen(152);
 		}
 	}
 #endif
 	newGameVar5 = 0;
-	text_clip_small();
+	textClipSmall();
 	newGameVar4 = 1;
 #ifndef _DEBUG
 	fadeToBlack(paletteRGBACustom);
@@ -93,10 +93,10 @@ void new_game() {
 	cfgfile.FlagDisplayText = tmpFlagDisplayText;
 }
 
-void show_credits() {
+void showCredits() {
 	int32 tmpShadowMode, tmpLanguageCDIdx;
 	
-	showCredits = 1;
+	canShowCredits = 1;
 	tmpShadowMode = cfgfile.ShadowMode;
 	tmpLanguageCDIdx = cfgfile.LanguageCDId;
 	cfgfile.ShadowMode = 0;
@@ -105,9 +105,9 @@ void show_credits() {
 	currentSceneIdx = 119;
 	needChangeScene = 119;
 	
-	game_engine_loop();
+	gameEngineLoop();
 
-	showCredits = 0;
+	canShowCredits = 0;
 	cfgfile.ShadowMode = tmpShadowMode;
 	cfgfile.LanguageCDId = tmpLanguageCDIdx;
 	
@@ -122,15 +122,15 @@ void show_credits() {
 }
 
 /** Main menu new game options */
-void new_game_menu() {
+void newGameMenu() {
 	//TODO: process players name
 	//if(process_player_name(42))
 	{
 		initEngineVars(1);
-		new_game();
+		newGame();
 
-		if (game_engine_loop()) {
-			show_credits();
+		if (gameEngineLoop()) {
+			showCredits();
 		}
 		
 		copyScreen(frontVideoBuffer, workVideoBuffer);
@@ -145,21 +145,21 @@ void new_game_menu() {
 }
 
 /** Main menu continue game options */
-void continue_game_menu() {
+void continueGameMenu() {
 	//TODO: get list of saved games
 	//if(chooseSave(21))
 	{
 		initEngineVars(-1); // will load game
 		if (gameChapter == 0 && currentSceneIdx == 0) {
-			new_game();
+			newGame();
 		} else {
 			newGameVar5 = 0;
-			text_clip_small();
+			textClipSmall();
 			newGameVar4 = 1;
 		}
 
-		if (game_engine_loop()) {
-			show_credits();
+		if (gameEngineLoop()) {
+			showCredits();
 		}
 
 		copyScreen(frontVideoBuffer, workVideoBuffer);
