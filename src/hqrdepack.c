@@ -114,7 +114,7 @@ void hqr_decompress_lz_entry(uint8 * dst, uint8 * src, int32 decompsize, int32 m
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size*/
-int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index) {
+int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index) {
 	uint32 headerSize;
 	uint32 offsetToData;
 	uint32 realSize;
@@ -230,7 +230,7 @@ int hqr_num_entries(int8 *filename) {
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int32 hqr_getalloc_entry(uint8 ** ptr, int8 *filename, int32 index) {
+int32 hqrGetallocEntry(uint8 ** ptr, int8 *filename, int32 index) {
 	int32 size;
 	size = hqr_entry_size(filename, index);
 
@@ -239,7 +239,7 @@ int32 hqr_getalloc_entry(uint8 ** ptr, int8 *filename, int32 index) {
 		printf("HQR WARNING: unable to allocate entry memory!!\n");
 		return 0;
 	}
-	hqr_get_entry(*ptr, filename, index);
+	hqrGetEntry(*ptr, filename, index);
 
 	return size;
 }

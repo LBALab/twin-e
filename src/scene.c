@@ -178,7 +178,7 @@ void load_scene() {
 	for (i = 1; i < sceneNumActors; i++) {
 		uint16 staticFlags;
 		
-		reset_actor(i);
+		resetActor(i);
 
 		staticFlags = *((uint16*)localScene);
 		localScene += 2;
@@ -188,7 +188,7 @@ void load_scene() {
 		localScene += 2;
 
 		if (!sceneActors[i].staticFlags.bIsSpriteActor) {
-			hqr_getalloc_entry(&sceneActors[i].entityDataPtr, HQR_FILE3D_FILE, sceneActors[i].entity);
+			hqrGetallocEntry(&sceneActors[i].entityDataPtr, HQR_FILE3D_FILE, sceneActors[i].entity);
 		}
 
 		sceneActors[i].body = *(localScene++);
@@ -291,7 +291,7 @@ int32 init_scene(int32 index) {
 	int32 sceneSize;
 
 	// load scene from file
-	sceneSize = hqr_getalloc_entry(&currentScene, HQR_SCENE_FILE, index);
+	sceneSize = hqrGetallocEntry(&currentScene, HQR_SCENE_FILE, index);
 
 	load_scene();
 
@@ -303,7 +303,7 @@ int32 init_scene(int32 index) {
 void reset_scene() {
 	int32 i;
 
-	reset_extras();
+	resetExtras();
 
 	for (i = 0; i < NUM_SCENES_FLAGS; i++) {
 		sceneFlags[i] = 0;
@@ -332,7 +332,7 @@ void change_scene() {
 	stop_samples();
 
 	reset_scene();
-	load_hero_entities();
+	loadHeroEntities();
 
 	sceneHero->controlMode = 1;
 	sceneHero->zone = -1;
@@ -348,7 +348,7 @@ void change_scene() {
 		currentTextBank = 10;
 
 	init_text_bank(currentTextBank + 3);
-	init_grid(needChangeScene);
+	initGrid(needChangeScene);
 
 	if (heroPositionType == POSITION_TYPE_ZONE) {
 		newHeroX = zoneHeroX;
@@ -371,13 +371,13 @@ void change_scene() {
 	if (previousSceneIdx != needChangeScene) {
 		previousHeroBehaviour = heroBehaviour;
 		previousHeroAngle = sceneHero->angle;
-		save_game();
+		saveGame();
 	}
 
-	restart_hero_scene();
+	restartHeroScene();
 
 	for (a = 1; a < sceneNumActors; a++) {
-		init_actor(a);
+		initActor(a);
 	}
 
 	inventoryNumKeys = 0;
@@ -403,7 +403,7 @@ void change_scene() {
 	set_light_vector(alphaLight, betaLight, 0);
 
 	if (sceneMusic != -1) {
-		play_midi_music(sceneMusic, -1);
+		playMidiMusic(sceneMusic, -1);
 	}
 }
 
@@ -467,7 +467,7 @@ void process_zone_extra_bonus(ZoneStruct *zone) {
 			}
 
 			angle = get_angle(Abs(zone->topRight.X + zone->bottomLeft.X)/2, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, sceneHero->X, sceneHero->Z);
-			index = add_extra_bonus(Abs(zone->topRight.X + zone->bottomLeft.X)/2, zone->topRight.Y, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, 180, angle, currentBonus + 3, zone->infoData.generic.info2);
+			index = addExtraBonus(Abs(zone->topRight.X + zone->bottomLeft.X)/2, zone->topRight.Y, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, 180, angle, currentBonus + 3, zone->infoData.generic.info2);
 			
 			if (index != -1) {
 				extraList[index].type |= 0x400;
@@ -533,20 +533,20 @@ void process_actor_zones(int32 actorIdx) {
 					tmpCellingGrid = 1;
 					if (useCellingGrid != zone->infoData.CeillingGrid.newGrid) {
 						if (zone->infoData.CeillingGrid.newGrid != -1) {
-							create_grid_map();
+							createGridMap();
 						}
 
 						useCellingGrid = zone->infoData.CeillingGrid.newGrid;
 						cellingGridIdx = z;
 						freeze_time();
-						init_celling_grid(useCellingGrid);
+						initCellingGrid(useCellingGrid);
 						unfreeze_time();
 					}
 				}
 				break;
 			case kObject:
 				if (!actorIdx && heroAction != 0) {
-					init_anim(ANIM_ACTION, 1, 0, 0);
+					initAnim(ANIM_ACTION, 1, 0, 0);
 					process_zone_extra_bonus(zone);
 				}
 				break;
@@ -567,12 +567,12 @@ void process_actor_zones(int32 actorIdx) {
 					destZ += processActorZ;
 
 					if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
-						if (get_brick_shape(destX, actor->Y + 0x100, destZ)) {
+						if (getBrickShape(destX, actor->Y + 0x100, destZ)) {
 							currentActorInZone = 1;
 							if (actor->Y >= Abs(zone->bottomLeft.Y + zone->topRight.Y) / 2) {
-								init_anim(ANIM_TOP_LADDER, 2, 0, actorIdx); // reached end of ladder
+								initAnim(ANIM_TOP_LADDER, 2, 0, actorIdx); // reached end of ladder
 							} else {
-								init_anim(ANIM_CLIMB_LADDER, 0, 255, actorIdx); // go up in ladder
+								initAnim(ANIM_CLIMB_LADDER, 0, 255, actorIdx); // go up in ladder
 							}
 						}
 					}
@@ -585,7 +585,7 @@ void process_actor_zones(int32 actorIdx) {
 	if (!tmpCellingGrid && actorIdx == currentlyFollowedActor && useCellingGrid != -1) {
 		useCellingGrid = -1;
 		cellingGridIdx = -1;
-		create_grid_map();
+		createGridMap();
 		reqBgRedraw = 1;
 	}
 }

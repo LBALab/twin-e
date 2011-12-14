@@ -66,7 +66,7 @@ enum ActionType {
 	@param animPtr Pointer to animation
 	@param bodyPtr Body model poitner
 	@param animTimerDataPtr Animation time data */
-int set_anim_at_keyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
+int setAnimAtKeyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 numOfKeyframeInAnim;
 	int16 numOfBonesInAnim;
 	uint8 *ptrToData;
@@ -135,18 +135,18 @@ int set_anim_at_keyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, Anim
 
 /** Get total number of keyframes in animation
 	@param animPtr Pointer to animation */
-int32 get_num_keyframes(uint8 *animPtr) {
+int32 getNumKeyframes(uint8 *animPtr) {
 	return (*(int16 *)(animPtr));
 }
 
 /** Get first keyframes in animation
 	@param animPtr Pointer to animation */
-int32 get_start_keyframe(uint8 *animPtr) {
+int32 getStartKeyframe(uint8 *animPtr) {
 	return (*(int16 *)(animPtr + 4));
 }
 
 /** Apply animation step rotation */
-void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx) {
+void applyAnimStepRotation(uint8 **ptr, int32 bp, int32 bx) {
 	int16 *dest;
 	int16 lastAngle;
 	int16 newAngle;
@@ -182,7 +182,7 @@ void apply_anim_steprotation(uint8 **ptr, int32 bp, int32 bx) {
 }
 
 /** Apply animation step */
-void apply_anim_step(uint8 **ptr, int32 bp, int32 bx) {
+void applyAnimStep(uint8 **ptr, int32 bp, int32 bx) {
 	int16 *dest;
 	int16 lastAngle;
 	int16 newAngle;
@@ -209,7 +209,7 @@ void apply_anim_step(uint8 **ptr, int32 bp, int32 bx) {
 }
 
 /** Get animation mode */
-int32 get_anim_mode(uint8 **ptr) {
+int32 getAnimMode(uint8 **ptr) {
 	int16 *lptr;
 	int16 opcode;
 
@@ -230,7 +230,7 @@ int32 get_anim_mode(uint8 **ptr) {
 	@param animPtr Animation pointer
 	@param bodyPtr Body model poitner 
 	@param animTimerDataPtr Animation time data */
-int32 set_model_animation(int32 animState, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
+int32 setModelAnimation(int32 animState, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 animOpcode;
 
 	int16 bodyHeader;
@@ -325,25 +325,25 @@ int32 set_model_animation(int32 animState, uint8 *animPtr, uint8 *bodyPtr, AnimT
 			int16 tmpNumOfPoints = numOfPointInAnim;
 
 			do {
-				animOpcode = get_anim_mode(&edi);
+				animOpcode = getAnimMode(&edi);
 
 				switch (animOpcode) {
 				case 0: {	// allow global rotate
-					apply_anim_steprotation(&edi, eax, keyFrameLength);
-					apply_anim_steprotation(&edi, eax, keyFrameLength);
-					apply_anim_steprotation(&edi, eax, keyFrameLength);
+					applyAnimStepRotation(&edi, eax, keyFrameLength);
+					applyAnimStepRotation(&edi, eax, keyFrameLength);
+					applyAnimStepRotation(&edi, eax, keyFrameLength);
 					break;
 				}
 				case 1: {	// dissallow global rotate
-					apply_anim_step(&edi, eax, keyFrameLength);
-					apply_anim_step(&edi, eax, keyFrameLength);
-					apply_anim_step(&edi, eax, keyFrameLength);
+					applyAnimStep(&edi, eax, keyFrameLength);
+					applyAnimStep(&edi, eax, keyFrameLength);
+					applyAnimStep(&edi, eax, keyFrameLength);
 					break;
 				}
 				case 2: {	// dissallow global rotate + hide
-					apply_anim_step(&edi, eax, keyFrameLength);
-					apply_anim_step(&edi, eax, keyFrameLength);
-					apply_anim_step(&edi, eax, keyFrameLength);
+					applyAnimStep(&edi, eax, keyFrameLength);
+					applyAnimStep(&edi, eax, keyFrameLength);
+					applyAnimStep(&edi, eax, keyFrameLength);
 					break;
 				}
 				default: {
@@ -367,7 +367,7 @@ int32 set_model_animation(int32 animState, uint8 *animPtr, uint8 *bodyPtr, AnimT
 /** Get entity anim index (This is taken from File3D entities)
 	@param anim Entity animation index
 	@param actorIdx Actor index */
-int32 get_body_anim_index(int32 animIdx, int32 actorIdx) {
+int32 getBodyAnimIndex(int32 animIdx, int32 actorIdx) {
 	int8 type;
 	uint16 realAnimIdx;
 	uint8 *bodyPtr;
@@ -414,7 +414,7 @@ int32 get_body_anim_index(int32 animIdx, int32 actorIdx) {
 	@param animPtr Animation pointer
 	@param bodyPtr Body model poitner 
 	@param animTimerDataPtr Animation time data */
-int32 stock_animation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
+int32 stockAnimation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int32 playAnim;
 	uint8 *ptr;
 	int32 *edi;
@@ -464,7 +464,7 @@ int32 stock_animation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animT
 	@param animPtr Animation pointer
 	@param bodyPtr Body model poitner 
 	@param animTimerDataPtr Animation time data */
-int32 verify_anim_at_keyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
+int32 verifyAnimAtKeyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 bodyHeader;
 
 	uint8 *edi;
@@ -535,7 +535,7 @@ int32 verify_anim_at_keyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, Ani
 
 /** Process acotr animation actions
 	@param actorIdx Actor index */
-void process_anim_actions(int32 actorIdx) {
+void processAnimActions(int32 actorIdx) {
 	int32 startAnimEntityIdx, endAnimEntityIdx, actionType, animPos;
 	uint8 *data;
 	ActorStruct *actor;
@@ -605,7 +605,7 @@ void process_anim_actions(int32 actorIdx) {
 					var_14 = *(data++);
 					var = *(data++);
 
-					add_extra_throw(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, cx, dx, var_24, var_14, var);
+					addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, cx, dx, var_24, var_14, var);
 				} else {
 					data += 11;
 				}
@@ -625,7 +625,7 @@ void process_anim_actions(int32 actorIdx) {
 						data += 2;
 						var_14 = *(data++);
 
-						add_extra_throw_magicball(actor->X, actor->Y + var_8, actor->Z, dx, actor->angle, var_24, var_14);
+						addExtraThrowMagicball(actor->X, actor->Y + var_8, actor->Z, dx, actor->angle, var_24, var_14);
 					} else {
 						data += 7;
 					}
@@ -659,7 +659,7 @@ void process_anim_actions(int32 actorIdx) {
 					data += 2;
 					temp = *(data++);
 
-					add_extra_aiming(actorIdx, actor->X, actor->Y + var_8, actor->Z, var_C, dx, var_24, temp);
+					addExtraAiming(actorIdx, actor->X, actor->Y + var_8, actor->Z, var_C, dx, var_24, temp);
 				} else {
 					data+=6;
 				}
@@ -685,7 +685,7 @@ void process_anim_actions(int32 actorIdx) {
 					var_14 = *(data++);
 					var = *(data++);
 
-					add_extra_throw(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, dx, cx, var_24, var_14, var);
+					addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, dx, cx, var_24, var_14, var);
 				} else {
 					data += 11;
 				}
@@ -757,7 +757,7 @@ void process_anim_actions(int32 actorIdx) {
 
 					strength = *(data++);
 
-					add_extra_throw(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
+					addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
 				} else {
 					data += 15;
 				}
@@ -798,7 +798,7 @@ void process_anim_actions(int32 actorIdx) {
 
 					strength = *(data++);
 
-					add_extra_throw(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
+					addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
 				} else {
 					data += 15;
 				}
@@ -825,7 +825,7 @@ void process_anim_actions(int32 actorIdx) {
 					data += 2;
 					param4 = *(data++);
 
-					add_extra_aiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx, targetActor, param3, param4);
+					addExtraAiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx, targetActor, param3, param4);
 				} else {
 					data+=11;
 				}
@@ -845,7 +845,7 @@ void process_anim_actions(int32 actorIdx) {
 	@param animType animation type
 	@param animExtra animation actions extra data
 	@param actorIdx actor index */
-int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) {
+int32 initAnim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) {
 	ActorStruct *actor;
 	int32 animIndex;
 
@@ -863,10 +863,10 @@ int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) 
 	if (animExtra == 255 && actor->animType != 2)
 		animExtra = actor->anim;
 
-	animIndex = get_body_anim_index(newAnim, actorIdx);
+	animIndex = getBodyAnimIndex(newAnim, actorIdx);
 
 	if (animIndex == -1)
-		animIndex = get_body_anim_index(0, actorIdx);
+		animIndex = getBodyAnimIndex(0, actorIdx);
 
 	if (animType != 4 && actor->animType == 2) {
 		actor->animExtra = newAnim;
@@ -887,9 +887,9 @@ int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) 
 		animType = 2;
 
 	if (actor->previousAnimIdx == -1) {	// if no previous animation
-		set_anim_at_keyframe(0, animTable[animIndex], bodyTable[actor->entity], &actor->animTimerData);
+		setAnimAtKeyframe(0, animTable[animIndex], bodyTable[actor->entity], &actor->animTimerData);
 	} else { // interpolation between animations
-		animBuffer2 += stock_animation(animBuffer2, bodyTable[actor->entity], &actor->animTimerData);
+		animBuffer2 += stockAnimation(animBuffer2, bodyTable[actor->entity], &actor->animTimerData);
 		if (animBuffer1 + 4488 < animBuffer2)
 			animBuffer2 = animBuffer1;
 	}
@@ -905,7 +905,7 @@ int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) 
 	actor->dynamicFlags.bAnimFrameReached = 1;
 
 	if (actor->animExtraPtr) {
-		process_anim_actions(actorIdx);
+		processAnimActions(actorIdx);
 	}
 
 	actor->lastRotationAngle = 0;
@@ -918,7 +918,7 @@ int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx) 
 
 /** Process main loop actor animations
 	@param actorIdx Actor index */
-void process_actor_animations(int32 actorIdx) { // DoAnim
+void processActorAnimations(int32 actorIdx) { // DoAnim
 	int16 numKeyframe;
 	uint8 *animPtr;
 	ActorStruct *actor;
@@ -1035,7 +1035,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 			int32 keyFramePassed;
 			animPtr = animTable[actor->previousAnimIdx];
 
-			keyFramePassed = verify_anim_at_keyframe(actor->animPosition, animPtr, bodyTable[actor->entity], &actor->animTimerData);
+			keyFramePassed = verifyAnimAtKeyframe(actor->animPosition, animPtr, bodyTable[actor->entity], &actor->animTimerData);
 
 			if (processRotationByAnim) {
 				actor->dynamicFlags.bIsRotationByAnim = 1;
@@ -1067,21 +1067,21 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 				// if actor have animation actions to process
 				if (actor->animExtraPtr) {
-					process_anim_actions(actorIdx);
+					processAnimActions(actorIdx);
 				}
 
 				numKeyframe = actor->animPosition;
-				if (numKeyframe == get_num_keyframes(animPtr)) {
+				if (numKeyframe == getNumKeyframes(animPtr)) {
 					actor->dynamicFlags.bIsHitting = 0;
 
 					if (actor->animType == 0) {
-						actor->animPosition = get_start_keyframe(animPtr);
+						actor->animPosition = getStartKeyframe(animPtr);
 					} else {
 						actor->anim = actor->animExtra;
-						actor->previousAnimIdx = get_body_anim_index(actor->anim, actorIdx);
+						actor->previousAnimIdx = getBodyAnimIndex(actor->anim, actorIdx);
 
 						if (actor->previousAnimIdx == -1) {
-							actor->previousAnimIdx = get_body_anim_index(0, actorIdx);
+							actor->previousAnimIdx = getBodyAnimIndex(0, actorIdx);
 							actor->anim = 0;
 						}
 
@@ -1093,7 +1093,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					}
 
 					if (actor->animExtraPtr) {
-						process_anim_actions(actorIdx);
+						processAnimActions(actorIdx);
 					}
 
 					actor->dynamicFlags.bAnimEnded = 1;
@@ -1118,7 +1118,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		processActorY += sceneActors[actor->standOn].Y;
 		processActorZ += sceneActors[actor->standOn].Z;
 
-		if (!standing_on_actor(actorIdx, actor->standOn)) {
+		if (!standingOnActor(actorIdx, actor->standOn)) {
 			actor->standOn = -1; // no longer standing on other actor
 		}
 	}
@@ -1135,22 +1135,22 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		int32 brickShape;
 		collisionY = 0;
 		
-		brickShape = get_brick_shape(previousActorX, previousActorY, previousActorZ);
+		brickShape = getBrickShape(previousActorX, previousActorY, previousActorZ);
 
 		if (brickShape) {
 			if (brickShape != kSolid) {
-				reajust_actor_position(brickShape);
+				reajustActorPosition(brickShape);
 			} /*else { // this shouldn't happen (collision should avoid it)
 				actor->Y = processActorY = (processActorY / 256) * 256 + 256; // go upper
 			}*/
 		}
 
 		if (actor->staticFlags.bComputeCollisionWithObj) {
-			check_collision_with_actors(actorIdx);
+			checkCollisionWithActors(actorIdx);
 		}
 
 		if (actor->standOn != -1 && actor->dynamicFlags.bIsFalling) {
-			stop_falling();
+			stopFalling();
 		}
 
 		causeActorDamage = 0;
@@ -1161,16 +1161,16 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 
 		if (!actorIdx && !actor->staticFlags.bComputeLowCollision) {
 			// check hero collisions with bricks
-			check_hero_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 1);
-			check_hero_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 2);
-			check_hero_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   4);
-			check_hero_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   8);
+			checkHeroCollisionWithBricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 1);
+			checkHeroCollisionWithBricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 2);
+			checkHeroCollisionWithBricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   4);
+			checkHeroCollisionWithBricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   8);
 		} else {
 			// check other actors collisions with bricks
-			check_actor_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 1);
-			check_actor_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 2);
-			check_actor_collision_with_bricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   4);
-			check_actor_collision_with_bricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   8);
+			checkActorCollisionWithBricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 1);
+			checkActorCollisionWithBricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.bottomLeft, 2);
+			checkActorCollisionWithBricks(actor->boudingBox.X.topRight,   actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   4);
+			checkActorCollisionWithBricks(actor->boudingBox.X.bottomLeft, actor->boudingBox.Y.bottomLeft, actor->boudingBox.Z.topRight,   8);
 		}
 
 		// process wall hit while running
@@ -1181,9 +1181,9 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 			destZ += processActorZ;
 
 			if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
-				if (get_brick_shape(destX, processActorY + 0x100, destZ)) {
-					add_extra_special(actor->X, actor->Y + 1000, actor->Z, kHitStars);
-					init_anim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);
+				if (getBrickShape(destX, processActorY + 0x100, destZ)) {
+					addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
+					initAnim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);
 
 					if (currentlyProcessedActorIdx == 0) {
 						heroMoved = 1;
@@ -1199,18 +1199,18 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 			}
 		}
 
-		brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+		brickShape = getBrickShape(processActorX, processActorY, processActorZ);
 		actor->brickShape = brickShape;
 
 		if (brickShape) {
 			if (brickShape == kSolid) {
 				if (actor->dynamicFlags.bIsFalling) {
-					stop_falling();
+					stopFalling();
 					processActorY = (collisionY << 8) + 0x100;
 				} else {
 					if (!actorIdx && heroBehaviour == ATHLETIC && actor->anim == brickShape) {
-						add_extra_special(actor->X, actor->Y + 1000, actor->Z, kHitStars);
-						init_anim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);	
+						addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
+						initAnim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);	
 
 						if (!actorIdx) {
 							heroMoved = 1;
@@ -1225,39 +1225,39 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 					}
 
 					// no Z coordinate issue
-					if (!get_brick_shape(processActorX, processActorY, previousActorZ)) {
+					if (!getBrickShape(processActorX, processActorY, previousActorZ)) {
 						processActorZ = previousActorZ;
 					}
 
 					// no X coordinate issue
-					if (!get_brick_shape(previousActorX, processActorY, processActorZ)) {
+					if (!getBrickShape(previousActorX, processActorY, processActorZ)) {
 						processActorX = previousActorX;
 					}
 
 					// X and Z with issue, no move
-					if (get_brick_shape(processActorX, processActorY, previousActorZ) && get_brick_shape(previousActorX, processActorY, processActorZ)) {
+					if (getBrickShape(processActorX, processActorY, previousActorZ) && getBrickShape(previousActorX, processActorY, processActorZ)) {
 						return;
 					}
 				}
 			} else {
 				if (actor->dynamicFlags.bIsFalling) {
-					stop_falling();
+					stopFalling();
 				}
 
-				reajust_actor_position(brickShape);
+				reajustActorPosition(brickShape);
 			}
 
 			actor->dynamicFlags.bIsFalling = 0;
 		} else {
 			if (actor->staticFlags.bCanFall && actor->standOn == -1) {
-				brickShape = get_brick_shape(processActorX, processActorY - 1, processActorZ);
+				brickShape = getBrickShape(processActorX, processActorY - 1, processActorZ);
 
 				if (brickShape) {
 					if (actor->dynamicFlags.bIsFalling) {
-						stop_falling();
+						stopFalling();
 					}
 
-					reajust_actor_position(brickShape);
+					reajustActorPosition(brickShape);
 				} else {
 					if (!actor->dynamicFlags.bIsRotationByAnim) {
 						actor->dynamicFlags.bIsFalling = 1;
@@ -1266,7 +1266,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 							heroYBeforeFall = processActorY;
 						}
 
-						init_anim(ANIM_FALL, 0, 255, actorIdx);
+						initAnim(ANIM_FALL, 0, 255, actorIdx);
 					}
 				}
 			}
@@ -1278,7 +1278,7 @@ void process_actor_animations(int32 actorIdx) { // DoAnim
 		}
 	} else {
 		if (actor->staticFlags.bComputeCollisionWithObj) {
-			check_collision_with_actors(actorIdx);
+			checkCollisionWithActors(actorIdx);
 		}
 	}
 

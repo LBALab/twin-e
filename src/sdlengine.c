@@ -78,10 +78,10 @@ TTF_Font *font;
 
 /** SDL exit callback */
 //static void atexit_callback(void) {
-//	sdl_close();
+//	sdlClose();
 //}
 
-void sdl_close() {
+void sdlClose() {
 	stop_track_music();
 	stop_midi_music();
 	Mix_CloseAudio();
@@ -95,7 +95,7 @@ void sdl_close() {
 
 /** SDL initializer
 	@return SDL init state */
-int sdl_initialize() {
+int sdlInitialize() {
 	uint8 *keyboard;
 	int32 size;
 	int32 i;
@@ -192,7 +192,7 @@ int sdl_initialize() {
 
 /** Frames per second sdl delay
 	@param fps frames per second */
-void fps_cycles(int32 fps) {
+void fpsCycles(int32 fps) {
 	SDL_Delay(1000 / (fps));
 }
 
@@ -209,7 +209,7 @@ void delaySkip(uint32 time) {
 	uint32 stopTicks = 0;
 	skipIntro = 0;
 	do {
-		read_keys();
+		readKeys();
 		if (skipIntro == 1)
 			break;
 		stopTicks = SDL_GetTicks() - startTicks;
@@ -220,7 +220,7 @@ void delaySkip(uint32 time) {
 
 /** Set a new palette in the SDL screen buffer
 	@param palette palette to set */
-void set_palette(uint8 * palette) {
+void setPalette(uint8 * palette) {
 	SDL_Color *screenColorsTemp = (SDL_Color *) palette;
 
 	SDL_SetColors(screenBuffer, screenColorsTemp, 0, 256);
@@ -229,7 +229,7 @@ void set_palette(uint8 * palette) {
 }
 
 /** Fade screen from black to white */
-void fade_black_2_white() {
+void fadeBlackToWhite() {
 	int32 i;
 
 	SDL_Color colorPtr[256];
@@ -253,7 +253,7 @@ void flip() {
 	@param top top position to start copy
 	@param right right position to start copy
 	@param bottom bottom position to start copy */
-void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom) {
+void copyBlockPhys(int32 left, int32 top, int32 right, int32 bottom) {
 	SDL_Rect rectangle;
 
 	rectangle.x = left;
@@ -269,14 +269,14 @@ void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom) {
 	@param buffer screen buffer to blit surface
 	@param width screen width size
 	@param height screen height size */
-void init_screen_buffer(uint8 *buffer, int32 width, int32 height) {
+void initScreenBuffer(uint8 *buffer, int32 width, int32 height) {
 	screenBuffer = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8, SCREEN_WIDTH, 0, 0, 0, 0);
 }
 
 /** Cross fade feature
 	@param buffer screen buffer
 	@param palette new palette to cross fade */
-void cross_fade(uint8 *buffer, uint8 *palette) {
+void crossFade(uint8 *buffer, uint8 *palette) {
 	int32 i;
 	SDL_Surface *backupSurface;
 	SDL_Surface *newSurface;
@@ -322,7 +322,7 @@ void cross_fade(uint8 *buffer, uint8 *palette) {
 }
 
 /** Switch between window and fullscreen modes */
-void toggle_fullscreen() {
+void toggleFullscreen() {
 	cfgfile.FullScreen = 1 - cfgfile.FullScreen;
 	SDL_FreeSurface(screen);
 
@@ -330,11 +330,11 @@ void toggle_fullscreen() {
 
 	if (cfgfile.FullScreen) {
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE);
-		copy_screen(workVideoBuffer, frontVideoBuffer);
+		copyScreen(workVideoBuffer, frontVideoBuffer);
 		SDL_ShowCursor(1);
 	} else {
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
-		copy_screen(workVideoBuffer, frontVideoBuffer);
+		copyScreen(workVideoBuffer, frontVideoBuffer);
 
 #ifdef _DEBUG
 		SDL_ShowCursor(1);
@@ -345,7 +345,7 @@ void toggle_fullscreen() {
 }
 
 /** Handle keyboard pressed keys */
-void read_keys() {
+void readKeys() {
 	SDL_Event event;
 	int32 localKey;
 	int32 i, j, size;
@@ -366,7 +366,7 @@ void read_keys() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
-			sdl_close();
+			sdlClose();
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			switch (event.button.button) {
@@ -436,7 +436,7 @@ void read_keys() {
 				localKey = 0x40;
 				break;
 			case SDLK_F12:
-				toggle_fullscreen();
+				toggleFullscreen();
 				break;
 #ifdef GAMEMOD
 			case SDLK_r:  // next room
@@ -553,7 +553,7 @@ void read_keys() {
 	@param Y Y coordinate in screen
 	@param string text to display
 	@param center if the text should be centered accoding with the giving positions */
-void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
+void ttfDrawText(int32 X, int32 Y, int8 *string, int32 center) {
 	SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
 	SDL_Color *forecol = &white;
 	SDL_Rect rectangle;
@@ -576,7 +576,7 @@ void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
 
 /** Gets SDL mouse positions
 	@param mouseData structure that contains mouse position info */
-void get_mouse_positions(MouseStatusStruct *mouseData) {
+void getMousePositions(MouseStatusStruct *mouseData) {
 	SDL_GetMouseState(&mouseData->X, &mouseData->Y);
 
 	mouseData->left = leftMouse;

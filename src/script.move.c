@@ -67,7 +67,7 @@ int32 mNOP(int32 actorIdx, ActorStruct *actor) {
 /*0x02*/
 int32 mBODY(int32 actorIdx, ActorStruct *actor) {
 	int32 bodyIdx = *(scriptPtr);
-	init_model_actor(bodyIdx, actorIdx);
+	initModelActor(bodyIdx, actorIdx);
 	actor->positionInMoveScript++;
 	return 0;
 }
@@ -75,7 +75,7 @@ int32 mBODY(int32 actorIdx, ActorStruct *actor) {
 /*0x03*/
 int32 mANIM(int32 actorIdx, ActorStruct *actor) {
 	int32 animIdx = *(scriptPtr++);
-	if (init_anim(animIdx, 0, 0, actorIdx)) {
+	if (initAnim(animIdx, 0, 0, actorIdx)) {
 		actor->positionInMoveScript++;
 	} else {
 		actor->positionInMoveScript = scriptPosition;
@@ -334,7 +334,7 @@ int32 mWAIT_NUM_SECOND(int32 actorIdx, ActorStruct *actor) {
 
 /*0x13*/
 int32 mNO_BODY(int32 actorIdx, ActorStruct *actor) {
-	init_model_actor(-1, actorIdx);
+	initModelActor(-1, actorIdx);
 	return 0;
 }
 

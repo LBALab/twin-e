@@ -507,7 +507,7 @@ int32 lELSE(int32 actorIdx, ActorStruct *actor) {
 /*0x11*/
 int32 lBODY(int32 actorIdx, ActorStruct *actor) {
 	int32 bodyIdx = *(scriptPtr);
-	init_model_actor(bodyIdx, actorIdx);
+	initModelActor(bodyIdx, actorIdx);
 	scriptPtr++;
 	return 0;
 }
@@ -516,14 +516,14 @@ int32 lBODY(int32 actorIdx, ActorStruct *actor) {
 int32 lBODY_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 	int32 otherBodyIdx = *(scriptPtr++);
-	init_model_actor(otherBodyIdx, otherActorIdx);
+	initModelActor(otherBodyIdx, otherActorIdx);
 	return 0;
 }
 
 /*0x13*/
 int32 lANIM(int32 actorIdx, ActorStruct *actor) {
 	int32 animIdx = *(scriptPtr++);
-	init_anim(animIdx, 0, 0, actorIdx);
+	initAnim(animIdx, 0, 0, actorIdx);
 	return 0;
 }
 
@@ -531,7 +531,7 @@ int32 lANIM(int32 actorIdx, ActorStruct *actor) {
 int32 lANIM_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 	int32 otherAnimIdx = *(scriptPtr++);
-	init_anim(otherAnimIdx, 0, 0, otherActorIdx);
+	initAnim(otherAnimIdx, 0, 0, otherActorIdx);
 	return 0;
 }
 
@@ -634,8 +634,8 @@ int32 lCAM_FOLLOW(int32 actorIdx, ActorStruct *actor) {
 int32 lSET_BEHAVIOUR(int32 actorIdx, ActorStruct *actor) {
 	int32 behavior = *(scriptPtr++);
 
-	init_anim(ANIM_STANDING, 0, 255, 0);
-	set_behaviour(behavior);
+	initAnim(ANIM_STANDING, 0, 255, 0);
+	setBehaviour(behavior);
 
 	return 0;
 }
@@ -692,7 +692,7 @@ int32 lSET_FLAG_GAME(int32 actorIdx, ActorStruct *actor) {
 int32 lKILL_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 
-	process_actor_carrier(otherActorIdx);
+	processActorCarrier(otherActorIdx);
 	sceneActors[otherActorIdx].dynamicFlags.bIsDead = 1;
 	sceneActors[otherActorIdx].entity = -1;
 	sceneActors[otherActorIdx].zone = -1;
@@ -703,7 +703,7 @@ int32 lKILL_OBJ(int32 actorIdx, ActorStruct *actor) {
 
 /*0x26*/
 int32 lSUICIDE(int32 actorIdx, ActorStruct *actor) {
-	process_actor_carrier(actorIdx);
+	processActorCarrier(actorIdx);
 	actor->dynamicFlags.bIsDead = 1;
 	actor->entity = -1;
 	actor->zone = -1;
@@ -745,7 +745,7 @@ int32 lGIVE_GOLD_PIECES(int32 actorIdx, ActorStruct *actor) {
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];
 		if (overlay->info0 != -1 && overlay->type == koNumberRange) {
-			overlay->info0 = get_average_value(overlay->info1, overlay->info0, 100, overlay->lifeTime - lbaTime - 50);
+			overlay->info0 = getAverageValue(overlay->info1, overlay->info0, 100, overlay->lifeTime - lbaTime - 50);
 			overlay->info1 = inventoryNumKashes;
 			overlay->lifeTime = lbaTime + 150;
 			hideRange = 1;
@@ -807,7 +807,7 @@ int32 lFOUND_OBJECT(int32 actorIdx, ActorStruct *actor) {
 	int32 item = *(scriptPtr++);
 	
 	freeze_time();
-	process_found_item(item);
+	processFoundItem(item);
 	unfreeze_time();
 	redraw_engine_actions(1);
 
@@ -871,7 +871,7 @@ int32 lGIVE_BONUS(int32 actorIdx, ActorStruct *actor) {
 	int32 flag = *(scriptPtr++);
 
 	if (actor->bonusParameter & 0x1F0) {
-		process_actor_extra_bonus(actorIdx);
+		processActorExtraBonus(actorIdx);
 	}
 
 	if (flag != 0) {
@@ -999,7 +999,7 @@ int32 lSUB_LIFE_POINT_OBJ(int32 actorIdx, ActorStruct *actor) {
 int32 lHIT_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 	int32 strengthOfHit = *(scriptPtr++);
-	hit_actor(actorIdx, otherActorIdx, strengthOfHit, sceneActors[otherActorIdx].angle);
+	hitActor(actorIdx, otherActorIdx, strengthOfHit, sceneActors[otherActorIdx].angle);
 	return 0;
 }
 
@@ -1009,9 +1009,9 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 	int32 nameSize = strlen(movie);
 	scriptPtr += nameSize + 1;
 
-	play_movie(movie);
-	set_palette(paletteRGBA);
-	clear_screen();
+	playMovie(movie);
+	setPalette(paletteRGBA);
+	clearScreen();
 	flip();
 	
 	return 0;
@@ -1020,7 +1020,7 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 /*0x41*/
 int32 lPLAY_MIDI(int32 actorIdx, ActorStruct *actor) {
 	int32 midiIdx = *(scriptPtr++);
-	play_midi_music(midiIdx, 0); // TODO: improve this
+	playMidiMusic(midiIdx, 0); // TODO: improve this
 	return 0;
 }
 
@@ -1057,7 +1057,7 @@ int32 lASK_CHOICE(int32 actorIdx, ActorStruct *actor) {
 	freeze_time();
 	// TODO: bubble
 	set_font_cross_color(actor->talkColor);
-	process_game_choices(choiceIdx);
+	processGameChoices(choiceIdx);
 	numChoices = 0;
 	unfreeze_time();
 	redraw_engine_actions(1);
@@ -1097,7 +1097,7 @@ int32 lINIT_PINGOUIN(int32 actorIdx, ActorStruct *actor) {
 int32 lSET_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
 	int32 location = *(scriptPtr++);
 	
-	set_holomap_position(location);
+	setHolomapPosition(location);
 	if (gameFlags[GAMEFLAG_HAS_HOLOMAP]) {
 		add_overlay(koInventoryItem, 0, 0, 0, 0, koNormal, 3);
 	}
@@ -1108,7 +1108,7 @@ int32 lSET_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
 /*0x49*/
 int32 lCLR_HOLO_POS(int32 actorIdx, ActorStruct *actor) {
 	int32 location = *(scriptPtr++);
-	clear_holomap_position(location);
+	clearHolomapPosition(location);
 	return 0;
 }
 
@@ -1133,7 +1133,7 @@ int32 lSUB_FUEL(int32 actorIdx, ActorStruct *actor) {
 /*0x4C*/
 int32 lSET_GRM(int32 actorIdx, ActorStruct *actor) {
 	cellingGridIdx = *(scriptPtr++);
-	init_celling_grid(cellingGridIdx);
+	initCellingGrid(cellingGridIdx);
 	return 0;
 }
 
@@ -1187,7 +1187,7 @@ int32 lGRM_OFF(int32 actorIdx, ActorStruct *actor) {
 	if (cellingGridIdx != -1) {
 		useCellingGrid = -1;
 		cellingGridIdx = -1;
-		create_grid_map();
+		createGridMap();
 		redraw_engine_actions(1);
 	}
 	
@@ -1229,7 +1229,7 @@ int32 lEXPLODE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
 	ActorStruct *otherActor = &sceneActors[actorIdx];
 
-	add_extra_explode(otherActor->X, otherActor->Y, otherActor->Z); // RECHECK this
+	addExtraExplode(otherActor->X, otherActor->Y, otherActor->Z); // RECHECK this
 
 	return 0;
 }
@@ -1253,7 +1253,7 @@ int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	freeze_time();
 	// TODO: bubble
 	set_font_cross_color(sceneActors[otherActorIdx].talkColor);
-	process_game_choices(choiceIdx);
+	processGameChoices(choiceIdx);
 	numChoices = 0;
 	unfreeze_time();
 	redraw_engine_actions(1);
@@ -1276,8 +1276,8 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
 	int32 tmpFlagDisplayText;
 
 	freeze_time();
-	fade_2_black(paletteRGBA);
-	load_image(25, 1);
+	fadeToBlack(paletteRGBA);
+	loadImage(25, 1);
 	text_clip_full();
 	set_font_cross_color(15);
 	newGameVar4 = 0;
@@ -1286,13 +1286,13 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
 	draw_text_fullscreen(6);
 	newGameVar4 = 1;
 	text_clip_small();
-	fade_2_black(paletteRGBACustom);
-	clear_screen();
-	set_palette(paletteRGBA);
+	fadeToBlack(paletteRGBACustom);
+	clearScreen();
+	setPalette(paletteRGBA);
 	cfgfile.FlagDisplayText = tmpFlagDisplayText;
 
 	do {
-		read_keys();
+		readKeys();
 	} while (skipIntro || skipedKey);
 
 	unfreeze_time();
@@ -1306,7 +1306,7 @@ int32 lANIM_SET(int32 actorIdx, ActorStruct *actor) {
 
 	actor->anim = -1;
 	actor->previousAnimIdx = -1;
-	init_anim(animIdx, 0, 0, actorIdx);
+	initAnim(animIdx, 0, 0, actorIdx);
 
 	return 0;
 }
@@ -1335,7 +1335,7 @@ int32 lTHE_END(int32 actorIdx, ActorStruct *actor) {
 	heroBehaviour = previousHeroBehaviour;
 	newHeroX = -1;
 	sceneHero->angle = previousHeroAngle;
-	save_game();
+	saveGame();
 	return 1; // break;
 }
 
@@ -1363,7 +1363,7 @@ int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
 
 /*0x66*/
 int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 	flip();
 	changeRoomVar10 = 0;
 
@@ -1398,7 +1398,7 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
 		}
 		
 		drawVar1 += 40;
-		copy_block_phys(0, drawVar1, textBoxRight, drawVar1);
+		copyBlockPhys(0, drawVar1, textBoxRight, drawVar1);
 	}
 
 	return 0;
@@ -1408,7 +1408,7 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
 int32 lCLEAR_TEXT(int32 actorIdx, ActorStruct *actor) {
 	drawVar1 = 0;
 	draw_splitted_box(0, 0, 639, 240, 0);
-	copy_block_phys(0, 0, 639, 240);
+	copyBlockPhys(0, 0, 639, 240);
 	return 0;
 }
 

@@ -96,18 +96,18 @@ int32 choiceAnswer; // inGameMenuAnswer
 extern int32 magicLevelStrengthOfHit[];
 
 /** Initialize all engine variables */
-void init_engine_vars(int32 save);
+void initEngineVars(int32 save);
 
 /** Initialize engine 3D projections */
-void init_engine_projections();
+void initEngineProjections();
 
-void process_found_item(int32 item);
+void processFoundItem(int32 item);
 
-void load_game();
-void save_game();
+void loadGame();
+void saveGame();
 
-void process_game_choices(int32 choiceIdx);
+void processGameChoices(int32 choiceIdx);
 
-void process_gameover_animation();
+void processGameoverAnimation();
 
 #endif

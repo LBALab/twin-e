@@ -84,7 +84,7 @@ void unfreeze_time() {
 	@return true if we want to show credit sequence */
 int32 run_game_engine() { // mainLoopInteration
 	int32 a;
-	read_keys();
+	readKeys();
 
 	if (needChangeScene > -1) {
 		change_scene();
@@ -96,7 +96,7 @@ int32 run_game_engine() { // mainLoopInteration
 	loopCurrentKey = skipIntro;
 
 #ifdef GAMEMOD
-	process_debug(loopCurrentKey);
+	processDebug(loopCurrentKey);
 #endif
 
 	if(showCredits != 0) {
@@ -118,7 +118,7 @@ int32 run_game_engine() { // mainLoopInteration
 				unfreeze_time();
 				redraw_engine_actions(1);
 				freeze_time();
-				save_game(); // auto save game
+				saveGame(); // auto save game
 				quitGame = 0;
 				cfgfile.Quit = 0;
 				unfreeze_time();
@@ -157,17 +157,17 @@ int32 run_game_engine() { // mainLoopInteration
 				break;
 			case kiMagicBall:
 				if (usingSabre == 1) {
-					init_model_actor(0, 0);
+					initModelActor(0, 0);
 				}
 				usingSabre = 0;
 				break;
 			case kiUseSabre:
 				if (sceneHero->body == 2) {
 					if (heroBehaviour == PROTOPACK) {
-						set_behaviour(NORMAL);
+						setBehaviour(NORMAL);
 					}
-					init_model_actor(2, 0);
-					init_anim(24, 1, 0, 0);
+					initModelActor(2, 0);
+					initAnim(24, 1, 0, 0);
 
 					usingSabre = 1;
 				}
@@ -175,8 +175,8 @@ int32 run_game_engine() { // mainLoopInteration
 			case kiBookOfBu: {
 				int32 tmpFlagDisplayText;
 
-				fade_2_black(paletteRGBA);
-				load_image(RESSHQR_INTROSCREEN1IMG, 1);
+				fadeToBlack(paletteRGBA);
+				loadImage(RESSHQR_INTROSCREEN1IMG, 1);
 				init_text_bank(2);
 				newGameVar4 = 0;
 				text_clip_full();
@@ -188,10 +188,10 @@ int32 run_game_engine() { // mainLoopInteration
 				text_clip_small();
 				newGameVar4 = 1;
 				init_text_bank(currentTextBank + 3);
-				fade_2_black(paletteRGBACustom);
-				clear_screen();
+				fadeToBlack(paletteRGBACustom);
+				clearScreen();
 				flip();
-				set_palette(paletteRGBA);
+				setPalette(paletteRGBA);
 				// lockPalette = 1; // TODO
 			}							 
 				break;
@@ -203,9 +203,9 @@ int32 run_game_engine() { // mainLoopInteration
 				}
 
 				if (heroBehaviour == PROTOPACK) {
-					set_behaviour(NORMAL);
+					setBehaviour(NORMAL);
 				} else {
-					set_behaviour(PROTOPACK);
+					setBehaviour(PROTOPACK);
 				}
 				break;
 			case kiPinguin: {
@@ -218,10 +218,10 @@ int32 run_game_engine() { // mainLoopInteration
 
 				rotate_actor(0, 800, pinguin->angle);
 
-				if (check_collision_with_actors(mecaPinguinIdx)) {
+				if (checkCollisionWithActors(mecaPinguinIdx)) {
 					pinguin->life = 50;
 					pinguin->body = -1;
-					init_model_actor(0, mecaPinguinIdx);
+					initModelActor(0, mecaPinguinIdx);
 					pinguin->dynamicFlags.bIsDead = 0; // &= 0xDF
                     pinguin->brickShape = 0;
 					move_actor(pinguin->angle, pinguin->angle, pinguin->speed, &pinguin->move);
@@ -298,9 +298,9 @@ int32 run_game_engine() { // mainLoopInteration
 			}
 
 			if (heroBehaviour == PROTOPACK) {
-				set_behaviour(NORMAL);
+				setBehaviour(NORMAL);
 			} else {
-				set_behaviour(PROTOPACK);
+				setBehaviour(PROTOPACK);
 			}
 		}
 
@@ -319,9 +319,9 @@ int32 run_game_engine() { // mainLoopInteration
 			freeze_time();
 			set_font_color(15);
 			draw_text(5, 446, (int8*)"Pause"); // no key for pause in Text Bank
-			copy_block_phys(5, 446, 100, 479);
+			copyBlockPhys(5, 446, 100, 479);
 			do {
-				read_keys();
+				readKeys();
 				SDL_Delay(10);
 			} while (skipIntro != 0x19 && !pressedKey);
 			unfreeze_time();
@@ -345,7 +345,7 @@ int32 run_game_engine() { // mainLoopInteration
         sceneActors[a].hitBy = -1;
     }
 
-	process_extras();
+	processExtras();
 
 	for (a = 0; a < sceneNumActors; a++) {
 		ActorStruct *actor = &sceneActors[a];
@@ -353,18 +353,18 @@ int32 run_game_engine() { // mainLoopInteration
 		if (!actor->dynamicFlags.bIsDead) {
 			if (actor->life == 0) {
 				if (a == 0) { // if its hero who died
-					init_anim(ANIM_LANDDEATH, 4, 0, 0);
+					initAnim(ANIM_LANDDEATH, 4, 0, 0);
 					actor->controlMode = 0;
 				} else {
 					play_sample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z);
 
 					if (a == mecaPinguinIdx) {
-						add_extra_explode(actor->X, actor->Y, actor->Z);
+						addExtraExplode(actor->X, actor->Y, actor->Z);
 					}
 				}
 				
 				if (actor->bonusParameter & 0x1F0 && !(actor->bonusParameter & 1)) {
-					process_actor_extra_bonus(a);
+					processActorExtraBonus(a);
 				}
 			}
 
@@ -378,7 +378,7 @@ int32 run_game_engine() { // mainLoopInteration
 				process_move_script(a);
 			}
 
-			process_actor_animations(a);
+			processActorAnimations(a);
 
 			if (actor->staticFlags.bIsZonable) {
 				process_actor_zones(a);
@@ -394,7 +394,7 @@ int32 run_game_engine() { // mainLoopInteration
 
 			if (actor->staticFlags.bCanDrown) {
 				int32 brickSound;
-				brickSound = get_brick_sound_type(actor->X, actor->Y - 1, actor->Z);
+				brickSound = getBrickSoundType(actor->X, actor->Y - 1, actor->Z);
 				actor->brickSound = brickSound;
 
 				if ((brickSound & 0xF0) == 0xF0) {
@@ -404,7 +404,7 @@ int32 run_game_engine() { // mainLoopInteration
 							play_sample(0x25, rnd, 1, actor->X, actor->Y, actor->Z);
 							if (actor->bonusParameter & 0x1F0) {
 								if (!(actor->bonusParameter & 1)) {
-									process_actor_extra_bonus(a);
+									processActorExtraBonus(a);
 								}
 								actor->life = 0;
 							}
@@ -412,7 +412,7 @@ int32 run_game_engine() { // mainLoopInteration
 							if (heroBehaviour != 4 || (brickSound & 0x0F) != actor->anim) {
 								if (!cropBottomScreen)
 								{
-									init_anim(ANIM_DRAWN, 4, 0, 0);
+									initAnim(ANIM_DRAWN, 4, 0, 0);
 									project_position_on_screen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 									cropBottomScreen = projPosY;
 								}
@@ -464,14 +464,14 @@ int32 run_game_engine() { // mainLoopInteration
 								currentSceneIdx = previousSceneIdx;
 							}
 
-							save_game();
-							process_gameover_animation();
+							saveGame();
+							processGameoverAnimation();
 							quitGame = 0;
 							return 0;
 						}
 					}
 				} else {
-					process_actor_carrier(a);
+					processActorCarrier(a);
 					actor->dynamicFlags.bIsDead = 1;
 					actor->entity = -1;
 					actor->zone = -1;

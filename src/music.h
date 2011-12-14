@@ -53,12 +53,12 @@ void play_track_music(int32 track);
 void stop_track_music();
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
-void play_midi_music(int32 midiIdx, int32 loop);
+void playMidiMusic(int32 midiIdx, int32 loop);
 /** Stop MIDI music */
 void stop_midi_music();
 
 /** Initialize CD-Rom */
-int32 init_cdrom();
+int32 initCdrom();
 
 /** Stop MIDI and Track music */
 void stop_music();

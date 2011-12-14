@@ -388,7 +388,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 					cfgfile.MusicVolume = 255;
 				if (cfgfile.MusicVolume < 0)
 					cfgfile.MusicVolume = 0;
-				newWidth = cross_dot(left, right, 255, cfgfile.MusicVolume);
+				newWidth = crossDot(left, right, 255, cfgfile.MusicVolume);
 				break;
 			}
 			case 2: {
@@ -396,7 +396,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 					cfgfile.WaveVolume = 255;
 				if (cfgfile.WaveVolume < 0)
 					cfgfile.WaveVolume = 0;
-				newWidth = cross_dot(left, right, 255, cfgfile.WaveVolume);
+				newWidth = crossDot(left, right, 255, cfgfile.WaveVolume);
 				break;
 			}
 			case 3: {
@@ -404,7 +404,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 					cfgfile.CDVolume = 255;
 				if (cfgfile.CDVolume < 0)
 					cfgfile.CDVolume = 0;
-				newWidth = cross_dot(left, right, 255, cfgfile.CDVolume);
+				newWidth = crossDot(left, right, 255, cfgfile.CDVolume);
 				break;
 			}
 			case 4: {
@@ -412,7 +412,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 					cfgfile.LineVolume = 255;
 				if (cfgfile.LineVolume < 0)
 					cfgfile.LineVolume = 0;
-				newWidth = cross_dot(left, right, 255, cfgfile.LineVolume);
+				newWidth = crossDot(left, right, 255, cfgfile.LineVolume);
 				break;
 			}
 			case 5: {
@@ -420,7 +420,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 					cfgfile.MasterVolume = 255;
 				if (cfgfile.MasterVolume < 0)
 					cfgfile.MasterVolume = 0;
-				newWidth = cross_dot(left, right, 255, cfgfile.MasterVolume);
+				newWidth = crossDot(left, right, 255, cfgfile.MasterVolume);
 				break;
 			}
 			};
@@ -455,7 +455,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 
 	// TODO: make volume buttons
 
-	copy_block_phys(left, top, right, bottom);
+	copyBlockPhys(left, top, right, bottom);
 }
 
 /** Process the menu button draw
@@ -538,7 +538,7 @@ int32 process_menu(int16 * menuSettings) {
 	localTime = lbaTime;
 	maxButton = numEntry - 1;
 
-	read_keys();
+	readKeys();
 
 	do {
 		// if its on main menu
@@ -641,7 +641,7 @@ int32 process_menu(int16 * menuSettings) {
 
 			draw_button(localData, 0); // current button
 			do {
-				read_keys();
+				readKeys();
 				draw_button(localData, 1);
 			} while (pressedKey == 0 && skipedKey == 0 && skipIntro == 0);
 			buttonNeedRedraw = 0;
@@ -653,15 +653,15 @@ int32 process_menu(int16 * menuSettings) {
 
 			buttonNeedRedraw = 0;
 			draw_button(localData, 1);
-			read_keys();
+			readKeys();
 			// WARNING: this is here to prevent a fade bug while quit the menu
-			copy_screen(workVideoBuffer, frontVideoBuffer);
+			copyScreen(workVideoBuffer, frontVideoBuffer);
 		}
 	} while (!(skipedKey & 2) && !(skipedKey & 1));
 
 	currentButton = *(localData + 5 + currentButton * 2); // get current browsed button
 
-	read_keys();
+	readKeys();
 
 	return currentButton;
 }
@@ -670,7 +670,7 @@ int32 process_menu(int16 * menuSettings) {
 int32 advoptions_menu() {
 	int32 ret = 0;
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	do {
 		switch (process_menu(AdvOptionsMenuSettings)) {
@@ -684,7 +684,7 @@ int32 advoptions_menu() {
 		}
 	} while (ret != 1);
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
 	return 0;
@@ -694,7 +694,7 @@ int32 advoptions_menu() {
 int32 savemanage_menu() {
 	int32 ret = 0;
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	do {
 		switch (process_menu(SaveManageMenuSettings)) {
@@ -708,7 +708,7 @@ int32 savemanage_menu() {
 		}
 	} while (ret != 1);
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
 	return 0;
@@ -718,7 +718,7 @@ int32 savemanage_menu() {
 int32 volume_menu() {
 	int32 ret = 0;
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	do {
 		switch (process_menu(VolumeMenuSettings)) {
@@ -732,7 +732,7 @@ int32 volume_menu() {
 		}
 	} while (ret != 1);
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
 	return 0;
@@ -742,7 +742,7 @@ int32 volume_menu() {
 int32 options_menu() {
 	int32 ret = 0;
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	stop_samples();
 	//playCDtrack(9);
@@ -755,19 +755,19 @@ int32 options_menu() {
 			break;
 		}
 		case OPTIONSMENU_VOLUME: {
-			copy_screen(workVideoBuffer, frontVideoBuffer);
+			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
 			volume_menu();
 			break;
 		}
 		case OPTIONSMENU_SAVEMANAGE: {
-			copy_screen(workVideoBuffer, frontVideoBuffer);
+			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
 			savemanage_menu();
 			break;
 		}
 		case OPTIONSMENU_ADVOPTIONS: {
-			copy_screen(workVideoBuffer, frontVideoBuffer);
+			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
 			advoptions_menu();
 			break;
@@ -777,7 +777,7 @@ int32 options_menu() {
 		}
 	} while (ret != 1);
 
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 	flip(workVideoBuffer);
 
 	return 0;
@@ -785,14 +785,14 @@ int32 options_menu() {
 
 
 /** Used to run the main menu */
-void main_menu() {
+void mainMenu() {
 	stop_samples();
 
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	// load menu effect file only once
 	plasmaEffectPtr = malloc(PLASMA_EFFECT_FILESIZE);
-	hqr_get_entry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
+	hqrGetEntry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
 	while (!cfgfile.Quit) {
 		init_text_bank(0);
@@ -810,7 +810,7 @@ void main_menu() {
 			break;
 		}
 		case MAINMENU_OPTIONS: {
-			copy_screen(workVideoBuffer, frontVideoBuffer);
+			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
 			OptionsMenuSettings[5] = OPTIONSMENU_RETURNMENU;
 			options_menu();
@@ -821,10 +821,10 @@ void main_menu() {
 			break;
 		}
 		case MAINMENU_BKGIMAGE: {
-			load_menu_image(1);
+			loadMenuImage(1);
 		}
 		}
-		fps_cycles(cfgfile.Fps);
+		fpsCycles(cfgfile.Fps);
 	}
 }
 
@@ -834,7 +834,7 @@ int32 giveup_menu() {
 	int32 menuId;
 	int16 * localMenu;
 
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 	stop_samples();
 
 	if (cfgfile.UseAutoSaving == 1)
@@ -853,7 +853,7 @@ int32 giveup_menu() {
 
 		init_text_bank(currentTextBank + 3);
 
-		fps_cycles(cfgfile.Fps);
+		fpsCycles(cfgfile.Fps);
 	} while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
 
 	if (menuId == GIVEUPMENU_QUIT)
@@ -873,11 +873,11 @@ void draw_info_menu(int16 left, int16 top)
 
 	newBoxLeft2 = left + 9;
 
-	draw_sprite(0, newBoxLeft2, top + 13, spriteTable[SPRITEHQR_LIFEPOINTS]);
+	drawSprite(0, newBoxLeft2, top + 13, spriteTable[SPRITEHQR_LIFEPOINTS]);
 
 	boxRight = left + 325;
 	newBoxLeft = left + 25;
-	boxLeft = cross_dot(newBoxLeft, boxRight, 50, sceneHero->life);
+	boxLeft = crossDot(newBoxLeft, boxRight, 50, sceneHero->life);
 
 	boxTop = top + 10;
 	boxBottom = top + 25;
@@ -885,9 +885,9 @@ void draw_info_menu(int16 left, int16 top)
 	draw_box(left + 25, top + 10, left + 324, top + 10 + 14);
 
 	if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED] && gameFlags[GAMEFLAG_TUNIC]) {
-		draw_sprite(0, newBoxLeft2, top + 36, spriteTable[SPRITEHQR_MAGICPOINTS]);
+		drawSprite(0, newBoxLeft2, top + 36, spriteTable[SPRITEHQR_MAGICPOINTS]);
 		if(magicLevelIdx > 0) {
-			draw_splitted_box(newBoxLeft, top + 35, cross_dot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
+			draw_splitted_box(newBoxLeft, top + 35, crossDot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
 		}
 		draw_box(left + 25, top + 35, left + magicLevelIdx * 80 + 20, top + 35 + 15);
 	}
@@ -895,12 +895,12 @@ void draw_info_menu(int16 left, int16 top)
 	boxLeft = left + 340;
 
 	/** draw coin sprite */
-	draw_sprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
+	drawSprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
 	set_font_color(155);
 	draw_text(left + 370, top + 5, ITOA(inventoryNumKashes));
 
 	/** draw key sprite */
-	draw_sprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
+	drawSprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
 	set_font_color(155);
 	draw_text(left + 370, top + 40, ITOA(inventoryNumKeys));
 
@@ -912,16 +912,16 @@ void draw_info_menu(int16 left, int16 top)
 	// Clover leaf boxes
 	for (i = 0; i < inventoryNumLeafsBox; i++)
 	{
-		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITEHQR_CLOVERLEAFBOX]);
+		drawSprite(0, crossDot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITEHQR_CLOVERLEAFBOX]);
 	}
 
 	// Clover leafs
 	for (i = 0; i < inventoryNumLeafs; i++)
 	{
-		draw_sprite(0, cross_dot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITEHQR_CLOVERLEAF]);
+		drawSprite(0, crossDot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITEHQR_CLOVERLEAF]);
 	}
 
-	copy_block_phys(left, top, left + 450, top + 135);
+	copyBlockPhys(left, top, left + 450, top + 135);
 }
 
 void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
@@ -937,10 +937,10 @@ void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
 	currentAnim = animTable[heroAnimIdx[behaviour]];
 	currentAnimState = behaviourAnimState[behaviour];
 
-	if (set_model_animation(currentAnimState, currentAnim, behaviourEntity, &behaviourAnimData[behaviour])) {
+	if (setModelAnimation(currentAnimState, currentAnim, behaviourEntity, &behaviourAnimData[behaviour])) {
 		currentAnimState++; // keyframe
-		if (currentAnimState >= get_num_keyframes(currentAnim)) {
-			currentAnimState = get_start_keyframe(currentAnim);
+		if (currentAnimState >= getNumKeyframes(currentAnim)) {
+			currentAnimState = getStartKeyframe(currentAnim);
 		}
 		behaviourAnimState[behaviour] = currentAnimState;
 	}
@@ -974,8 +974,8 @@ void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
 
 	render_behaviour_model(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
 
-	copy_block_phys(boxLeft, boxTop, boxRight, boxBottom);
-	copy_block_phys(110, 239, 540, 279);
+	copyBlockPhys(boxLeft, boxTop, boxRight, boxBottom);
+	copyBlockPhys(110, 239, 540, 279);
 
 	load_clip();
 }
@@ -984,21 +984,21 @@ void draw_behaviour_menu(int32 angle) {
 	draw_box(100, 100, 550, 290);
 	draw_transparent_box(101, 101, 549, 289, 2);
 
-	set_anim_at_keyframe(behaviourAnimState[NORMAL], animTable[heroAnimIdx[NORMAL]], behaviourEntity, &behaviourAnimData[NORMAL]);
+	setAnimAtKeyframe(behaviourAnimState[NORMAL], animTable[heroAnimIdx[NORMAL]], behaviourEntity, &behaviourAnimData[NORMAL]);
 	draw_behaviour(NORMAL, angle, 0);
 
-	set_anim_at_keyframe(behaviourAnimState[ATHLETIC], animTable[heroAnimIdx[ATHLETIC]], behaviourEntity, &behaviourAnimData[ATHLETIC]);
+	setAnimAtKeyframe(behaviourAnimState[ATHLETIC], animTable[heroAnimIdx[ATHLETIC]], behaviourEntity, &behaviourAnimData[ATHLETIC]);
 	draw_behaviour(ATHLETIC, angle, 0);
 
-	set_anim_at_keyframe(behaviourAnimState[AGGRESSIVE], animTable[heroAnimIdx[AGGRESSIVE]], behaviourEntity, &behaviourAnimData[AGGRESSIVE]);
+	setAnimAtKeyframe(behaviourAnimState[AGGRESSIVE], animTable[heroAnimIdx[AGGRESSIVE]], behaviourEntity, &behaviourAnimData[AGGRESSIVE]);
 	draw_behaviour(AGGRESSIVE, angle, 0);
 
-	set_anim_at_keyframe(behaviourAnimState[DISCRETE], animTable[heroAnimIdx[DISCRETE]], behaviourEntity, &behaviourAnimData[DISCRETE]);
+	setAnimAtKeyframe(behaviourAnimState[DISCRETE], animTable[heroAnimIdx[DISCRETE]], behaviourEntity, &behaviourAnimData[DISCRETE]);
 	draw_behaviour(DISCRETE, angle, 0);
 
 	draw_info_menu(100, 300);
 
-	copy_block_phys(100, 100, 550, 290);
+	copyBlockPhys(100, 100, 550, 290);
 }
 
 /** Process hero behaviour menu */
@@ -1010,7 +1010,7 @@ void process_behaviour_menu() {
 
 	if (heroBehaviour == PROTOPACK) {
 		stop_samples();
-		set_behaviour(NORMAL);
+		setBehaviour(NORMAL);
 	}
 
 	behaviourEntity = bodyTable[sceneHero->entity];
@@ -1020,9 +1020,9 @@ void process_behaviour_menu() {
 	heroAnimIdx[AGGRESSIVE] = heroAnimIdxAGGRESSIVE;
 	heroAnimIdx[DISCRETE]   = heroAnimIdxDISCRETE;
 
-	set_actor_angle_safe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
+	setActorAngleSafe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
 
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	tmpLanguageCD = cfgfile.LanguageCDId;
 	cfgfile.LanguageCDId = 0;
@@ -1036,14 +1036,14 @@ void process_behaviour_menu() {
 
 	tmpHeroBehaviour = heroBehaviour;
 
-	set_anim_at_keyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
+	setAnimAtKeyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
 
-	read_keys();
+	readKeys();
 	
 	tmpTime = lbaTime;
 
 	while (skipedKey & 4 || (skipIntro > 59 && skipIntro < 62)) {
-		read_keys();
+		readKeys();
 		key = pressedKey;
 
 		if (key & 8) {
@@ -1065,25 +1065,25 @@ void process_behaviour_menu() {
 		if (tmpHeroBehaviour != heroBehaviour) {
 			draw_behaviour(tmpHeroBehaviour, sceneHero->angle, 1);
 			tmpHeroBehaviour = heroBehaviour;
-			set_actor_angle_safe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
-			set_anim_at_keyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
+			setActorAngleSafe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
+			setAnimAtKeyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
 
 			while (pressedKey) {
-				read_keys();
+				readKeys();
 				draw_behaviour(heroBehaviour, -1, 1);
 			}
 		}
 		
 		draw_behaviour(heroBehaviour, -1, 1);
 
-		fps_cycles(50);
+		fpsCycles(50);
 		lbaTime++;
 	}
 
 	lbaTime = tmpTime;
 
-	set_behaviour(heroBehaviour);
-	init_engine_projections();
+	setBehaviour(heroBehaviour);
+	initEngineProjections();
 
 	currentTextBank = tmpTextBank;
 	init_text_bank(currentTextBank + 3);
@@ -1130,7 +1130,7 @@ void draw_item(int32 item) {
 	}
 
 	draw_box(left, top, right, bottom);
-	copy_block_phys(left, top, right, bottom);
+	copyBlockPhys(left, top, right, bottom);
 }
 
 void draw_inventory_items() {
@@ -1139,7 +1139,7 @@ void draw_inventory_items() {
 	draw_transparent_box(17, 10, 622, 320, 4);
 	draw_box(17, 10, 622, 320);
 	draw_magicitems_box(110, 18, 188, 311, 75);
-	copy_block_phys(17, 10, 622, 320);
+	copyBlockPhys(17, 10, 622, 320);
 
 	for (item = 0; item < NUM_INVENTORY_ITEMS; item++) {
 		draw_item(item);
@@ -1154,7 +1154,7 @@ void process_inventory_menu() {
 	tmpAlphaLight = alphaLight;
 	tmpBetaLight  = betaLight;
 
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	set_light_vector(896, 950, 0);
 
@@ -1177,7 +1177,7 @@ void process_inventory_menu() {
 	init_dialogue_box();
 
 	while (skipIntro != 1) {
-		read_keys();
+		readKeys();
 		prevSelectedItem = inventorySelectedItem;
 
 		if (!di) {
@@ -1283,14 +1283,14 @@ void process_inventory_menu() {
 	alphaLight = tmpAlphaLight;
 	betaLight = tmpBetaLight;
 
-	init_engine_projections();
+	initEngineProjections();
 
 	cfgfile.LanguageCDId = tmpLanguageCD;
 
 	init_text_bank(currentTextBank + 3);
 
 	while (skipIntro != 0 && skipedKey != 0) {
-		read_keys();
+		readKeys();
 		delay(1);
 	}
 }

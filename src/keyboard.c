@@ -28,7 +28,7 @@
 #include "keyboard.h"
 
 /** Initialize engine auxiliar keymap */
-void init_keymap() {
+void initKeymap() {
 	pressedKeyMap[0] = 0x48;
 	pressedKeyMap[1] = 0x50;
 	pressedKeyMap[2] = 0x4B;

@@ -51,41 +51,41 @@ int32 causeActorDamage; //fieldCauseDamage
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
 	@param actorIdx2 Actor 2 index */
-int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2);
+int32 standingOnActor(int32 actorIdx1, int32 actorIdx2);
 
-int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3);
+int32 getAverageValue(int32 var0, int32 var1, int32 var2, int32 var3);
 
 /** Reajust actor position in scene according with brick shape bellow actor
 	@param brickShape Shape of brick bellow the actor */
-void reajust_actor_position(int32 brickShape);
+void reajustActorPosition(int32 brickShape);
 
 /** Check collision with actors
 	@param actorIx Current process actor index */
-int32 check_collision_with_actors(int32 actorIdx);
+int32 checkCollisionWithActors(int32 actorIdx);
 
 /** Check Hero collision with bricks
 	@param X Hero X coordinate 
 	@param Y Hero Y coordinate 
 	@param Z Hero Z coordinate
 	@param damageMask Cause damage mask */
-void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask);
+void checkHeroCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 damageMask);
 
 /** Check other actor collision with bricks
 	@param X Actor X coordinate 
 	@param Y Actor Y coordinate 
 	@param Z Actor Z coordinate
 	@param damageMask Cause damage mask */
-void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask);
+void checkActorCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 damageMask);
 
 /** Make actor to stop falling */
-void stop_falling();
+void stopFalling();
 
 /** Check extra collision with actors
 	@param extra to process
 	@param actorIdx actor to check collision */
-int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx);
+int32 checkExtraCollisionWithActors(ExtraListStruct* extra, int32 actorIdx);
 
 /** Check extra collision with bricks */
-int32 check_extra_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ);
+int32 checkExtraCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ);
 
 #endif

@@ -71,7 +71,7 @@ void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int3
 int32 process_menu(int16 * menuSettings);
 
 /** Used to run the main menu */
-void main_menu();
+void mainMenu();
 
 /** Used to run the in-game give-up menu */
 int32 giveup_menu();

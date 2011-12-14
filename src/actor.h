@@ -252,47 +252,47 @@ int16 topRightY;   // loadCostumeVar5
 int16 topRightZ;   // loadCostumeVar6
 
 /** Restart hero variables while opening new scenes */
-void restart_hero_scene();
+void restartHeroScene();
 
 /** Load hero 3D body and animations */
-void load_hero_entities();
+void loadHeroEntities();
 
 /** Set hero behaviour
 	@param behaviour behaviour value to set */
-void set_behaviour(int32 behaviour);
+void setBehaviour(int32 behaviour);
 
 /** Initialize 3D actor body
 	@param bodyIdx 3D actor body index
 	@param actorIdx 3D actor index */
-int32 init_body(int32 bodyIdx, int32 actorIdx);
+int32 initBody(int32 bodyIdx, int32 actorIdx);
 
 /** Preload all sprites */
-void preload_sprites();
+void preloadSprites();
 
 /** Initialize 3D actor
 	@param bodyIdx 3D actor body index
 	@param actorIdx 3D actor index */
-void init_model_actor(int32 bodyIdx, int16 actorIdx);
+void initModelActor(int32 bodyIdx, int16 actorIdx);
 
 /** Initialize actors
 	@param actorIdx actor index to init */
-void init_actor(int16 actorIdx);
+void initActor(int16 actorIdx);
 
 /** Reset actor
 	@param actorIdx actor index to init */
-void reset_actor(int16 actorIdx);
+void resetActor(int16 actorIdx);
 
 /** Process hit actor
 	@param actorIdx actor hitting index
 	@param actorIdxAttacked actor attacked index
 	@param strengthOfHit actor hitting strength of hit
 	@param angle angle of actor hitting */
-void hit_actor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32 angle);
+void hitActor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32 angle);
 
 /** Process actor carrier */
-void process_actor_carrier(int32 actorIdx);
+void processActorCarrier(int32 actorIdx);
 
 /** Process actor extra bonus */
-void process_actor_extra_bonus(int32 actorIdx);
+void processActorExtraBonus(int32 actorIdx);
 
 #endif

@@ -80,6 +80,6 @@ unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
 
 /** General function to play movies
 	@param movie - movie file path */
-void play_movie(int8 *movie);
+void playMovie(int8 *movie);
 
 #endif

@@ -44,7 +44,7 @@ int32 canChangeScenes = 0;
 #endif
 
 /** Change scenario camera positions */
-void change_grid_camera(int16 pKey) {
+void changeGridCamera(int16 pKey) {
 	if (useFreeCamera) {
 		// Press up - more X positions
 		if (pKey == 0x2E) {
@@ -73,7 +73,7 @@ void change_grid_camera(int16 pKey) {
 }
 
 /** Change grid index */
-void change_grid(int16 pKey) {
+void changeGrid(int16 pKey) {
 	if (canChangeScenes) {
 		// Press up - more X positions
 		if (pKey == 0x13) {
@@ -99,7 +99,7 @@ void change_grid(int16 pKey) {
 }
 
 /** Apply and change disappear celling grid */
-void apply_celling_grid(int16 pKey) {
+void applyCellingGrid(int16 pKey) {
 	// Increase celling grid index
 	if (pKey == 0x22) {
 		cellingGridIdx++;
@@ -116,14 +116,14 @@ void apply_celling_grid(int16 pKey) {
 	// Enable/disable celling grid
 	if (pKey == 0x14 && useCellingGrid == -1) {
 		useCellingGrid = 1;
-		//create_grid_map();
-		init_celling_grid(cellingGridIdx);
+		//createGridMap();
+		initCellingGrid(cellingGridIdx);
 		if (cfgfile.Debug && pKey == 0x14)
 			printf("\nEnable Celling Grid index: %d\n", cellingGridIdx);
 		needChangeScene = -2; // tricky to make the fade
 	} else if (pKey == 0x14 && useCellingGrid == 1) {
 		useCellingGrid = -1;
-		create_grid_map();
+		createGridMap();
 		reqBgRedraw = 1;
 		if (cfgfile.Debug && pKey == 0x14)
 			printf("\nDisable Celling Grid index: %d\n", cellingGridIdx);

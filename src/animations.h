@@ -117,54 +117,54 @@ uint8 *animBuffer2;
 	@param animPtr Pointer to animation
 	@param bodyPtr Body model poitner
 	@param animTimerDataPtr Animation time data */
-int32 set_anim_at_keyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
+int32 setAnimAtKeyframe(int32 keyframeIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
 
 /** Get total number of keyframes in animation
 	@param animPtr Pointer to animation */
-int32 get_num_keyframes(uint8 *animPtr);
+int32 getNumKeyframes(uint8 *animPtr);
 
 /** Get first keyframes in animation
 	@param animPtr Pointer to animation */
-int32 get_start_keyframe(uint8 *animPtr);
+int32 getStartKeyframe(uint8 *animPtr);
 
 /** Set new body animation
 	@param animIdx Animation index
 	@param animPtr Animation pointer
 	@param bodyPtr Body model poitner 
 	@param animTimerDataPtr Animation time data */
-int32 set_model_animation(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
+int32 setModelAnimation(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
 
 /** Get entity anim index (This is taken from File3D entities)
 	@param animIdx Entity animation index
 	@param actorIdx Actor index */
-int32 get_body_anim_index(int32 animIdx, int32 actorIdx);
+int32 getBodyAnimIndex(int32 animIdx, int32 actorIdx);
 
 /** Stock animation - copy the next keyFrame from a different buffer
 	@param animPtr Animation pointer
 	@param bodyPtr Body model poitner 
 	@param animTimerDataPtr Animation time data */
-int32 stock_animation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
+int32 stockAnimation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
 
 /** Verify animation at keyframe
 	@param animIdx Animation index
 	@param animPtr Animation pointer
 	@param bodyPtr Body model poitner 
 	@param animTimerDataPtr Animation time data */
-int32 verify_anim_at_keyframe(int32 animPos, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
+int32 verifyAnimAtKeyframe(int32 animPos, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr);
 
 /** Initialize animation
 	@param newAnim animation to init
 	@param animType animation type
 	@param animExtra animation actions extra data
 	@param actorIdx actor index */
-int32 init_anim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx);
+int32 initAnim(int32 newAnim, int16 animType, uint8 animExtra, int32 actorIdx);
 
 /** Process acotr animation actions
 	@param actorIdx Actor index */
-void process_anim_actions(int32 actorIdx);
+void processAnimActions(int32 actorIdx);
 
 /** Process main loop actor animations
 	@param actorIdx Actor index */
-void process_actor_animations(int32 actorIdx);
+void processActorAnimations(int32 actorIdx);
 
 #endif

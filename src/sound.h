@@ -49,7 +49,7 @@ void sample_volume(int32 channel, int32 volume);
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
 	@param y unknown y variable */
-void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y);
+void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y);
 
 /** Play samples
 	@param index sample index under flasamp.hqr file

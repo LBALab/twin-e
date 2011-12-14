@@ -37,14 +37,14 @@
 extern SDL_Surface *screen;
 
 /** Close everything in the game */
-void sdl_close();
+void sdlClose();
 
 /** SDL initializer
 	@return SDL init state */
-int sdl_initialize();
+int sdlInitialize();
 
 /** Frames per second sdl delay */
-void fps_cycles(int32 fps);
+void fpsCycles(int32 fps);
 
 /** Deplay certain seconds till proceed
 	@param time time in seconds to delay */
@@ -56,10 +56,10 @@ void delaySkip(uint32 time);
 
 /** Set a new palette in the SDL screen buffer
 	@param palette palette to set */
-void set_palette(uint8 * palette);
+void setPalette(uint8 * palette);
 
 /** Fade screen from black to white */
-void fade_black_2_white();
+void fadeBlackToWhite();
 
 /** Blit surface in the screen */
 void flip();
@@ -69,34 +69,34 @@ void flip();
 	@param top top position to start copy
 	@param right right position to start copy
 	@param bottom bottom position to start copy */
-void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom);
+void copyBlockPhys(int32 left, int32 top, int32 right, int32 bottom);
 
 /** Create SDL screen surface
 	@param buffer screen buffer to blit surface
 	@param width screen width size
 	@param height screen height size */
-void init_screen_buffer(uint8 *buffer, int32 width, int32 height);
+void initScreenBuffer(uint8 *buffer, int32 width, int32 height);
 
 /** Cross fade feature
 	@param buffer screen buffer
 	@param palette new palette to cross fade*/
-void cross_fade(uint8 *buffer, uint8 *palette);
+void crossFade(uint8 *buffer, uint8 *palette);
 
 /** Switch between window and fullscreen modes */
-void toggle_fullscreen();
+void toggleFullscreen();
 
 /** Handle keyboard pressed keys */
-void read_keys();
+void readKeys();
 
 /** Display SDL text in screen
 	@param X X coordinate in screen
 	@param Y Y coordinate in screen
 	@param string text to display
 	@param center if the text should be centered accoding with the giving positions */
-void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center);
+void ttfDrawText(int32 X, int32 Y, int8 *string, int32 center);
 
 /** Gets SDL mouse positions
 	@param mouseData structure that contains mouse position info */
-void get_mouse_positions(MouseStatusStruct *mouseData);
+void getMousePositions(MouseStatusStruct *mouseData);
 
 #endif

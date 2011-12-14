@@ -78,7 +78,7 @@ void get_shadow_position(int32 X, int32 Y, int32 Z);
 	@param endAngle end angle
 	@param stepAngle number of steps
 	@param movePtr time pointer to update */
-void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr);
+void setActorAngleSafe(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr);
 
 /** Clear actors safe angle
 	@param actorPtr actor pointer */

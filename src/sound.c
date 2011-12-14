@@ -60,7 +60,7 @@ void sample_volume(int32 channel, int32 volume) {
 	@param repeat number of times to repeat the sample
 	@param x unknown x variable
 	@param y unknown y variable */
-void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
+void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
 	if (cfgfile.Sound) {
 		int32 sampSize = 0;
 		int8 sampfile[256];
@@ -69,7 +69,7 @@ void play_fla_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 
 		sprintf(sampfile, FLA_DIR "%s",HQR_FLASAMP_FILE);
 
-		sampSize = hqr_getalloc_entry(&sampPtr, sampfile, index);
+		sampSize = hqrGetallocEntry(&sampPtr, sampfile, index);
 
 		// Fix incorrect sample files first byte
 		if (*sampPtr != 'C')
@@ -104,7 +104,7 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 		SDL_RWops *rw;
 		uint8* sampPtr;
 
-		sampSize = hqr_getalloc_entry(&sampPtr, HQR_SAMPLES_FILE, index);
+		sampSize = hqrGetallocEntry(&sampPtr, HQR_SAMPLES_FILE, index);
 
 		// Fix incorrect sample files first byte
 		if (*sampPtr != 'C')
@@ -116,7 +116,7 @@ void play_sample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
 		sample_volume(-1, cfgfile.WaveVolume);
 
 		/*distance = Abs(get_distance_3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
-		distance = get_average_value(0, distance, 10000, 255);
+		distance = getAverageValue(0, distance, 10000, 255);
 
 		Mix_SetDistance(1, distance);*/
 

@@ -34,10 +34,10 @@ extern int32 useFreeCamera;
 extern int32 canChangeScenes;
 
 /** Change scenario camera positions */
-void change_grid_camera(int16 pKey);
+void changeGridCamera(int16 pKey);
 /** Change grid index */
-void change_grid(int16 pKey);
+void changeGrid(int16 pKey);
 /** Apply and change disappear celling grid */
-void apply_celling_grid(int16 pKey);
+void applyCellingGrid(int16 pKey);
 
 #endif

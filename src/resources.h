@@ -112,6 +112,6 @@ uint8* inventoryTable[NUM_INVENTORY_ITEMS];
 uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
 /** Initialize resource pointers */
-void init_resources();
+void initResources();
 
 #endif

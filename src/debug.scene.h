@@ -33,6 +33,6 @@
 extern int32 showingZones;
 extern int32 typeZones;
 
-void display_zones(int16 pKey);
+void displayZones(int16 pKey);
 
 #endif
