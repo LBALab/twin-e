@@ -681,7 +681,21 @@ void processExtras() {
 			}
 			// process magic ball extra aiming for key
 			if (extra->type & 0x200) {
-				// TODO: reverse this part of the code
+				int32 actorIdx, actorIdxAttacked, tmpAngle, angle;
+
+				actorIdxAttacked = extra->lifeTime;
+				actorIdx = extra->actorIdx;
+
+				currentExtraX = sceneActors[actorIdxAttacked].X;
+				currentExtraY = sceneActors[actorIdxAttacked].Y + 1000;
+				currentExtraZ = sceneActors[actorIdxAttacked].Z;
+
+				tmpAngle = getAngle(extra->X, extra->Z, currentExtraX, currentExtraZ);
+				angle = (tmpAngle - extra->angle) & 0x3FF;
+
+				if (angle > 400 && angle < 600) {
+					// TODO: reverse this part of the code
+				}
 
 				/*
 				v13 = *(_WORD *)(v0 + 24);
