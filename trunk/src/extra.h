@@ -64,27 +64,27 @@ enum ExtraSpecialType {
 	kExplodeCloud = 1
 };
 
-int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit);
+int32 addExtra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit);
 
 /** Add extra explosion
 	@param X Explostion X coordinate 
 	@param Y Explostion Y coordinate
 	@param Z Explostion Z coordinate */
-int32 add_extra_explode(int32 X, int32 Y, int32 Z);
+int32 addExtraExplode(int32 X, int32 Y, int32 Z);
 
 /** Reset all used extras */
-void reset_extras();
+void resetExtras();
 
-void add_extra_special(int32 X, int32 Y, int32 Z, int32 type);
-int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount);
-int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 var2, int32 var3, int32 var4, int32 var5, int32 strengthOfHit);
-int32 add_extra_aiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 targetActorIdx, int32 maxSpeed, int32 strengthOfHit);
-void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 angle, int32 param2, int32 param3);
+void addExtraSpecial(int32 X, int32 Y, int32 Z, int32 type);
+int32 addExtraBonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount);
+int32 addExtraThrow(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 var2, int32 var3, int32 var4, int32 var5, int32 strengthOfHit);
+int32 addExtraAiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 targetActorIdx, int32 maxSpeed, int32 strengthOfHit);
+void addExtraThrowMagicball(int32 X, int32 Y, int32 Z, int32 param1, int32 angle, int32 param2, int32 param3);
 
-void draw_extra_special(int32 extraIdx, int32 X, int32 Y);
+void drawExtraSpecial(int32 extraIdx, int32 X, int32 Y);
 
 /** Process extras */
-void process_extras();
+void processExtras();
 
 
 #endif

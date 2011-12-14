@@ -32,11 +32,11 @@
 
 /** Set Holomap location position
 	@location Scene where position must be set */
-void set_holomap_position(int32 location);
+void setHolomapPosition(int32 location);
 
 /** Clear Holomap location position
 	@location Scene where position must be cleared */
-void clear_holomap_position(int32 location);
+void clearHolomapPosition(int32 location);
 
 
 #endif

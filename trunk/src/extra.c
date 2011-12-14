@@ -106,7 +106,7 @@ int16 explodeCloudShapeTable [] = {
 	-12
 };
 
-int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit) {
+int32 addExtra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit) {
 	int32 i;
 
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
@@ -135,7 +135,7 @@ int32 add_extra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 ta
 	@param X Explostion X coordinate 
 	@param Y Explostion Y coordinate
 	@param Z Explostion Z coordinate */
-int32 add_extra_explode(int32 X, int32 Y, int32 Z) {
+int32 addExtraExplode(int32 X, int32 Y, int32 Z) {
 	int32 i;
 
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
@@ -157,7 +157,7 @@ int32 add_extra_explode(int32 X, int32 Y, int32 Z) {
 }
 
 /** Reset all used extras */
-void reset_extras() {
+void resetExtras() {
 	int32 i;
 
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
@@ -167,7 +167,7 @@ void reset_extras() {
 	}
 }
 
-void throw_extra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int32 var4) { // InitFly
+void throwExtra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int32 var4) { // InitFly
 	extra->type |= 2;
 	
 	extra->lastX = extra->X;
@@ -187,7 +187,7 @@ void throw_extra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int
 	extra->lifeTime = lbaTime;
 }
 
-void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
+void addExtraSpecial(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
 	int32 i;
 	int16 flag = 0x8000 + type;
 
@@ -205,7 +205,7 @@ void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
 				extra->Z = Z;
 
 				// same as InitFly
-				throw_extra(extra, Rnd(0x100) + 0x80, Rnd(0x400), 50, 20);
+				throwExtra(extra, Rnd(0x100) + 0x80, Rnd(0x400), 50, 20);
 
 				extra->strengthOfHit = 0;
 				extra->lifeTime = lbaTime;
@@ -229,7 +229,7 @@ void add_extra_special(int32 X, int32 Y, int32 Z, int32 type) { // InitSpecial
 	}
 }
 
-int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount) { // ExtraBonus
+int32 addExtraBonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32 type, int32 bonusAmount) { // ExtraBonus
 	int32 i;
 
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
@@ -247,7 +247,7 @@ int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32
 			extra->Z = Z;
 
 			// same as InitFly
-			throw_extra(extra, param, angle, 40, 15);
+			throwExtra(extra, param, angle, 40, 15);
 
 			extra->strengthOfHit = 0;
 			extra->lifeTime = lbaTime;
@@ -261,7 +261,7 @@ int32 add_extra_bonus(int32 X, int32 Y, int32 Z, int32 param, int32 angle, int32
 	return -1;
 }
 
-int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 var2, int32 var3, int32 var4, int32 var5, int32 strengthOfHit) { // ThrowExtra
+int32 addExtraThrow(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 var2, int32 var3, int32 var4, int32 var5, int32 strengthOfHit) { // ThrowExtra
 	int32 i;
 
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
@@ -274,7 +274,7 @@ int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, i
 			extra->Z = Z;
 
 			// same as InitFly
-			throw_extra(extra, var2, var3, var4, var5);
+			throwExtra(extra, var2, var3, var4, var5);
 
 			extra->strengthOfHit = strengthOfHit;
 			extra->lifeTime = lbaTime;
@@ -288,7 +288,7 @@ int32 add_extra_throw(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, i
 	return -1;
 }
 
-int32 add_extra_aiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 targetActorIdx, int32 maxSpeed, int32 strengthOfHit) { // ExtraSearch
+int32 addExtraAiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 targetActorIdx, int32 maxSpeed, int32 strengthOfHit) { // ExtraSearch
 	int32 i;
 
 	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
@@ -319,12 +319,12 @@ int32 findExtraKey() {
 	return -1;
 }
 
-int32 add_extra_aiming_at_key(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 extraIdx) { // addMagicBallAimingAtKey
+int32 addExtraAimingAtKey(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 extraIdx) { // addMagicBallAimingAtKey
 	// TODO cseg01:00018250
 	return -1;
 }
 
-void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 angle, int32 param2, int32 param3) { // ThrowMagicBall
+void addExtraThrowMagicball(int32 X, int32 Y, int32 Z, int32 param1, int32 angle, int32 param2, int32 param3) { // ThrowMagicBall
 	int32 ballSprite = -1;
 	int32 ballStrength = 0;
 	int32 extraIdx = -1;
@@ -361,21 +361,21 @@ void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 an
 
 	switch (magicBallNumBounce) {
 	case 0:
-		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
+		magicBallIdx = addExtraThrow(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
 		break;
 	case 1:
 		magicBallAuxBounce = 4;
-		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
+		magicBallIdx = addExtraThrow(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
 		break;
 	case 2:
 	case 3:
 	case 4:
 		magicBallNumBounce = 1;
 		magicBallAuxBounce = 4;
-		magicBallIdx = add_extra_throw(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
+		magicBallIdx = addExtraThrow(0, X, Y, Z, ballSprite, param1, angle, param2, param3, ballStrength);
 		break;
 	case 5:
-		magicBallIdx = add_extra_aiming_at_key(0, X, Y, Z, ballSprite, extraIdx);
+		magicBallIdx = addExtraAimingAtKey(0, X, Y, Z, ballSprite, extraIdx);
       break;
 	}
 
@@ -384,7 +384,7 @@ void add_extra_throw_magicball(int32 X, int32 Y, int32 Z, int32 param1, int32 an
 	}
 }
 
-void draw_special_shape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 angle, int32 size) {
+void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 angle, int32 size) {
 	int16 currentShapeTable;
 	int16 var_8;
 	int16 temp1;
@@ -472,7 +472,7 @@ void draw_special_shape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 
 	draw_line(currentX, currentY, computedX, computedY, color);
 }
 
-void draw_extra_special(int32 extraIdx, int32 X, int32 Y) {
+void drawExtraSpecial(int32 extraIdx, int32 X, int32 Y) {
 	int32 specialType;
 	ExtraListStruct *extra = &extraList[extraIdx];
 
@@ -480,7 +480,7 @@ void draw_extra_special(int32 extraIdx, int32 X, int32 Y) {
 
 	switch(specialType) {
 	case kHitStars:
-		draw_special_shape(hitStarsShapeTable, X, Y, 15, (lbaTime << 5) & 0x300, 4);
+		drawSpecialShape(hitStarsShapeTable, X, Y, 15, (lbaTime << 5) & 0x300, 4);
 		break;
 	case kExplodeCloud: {
 		int32 cloudTime = 1 + lbaTime - extra->lifeTime;
@@ -489,20 +489,20 @@ void draw_extra_special(int32 extraIdx, int32 X, int32 Y) {
 			cloudTime = 32;
 		}
 
-		draw_special_shape(explodeCloudShapeTable, X, Y, 15, 0, cloudTime);
+		drawSpecialShape(explodeCloudShapeTable, X, Y, 15, 0, cloudTime);
 	}
 		break;
 	}
 }
 
-void process_magicball_bounce(ExtraListStruct *extra, int32 X, int32 Y, int32 Z) {
-	if (get_brick_shape(X, extra->Y, Z)) {
+void processMagicballBounce(ExtraListStruct *extra, int32 X, int32 Y, int32 Z) {
+	if (getBrickShape(X, extra->Y, Z)) {
 		extra->destY = -extra->destY;
 	}
-	if (get_brick_shape(extra->X, Y, Z)) {
+	if (getBrickShape(extra->X, Y, Z)) {
 		extra->destX = -extra->destX;
 	}
-	if (get_brick_shape(X, Y, extra->Z)) {
+	if (getBrickShape(X, Y, extra->Z)) {
 		extra->destZ = -extra->destZ;
 	}
 
@@ -517,7 +517,7 @@ void process_magicball_bounce(ExtraListStruct *extra, int32 X, int32 Y, int32 Z)
 }
 
 /** Process extras */
-void process_extras() {
+void processExtras() {
 	int32 i;
 
 	int32 currentExtraX = 0;
@@ -543,7 +543,7 @@ void process_extras() {
 			}
 			// 
 			if (extra->type & 0x1000) {
-				extra->info0 = get_average_value(97, 100, 30, lbaTime - extra->lifeTime);
+				extra->info0 = getAverageValue(97, 100, 30, lbaTime - extra->lifeTime);
 				continue;
 			}
 			// process extra moving
@@ -574,7 +574,7 @@ void process_extras() {
 							spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
 						}
 
-						magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+						magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
 					}
 
 					// if can take extra on ground
@@ -610,7 +610,7 @@ void process_extras() {
 
 				if (angle > 400 && angle < 600) {
 					if (extra->strengthOfHit) {
-						hit_actor(actorIdx, actorIdxAttacked, extra->strengthOfHit, -1);
+						hitActor(actorIdx, actorIdxAttacked, extra->strengthOfHit, -1);
 					}
 
 					if (i == magicBallIdx) {
@@ -639,7 +639,7 @@ void process_extras() {
 
 					set_actor_angle(0, extra->destZ, 50, &extra->trackActorMove);
 
-					if (actorIdxAttacked == check_extra_collision_with_actors(extra, actorIdx)) {
+					if (actorIdxAttacked == checkExtraCollisionWithActors(extra, actorIdx)) {
 						if (i == magicBallIdx) {
 							magicBallIdx = -1;
 						}
@@ -655,7 +655,7 @@ void process_extras() {
 			}
 			// process extra collision with actors
 			if (extra->type & 0x4) {
-				if (check_extra_collision_with_actors(extra, extra->actorIdx) != -1) {
+				if (checkExtraCollisionWithActors(extra, extra->actorIdx) != -1) {
 					// if extra is Magic Ball
 					if (i == magicBallIdx) {
 						int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
@@ -667,7 +667,7 @@ void process_extras() {
 							spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
 						}
 
-						magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+						magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
 					}
 					
 					extra->info0 = -1;
@@ -678,7 +678,7 @@ void process_extras() {
 			if (extra->type & 0x8) {
 				int32 process = 0;
 
-				if (check_extra_collision_with_bricks(currentExtraX, currentExtraY, currentExtraZ, extra->X, extra->Y, extra->Z)) {
+				if (checkExtraCollisionWithBricks(currentExtraX, currentExtraY, currentExtraZ, extra->X, extra->Y, extra->Z)) {
 					// if not touch the ground
 					if (!(extra->type & 0x2000)) {
 						process = 1;
@@ -693,7 +693,7 @@ void process_extras() {
 				if (process) {
 					// show explode cloud
 					if (extra->type & 0x100) {
-						add_extra_special(currentExtraX, currentExtraY, currentExtraZ, kExplodeCloud);
+						addExtraSpecial(currentExtraX, currentExtraY, currentExtraZ, kExplodeCloud);
 					}
 					// if extra is magic ball
 					if (i == magicBallIdx) {
@@ -711,7 +711,7 @@ void process_extras() {
 								spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
 							}
 
-							magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+							magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
 
 							extra->info0 = -1;
 							continue;
@@ -729,12 +729,12 @@ void process_extras() {
 									spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
 								}
 
-								magicBallIdx = add_extra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
+								magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 10000, 0);
 
 								extra->info0 = -1;
 								continue;
 							} else {
-								process_magicball_bounce(extra, currentExtraX, currentExtraY, currentExtraZ);
+								processMagicballBounce(extra, currentExtraX, currentExtraY, currentExtraZ);
 							}
 						}
 					} else {
@@ -747,7 +747,7 @@ void process_extras() {
 			if (extra->type & 0x10) {
 				int32 process = 0;
 
-				if (check_extra_collision_with_bricks(currentExtraX, currentExtraY, currentExtraZ, extra->X, extra->Y, extra->Z)) {
+				if (checkExtraCollisionWithBricks(currentExtraX, currentExtraY, currentExtraZ, extra->X, extra->Y, extra->Z)) {
 					// if not touch the ground
 					if (!(extra->type & 0x2000)) {
 						process = 1;
@@ -771,7 +771,7 @@ void process_extras() {
 			// get extras on ground
 			if ((extra->type & 0x20) && !(extra->type & 0x2)) {
 				// if hero touch extra
-				if (check_extra_collision_with_actors(extra, -1) == 0) {
+				if (checkExtraCollisionWithActors(extra, -1) == 0) {
 					// FIXME: add constant for sample index
 					play_sample(97, 0x1000, 1, extra->X, extra->Y, extra->Z);
 

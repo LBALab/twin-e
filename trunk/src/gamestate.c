@@ -57,7 +57,7 @@ int32 magicLevelStrengthOfHit[] = {
 };
 
 /** Initialize engine 3D projections */
-void init_engine_projections() { // reinitAll1
+void initEngineProjections() { // reinitAll1
 	set_ortho_projection(311, 240, 512);
 	set_base_translation(0, 0, 0);
 	set_base_rotation(0, 0, 0);
@@ -65,10 +65,10 @@ void init_engine_projections() { // reinitAll1
 }
 
 /** Initialize variables */
-void init_scene_vars() {
+void initSceneVars() {
 	int32 i;
 
-	reset_extras();
+	resetExtras();
 	
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		overlayList[i].info0 = -1;
@@ -112,8 +112,8 @@ void init_scene_vars() {
 	currentPositionInBodyPtrTab = 0;
 }
 
-void init_hero_vars() { // reinitAll3
-	reset_actor(0); // reset Hero
+void initHeroVars() { // reinitAll3
+	resetActor(0); // reset Hero
 
 	magicBallIdx = -1;
 
@@ -131,14 +131,14 @@ void init_hero_vars() { // reinitAll3
 }
 
 /** Initialize all engine variables */
-void init_engine_vars(int32 save) { // reinitAll
+void initEngineVars(int32 save) { // reinitAll
 	reset_clip();
 
 	alphaLight = 896;
 	betaLight = 950;
-	init_engine_projections();
-	init_scene_vars();
-	init_hero_vars();
+	initEngineProjections();
+	initSceneVars();
+	initHeroVars();
 	
 	newHeroX = 0x2000;
 	newHeroY = 0x1800;
@@ -171,14 +171,14 @@ void init_engine_vars(int32 save) { // reinitAll
 	previousHeroBehaviour = 0;
 
 	if (save == -1) {
-		load_game();
+		loadGame();
 		if (newHeroX == -1) {
 			heroPositionType = POSITION_TYPE_NONE;	
 		}
 	}
 }
 
-void load_game() {
+void loadGame() {
 	FileReader fr;
 	uint8 data;
 	int8* namePtr;
@@ -233,7 +233,7 @@ void load_game() {
 	heroPositionType = POSITION_TYPE_REBORN;
 }
 
-void save_game() {
+void saveGame() {
 	FileReader fr;
 	int8 data;
 
@@ -282,7 +282,7 @@ void save_game() {
 	frclose(&fr);
 }
 
-void process_found_item(int32 item) {
+void processFoundItem(int32 item) {
 	int32 itemCameraX, itemCameraY, itemCameraZ; // objectXYZ
 	int32 itemX, itemY, itemZ; // object2XYZ
 	int32 boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY;
@@ -299,7 +299,7 @@ void process_found_item(int32 item) {
 	redraw_engine_actions(1);
 	sceneHero->staticFlags.bIsHidden = 0;
 
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	itemCameraX = newCameraX << 9;
 	itemCameraY = newCameraY << 8;
@@ -315,7 +315,7 @@ void process_found_item(int32 item) {
 	}
 	itemZ = (sceneHero->Z + 0x100) >> 9;
 
-	draw_over_model_actor(itemX, itemY, itemZ);
+	drawOverModelActor(itemX, itemY, itemZ);
 	flip();
 
 	project_position_on_screen(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ);
@@ -348,11 +348,11 @@ void process_found_item(int32 item) {
 
 	// TODO: process vox play
 
-	currentAnim = animTable[get_body_anim_index(ANIM_FOUND_ITEM, 0)];
+	currentAnim = animTable[getBodyAnimIndex(ANIM_FOUND_ITEM, 0)];
 
 	tmpAnimTimer = sceneHero->animTimerData;
 	
-	animBuffer2 += stock_animation(animBuffer2, bodyTable[sceneHero->entity], &sceneHero->animTimerData);
+	animBuffer2 += stockAnimation(animBuffer2, bodyTable[sceneHero->entity], &sceneHero->animTimerData);
 	if (animBuffer1 + 4488 < animBuffer2) {
 		animBuffer2 = animBuffer1;
 	}
@@ -377,18 +377,18 @@ void process_found_item(int32 item) {
 		draw_box(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
 		add_redraw_area(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
 		reset_clip();
-		init_engine_projections();
+		initEngineProjections();
 
-		if (set_model_animation(currentAnimState, currentAnim, bodyTable[sceneHero->entity], &sceneHero->animTimerData)) {
+		if (setModelAnimation(currentAnimState, currentAnim, bodyTable[sceneHero->entity], &sceneHero->animTimerData)) {
 			currentAnimState++; // keyframe
-			if (currentAnimState >= get_num_keyframes(currentAnim)) {
-				currentAnimState = get_start_keyframe(currentAnim);
+			if (currentAnimState >= getNumKeyframes(currentAnim)) {
+				currentAnimState = getStartKeyframe(currentAnim);
 			}
 		}
 
 		render_iso_model(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ, 0, 0x80, 0, bodyTable[sceneHero->entity]);
 		set_clip(renderLeft, renderTop, renderRight, renderBottom);
-		draw_over_model_actor(itemX, itemY, itemZ);
+		drawOverModelActor(itemX, itemY, itemZ);
 		add_redraw_area(renderLeft, renderTop, renderRight, renderBottom);
 
 		if (textState) {
@@ -402,7 +402,7 @@ void process_found_item(int32 item) {
 
 		flip_redraw_areas();
 		
-		read_keys();
+		readKeys();
 		if (skipedKey) {
 			if (!textState) {
 				quitItem = 1;
@@ -419,7 +419,7 @@ void process_found_item(int32 item) {
 	// TODO: process vox play
 	/*{
 		while (printText11()) {
-			read_keys();
+			readKeys();
 			if (skipIntro == 1) {
 				break;
 			}
@@ -427,20 +427,20 @@ void process_found_item(int32 item) {
 		}
 	}*/
 
-	init_engine_projections();
+	initEngineProjections();
 	init_text_bank(currentTextBank + 3);
 
 	/*do {
-		read_keys();
+		readKeys();
 		delaySkip(1);
 	} while (!skipIntro);*/
 
 	sceneHero->animTimerData = tmpAnimTimer;
 }
 
-void process_game_choices(int32 choiceIdx) {
+void processGameChoices(int32 choiceIdx) {
 	int32 i;
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	gameChoicesSettings[0] = 0;	// Current loaded button (button number)
 	gameChoicesSettings[1] = numChoices; // Num of buttons
@@ -462,7 +462,7 @@ void process_game_choices(int32 choiceIdx) {
 	// TODO: process vox play
 }
 
-void process_gameover_animation() { // makeGameOver
+void processGameoverAnimation() { // makeGameOver
 	int32 tmpLbaTime, startLbaTime;
 	uint8 *gameOverPtr;
 
@@ -474,10 +474,10 @@ void process_gameover_animation() { // makeGameOver
 	sceneHero->staticFlags.bIsHidden = 0;
 
 	// TODO: drawInGameTransBox
-	set_palette(paletteRGBA);
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	setPalette(paletteRGBA);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 	gameOverPtr = malloc(hqr_entry_size(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
-	hqr_get_entry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
+	hqrGetEntry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
 
 	if (gameOverPtr) {
 		int32 avg, cdot;
@@ -490,14 +490,14 @@ void process_gameover_animation() { // makeGameOver
 		set_clip(120, 120, 519, 359);
 		
 		while(skipIntro != 1 && (lbaTime - startLbaTime) <= 0x1F4) {
-			read_keys();
+			readKeys();
 			
-			avg = get_average_value(40000, 3200, 500, lbaTime - startLbaTime);
-			cdot = cross_dot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
+			avg = getAverageValue(40000, 3200, 500, lbaTime - startLbaTime);
+			cdot = crossDot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
 			blit_box(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 			set_camera_angle(0, 0, 0, 0, -cdot, 0, avg);
 			render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
-			copy_block_phys(120, 120, 519, 359);
+			copyBlockPhys(120, 120, 519, 359);
 
 			lbaTime++;
 			delay(15);
@@ -507,15 +507,15 @@ void process_gameover_animation() { // makeGameOver
 		blit_box(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 		set_camera_angle(0, 0, 0, 0, 0, 0, 3200);
 		render_iso_model(0, 0, 0, 0, 0, 0, gameOverPtr);
-		copy_block_phys(120, 120, 519, 359);
+		copyBlockPhys(120, 120, 519, 359);
 
 		delaySkip(2000);
 
 		reset_clip();
 		free(gameOverPtr);
-		copy_screen(workVideoBuffer, frontVideoBuffer);
+		copyScreen(workVideoBuffer, frontVideoBuffer);
 		flip();
-		init_engine_projections();
+		initEngineProjections();
 
 		lbaTime = tmpLbaTime;
 	}

@@ -38,6 +38,6 @@ typedef struct MouseStatusStruct {
 } MouseStatusStruct;
 
 
-void process_debug(int16 pKey);
+void processDebug(int16 pKey);
 
 #endif

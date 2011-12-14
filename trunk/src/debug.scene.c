@@ -36,7 +36,7 @@
 int32 showingZones = 0;
 int32 typeZones = 127; // all zones on as default
 
-void draw_bounding_box_project_points(ScenePoint* pPoint3d, ScenePoint* pPoint3dProjected) {
+void drawBoundingBoxProjectPoints(ScenePoint* pPoint3d, ScenePoint* pPoint3dProjected) {
 	project_position_on_screen(pPoint3d->X, pPoint3d->Y, pPoint3d->Z);
 
 	pPoint3dProjected->X = projPosX;
@@ -56,7 +56,7 @@ void draw_bounding_box_project_points(ScenePoint* pPoint3d, ScenePoint* pPoint3d
 		renderBottom = projPosY;
 }
 
-int32 check_zone_type(int32 type) {
+int32 checkZoneType(int32 type) {
 	switch (type) {
 	case 0:
 		if (typeZones & 0x01)
@@ -93,14 +93,14 @@ int32 check_zone_type(int32 type) {
 	return 0;
 }
 
-void display_zones(int16 pKey) {
+void displayZones(int16 pKey) {
 	if (showingZones == 1) {
 		int z;
 		ZoneStruct *zonePtr = sceneZones;
 		for (z = 0; z < sceneNumZones; z++) {
 			zonePtr = &sceneZones[z];
 
-			if (check_zone_type(zonePtr->type)) {
+			if (checkZoneType(zonePtr->type)) {
 				ScenePoint frontBottomLeftPoint;
 				ScenePoint frontBottomRightPoint;
 
@@ -163,14 +163,14 @@ void display_zones(int16 pKey) {
 
 				// project all points
 
-				draw_bounding_box_project_points(&frontBottomLeftPoint,    &frontBottomLeftPoint2D);
-				draw_bounding_box_project_points(&frontBottomRightPoint,   &frontBottomRightPoint2D);
-				draw_bounding_box_project_points(&frontTopLeftPoint,       &frontTopLeftPoint2D);
-				draw_bounding_box_project_points(&frontTopRightPoint,      &frontTopRightPoint2D);
-				draw_bounding_box_project_points(&backBottomLeftPoint,     &backBottomLeftPoint2D);
-				draw_bounding_box_project_points(&backBottomRightPoint,    &backBottomRightPoint2D);
-				draw_bounding_box_project_points(&backTopLeftPoint,        &backTopLeftPoint2D);
-				draw_bounding_box_project_points(&backTopRightPoint,       &backTopRightPoint2D);
+				drawBoundingBoxProjectPoints(&frontBottomLeftPoint,    &frontBottomLeftPoint2D);
+				drawBoundingBoxProjectPoints(&frontBottomRightPoint,   &frontBottomRightPoint2D);
+				drawBoundingBoxProjectPoints(&frontTopLeftPoint,       &frontTopLeftPoint2D);
+				drawBoundingBoxProjectPoints(&frontTopRightPoint,      &frontTopRightPoint2D);
+				drawBoundingBoxProjectPoints(&backBottomLeftPoint,     &backBottomLeftPoint2D);
+				drawBoundingBoxProjectPoints(&backBottomRightPoint,    &backBottomRightPoint2D);
+				drawBoundingBoxProjectPoints(&backTopLeftPoint,        &backTopLeftPoint2D);
+				drawBoundingBoxProjectPoints(&backTopRightPoint,       &backTopRightPoint2D);
 
 				// draw all lines
 

@@ -51,6 +51,6 @@ int32 heroPressedKey;
 int32 heroPressedKey2;
 
 /** Initialize engine auxiliar keymap */
-void init_keymap();
+void initKeymap();
 
 #endif

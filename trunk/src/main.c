@@ -114,12 +114,12 @@ int8 CFGList[][22] = {
 
 
 /** Allocate video memory, both front and back buffers */
-void allocate_video_memory() {
+void allocVideoMemory() {
 	int32 i, j, k;
 
 	workVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint8));
 	frontVideoBuffer = frontVideoBufferbis = (uint8 *) malloc(sizeof(uint8) * SCREEN_WIDTH * SCREEN_HEIGHT);
-	init_screen_buffer(frontVideoBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
+	initScreenBuffer(frontVideoBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	j = 0;
 	k = 0;
@@ -135,7 +135,7 @@ void allocate_video_memory() {
 /** Gets configuration type index from lba.cfg config file
 	@param lineBuffer buffer with config line
 	@return config type index */
-int get_config_type_index(int8* lineBuffer) {
+int getConfigTypeIndex(int8* lineBuffer) {
 	int32 i;
 	char buffer[256];
 	char* ptr;
@@ -160,7 +160,7 @@ int get_config_type_index(int8* lineBuffer) {
 }
 
 /** Init configuration file \a lba.cfg */
-void init_configurations() {
+void initConfigurations() {
 	FILE *fd;
 	int8 buffer[256];
 	int32 cfgtype = -1;
@@ -172,7 +172,7 @@ void init_configurations() {
 	// make sure it quit when it reaches the end of file
 	while (fgets(buffer, 256, fd) != NULL) {
 		*strchr(buffer, 0x0D0A) = 0;
-		cfgtype = get_config_type_index(buffer);
+		cfgtype = getConfigTypeIndex(buffer);
 		if (cfgtype != -1) {
 			switch (cfgtype) {
 			case 0:
@@ -264,9 +264,9 @@ void init_configurations() {
 }
 
 /** Initialize LBA engine */
-void init_engine() {
+void initEngine() {
 	// getting configuration file
-	init_configurations();
+	initConfigurations();
 
 	// Show engine information
 	printf("Prequengine v%s\n", ENGINE_VERSION);
@@ -277,52 +277,52 @@ void init_engine() {
 	if (cfgfile.Debug)
 		printf("Compiled the %s at %s\n", __DATE__, __TIME__);
 
-	sdl_initialize();
+	sdlInitialize();
 
 	srand(SDL_GetTicks()); // always get a different seed while starting the game
 
-	allocate_video_memory();
-	clear_screen();
+	allocVideoMemory();
+	clearScreen();
 
 	// Toggle fullscreen if Fullscreen flag is set
-	toggle_fullscreen();
+	toggleFullscreen();
 
 	// Check if LBA CD-Rom is on drive
-	init_cdrom();
+	initCdrom();
 
 #ifndef _DEBUG
 
 	// Display company logo
-	adeline_logo();
+	adelineLogo();
 
 	// verify game version screens
 	if (cfgfile.Version == EUROPE_VERSION) {
 		// Little Big Adventure screen
-		load_image_delay(RESSHQR_LBAIMG, 3);
+		loadImageDelay(RESSHQR_LBAIMG, 3);
 		// Electronic Arts Logo
-		load_image_delay(RESSHQR_EAIMG, 2);
+		loadImageDelay(RESSHQR_EAIMG, 2);
 	} else if (cfgfile.Version == USA_VERSION) {
 		// Relentless screen
-		load_image_delay(RESSHQR_RELLENTIMG, 3);
+		loadImageDelay(RESSHQR_RELLENTIMG, 3);
 		// Electronic Arts Logo
-		load_image_delay(RESSHQR_EAIMG, 2);
+		loadImageDelay(RESSHQR_EAIMG, 2);
 	} else if (cfgfile.Version == MODIFICATION_VERSION) {
 		// Modification screen
-		load_image_delay(RESSHQR_RELLENTIMG, 2);
+		loadImageDelay(RESSHQR_RELLENTIMG, 2);
 	}
 
-	play_movie(FLA_DRAGON3);
+	playMovie(FLA_DRAGON3);
 
 #endif
 
-	load_menu_image(1);
+	loadMenuImage(1);
 
-	main_menu();
+	mainMenu();
 }
 
 
 /** Initialize all needed stuffs at first time running engine */
-void init_all() {
+void initAll() {
 	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
 	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
 
@@ -341,17 +341,17 @@ void init_all() {
 	rightMouse = 0;
 	leftMouse = 0;
 
-	init_keymap();
-	init_resources();
+	initKeymap();
+	initResources();
 }
 
 /** Main engine function
 	@param argc numner of arguments
 	@param argv array with all arguments strings */
 int main(int argc, char *argv[]) {
-	init_all();
-	init_engine();
-	sdl_close();
+	initAll();
+	initEngine();
+	sdlClose();
 	printf("\n\nLBA/Relentless < %s / %s >\n\nOK.\n\n", __DATE__, __TIME__);
 	printf("Prequengine v%s closed\n", ENGINE_VERSION);
 	if (cfgfile.Debug) {

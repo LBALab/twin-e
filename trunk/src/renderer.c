@@ -2199,7 +2199,7 @@ void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 b
 	if (angle == -1) {
 		newAngle = get_real_angle(&moveMenu);
 		if (moveMenu.numOfStep == 0) {
-			set_actor_angle_safe(newAngle, newAngle - 256, 50, &moveMenu);
+			setActorAngleSafe(newAngle, newAngle - 256, 50, &moveMenu);
 		}
 		render_iso_model(0, Y, 0, 0, newAngle, 0, entityPtr);
 	}

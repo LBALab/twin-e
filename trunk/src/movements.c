@@ -76,11 +76,11 @@ void get_shadow_position(int32 X, int32 Y, int32 Z) {
 	if (*ptr) {
 		uint8* tempPtr;
 
-		tempPtr = get_block_library(*(ptr++) - 1) + 3;
+		tempPtr = getBlockLibrary(*(ptr++) - 1) + 3;
 
 		shadowCollisionType = *(tempPtr + *(ptr) * 4);
 
-		reajust_actor_position(shadowCollisionType);
+		reajustActorPosition(shadowCollisionType);
 	}
 
 	shadowX = processActorX;
@@ -93,7 +93,7 @@ void get_shadow_position(int32 X, int32 Y, int32 Z) {
 	@param endAngle end angle
 	@param stepAngle number of steps
 	@param movePtr Pointer to process movements */
-void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr) {
+void setActorAngleSafe(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr) {
 	movePtr->from = startAngle & 0x3FF;
 	movePtr->to = endAngle & 0x3FF;
 	movePtr->numOfStep = stepAngle & 0x3FF;
@@ -103,7 +103,7 @@ void set_actor_angle_safe(int16 startAngle, int16 endAngle, int16 stepAngle, Act
 /** Clear actors safe angle
 	@param actorPtr actor pointer */
 void clear_real_angle(ActorStruct * actorPtr) {
-	set_actor_angle_safe(actorPtr->angle, actorPtr->angle, 0, &actorPtr->move);
+	setActorAngleSafe(actorPtr->angle, actorPtr->angle, 0, &actorPtr->move);
 }
 
 /** Set actor safe angle
@@ -374,7 +374,7 @@ void process_actor_movements(int32 actorIdx) {
 					break;
 				case ATHLETIC:
 					if (skipIntro == 0x39) {
-						init_anim(ANIM_JUMP, 1, 0, actorIdx);
+						initAnim(ANIM_JUMP, 1, 0, actorIdx);
 					}
 					break;
 				case AGGRESSIVE:
@@ -387,34 +387,34 @@ void process_actor_movements(int32 actorIdx) {
 
 								switch (aggresiveMode) {
 								case 0:
-									init_anim(ANIM_KICK, 1, 0, actorIdx);
+									initAnim(ANIM_KICK, 1, 0, actorIdx);
 									break;
 								case 1:
-									init_anim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
+									initAnim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
 									break;
 								case 2:
-									init_anim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
+									initAnim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
 									break;
 								}
 							}
 						} else {
 							if (key & 8) {
-								init_anim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
+								initAnim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
 							}
 
 							if (key & 4) {
-								init_anim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
+								initAnim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
 							}
 
 							if (key & 1) {
-								init_anim(ANIM_KICK, 1, 0, actorIdx);
+								initAnim(ANIM_KICK, 1, 0, actorIdx);
 							}
 						}
 					}
 					break;
 				case DISCRETE:
 					if (skipIntro == 0x39) {
-						init_anim(ANIM_HIDE, 0, 255, actorIdx);
+						initAnim(ANIM_HIDE, 0, 255, actorIdx);
 					}
 					break;
 				}
@@ -424,7 +424,7 @@ void process_actor_movements(int32 actorIdx) {
 				if (usingSabre == 0) { // Use Magic Ball
 					if (gameFlags[GAMEFLAG_HAS_MAGICBALL]) {
 						if (magicBallIdx == -1) {
-							init_anim(ANIM_THROW_BALL, 1, 0, actorIdx);
+							initAnim(ANIM_THROW_BALL, 1, 0, actorIdx);
 						}
 
 						heroMoved = 1;
@@ -433,10 +433,10 @@ void process_actor_movements(int32 actorIdx) {
 				} else {
 					if (gameFlags[GAMEFLAG_HAS_SABRE]) {
 						if (actor->body != 2) {
-							init_model_actor(2, actorIdx);
+							initModelActor(2, actorIdx);
 						}
 
-						init_anim(ANIM_SABRE_ATTACK, 1, 0, actorIdx);
+						initAnim(ANIM_SABRE_ATTACK, 1, 0, actorIdx);
 
 						heroMoved = 1;
 						actor->angle = get_real_angle(&actor->move);
@@ -453,7 +453,7 @@ void process_actor_movements(int32 actorIdx) {
 
 				if (key != heroPressedKey || loopPressedKey != heroPressedKey2) {
 					if (heroMoved) {
-						init_anim(ANIM_STANDING, 0, 255, actorIdx);
+						initAnim(ANIM_STANDING, 0, 255, actorIdx);
 					}
 				}
 
@@ -461,20 +461,20 @@ void process_actor_movements(int32 actorIdx) {
 
 				if (key & 1) { // walk forward
 					if (!currentActorInZone) {
-						init_anim(ANIM_FORWARD, 0, 255, actorIdx);
+						initAnim(ANIM_FORWARD, 0, 255, actorIdx);
 					}
 					heroMoved = 1;
 				}
 
 				if (key & 2 && !(key & 1)) { // walk backward
-					init_anim(ANIM_BACKWARD, 0, 255, actorIdx);
+					initAnim(ANIM_BACKWARD, 0, 255, actorIdx);
 					heroMoved = 1;
 				}
 
 				if (key & 4) { // turn left
 					heroMoved = 1;
 					if (actor->anim == 0) {
-						init_anim(ANIM_TURNLEFT, 0, 255, actorIdx);
+						initAnim(ANIM_TURNLEFT, 0, 255, actorIdx);
 					} else {
 						if (!actor->dynamicFlags.bIsRotationByAnim) {
 							actor->angle = get_real_angle(&actor->move);
@@ -485,7 +485,7 @@ void process_actor_movements(int32 actorIdx) {
 				if (key & 8) { // turn right
 					heroMoved = 1;
 					if (actor->anim == 0) {
-						init_anim(ANIM_TURNRIGHT, 0, 255, actorIdx);
+						initAnim(ANIM_TURNRIGHT, 0, 255, actorIdx);
 					} else {
 						if (!actor->dynamicFlags.bIsRotationByAnim) {
 							actor->angle = get_real_angle(&actor->move);
@@ -535,11 +535,11 @@ void process_actor_movements(int32 actorIdx) {
 				if (actor->brickShape & 0x80) {
 					move_actor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF ), actor->speed, &actor->move);                     
 					actor->info0 = Rnd(300) + lbaTime + 300;
-					init_anim(0, 0, 255, actorIdx);
+					initAnim(0, 0, 255, actorIdx);
 				}
 
 				if (!actor->move.numOfStep) {
-					init_anim(1, 0, 255, actorIdx);
+					initAnim(1, 0, 255, actorIdx);
 					if(lbaTime > actor->info0) {
 						move_actor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF), actor->speed, &actor->move);
                         actor->info0 = Rnd(300) + lbaTime + 300;

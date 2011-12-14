@@ -35,7 +35,7 @@
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index);
+int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index);
 
 /** Get a HQR entry pointer
 	@param filename HQR file name
@@ -53,6 +53,6 @@ int32 hqr_num_entries(int8 *filename);
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int32 hqr_getalloc_entry(uint8 ** ptr, int8 *filename, int32 index);
+int32 hqrGetallocEntry(uint8 ** ptr, int8 *filename, int32 index);
 
 #endif

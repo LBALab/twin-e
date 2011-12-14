@@ -70,13 +70,13 @@ void music_volume(int32 volume) {
 
 /** Fade music in
 	@param loops number of*/
-void music_fade_in(int32 loops, int32 ms) {
+void music_fadeIn(int32 loops, int32 ms) {
 	Mix_FadeInMusic(current_track, loops, ms);
 }
 
 /** Fade music out
 	@param ms number of miliseconds to fade*/
-void music_fade_out(int32 ms) {
+void music_fadeOut(int32 ms) {
 	while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
 		SDL_Delay(100);
 	}
@@ -119,7 +119,7 @@ void play_track_music_mp3(int32 track) {
 
 	stop_track_music_mp3();
 
-	music_fade_in(1, FADE_MS);
+	music_fadeIn(1, FADE_MS);
 
 	current_track = Mix_LoadMUS(musfile);
 	music_volume(cfgfile.MusicVolume);
@@ -164,7 +164,7 @@ void play_track_music(int32 track) {
 /** Generic stop music according with settings */
 void stop_track_music() {
 	if (cfgfile.Sound) {
-		music_fade_out(FADE_MS);
+		music_fadeOut(FADE_MS);
 
 		if (cfgfile.Sound > 1)
 			stop_track_music_mp3();
@@ -175,7 +175,7 @@ void stop_track_music() {
 
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
-void play_midi_music(int32 midiIdx, int32 loop) {
+void playMidiMusic(int32 midiIdx, int32 loop) {
 	if (cfgfile.Sound) {
 		int32 midiSize;
 		int8 filename[256];
@@ -196,18 +196,18 @@ void play_midi_music(int32 midiIdx, int32 loop) {
 			sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
 
 		if (midiPtr) {
-			music_fade_out(FADE_MS / 2);
+			music_fadeOut(FADE_MS / 2);
 			stop_midi_music();
 			//free(midiPtr);
 		}
 
-		midiSize = hqr_getalloc_entry(&midiPtr, filename, midiIdx);
+		midiSize = hqrGetallocEntry(&midiPtr, filename, midiIdx);
 
 		rw = SDL_RWFromMem(midiPtr, midiSize);
 
 		current_track = Mix_LoadMUS_RW(rw);
 
-		music_fade_in(1, FADE_MS);
+		music_fadeIn(1, FADE_MS);
 
 		music_volume(cfgfile.MusicVolume);
 
@@ -242,7 +242,7 @@ void stop_midi_music() {
 }
 
 /** Initialize CD-Rom */
-int init_cdrom() {
+int initCdrom() {
 	if (cfgfile.Sound) {
 		int32 numOfCDROM;
 		int32 cdNum;

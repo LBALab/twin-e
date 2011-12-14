@@ -48,7 +48,7 @@ void new_game() {
 
 #ifndef _DEBUG	
 	// intro screen 1 - twinsun
-	load_image( RESSHQR_INTROSCREEN1IMG, 1 );
+	loadImage( RESSHQR_INTROSCREEN1IMG, 1 );
 #endif
 	newGameVar4 = 0;
 	newGameVar5 = 1;
@@ -58,16 +58,16 @@ void new_game() {
 	set_font_cross_color(15);
 #ifndef _DEBUG	
 	draw_text_fullscreen(150);
-	read_keys();
+	readKeys();
 
 	if (skipIntro != 1) {
 		// intro screen 1 - twinsun
-		load_image( RESSHQR_INTROSCREEN2IMG, 1 );
+		loadImage( RESSHQR_INTROSCREEN2IMG, 1 );
 		draw_text_fullscreen(151);
-		read_keys();
+		readKeys();
 
 		if (skipIntro != 1) {
-			load_image( RESSHQR_INTROSCREEN3IMG, 1 );
+			loadImage( RESSHQR_INTROSCREEN3IMG, 1 );
 			draw_text_fullscreen(152);
 		}
 	}
@@ -76,19 +76,19 @@ void new_game() {
 	text_clip_small();
 	newGameVar4 = 1;
 #ifndef _DEBUG
-	fade_2_black(paletteRGBACustom);
-	clear_screen();
+	fadeToBlack(paletteRGBACustom);
+	clearScreen();
 	flip();
 	
-	play_midi_music(1, 0);
-	play_movie(FLA_INTROD);
+	playMidiMusic(1, 0);
+	playMovie(FLA_INTROD);
 #endif
-	clear_screen();
+	clearScreen();
 	flip();
 
 
 	// set main palette back
-	set_palette(paletteRGBA);
+	setPalette(paletteRGBA);
 
 	cfgfile.FlagDisplayText = tmpFlagDisplayText;
 }
@@ -101,7 +101,7 @@ void show_credits() {
 	tmpLanguageCDIdx = cfgfile.LanguageCDId;
 	cfgfile.ShadowMode = 0;
 	cfgfile.LanguageCDId = 0;
-	init_engine_vars(1);
+	initEngineVars(1);
 	currentSceneIdx = 119;
 	needChangeScene = 119;
 	
@@ -111,14 +111,14 @@ void show_credits() {
 	cfgfile.ShadowMode = tmpShadowMode;
 	cfgfile.LanguageCDId = tmpLanguageCDIdx;
 	
-	clear_screen();
+	clearScreen();
 	flip();
 
-	play_movie(FLA_THEEND);
+	playMovie(FLA_THEEND);
 
-	clear_screen();
+	clearScreen();
 	flip();
-	set_palette(paletteRGBA);
+	setPalette(paletteRGBA);
 }
 
 /** Main menu new game options */
@@ -126,19 +126,19 @@ void new_game_menu() {
 	//TODO: process players name
 	//if(process_player_name(42))
 	{
-		init_engine_vars(1);
+		initEngineVars(1);
 		new_game();
 
 		if (game_engine_loop()) {
 			show_credits();
 		}
 		
-		copy_screen(frontVideoBuffer, workVideoBuffer);
+		copyScreen(frontVideoBuffer, workVideoBuffer);
 		// TODO: recheck this
 		do {
-			read_keys();
+			readKeys();
 			do {
-				read_keys();
+				readKeys();
 			} while(skipedKey != 0);
 		} while(skipIntro != 0);
 	}
@@ -149,7 +149,7 @@ void continue_game_menu() {
 	//TODO: get list of saved games
 	//if(chooseSave(21))
 	{
-		init_engine_vars(-1); // will load game
+		initEngineVars(-1); // will load game
 		if (gameChapter == 0 && currentSceneIdx == 0) {
 			new_game();
 		} else {
@@ -162,12 +162,12 @@ void continue_game_menu() {
 			show_credits();
 		}
 
-		copy_screen(frontVideoBuffer, workVideoBuffer);
+		copyScreen(frontVideoBuffer, workVideoBuffer);
 		// TODO: recheck this
 		do {
-			read_keys();
+			readKeys();
 			do {
-				read_keys();
+				readKeys();
 			} while(skipedKey != 0);
 		} while(skipIntro != 0);
 	}

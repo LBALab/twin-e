@@ -76,11 +76,11 @@ void init_text_bank(int32 bankIdx) { // InitDial
 	// get index according with language
 	langIdx = (cfgfile.LanguageId * 14) * 2  + bankIdx * 2;
 
-	hqrSize = hqr_getalloc_entry(&dialOrderPtr, HQR_TEXT_FILE, langIdx);
+	hqrSize = hqrGetallocEntry(&dialOrderPtr, HQR_TEXT_FILE, langIdx);
 
 	numDialTextEntries = hqrSize / 2;
 
-	hqrSize = hqr_getalloc_entry(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
+	hqrSize = hqrGetallocEntry(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
 
 	/*if (cfgfile.LanguageCDId != 0) {
 		loadVox(bankIdx);
@@ -200,7 +200,7 @@ void draw_character_shadow(int32 x, int32 y, uint8 character, int32 color) { // 
 		right = x + 32;
 		bottom = y + 38;
 
-		copy_block_phys(left, top, right, bottom);
+		copyBlockPhys(left, top, right, bottom);
 	}
 }
 
@@ -264,14 +264,14 @@ void init_dialogue_box() { // InitDialWindow
 		draw_transparent_box(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
 	}
 
-	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+	copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
 	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)workVideoBuffer);
 }
 
 void init_inventory_dialogue_box() { // SecondInitDialWindow
 	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
-	copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+	copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
 }
 
@@ -453,7 +453,7 @@ void printText10Sub() { // printText10Sub()
 		render_polygons(polyRenderType, dialTextStopColor);
 	}
 
-	copy_block_phys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
+	copyBlockPhys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
 }
 
 void printText10Sub2() { // printText10Sub2()
@@ -512,7 +512,7 @@ int printText10() { // printText10()
 		}
 		if (printText8Var6 != 0) {
 			blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
-			copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+			copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 			printText8Var3 = 0;
 			printText8Var6 = 0;
 			TEXT_CurrentLetterX = dialTextBoxLeft + 8;
@@ -581,7 +581,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 
 	save_clip();
 	reset_clip();
-	copy_screen(frontVideoBuffer, workVideoBuffer);
+	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	// TODO: get right VOX entry index
 	// TODO: if we don't display text, than still plays vox file
@@ -590,12 +590,12 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	init_dialogue_box();
 
 	do {
-		read_keys();
+		readKeys();
 		printedText = printText10();
 		
 		if (printedText == 2) {
 			do {
-				read_keys();
+				readKeys();
 				if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
 					break;
 				}
@@ -604,7 +604,7 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 			} while(1);
 
 			do {
-				read_keys();
+				readKeys();
 				if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
 					break;
 				}
@@ -640,14 +640,14 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	// RECHECK this later
 	// wait displaying text
 	do {
-		read_keys();
+		readKeys();
 		delay(1);
 	} while(skipIntro || skipedKey || pressedKey);
 
 	// RECHECK this later
 	// wait key to display next text
 	do {
-		read_keys();
+		readKeys();
 		if (skipIntro != 0) {
 			load_clip();
 			return;
@@ -802,18 +802,18 @@ void draw_ask_question(int32 index) { // MyDial
 	init_dialogue_box();
 
 	do {
-		read_keys();
+		readKeys();
 		textStatus = printText10();
 		
 		if (textStatus == 2) {
 			do {
-				read_keys();
+				readKeys();
 				// TODO: missing vox processing
 				delay(1);
 			} while(skipIntro || skipedKey || pressedKey);
 
 			do {
-				read_keys();
+				readKeys();
 				// TODO: missing vox processing
 				delay(1);
 			} while(!skipIntro && !skipedKey && !pressedKey);

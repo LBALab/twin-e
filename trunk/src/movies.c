@@ -68,7 +68,7 @@
 #define KEY_FRAME		7
 
 /** Auxiliar FLA fade out variable */
-int32 fadeOut;
+int32 _fadeOut;
 /** Auxiliar FLA fade out variable to count frames between the fade */
 int32 fadeOutFrames;
 
@@ -93,7 +93,7 @@ FileReader frFla;
 	@param ptr FLA frame buffer pointer
 	@param width FLA movie width
 	@param height FLA movie height */
-void draw_key_frame(uint8 * ptr, int32 width, int32 height) {
+void drawKeyFrame(uint8 * ptr, int32 width, int32 height) {
 	int32 a, b;
 	uint8 * destPtr = (uint8 *)flaBuffer;
 	uint8 * startOfLine = destPtr;
@@ -129,7 +129,7 @@ void draw_key_frame(uint8 * ptr, int32 width, int32 height) {
 /** FLA movie draw delta frame
 	@param ptr FLA frame buffer pointer
 	@param width FLA movie width */
-void draw_delta_frame(uint8 * ptr, int32 width) {
+void drawDeltaFrame(uint8 * ptr, int32 width) {
 	int32 a, b;
 	uint16 skip;
 	uint8 * destPtr;
@@ -177,7 +177,7 @@ void draw_delta_frame(uint8 * ptr, int32 width) {
 
 	According with the settins we can put the original aspect radio stretch
 	to fullscreen or preserve it and use top and button black bars */
-void scale_fla_2x() {
+void scaleFla2x() {
 	int32 i, j;
 	uint8* source = (uint8*)flaBuffer;
 	uint8* dest = (uint8*)workVideoBuffer;
@@ -216,7 +216,7 @@ void scale_fla_2x() {
 }
 
 /** FLA movie process frame */
-void process_frame() {
+void processFrame() {
 	FLASampleStruct sample;
 	uint32 opcodeBlockSize;
 	uint8 opcode;
@@ -250,16 +250,16 @@ void process_frame() {
 		case FADE: {
 			// FLA movies don't use cross fade
 			// fade out tricky
-			if (fadeOut != 1) {
-				convert_pal_2_RGBA(palette, paletteRGBACustom);
-				fade_2_black(paletteRGBACustom);
-				fadeOut = 1;
+			if (_fadeOut != 1) {
+				convertPalToRGBA(palette, paletteRGBACustom);
+				fadeToBlack(paletteRGBACustom);
+				_fadeOut = 1;
 			}
 			break;
 		}
 		case PLAY_SAMPLE: {
 			memcpy(&sample, ptr, sizeof(FLASampleStruct));
-			play_fla_sample(sample.sampleNum, sample.freq, sample.repeat, sample.x, sample.y);
+			playFlaSample(sample.sampleNum, sample.freq, sample.repeat, sample.x, sample.y);
 			break;
 		}
 		case STOP_SAMPLE: {
@@ -267,13 +267,13 @@ void process_frame() {
 			break;
 		}
 		case DELTA_FRAME: {
-			draw_delta_frame(ptr, FLASCREEN_WIDTH);
-			if (fadeOut == 1)
+			drawDeltaFrame(ptr, FLASCREEN_WIDTH);
+			if (_fadeOut == 1)
 				fadeOutFrames++;
 			break;
 		}
 		case KEY_FRAME: {
-			draw_key_frame(ptr, FLASCREEN_WIDTH, FLASCREEN_HEIGHT);
+			drawKeyFrame(ptr, FLASCREEN_WIDTH, FLASCREEN_HEIGHT);
 			break;
 		}
 		default: {
@@ -290,13 +290,13 @@ void process_frame() {
 
 /** Play FLA movies
 	@param filname FLA movie file name */
-void play_fla_movie(int8 *filename) {
+void playFlaMovie(int8 *filename) {
 	int32 i;
 	int32 quit = 0;
 	int32 currentFrame;
 	int16 tmpValue;
 
-	fadeOut = -1;
+	_fadeOut = -1;
 	fadeOutFrames = 0;
 
 	if (!fropen2(&frFla, filename, "rb"))
@@ -330,33 +330,33 @@ void play_fla_movie(int8 *filename) {
 				if (currentFrame == flaHeaderData.numOfFrames)
 					quit = 1;
 				else {
-					process_frame();
-					scale_fla_2x();
-					copy_screen(workVideoBuffer, frontVideoBuffer);
+					processFrame();
+					scaleFla2x();
+					copyScreen(workVideoBuffer, frontVideoBuffer);
 
 					// Only blit to screen if isn't a fade
-					if (fadeOut == -1) {
-						convert_pal_2_RGBA(palette, paletteRGBACustom);
+					if (_fadeOut == -1) {
+						convertPalToRGBA(palette, paletteRGBACustom);
 						if (!currentFrame) // fade in the first frame
-							fade_in(paletteRGBACustom);
+							fadeIn(paletteRGBACustom);
 						else
-							set_palette(paletteRGBACustom);
+							setPalette(paletteRGBACustom);
 					}
 
 					// TRICKY: fade in tricky
 					if (fadeOutFrames >= 2) {
 						flip(frontVideoBuffer);
-						convert_pal_2_RGBA(palette, paletteRGBACustom);
-						fade_2_pal(paletteRGBACustom);
-						fadeOut = -1;
+						convertPalToRGBA(palette, paletteRGBACustom);
+						fadeToPal(paletteRGBACustom);
+						_fadeOut = -1;
 						fadeOutFrames = 0;
 					}
 
 					currentFrame++;
 
-					fps_cycles(flaHeaderData.speed + 1);
+					fpsCycles(flaHeaderData.speed + 1);
 
-					read_keys();
+					readKeys();
 					if (skipIntro)
 						break;
 				}
@@ -364,15 +364,15 @@ void play_fla_movie(int8 *filename) {
 		}
 	}
 	if (cfgfile.CrossFade)
-		cross_fade(frontVideoBuffer, paletteRGBACustom);
+		crossFade(frontVideoBuffer, paletteRGBACustom);
 	else
-		fade_2_black(paletteRGBACustom);
+		fadeToBlack(paletteRGBACustom);
 	stop_samples();
 }
 
 /** Generic play movies, according with the settings
 	@param movie - movie file path */
-void play_movie(int8 *movie) {
+void playMovie(int8 *movie) {
 	int32 i;
 	int8 fileBuf[256];
 
@@ -391,7 +391,7 @@ void play_movie(int8 *movie) {
 		sprintf(fileBuf, FLA_DIR);
 		strcat(fileBuf, movie);
 		strcat(fileBuf, FLA_EXT);
-		play_fla_movie(fileBuf);
+		playFlaMovie(fileBuf);
 		break;
 	case CONF_MOVIE_FLAPCX:
 	case CONF_MOVIE_AVI:

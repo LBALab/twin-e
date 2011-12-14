@@ -78,33 +78,33 @@ int16 cellingGridIdx; // currentGrid2
 	@param X actor X coordinate
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
-void draw_over_model_actor(int32 X, int32 Y, int32 Z);
+void drawOverModelActor(int32 X, int32 Y, int32 Z);
 
 /** Draw sprite actor over bricks
 	@param X actor X coordinate
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
-void draw_over_sprite_actor(int32 X, int32 Y, int32 Z);
+void drawOverSpriteActor(int32 X, int32 Y, int32 Z);
 
 /** Get sprite width and height sizes
 	@param offset sprite pointer offset
 	@param width sprite width size
 	@param height sprite height size
 	@param spritePtr sprite buffer pointer */
-void get_sprite_size(int32 offset, int32 *width, int32 *height, uint8 *spritePtr);
+void getSpriteSize(int32 offset, int32 *width, int32 *height, uint8 *spritePtr);
 
 /** Draw brick sprite in the screen
 	@param index brick index to draw
 	@param posX brick X position to draw
 	@param posY brick Y position to draw */
-void draw_brick(int32 index, int32 posX, int32 posY);
+void drawBrick(int32 index, int32 posX, int32 posY);
 
 /** Draw sprite in the screen
 	@param index sprite index to draw
 	@param posX sprite X position to draw
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw */
-void draw_sprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr);
+void drawSprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr);
 
 /** Draw sprite or bricks in the screen according with the type
 	@param index sprite index to draw
@@ -112,31 +112,31 @@ void draw_sprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr);
 	@param posY sprite Y position to draw
 	@param ptr sprite buffer pointer to draw
 	@param isSprite allows to identify if the sprite to display is brick or a single sprite */
-void draw_brick_sprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr, int32 isSprite);
+void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *spritePtr, int32 isSprite);
 
 /** Get block library
 	@param index block library index
 	@return pointer to the current block index */
-uint8* get_block_library(int32 index);
+uint8* getBlockLibrary(int32 index);
 
 /** Create grid map from current grid to block library buffer */
-void create_grid_map();
+void createGridMap();
 
 /** Initialize grid (background scenearios)
 	@param index grid index number */
-int32 init_grid(int32 index);
+int32 initGrid(int32 index);
 
 /** Initialize celling grid (background scenearios)
 	@param index grid index number */
-int32 init_celling_grid(int32 index);
+int32 initCellingGrid(int32 index);
 
 /** Redraw grid background */
-void redraw_grid();
+void redrawGrid();
 
-int32 get_brick_shape(int32 x, int32 y, int32 z);
+int32 getBrickShape(int32 x, int32 y, int32 z);
 
-int32 get_brick_shape_full(int32 x, int32 y, int32 z, int32 y2);
+int32 getBrickShapeFull(int32 x, int32 y, int32 z, int32 y2);
 
-int32 get_brick_sound_type(int32 x, int32 y, int32 z);
+int32 getBrickSoundType(int32 x, int32 y, int32 z);
 
 #endif

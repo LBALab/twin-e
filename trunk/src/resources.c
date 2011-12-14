@@ -53,21 +53,21 @@ int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
 /** Init palettes */
 void init_palettes() {
 	// Init standard palette
-	hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_MAINPAL);
-	convert_pal_2_RGBA(palette, paletteRGBA);
-	set_palette(paletteRGBA);
+	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_MAINPAL);
+	convertPalToRGBA(palette, paletteRGBA);
+	setPalette(paletteRGBA);
 
 	// We use it now
 	palCustom = 0;
 }
 
 /** Preload all sprites */
-void preload_sprites() {
+void preloadSprites() {
 	int32 i;
 	int32 numEntries = hqr_num_entries(HQR_SPRITES_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
-		spriteSizeTable[i] = hqr_getalloc_entry(&spriteTable[i], HQR_SPRITES_FILE, i);
+		spriteSizeTable[i] = hqrGetallocEntry(&spriteTable[i], HQR_SPRITES_FILE, i);
 	}
 }
 
@@ -77,7 +77,7 @@ void preload_animations() {
 	int32 numEntries = hqr_num_entries(HQR_ANIM_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
-		animSizeTable[i] = hqr_getalloc_entry(&animTable[i], HQR_ANIM_FILE, i);
+		animSizeTable[i] = hqrGetallocEntry(&animTable[i], HQR_ANIM_FILE, i);
 	}
 }
 
@@ -87,7 +87,7 @@ void preload_samples() {
 	int32 numEntries = hqr_num_entries(HQR_SAMPLES_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
-		samplesSizeTable[i] = hqr_getalloc_entry(&samplesTable[i], HQR_SAMPLES_FILE, i);
+		samplesSizeTable[i] = hqrGetallocEntry(&samplesTable[i], HQR_SAMPLES_FILE, i);
 	}
 }
 
@@ -97,30 +97,30 @@ void preload_inventory_items() {
 	int32 numEntries = hqr_num_entries(HQR_INVOBJ_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
-		inventorySizeTable[i] = hqr_getalloc_entry(&inventoryTable[i], HQR_INVOBJ_FILE, i);
+		inventorySizeTable[i] = hqrGetallocEntry(&inventoryTable[i], HQR_INVOBJ_FILE, i);
 	}
 }
 
 /** Initialize resource pointers */
-void init_resources() {
+void initResources() {
 	int32 size = 0;
 
 	// Menu and in-game palette
 	init_palettes();
 
 	// load LBA font
-	size = hqr_getalloc_entry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
+	size = hqrGetallocEntry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
 
 	set_font_parameters(2, 8);
 	set_font_color(14);
 	set_text_cross_color(136, 143, 2);
 
-	hqr_getalloc_entry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
+	hqrGetallocEntry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
 
 	// load sprite actors bounding box data
-	size = hqr_getalloc_entry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
+	size = hqrGetallocEntry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
 
-	preload_sprites();
+	preloadSprites();
 	preload_animations();
 	//preload_samples();
 	preload_inventory_items();

@@ -39,7 +39,7 @@
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
 	@param actorIdx2 Actor 2 index */
-int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2) { // CheckZvOnZv
+int32 standingOnActor(int32 actorIdx1, int32 actorIdx2) { // CheckZvOnZv
 	int32 x1Left, y1Left, z1Left, x1Right, y1Right, z1Right;
 	int32 x2Left, y2Left, z2Left, x2Right, y2Right, z2Right;
 	ActorStruct *actor1;
@@ -92,7 +92,7 @@ int32 standing_on_actor(int32 actorIdx1, int32 actorIdx2) { // CheckZvOnZv
 	return 1; // standing
 }
 
-int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3) {
+int32 getAverageValue(int32 var0, int32 var1, int32 var2, int32 var3) {
 	if (var3 <= 0) {
 		return var0;
 	}
@@ -106,7 +106,7 @@ int32 get_average_value(int32 var0, int32 var1, int32 var2, int32 var3) {
 
 /** Reajust actor position in scene according with brick shape bellow actor
 	@param brickShape Shape of brick bellow the actor */
-void reajust_actor_position(int32 brickShape) {
+void reajustActorPosition(int32 brickShape) {
 	int32 brkX, brkY, brkZ;
 
 	if (!brickShape) {
@@ -187,16 +187,16 @@ void reajust_actor_position(int32 brickShape) {
 	if (brickShape >= kStairsTopLeft && brickShape <= kStairsBottomRight) {
 		switch (brickShape) {
 		case kStairsTopLeft: 
-			processActorY = brkY + get_average_value(0, 0x100, 0x200, processActorX - brkX);
+			processActorY = brkY + getAverageValue(0, 0x100, 0x200, processActorX - brkX);
 			break;
 		case kStairsTopRight: 
-			processActorY = brkY + get_average_value(0, 0x100, 0x200, processActorZ - brkZ);
+			processActorY = brkY + getAverageValue(0, 0x100, 0x200, processActorZ - brkZ);
 			break;
 		case kStairsBottomLeft: 
-			processActorY = brkY + get_average_value(0x100, 0, 0x200, processActorZ - brkZ);
+			processActorY = brkY + getAverageValue(0x100, 0, 0x200, processActorZ - brkZ);
 			break;
 		case kStairsBottomRight: 
-			processActorY = brkY + get_average_value(0x100, 0, 0x200, processActorX - brkX);
+			processActorY = brkY + getAverageValue(0x100, 0, 0x200, processActorX - brkX);
 			break;
 		default:
 			break;
@@ -206,7 +206,7 @@ void reajust_actor_position(int32 brickShape) {
 
 /** Check collision with actors
 	@param actorIx Current process actor index */
-int32 check_collision_with_actors(int32 actorIdx) {
+int32 checkCollisionWithActors(int32 actorIdx) {
 	int32 a, xLeft, xRight, yLeft, yRight, zLeft, zRight;
 	ActorStruct *actor, *actorTest;
 
@@ -247,7 +247,7 @@ int32 check_collision_with_actors(int32 actorIdx) {
 						processActorY = yRightTest - actor->boudingBox.Y.bottomLeft + 1;
 						actor->standOn = a;
 					} else {
-						if (standing_on_actor(actorIdx, a)) {
+						if (standingOnActor(actorIdx, a)) {
 							processActorY = yRightTest - actor->boudingBox.Y.bottomLeft + 1;
 							actor->standOn = a;
 						} else {
@@ -303,8 +303,8 @@ int32 check_collision_with_actors(int32 actorIdx) {
 				} else {
 					int32 newAngle;
 
-					if (standing_on_actor(actorIdx, a)) {
-						hit_actor(actorIdx, a, 1, -1);
+					if (standingOnActor(actorIdx, a)) {
+						hitActor(actorIdx, a, 1, -1);
 					}
 
 					newAngle = get_angle(processActorX, processActorZ, actorTest->X, actorTest->Z);
@@ -386,7 +386,7 @@ int32 check_collision_with_actors(int32 actorIdx) {
 				zRightTest = actorTest->Z + actorTest->boudingBox.Z.topRight;
 
 				if (xLeft < xRightTest && xRight > xLeftTest && yLeft < yRightTest && yRight > yLeftTest && zLeft < zRightTest && zRight > zLeftTest) {
-					hit_actor(actorIdx, a, actor->strengthOfHit, actor->angle + 0x200);
+					hitActor(actorIdx, a, actor->strengthOfHit, actor->angle + 0x200);
 					actor->dynamicFlags.bIsHitting = 0;
 				}
 			}
@@ -401,25 +401,25 @@ int32 check_collision_with_actors(int32 actorIdx) {
 	@param Y Hero Y coordinate 
 	@param Z Hero Z coordinate
 	@param damageMask Cause damage mask */
-void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask) {
+void checkHeroCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 damageMask) {
 	int32 brickShape;
 
-	brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+	brickShape = getBrickShape(processActorX, processActorY, processActorZ);
 
 	processActorX += X;
 	processActorY += Y;
 	processActorZ += Z;
 
 	if (processActorX >= 0 && processActorZ >= 0 && processActorX <= 0x7E00 && processActorZ <= 0x7E00) {
-		reajust_actor_position(brickShape);
-		brickShape = get_brick_shape_full(processActorX, processActorY, processActorZ, processActorPtr->boudingBox.Y.topRight);
+		reajustActorPosition(brickShape);
+		brickShape = getBrickShapeFull(processActorX, processActorY, processActorZ, processActorPtr->boudingBox.Y.topRight);
 
 		if (brickShape == kSolid) {
 			causeActorDamage |= damageMask;
-			brickShape = get_brick_shape_full(processActorX, processActorY, previousActorZ + Z, processActorPtr->boudingBox.Y.topRight);
+			brickShape = getBrickShapeFull(processActorX, processActorY, previousActorZ + Z, processActorPtr->boudingBox.Y.topRight);
 
 			if (brickShape == kSolid) {
-				brickShape = get_brick_shape_full(X + previousActorX, processActorY, processActorZ, processActorPtr->boudingBox.Y.topRight);
+				brickShape = getBrickShapeFull(X + previousActorX, processActorY, processActorZ, processActorPtr->boudingBox.Y.topRight);
 				
 				if (brickShape != kSolid) {
 					processCollisionX = previousActorX;
@@ -440,25 +440,25 @@ void check_hero_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMas
 	@param Y Actor Y coordinate 
 	@param Z Actor Z coordinate
 	@param damageMask Cause damage mask */
-void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMask) {
+void checkActorCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 damageMask) {
 	int32 brickShape;
 
-	brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+	brickShape = getBrickShape(processActorX, processActorY, processActorZ);
 
 	processActorX += X;
 	processActorY += Y;
 	processActorZ += Z;
 
 	if (processActorX >= 0 && processActorZ >= 0 && processActorX <= 0x7E00 && processActorZ <= 0x7E00) {
-		reajust_actor_position(brickShape);
-		brickShape = get_brick_shape(processActorX, processActorY, processActorZ);
+		reajustActorPosition(brickShape);
+		brickShape = getBrickShape(processActorX, processActorY, processActorZ);
 
 		if (brickShape == kSolid) {
 			causeActorDamage |= damageMask;
-			brickShape = get_brick_shape(processActorX, processActorY, previousActorZ + Z);
+			brickShape = getBrickShape(processActorX, processActorY, previousActorZ + Z);
 
 			if (brickShape == kSolid) {
-				brickShape = get_brick_shape(X + previousActorX, processActorY, processActorZ);
+				brickShape = getBrickShape(X + previousActorX, processActorY, processActorZ);
 				
 				if (brickShape != kSolid) {
 					processCollisionX = previousActorX;
@@ -475,29 +475,29 @@ void check_actor_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 damageMa
 }
 
 /** Make actor to stop falling */
-void stop_falling() { // ReceptionObj()
+void stopFalling() { // ReceptionObj()
 	int32 fall;
 
 	if (currentlyProcessedActorIdx == 0) {
 		fall = heroYBeforeFall - processActorY;
 
 		if (fall >= 0x1000) {
-			add_extra_special(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
+			addExtraSpecial(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
 			processActorPtr->life--;
-			init_anim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
+			initAnim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
 		} else if (fall >= 0x800) {
-			add_extra_special(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
+			addExtraSpecial(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
 			processActorPtr->life--;
-			init_anim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
+			initAnim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
 		} else if (fall > 10) {
-			init_anim(ANIM_LANDING, 2, 0, currentlyProcessedActorIdx);	
+			initAnim(ANIM_LANDING, 2, 0, currentlyProcessedActorIdx);	
 		} else {
-			init_anim(ANIM_STANDING, 0, 0, currentlyProcessedActorIdx);	
+			initAnim(ANIM_STANDING, 0, 0, currentlyProcessedActorIdx);	
 		}
 
 		heroYBeforeFall = 0;
 	} else {
-		init_anim(ANIM_LANDING, 2, processActorPtr->animExtra, currentlyProcessedActorIdx);
+		initAnim(ANIM_LANDING, 2, processActorPtr->animExtra, currentlyProcessedActorIdx);
 	}
 
 	processActorPtr->dynamicFlags.bIsFalling = 0;
@@ -506,7 +506,7 @@ void stop_falling() { // ReceptionObj()
 /** Check extra collision with actors
 	@param extra to process
 	@param actorIdx actor to check collision */
-int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx) {
+int32 checkExtraCollisionWithActors(ExtraListStruct* extra, int32 actorIdx) {
 	int32 a;
 	int32 xLeft, xRight, yLeft, yRight, zLeft, zRight;
 	int16 * spriteBounding;
@@ -540,7 +540,7 @@ int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx) 
 
 			if (xLeft < xRightTest && xRight > xLeftTest && yLeft < yRightTest && yRight > yLeftTest && zLeft < zRightTest && zRight > zLeftTest) {
 				if (extra->strengthOfHit != 0) {
-					hit_actor(actorIdx, a, extra->strengthOfHit, -1);
+					hitActor(actorIdx, a, extra->strengthOfHit, -1);
 				}
 
 				return a;
@@ -552,10 +552,10 @@ int32 check_extra_collision_with_actors(ExtraListStruct* extra, int32 actorIdx) 
 }
 
 /** Check extra collision with bricks */
-int32 check_extra_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ) {
+int32 checkExtraCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ) {
 	int32 averageX, averageY, averageZ;
 
-	if (get_brick_shape(oldX, oldY, oldZ)) {
+	if (getBrickShape(oldX, oldY, oldZ)) {
 		return 1;
 	}
 
@@ -563,15 +563,15 @@ int32 check_extra_collision_with_bricks(int32 X, int32 Y, int32 Z, int32 oldX, i
 	averageY = Abs(Y + oldY)/2;
 	averageZ = Abs(Z + oldZ)/2;
 
-	if (get_brick_shape(averageX, averageY, averageZ)) {
+	if (getBrickShape(averageX, averageY, averageZ)) {
 		return 1;
 	}
 
-	if (get_brick_shape(Abs(oldX + averageX)/2, Abs(oldY + averageY)/2, Abs(oldZ + averageZ)/2)) {
+	if (getBrickShape(Abs(oldX + averageX)/2, Abs(oldY + averageY)/2, Abs(oldZ + averageZ)/2)) {
 		return 1;
 	}
 
-	if (get_brick_shape(Abs(X + averageX)/2, Abs(Y + averageY)/2, Abs(Z + averageZ)/2)) {
+	if (getBrickShape(Abs(X + averageX)/2, Abs(Y + averageY)/2, Abs(Z + averageZ)/2)) {
 		return 1;
 	}
 

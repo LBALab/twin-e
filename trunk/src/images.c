@@ -39,44 +39,44 @@
 
 
 /** Load and display Adeline Logo */
-void adeline_logo() {
-	play_midi_music(31, 0);
+void adelineLogo() {
+	playMidiMusic(31, 0);
 
-	load_image(RESSHQR_ADELINEIMG, 1);
+	loadImage(RESSHQR_ADELINEIMG, 1);
 	delaySkip(7000);
-	fade_out(paletteRGBACustom);
+	fadeOut(paletteRGBACustom);
 	palCustom = 1;
 }
 
 /** Load and display Main Menu image */
-void load_menu_image(int16 fade_in) {
-	hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
-	copy_screen(workVideoBuffer, frontVideoBuffer);
+void loadMenuImage(int16 fade_in) {
+	hqrGetEntry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
 	if (fade_in) {
-		fade_2_pal(paletteRGBA);
+		fadeToPal(paletteRGBA);
 	} else {
-		set_palette(paletteRGBA);
+		setPalette(paletteRGBA);
 	}
 
 	palCustom = 0;
 }
 
 /** Load a custom palette */
-void load_custom_palette(int32 index) {
-	hqr_get_entry(palette, HQR_RESS_FILE, index);
-	convert_pal_2_RGBA(palette, paletteRGBACustom);
+void loadCustomPalette(int32 index) {
+	hqrGetEntry(palette, HQR_RESS_FILE, index);
+	convertPalToRGBA(palette, paletteRGBACustom);
 }
 
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect
 	@param index \a RESS.HQR entry index (starting from 0) */
-void load_image(int32 index, int16 fade_in) {
-	hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, index);
-	copy_screen(workVideoBuffer, frontVideoBuffer);
-	load_custom_palette(index + 1);
+void loadImage(int32 index, int16 fade_in) {
+	hqrGetEntry(workVideoBuffer, HQR_RESS_FILE, index);
+	copyScreen(workVideoBuffer, frontVideoBuffer);
+	loadCustomPalette(index + 1);
 	if (fade_in) {
-		fade_2_pal(paletteRGBACustom);
+		fadeToPal(paletteRGBACustom);
 	} else {
-		set_palette(paletteRGBACustom);
+		setPalette(paletteRGBACustom);
 	}
 
 	palCustom = 1;
@@ -85,16 +85,16 @@ void load_image(int32 index, int16 fade_in) {
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect and delay
 	@param index \a RESS.HQR entry index (starting from 0)
 	@param time number of seconds to delay */
-void load_image_delay(int32 index, int32 time) {
-	load_image(index, 1);
+void loadImageDelay(int32 index, int32 time) {
+	loadImage(index, 1);
 	delaySkip(1000*time);
-	fade_out(paletteRGBACustom);
+	fadeOut(paletteRGBACustom);
 }
 
 /** Converts in-game palette to SDL palette
 	@param palSource palette source with RGB
 	@param palDest palette destination with RGBA */
-void convert_pal_2_RGBA(uint8 * palSource, uint8 * palDest) {
+void convertPalToRGBA(uint8 * palSource, uint8 * palDest) {
 	int i;
 
 	for (i = 0; i < NUMOFCOLORS; i++) {
@@ -108,24 +108,24 @@ void convert_pal_2_RGBA(uint8 * palSource, uint8 * palDest) {
 
 /** Fade image in
 	@param palette current palette to fade in */
-void fade_in(uint8 * palette) {
+void fadeIn(uint8 * palette) {
 	if (cfgfile.CrossFade)
-		cross_fade(frontVideoBuffer, palette);
+		crossFade(frontVideoBuffer, palette);
 	else
-		fade_2_pal(palette);
+		fadeToPal(palette);
 
-	set_palette(palette);
+	setPalette(palette);
 }
 
 /** Fade image out
 	@param palette current palette to fade out */
-void fade_out(uint8 * palette) {
+void fadeOut(uint8 * palette) {
 	/*if(cfgfile.CrossFade)
-		cross_fade(frontVideoBuffer, palette);
+		crossFade(frontVideoBuffer, palette);
 	else
-		fade_2_black(palette);*/
+		fadeToBlack(palette);*/
 	if (!cfgfile.CrossFade)
-		fade_2_black(palette);
+		fadeToBlack(palette);
 }
 
 /** Calculate a new color component according with an intensity
@@ -134,7 +134,7 @@ void fade_out(uint8 * palette) {
 	@param param unknown
 	@param intensity intensity value to adjust
 	@return new color component*/
-int32 cross_dot(int32 modifier, int32 color, int32 param, int32 intensity) {
+int32 crossDot(int32 modifier, int32 color, int32 param, int32 intensity) {
 	if (!param)
 		return (color);
 	return (((color - modifier) * intensity) / param) + modifier;
@@ -146,7 +146,7 @@ int32 cross_dot(int32 modifier, int32 color, int32 param, int32 intensity) {
 	@param B blue component of color
 	@param palette palette to adjust
 	@param intensity intensity value to adjust */
-void adjust_palette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity) {
+void adjustPalette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity) {
 	uint8 localPalette[NUMOFCOLORS*4];
 	uint8 *newR;
 	uint8 *newG;
@@ -165,9 +165,9 @@ void adjust_palette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity)
 	newA = &localPalette[3];
 
 	for (i = 0; i < NUMOFCOLORS; i++) {
-		*newR = cross_dot(R, palette[counter], 100, local);
-		*newG = cross_dot(G, palette[counter + 1], 100, local);
-		*newB = cross_dot(B, palette[counter + 2], 100, local);
+		*newR = crossDot(R, palette[counter], 100, local);
+		*newG = crossDot(G, palette[counter + 1], 100, local);
+		*newB = crossDot(B, palette[counter + 2], 100, local);
 		*newA = 0;
 
 		newR += 4;
@@ -178,18 +178,18 @@ void adjust_palette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity)
 		counter += 4;
 	}
 
-	set_palette(localPalette);
+	setPalette(localPalette);
 }
 
 /** Fade image to black
 	@param palette current palette to fade */
-void fade_2_black(uint8 *palette) {
+void fadeToBlack(uint8 *palette) {
 	int32 i = 0;
 
 	if (palReseted == 0) {
 		for (i = 100; i >= 0; i -= 3) {
-			adjust_palette(0, 0, 0, (uint8 *) palette, i);
-			fps_cycles(50);
+			adjustPalette(0, 0, 0, (uint8 *) palette, i);
+			fpsCycles(50);
 		}
 	}
 
@@ -198,22 +198,22 @@ void fade_2_black(uint8 *palette) {
 
 /** Fade image with another palette source
 	@param palette current palette to fade */
-void fade_2_pal(uint8 *palette) {
+void fadeToPal(uint8 *palette) {
 	int32 i = 100;
 
 	for (i = 0; i <= 100; i += 3) {
-		adjust_palette(0, 0, 0, (uint8 *) palette, i);
-		fps_cycles(50);
+		adjustPalette(0, 0, 0, (uint8 *) palette, i);
+		fpsCycles(50);
 	}
 
-	set_palette((uint8*)palette);
+	setPalette((uint8*)palette);
 
 	palReseted = 0;
 
 }
 
 /** Fade black palette to with palette */
-void black_2_white() {
+void blackToWhite() {
 	uint8 palette[NUMOFCOLORS*4];
 	int32 i;
 
@@ -221,16 +221,16 @@ void black_2_white() {
 	for (i = 0; i < NUMOFCOLORS; i += 3) {
 		memset(palette, i, 1024);
 
-		set_palette(palette);
+		setPalette(palette);
 	}
 }
 
 /** Resets both in-game and sdl palettes */
-void set_back_pal() {
+void setBackPal() {
 	memset(palette, 0, NUMOFCOLORS*3);
 	memset(paletteRGBA, 0, NUMOFCOLORS*4);
 
-	set_palette(paletteRGBA);
+	setPalette(paletteRGBA);
 
 	palReseted = 1;
 }
@@ -238,7 +238,7 @@ void set_back_pal() {
 /** Copy a determinate screen buffer to another
 	@param source screen buffer
 	@param destination screen buffer */
-void copy_screen(uint8 * source, uint8 * destination) {
+void copyScreen(uint8 * source, uint8 * destination) {
 	int32 w, h;
 
 	if (SCALE == 1)
@@ -256,6 +256,6 @@ void copy_screen(uint8 * source, uint8 * destination) {
 }
 
 /** Clear front buffer screen */
-void clear_screen() {
+void clearScreen() {
 	memset(frontVideoBuffer, 0, SCREEN_WIDTH*SCREEN_HEIGHT);
 }
