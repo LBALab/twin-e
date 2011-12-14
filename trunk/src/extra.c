@@ -314,13 +314,43 @@ int32 addExtraAiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx,
 	return -1;
 }
 
+// cseg01:00018168
 int32 findExtraKey() {
-	// TODO cseg01:00018168
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == SPRITEHQR_KEY) {
+			return i;
+		}
+	}
+
 	return -1;
 }
 
-int32 addExtraAimingAtKey(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprite, int32 extraIdx) { // addMagicBallAimingAtKey
-	// TODO cseg01:00018250
+// cseg01:00018250
+int32 addExtraAimingAtKey(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx, int32 extraIdx) { // addMagicBallAimingAtKey
+	int32 i;
+
+	for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extra = &extraList[i];
+		if (extra->info0 == -1) {
+			extra->info0 = spriteIdx;
+			extra->type = 0x200;
+			extra->info1 = 0;
+			extra->X = X;
+			extra->Y = Y;
+			extra->Z = Z;
+			extra->actorIdx = extraIdx;
+			extra->lifeTime = 0x0FA0;
+			extra->strengthOfHit = 0;
+			setActorAngle(0, 0x0FA0, 50, &extra->trackActorMove);
+			extra->angle = getAngle(X, Z, sceneActors[0].X, sceneActors[0].Z);	
+
+			return i;
+		}
+	}
+
 	return -1;
 }
 
@@ -652,6 +682,63 @@ void processExtras() {
 			// process magic ball extra aiming for key
 			if (extra->type & 0x200) {
 				// TODO: reverse this part of the code
+
+				/*
+				v13 = *(_WORD *)(v0 + 24);
+				v36 = v13;
+				v14 = 34 * v13;
+				v32 = *(__int16 *)((char *)&extraList[0].X + v14);
+				v37 = *(__int16 *)((char *)&extraList[0].Y + v14);
+				v35 = *(__int16 *)((char *)&extraList[0].Z + v14);
+				v12 = GetAngle(ebp0) - *(_WORD *)(v0 + 22);
+				HIBYTE(v12) &= 3u;
+				if ( v12 < 600 && v12 > 400
+				  || (v15 = GetAngle(ebp0),
+					  v16 = GetRealValue(v3),
+					  Rotate(ebp0),
+					  *(_WORD *)(v0 + 4) -= destZ,
+					  Rotate(ebp0),
+					  *(_WORD *)(v0 + 2) += destX,
+					  *(_WORD *)(v0 + 6) += destZ,
+					  setActorAngle(0, *(_WORD *)(v0 + 18), 50, v3),
+					  sub_1848C(v0, magicBallIdx) == v36) )
+				{
+				  HQ_3D_MixSample(0x61u);
+				  v30 = 34 * v36;
+				  if ( *(__int16 *)((char *)&extraList[0].field_20 + v30) > 1 )
+				  {
+					projectPositionOnScreen(ebp0);
+					addOverlayObject(
+					  1,
+					  *(__int16 *)((char *)&extraList[0].field_20 + v30),
+					  projectedPositionX,
+					  projectedPositionY,
+					  158,
+					  0,
+					  2);
+				  }
+				  addOverlayObject(0, 6, 10, 30, 0, 0, 2);
+				  v17 = 34 * v36;
+				  v18 = *(__int16 *)((char *)&extraList[0].field_20 + v17);
+				  *(__int16 *)((char *)&extraList[0].field_0 + v17) = -1;
+				  v19 = *(_WORD *)(v0 + 6);
+				  v20 = *(_WORD *)(v0 + 4);
+				  v21 = *(_WORD *)(v0 + 2);
+				  numKey += v18;
+				  magicBallIdx = ExtraSearch(-1, v21, v20, v19, 6, 0, 8000, 0);
+				  goto LABEL_108;
+				}
+				if ( extraList[v36].field_0 == -1 )
+				{
+				  v22 = 44;
+				  if ( *(_WORD *)v0 == 42 )
+					v22 = 109;
+				  if ( *(_WORD *)v0 == 43 )
+					v22 = 110;
+				  magicBallIdx = ExtraSearch(-1, *(_WORD *)(v0 + 2), *(_WORD *)(v0 + 4), *(_WORD *)(v0 + 6), v22, 0, 8000, 0);
+				  goto LABEL_108;
+				}
+				*/
 			}
 			// process extra collision with actors
 			if (extra->type & 0x4) {
