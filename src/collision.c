@@ -253,7 +253,7 @@ int32 checkCollisionWithActors(int32 actorIdx) {
 						} else {
 							int32 newAngle;
 
-							newAngle = get_angle(processActorX, processActorZ, actorTest->X, actorTest->Z);
+							newAngle = getAngle(processActorX, processActorZ, actorTest->X, actorTest->Z);
 
 							if (actorTest->staticFlags.bCanBePushed && !actor->staticFlags.bCanBePushed) {
 								actorTest->lastY = 0;
@@ -307,7 +307,7 @@ int32 checkCollisionWithActors(int32 actorIdx) {
 						hitActor(actorIdx, a, 1, -1);
 					}
 
-					newAngle = get_angle(processActorX, processActorZ, actorTest->X, actorTest->Z);
+					newAngle = getAngle(processActorX, processActorZ, actorTest->X, actorTest->Z);
 
 					if (actorTest->staticFlags.bCanBePushed && !actor->staticFlags.bCanBePushed) {
 						actorTest->lastY = 0;
@@ -358,7 +358,7 @@ int32 checkCollisionWithActors(int32 actorIdx) {
 	}
 
 	if (actor->dynamicFlags.bIsHitting) {
-   		rotate_actor(0, 200, actor->angle);
+   		rotateActor(0, 200, actor->angle);
 
 		xLeft  = destX + processActorX + actor->boudingBox.X.bottomLeft;
 		xRight = destX + processActorX + actor->boudingBox.X.topRight;

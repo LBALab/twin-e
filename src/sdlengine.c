@@ -82,8 +82,8 @@ TTF_Font *font;
 //}
 
 void sdlClose() {
-	stop_track_music();
-	stop_midi_music();
+	stopTrackMusic();
+	stopMidiMusic();
 	Mix_CloseAudio();
 #ifdef GAMEMOD
 	TTF_Quit();

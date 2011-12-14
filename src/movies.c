@@ -263,7 +263,7 @@ void processFrame() {
 			break;
 		}
 		case STOP_SAMPLE: {
-			stop_samples();
+			stopSamples();
 			break;
 		}
 		case DELTA_FRAME: {
@@ -367,7 +367,7 @@ void playFlaMovie(int8 *filename) {
 		crossFade(frontVideoBuffer, paletteRGBACustom);
 	else
 		fadeToBlack(paletteRGBACustom);
-	stop_samples();
+	stopSamples();
 }
 
 /** Generic play movies, according with the settings

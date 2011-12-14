@@ -51,7 +51,7 @@ int8 * HQR_ANIM_FILE			= "anim.hqr";
 int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
 
 /** Init palettes */
-void init_palettes() {
+void initPalettes() {
 	// Init standard palette
 	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_MAINPAL);
 	convertPalToRGBA(palette, paletteRGBA);
@@ -64,7 +64,7 @@ void init_palettes() {
 /** Preload all sprites */
 void preloadSprites() {
 	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_SPRITES_FILE) - 1;
+	int32 numEntries = hqrNumEntries(HQR_SPRITES_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
 		spriteSizeTable[i] = hqrGetallocEntry(&spriteTable[i], HQR_SPRITES_FILE, i);
@@ -72,9 +72,9 @@ void preloadSprites() {
 }
 
 /** Preload all animations */
-void preload_animations() {
+void preloadAnimations() {
 	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_ANIM_FILE) - 1;
+	int32 numEntries = hqrNumEntries(HQR_ANIM_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
 		animSizeTable[i] = hqrGetallocEntry(&animTable[i], HQR_ANIM_FILE, i);
@@ -82,9 +82,9 @@ void preload_animations() {
 }
 
 /** Preload all animations */
-void preload_samples() {
+void preloadSamples() {
 	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_SAMPLES_FILE) - 1;
+	int32 numEntries = hqrNumEntries(HQR_SAMPLES_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
 		samplesSizeTable[i] = hqrGetallocEntry(&samplesTable[i], HQR_SAMPLES_FILE, i);
@@ -92,9 +92,9 @@ void preload_samples() {
 }
 
 /** Preload all animations */
-void preload_inventory_items() {
+void preloadInventoryItems() {
 	int32 i;
-	int32 numEntries = hqr_num_entries(HQR_INVOBJ_FILE) - 1;
+	int32 numEntries = hqrNumEntries(HQR_INVOBJ_FILE) - 1;
 
 	for (i = 0; i < numEntries; i++) {
 		inventorySizeTable[i] = hqrGetallocEntry(&inventoryTable[i], HQR_INVOBJ_FILE, i);
@@ -106,14 +106,14 @@ void initResources() {
 	int32 size = 0;
 
 	// Menu and in-game palette
-	init_palettes();
+	initPalettes();
 
 	// load LBA font
 	size = hqrGetallocEntry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
 
-	set_font_parameters(2, 8);
-	set_font_color(14);
-	set_text_cross_color(136, 143, 2);
+	setFontParameters(2, 8);
+	setFontColor(14);
+	setTextCrossColor(136, 143, 2);
 
 	hqrGetallocEntry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
 
@@ -121,7 +121,7 @@ void initResources() {
 	size = hqrGetallocEntry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
 
 	preloadSprites();
-	preload_animations();
-	//preload_samples();
-	preload_inventory_items();
+	preloadAnimations();
+	//preloadSamples();
+	preloadInventoryItems();
 }

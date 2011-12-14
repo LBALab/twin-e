@@ -570,7 +570,7 @@ void processAnimActions(int32 actorIdx) {
 				animPos = *(data++);
 				if (animPos == actor->animPosition) {
 					int16 sampleIdx = *((int16 *)data);
-					play_sample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
 				}
 				data+=2;
 			}
@@ -582,7 +582,7 @@ void processAnimActions(int32 actorIdx) {
 					sampleIdx = *((int16 *)data); data+=2;
 					frequency = *((int16 *)data); data+=2;
 					frequency = Rnd(frequency) + 0x1000 - (Abs(frequency) >> 1);
-					play_sample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z);
 				} else {
 					data+=4;
 				}
@@ -640,7 +640,7 @@ void processAnimActions(int32 actorIdx) {
 					int16 sampleIdx, repeat;
 					sampleIdx = *((int16 *)data); data+=2;
 					repeat = *((int16 *)data); data+=2;
-					play_sample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z);
 				} else {
 					data+=4;
 				}
@@ -670,8 +670,8 @@ void processAnimActions(int32 actorIdx) {
 				if (animPos == actor->animPosition) {
 					int32 yHeight, var_C, var_24, var_14, cx, dx, distance, angle, var;
 
-					distance = get_distance_2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
-					angle = get_angle(actor->Y, 0, sceneHero->Y, distance);
+					distance = getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+					angle = getAngle(actor->Y, 0, sceneHero->Y, distance);
 
 					yHeight = *((int16 *)data);
 					data+=2;
@@ -694,7 +694,7 @@ void processAnimActions(int32 actorIdx) {
 			case kSampleStop: {
 				animPos = *(data++);
 				if (animPos == actor->animPosition) {
-					stop_samples();
+					stopSamples();
 				}
 				data += 2;
 			}
@@ -703,7 +703,7 @@ void processAnimActions(int32 actorIdx) {
 				animPos = *(data++);
 				if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
 					int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
-					play_sample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
 				}
 			}
 				break;
@@ -711,7 +711,7 @@ void processAnimActions(int32 actorIdx) {
 				animPos = *(data++);
 				if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
 					int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
-					play_sample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
 				}
 			}
 				break;
@@ -739,7 +739,7 @@ void processAnimActions(int32 actorIdx) {
 					distanceZ = *((int16 *)data);
 					data += 2;
 
-					rotate_actor(distanceX, distanceZ, actor->angle);
+					rotateActor(distanceX, distanceZ, actor->angle);
 
 					throwX = destX + actor->X;
 					throwY = distanceY + actor->Y;
@@ -771,7 +771,7 @@ void processAnimActions(int32 actorIdx) {
 					int32 spriteIdx, strength;
 					int32 param1, param2, param3, param4;
 
-					newAngle = get_angle(actor->Y, 0, sceneHero->Y, get_distance_2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
+					newAngle = getAngle(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
 
 					distanceX = *((int16 *)data);
 					data += 2;
@@ -780,7 +780,7 @@ void processAnimActions(int32 actorIdx) {
 					distanceZ = *((int16 *)data);
 					data += 2;
 
-					rotate_actor(distanceX, distanceZ, actor->angle);
+					rotateActor(distanceX, distanceZ, actor->angle);
 
 					throwX = destX + actor->X;
 					throwY = distanceY + actor->Y;
@@ -817,7 +817,7 @@ void processAnimActions(int32 actorIdx) {
 					distanceZ = *((int16 *)data);
 					data += 2;
 
-					rotate_actor( distanceX, distanceZ, actor->angle);
+					rotateActor( distanceX, distanceZ, actor->angle);
 
 					spriteIdx = *(data++);
 					targetActor = *(data++);
@@ -946,7 +946,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 
 		if (!actor->dynamicFlags.bIsFalling) {
 			if (actor->speed) {
-				int32 angle = get_real_value(&actor->move);
+				int32 angle = getRealValue(&actor->move);
 				if (!angle) {
 					if (actor->move.to > 0) {
 						angle = 1;
@@ -955,20 +955,20 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 					}
 				}
 				
-				rotate_actor(angle, 0, actor->animType);
+				rotateActor(angle, 0, actor->animType);
 
 				processActorY = actor->Y - destZ;
 
-				rotate_actor(0, destX, actor->angle);
+				rotateActor(0, destX, actor->angle);
 
 				processActorX = actor->X + destX;
 				processActorZ = actor->Z + destZ;
 
-				set_actor_angle(0, actor->speed, 50, &actor->move);
+				setActorAngle(0, actor->speed, 50, &actor->move);
 
 				if (actor->dynamicFlags.bIsSpriteMoving) {
 					if (actor->doorStatus) { // open door
-						if (get_distance_2D(processActorX, processActorZ, actor->lastX, actor->lastZ) >= actor->doorStatus) {
+						if (getDistance2D(processActorX, processActorZ, actor->lastX, actor->lastZ) >= actor->doorStatus) {
 							if (actor->angle == 0) {
 								processActorZ = actor->lastZ + actor->doorStatus;
 							} else if (actor->angle == 0x100) {
@@ -1046,7 +1046,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 			actor->angle = (actor->angle + processLastRotationAngle - actor->lastRotationAngle) & 0x3FF;
 			actor->lastRotationAngle = processLastRotationAngle;
 
-			rotate_actor(currentStepX, currentStepZ, actor->angle);
+			rotateActor(currentStepX, currentStepZ, actor->angle);
 
 			currentStepX = destX;
 			currentStepZ = destZ;
@@ -1175,7 +1175,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 
 		// process wall hit while running
 		if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == ATHLETIC && actor->anim == ANIM_FORWARD) {
-			rotate_actor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
+			rotateActor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
 
 			destX += processActorX;
 			destZ += processActorZ;

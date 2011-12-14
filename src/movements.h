@@ -71,7 +71,7 @@ int32 moveAngle; // DoTrackVar1
 	@param X Shadow X coordinate
 	@param Y Shadow Y coordinate
 	@param Z Shadow Z coordinate */
-void get_shadow_position(int32 X, int32 Y, int32 Z);
+void getShadowPosition(int32 X, int32 Y, int32 Z);
 
 /** Set actor safe angle
 	@param startAngle start angle
@@ -82,42 +82,42 @@ void setActorAngleSafe(int16 startAngle, int16 endAngle, int16 stepAngle, ActorM
 
 /** Clear actors safe angle
 	@param actorPtr actor pointer */
-void clear_real_angle(ActorStruct * actorPtr);
+void clearRealAngle(ActorStruct * actorPtr);
 
 /** Set actor safe angle
 	@param startAngle start angle
 	@param endAngle end angle
 	@param stepAngle number of steps
 	@param movePtr time pointer to update */
-void set_actor_angle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr);
+void setActorAngle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveStruct * movePtr);
 
 /** Get actor angle
 	@param x1 Actor 1 X
 	@param z1 Actor 1 Z
 	@param x2 Actor 2 X
 	@param z2 Actor 2 Z */
-int32 get_angle(int32 x1, int32 z1, int32 x2, int32 z2);
+int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2);
 
 /** Get actor real angle
 	@param movePtr time pointer to process */
-int32 get_real_angle(ActorMoveStruct * movePtr);
+int32 getRealAngle(ActorMoveStruct * movePtr);
 
 /** Get actor step
 	@param movePtr time pointer to process */
-int32 get_real_value(ActorMoveStruct * movePtr);
+int32 getRealValue(ActorMoveStruct * movePtr);
 
 /** Rotate actor with a given angle
 	@param X Actor current X coordinate
 	@param Z Actor current Z coordinate
 	@param angle Actor angle to rotate */
-void rotate_actor(int32 X, int32 Z, int32 angle);
+void rotateActor(int32 X, int32 Z, int32 angle);
 
 /** Get distance value in 2D
 	@param x1 Actor 1 X coordinate
 	@param z1 Actor 1 Z coordinate
 	@param x2 Actor 2 X coordinate
 	@param z2 Actor 2 Z coordinate */
-int32 get_distance_2D(int32 x1, int32 z1, int32 x2, int32 z2);
+int32 getDistance2D(int32 x1, int32 z1, int32 x2, int32 z2);
 
 /** Get distance value in 3D
 	@param x1 Actor 1 X coordinate
@@ -126,15 +126,15 @@ int32 get_distance_2D(int32 x1, int32 z1, int32 x2, int32 z2);
 	@param x2 Actor 2 X coordinate
 	@param y2 Actor 2 Y coordinate
 	@param z2 Actor 2 Z coordinate */
-int32 get_distance_3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2);
+int32 getDistance3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2);
 
 /** Move actor around the scene
 	@param angleFrom Current actor angle
 	@param angleTo Angle to rotate
 	@param speed Rotate speed
 	@param movePtr Pointer to process movements */
-void move_actor(int32 angleFrom, int32 angleTo, int32 speed, ActorMoveStruct *movePtr);
+void moveActor(int32 angleFrom, int32 angleTo, int32 speed, ActorMoveStruct *movePtr);
 
-void process_actor_movements(int32 actorIdx);
+void processActorMovements(int32 actorIdx);
 
 #endif

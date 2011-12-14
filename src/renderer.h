@@ -56,26 +56,26 @@ int32 numOfVertex;
 int16 vertexCoordinates[193];
 int16 *pRenderV1;
 
-void set_light_vector(int32 angleX, int32 angleY, int32 angleZ);
+void setLightVector(int32 angleX, int32 angleY, int32 angleZ);
 
-int32 compute_polygons();
-void render_polygons(int32 ecx, int32 edi);
+int32 computePolygons();
+void renderPolygons(int32 ecx, int32 edi);
 
-void prepare_iso_model(uint8 *bodyPtr); // loadGfxSub
+void prepareIsoModel(uint8 *bodyPtr); // loadGfxSub
 
-int32 project_position_on_screen(int32 cX, int32 cY, int32 cZ);
-void set_camera_position(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
-void set_camera_angle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6);
-void set_base_translation(int32 X, int32 Y, int32 Z);
-void set_base_rotation(int32 X, int32 Y, int32 Z);
-void set_ortho_projection(int32 X, int32 Y, int32 Z);
+int32 projectPositionOnScreen(int32 cX, int32 cY, int32 cZ);
+void setCameraPosition(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
+void setCameraAngle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6);
+void setBaseTranslation(int32 X, int32 Y, int32 Z);
+void setBaseRotation(int32 X, int32 Y, int32 Z);
+void setOrthoProjection(int32 X, int32 Y, int32 Z);
 
-int32 render_iso_model(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr);
+int32 renderIsoModel(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr);
 
-void copy_actor_intern_anim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest);
+void copyActorInternAnim(uint8 *bodyPtrSrc, uint8 *bodyPtrDest);
 
-void render_behaviour_model(int32 boxLeft, int32 boxTop, int32 boxRight, int32 boxBottom, int32 Y, int32 angle, uint8 *entityPtr);
+void renderBehaviourModel(int32 boxLeft, int32 boxTop, int32 boxRight, int32 boxBottom, int32 Y, int32 angle, uint8 *entityPtr);
 
-void render_inventory_item(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param);
+void renderInventoryItem(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param);
 
 #endif

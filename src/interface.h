@@ -55,7 +55,7 @@ int32 textWindowBottomSave;
 	@param endWidth width value where the line ends
 	@param endHeight height value where the line ends
 	@param lineColor line color in the current palette */
-void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor);
+void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeight, int32 lineColor);
 
 /** Blit button box from working buffer to front buffer
 	@param left start width to draw the button
@@ -66,7 +66,7 @@ void draw_line(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHei
 	@param leftDest start width to draw the button in destination buffer
 	@param topDest start height to draw the button in destination buffer
 	@dest destination screen buffer, in this case front buffer */
-void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest);
+void blitBox(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int32 leftDest, int32 topDest, int8 *dest);
 
 /** Draws inside buttons transparent area
 	@param left start width to draw the button
@@ -74,13 +74,13 @@ void blit_box(int32 left, int32 top, int32 right, int32 bottom, int8 *source, in
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
+void drawTransparentBox(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
 
-void draw_splitted_box(int32 left, int32 top, int32 right, int32 bottom, uint8 e);
+void drawSplittedBox(int32 left, int32 top, int32 right, int32 bottom, uint8 e);
 
-void set_clip(int32 left, int32 top, int32 right, int32 bottom);
-void save_clip(); // saveTextWindow
-void load_clip(); // loadSavedTextWindow
-void reset_clip();
+void setClip(int32 left, int32 top, int32 right, int32 bottom);
+void saveClip(); // saveTextWindow
+void loadClip(); // loadSavedTextWindow
+void resetClip();
 
 #endif

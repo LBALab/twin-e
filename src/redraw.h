@@ -77,25 +77,25 @@ typedef struct OverlayListStruct {
 
 OverlayListStruct overlayList[OVERLAY_MAX_ENTRIES];
 
-void add_overlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime);
+void addOverlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime);
 
 /** Add a certain region to redraw list array
 	@param left start width to redraw the region
 	@param top start height to redraw the region
 	@param right end width to redraw the region
 	@param bottom end height to redraw the region */
-void add_redraw_area(int32 left, int32 top, int32 right, int32 bottom);
+void addRedrawArea(int32 left, int32 top, int32 right, int32 bottom);
 
 /** Flip currentRedrawList regions in the screen
 
 	This only updates small areas in the screen so few CPU processor is used */
-void flip_redraw_areas();
+void flipRedrawAreas();
 
 /** Blit/Update all screen regions in the currentRedrawList */
-void blit_background_areas();
+void blitBackgroundAreas();
 
 /** This is responsible for the entire game screen redraw
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
-void redraw_engine_actions(int32 bgRedraw);
+void redrawEngineActions(int32 bgRedraw);
 
 #endif

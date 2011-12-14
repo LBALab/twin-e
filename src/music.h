@@ -35,32 +35,32 @@ int32 currentMusic;
 
 /** Music volume
 	@param current volume number */
-void music_volume(int32 volume);
+void musicVolume(int32 volume);
 /** Play CD music
 	@param track track number to play */
-void play_track_music_cd(int32 track);
+void playTrackMusicCd(int32 track);
 /** Stop CD music */
-void stop_track_music_cd();
+void stopTrackMusicCd();
 /** Play MP3 music
 	@param track track number to play */
-void play_track_music_mp3(int32 track);
+void playTrackMusicMp3(int32 track);
 /** Stop MP3 music */
-void stop_track_music_mp3();
+void stopTrackMusicMp3();
 /** Generic play music, according with settings it plays CD or high quality sounds instead
 	@param track track number to play*/
-void play_track_music(int32 track);
+void playTrackMusic(int32 track);
 /** Generic stop music according with settings */
-void stop_track_music();
+void stopTrackMusic();
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
 void playMidiMusic(int32 midiIdx, int32 loop);
 /** Stop MIDI music */
-void stop_midi_music();
+void stopMidiMusic();
 
 /** Initialize CD-Rom */
 int32 initCdrom();
 
 /** Stop MIDI and Track music */
-void stop_music();
+void stopMusic();
 
 #endif

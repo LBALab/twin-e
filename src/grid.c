@@ -798,7 +798,7 @@ void redrawGrid() {
 	cameraY = newCameraY << 8;
 	cameraZ = newCameraZ << 9;
 
-	project_position_on_screen(-cameraX, -cameraY, -cameraZ);
+	projectPositionOnScreen(-cameraX, -cameraY, -cameraZ);
 
 	projPosXScreen = projPosX;
 	projPosYScreen = projPosY;

@@ -242,7 +242,7 @@ int32 inventorySelectedColor;
 int32 inventorySelectedItem; // currentSelectedObjectInInventory
 
 /** Plasma Effect Initialization */
-void plasma_effect_init() {
+void plasmaEffectInit() {
 	uint8  *temp1 = 0;
 	uint8  *temp2 = 0;
 	int8   *temp2bis = 0;
@@ -304,14 +304,14 @@ void plasma_effect_init() {
 /** Process the plasma effect
 	@param top top height where the effect will be draw in the front buffer
 	@param color plasma effect start color */
-void process_plasma_effect(int32 top, int32 color) {
+void processPlasmaEffect(int32 top, int32 color) {
 	uint8 *temp;
 	uint8 *out;
 	int32 i, j;
 	uint8 temp3;
 	uint8 bh, bl;
 
-	plasma_effect_init();
+	plasmaEffectInit();
 
 	temp = plasmaEffectVar1 + 1600;
 	out = frontVideoBuffer + screenLockupTable[top];
@@ -344,11 +344,11 @@ void process_plasma_effect(int32 top, int32 color) {
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_box(int32 left, int32 top, int32 right, int32 bottom) {
-	draw_line(left, top, right, top, 79);			// top line
-	draw_line(left, top, left, bottom, 79);			// left line
-	draw_line(right, ++top, right, bottom, 73);		// right line
-	draw_line(++left, bottom, right, bottom, 73);	// bottom line
+void drawBox(int32 left, int32 top, int32 right, int32 bottom) {
+	drawLine(left, top, right, top, 79);			// top line
+	drawLine(left, top, left, bottom, 79);			// left line
+	drawLine(right, ++top, right, bottom, 73);		// right line
+	drawLine(++left, bottom, right, bottom, 73);	// bottom line
 }
 
 /** Draws main menu button
@@ -357,7 +357,7 @@ void draw_box(int32 left, int32 top, int32 right, int32 bottom) {
 	@param id current button identification from menu settings
 	@param value current button key pressed value
 	@param mode flag to know if should draw as a hover button or not */
-void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 mode) {
+void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mode) {
 	int32 right;
 	int32 top;
 	int32 left;
@@ -425,13 +425,13 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 			}
 			};
 
-			process_plasma_effect(top, 80);
+			processPlasmaEffect(top, 80);
 			if (!(rand() % 5)) {
 				plasmaEffectPtr[rand() % 140 * 10 + 1900] = 255;
 			}
-			draw_splitted_box(newWidth, top, right, bottom, 68);
+			drawSplittedBox(newWidth, top, right, bottom, 68);
 		} else {
-			process_plasma_effect(top, 64);
+			processPlasmaEffect(top, 64);
 			if (!(rand() % 5)) {
 				plasmaEffectPtr[rand() % 320 * 10 + 6400] = 255;
 			}
@@ -441,17 +441,17 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 			// implement this
 		}
 	} else {
-		blit_box(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *) frontVideoBuffer);
-		draw_transparent_box(left, top, right, bottom2, 4);
+		blitBox(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *) frontVideoBuffer);
+		drawTransparentBox(left, top, right, bottom2, 4);
 	}
 
-	draw_box(left, top, right, bottom);
+	drawBox(left, top, right, bottom);
 
-	set_font_color(15);
-	set_font_parameters(2, 8);
-	get_menu_text(value, dialText);
-	textSize = get_text_size(dialText);
-	draw_text(width - (textSize / 2), topheight - 18, dialText);
+	setFontColor(15);
+	setFontParameters(2, 8);
+	getMenuText(value, dialText);
+	textSize = getTextSize(dialText);
+	drawText(width - (textSize / 2), topheight - 18, dialText);
 
 	// TODO: make volume buttons
 
@@ -461,7 +461,7 @@ void draw_button_gfx(int32 width, int32 topheight, int32 id, int32 value, int32 
 /** Process the menu button draw
 	@param data menu settings array
 	@param mode flag to know if should draw as a hover button or not */
-void draw_button(int16 *menuSettings, int32 mode) {
+void drawButton(int16 *menuSettings, int32 mode) {
 	int32  buttonNumber;
 	int32  maxButton;
 	int16  *localData = menuSettings;
@@ -497,13 +497,13 @@ void draw_button(int16 *menuSettings, int32 mode) {
 		localData += 1;
 		if (mode != 0) {
 			if (currentButton == buttonNumber) {
-				draw_button_gfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
+				drawButtonGfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
 			}
 		} else {
 			if (currentButton == buttonNumber) {
-				draw_button_gfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
+				drawButtonGfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
 			} else {
-				draw_button_gfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 0);
+				drawButtonGfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 0);
 			}
 		}
 
@@ -518,7 +518,7 @@ void draw_button(int16 *menuSettings, int32 mode) {
 /** Where the main menu options are processed
 	@param menuSettings menu settings array with the information to build the menu options
 	@return pressed menu button identification */
-int32 process_menu(int16 * menuSettings) {
+int32 processMenu(int16 * menuSettings) {
 	int32 localTime;
 	int32 numEntry;
 	int32 buttonNeedRedraw;
@@ -588,7 +588,7 @@ int32 process_menu(int16 * menuSettings) {
 					if (((uint8) key & 8)) { // on arrow key right
 						cfgfile.MusicVolume += 4;
 					}
-					music_volume(cfgfile.MusicVolume);
+					musicVolume(cfgfile.MusicVolume);
 					break;
 				}
 				case SOUNDVOLUME: {
@@ -598,7 +598,7 @@ int32 process_menu(int16 * menuSettings) {
 					if (((uint8) key & 8)) { // on arrow key right
 						cfgfile.WaveVolume += 4;
 					}
-					sample_volume(-1, cfgfile.WaveVolume);
+					sampleVolume(-1, cfgfile.WaveVolume);
 					break;
 				}
 				case CDVOLUME: {
@@ -626,8 +626,8 @@ int32 process_menu(int16 * menuSettings) {
 					if (((uint8) key & 8)) { // on arrow key right
 						cfgfile.MasterVolume += 4;
 					}
-					music_volume(cfgfile.MusicVolume);
-					sample_volume(-1, cfgfile.WaveVolume);
+					musicVolume(cfgfile.MusicVolume);
+					sampleVolume(-1, cfgfile.WaveVolume);
 					break;
 				}
 				default:
@@ -639,10 +639,10 @@ int32 process_menu(int16 * menuSettings) {
 		if (buttonNeedRedraw == 1) {
 			*localData = currentButton;
 
-			draw_button(localData, 0); // current button
+			drawButton(localData, 0); // current button
 			do {
 				readKeys();
-				draw_button(localData, 1);
+				drawButton(localData, 1);
 			} while (pressedKey == 0 && skipedKey == 0 && skipIntro == 0);
 			buttonNeedRedraw = 0;
 		} else {
@@ -652,7 +652,7 @@ int32 process_menu(int16 * menuSettings) {
 			}
 
 			buttonNeedRedraw = 0;
-			draw_button(localData, 1);
+			drawButton(localData, 1);
 			readKeys();
 			// WARNING: this is here to prevent a fade bug while quit the menu
 			copyScreen(workVideoBuffer, frontVideoBuffer);
@@ -667,13 +667,13 @@ int32 process_menu(int16 * menuSettings) {
 }
 
 /** Used to run the advanced options menu */
-int32 advoptions_menu() {
+int32 advoptionsMenu() {
 	int32 ret = 0;
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	do {
-		switch (process_menu(AdvOptionsMenuSettings)) {
+		switch (processMenu(AdvOptionsMenuSettings)) {
 		case OPTIONSMENU_RETURNMENU: {
 			ret = 1; // quit option menu
 			break;
@@ -691,13 +691,13 @@ int32 advoptions_menu() {
 }
 
 /** Used to run the save game management menu */
-int32 savemanage_menu() {
+int32 savemanageMenu() {
 	int32 ret = 0;
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	do {
-		switch (process_menu(SaveManageMenuSettings)) {
+		switch (processMenu(SaveManageMenuSettings)) {
 		case OPTIONSMENU_RETURNMENU: {
 			ret = 1; // quit option menu
 			break;
@@ -715,13 +715,13 @@ int32 savemanage_menu() {
 }
 
 /** Used to run the volume menu */
-int32 volume_menu() {
+int32 volumeMenu() {
 	int32 ret = 0;
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
 
 	do {
-		switch (process_menu(VolumeMenuSettings)) {
+		switch (processMenu(VolumeMenuSettings)) {
 		case OPTIONSMENU_RETURNMENU: {
 			ret = 1; // quit option menu
 			break;
@@ -739,16 +739,16 @@ int32 volume_menu() {
 }
 
 /** Used to run the options menu */
-int32 options_menu() {
+int32 optionsMenu() {
 	int32 ret = 0;
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
 
-	stop_samples();
+	stopSamples();
 	//playCDtrack(9);
 
 	do {
-		switch (process_menu(OptionsMenuSettings)) {
+		switch (processMenu(OptionsMenuSettings)) {
 		case OPTIONSMENU_RETURNGAME:
 		case OPTIONSMENU_RETURNMENU: {
 			ret = 1; // quit option menu
@@ -757,19 +757,19 @@ int32 options_menu() {
 		case OPTIONSMENU_VOLUME: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
-			volume_menu();
+			volumeMenu();
 			break;
 		}
 		case OPTIONSMENU_SAVEMANAGE: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
-			savemanage_menu();
+			savemanageMenu();
 			break;
 		}
 		case OPTIONSMENU_ADVOPTIONS: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
-			advoptions_menu();
+			advoptionsMenu();
 			break;
 		}
 		default:
@@ -786,7 +786,7 @@ int32 options_menu() {
 
 /** Used to run the main menu */
 void mainMenu() {
-	stop_samples();
+	stopSamples();
 
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 
@@ -795,25 +795,25 @@ void mainMenu() {
 	hqrGetEntry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
 	while (!cfgfile.Quit) {
-		init_text_bank(0);
+		initTextBank(0);
 
-		play_track_music(9); // LBA's Theme
-		stop_samples();
+		playTrackMusic(9); // LBA's Theme
+		stopSamples();
 
-		switch (process_menu(MainMenuSettings)) {
+		switch (processMenu(MainMenuSettings)) {
 		case MAINMENU_NEWGAME: {
-			new_game_menu();
+			newGameMenu();
 			break;
 		}
 		case MAINMENU_CONTINUEGAME: {
-			continue_game_menu();
+			continueGameMenu();
 			break;
 		}
 		case MAINMENU_OPTIONS: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
 			flip(workVideoBuffer);
 			OptionsMenuSettings[5] = OPTIONSMENU_RETURNMENU;
-			options_menu();
+			optionsMenu();
 			break;
 		}
 		case MAINMENU_QUIT: {
@@ -829,13 +829,13 @@ void mainMenu() {
 }
 
 /** Used to process give up menu while playing game */
-int32 giveup_menu() {
+int32 giveupMenu() {
 	//int32 saveLangue=0;
 	int32 menuId;
 	int16 * localMenu;
 
 	copyScreen(frontVideoBuffer, workVideoBuffer);
-	stop_samples();
+	stopSamples();
 
 	if (cfgfile.UseAutoSaving == 1)
 		localMenu = GiveUpMenuSettings;
@@ -845,13 +845,13 @@ int32 giveup_menu() {
 	do {
 		//saveLangue = languageCD1;
 		//languageCD1 = 0;
-		init_text_bank(0);
+		initTextBank(0);
 
-		menuId = process_menu(localMenu);
+		menuId = processMenu(localMenu);
 
 		//languageCD1 = saveLangue;
 
-		init_text_bank(currentTextBank + 3);
+		initTextBank(currentTextBank + 3);
 
 		fpsCycles(cfgfile.Fps);
 	} while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
@@ -862,14 +862,14 @@ int32 giveup_menu() {
 	return 0;
 }
 
-void draw_info_menu(int16 left, int16 top)
+void drawInfoMenu(int16 left, int16 top)
 {
 	int32 boxLeft, boxTop, boxRight, boxBottom;
 	int32 newBoxLeft, newBoxLeft2, i;
 
-	reset_clip();
-	draw_box(left, top, left + 450, top + 80);
-	draw_splitted_box(left + 1, top + 1, left + 449, top + 79, 0);
+	resetClip();
+	drawBox(left, top, left + 450, top + 80);
+	drawSplittedBox(left + 1, top + 1, left + 449, top + 79, 0);
 
 	newBoxLeft2 = left + 9;
 
@@ -881,28 +881,28 @@ void draw_info_menu(int16 left, int16 top)
 
 	boxTop = top + 10;
 	boxBottom = top + 25;
-	draw_splitted_box(newBoxLeft, boxTop, boxLeft, boxBottom, 91);
-	draw_box(left + 25, top + 10, left + 324, top + 10 + 14);
+	drawSplittedBox(newBoxLeft, boxTop, boxLeft, boxBottom, 91);
+	drawBox(left + 25, top + 10, left + 324, top + 10 + 14);
 
 	if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED] && gameFlags[GAMEFLAG_TUNIC]) {
 		drawSprite(0, newBoxLeft2, top + 36, spriteTable[SPRITEHQR_MAGICPOINTS]);
 		if(magicLevelIdx > 0) {
-			draw_splitted_box(newBoxLeft, top + 35, crossDot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
+			drawSplittedBox(newBoxLeft, top + 35, crossDot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
 		}
-		draw_box(left + 25, top + 35, left + magicLevelIdx * 80 + 20, top + 35 + 15);
+		drawBox(left + 25, top + 35, left + magicLevelIdx * 80 + 20, top + 35 + 15);
 	}
 
 	boxLeft = left + 340;
 
 	/** draw coin sprite */
 	drawSprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
-	set_font_color(155);
-	draw_text(left + 370, top + 5, ITOA(inventoryNumKashes));
+	setFontColor(155);
+	drawText(left + 370, top + 5, ITOA(inventoryNumKashes));
 
 	/** draw key sprite */
 	drawSprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
-	set_font_color(155);
-	draw_text(left + 370, top + 40, ITOA(inventoryNumKeys));
+	setFontColor(155);
+	drawText(left + 370, top + 40, ITOA(inventoryNumKeys));
 
 	// prevent 
 	if (inventoryNumLeafs > inventoryNumLeafsBox) {
@@ -924,7 +924,7 @@ void draw_info_menu(int16 left, int16 top)
 	copyBlockPhys(left, top, left + 450, top + 135);
 }
 
-void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
+void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
 	uint8 *currentAnim;
 	int32 boxLeft, boxTop, boxRight, boxBottom, currentAnimState;
 	int8 dialText[256];
@@ -945,71 +945,71 @@ void draw_behaviour(int16 behaviour, int32 angle, int16 drawBox) {
 		behaviourAnimState[behaviour] = currentAnimState;
 	}
 
-	if (drawBox == 0) {
-		draw_box(boxLeft - 1, boxTop - 1, boxRight + 1, boxBottom + 1);
+	if (cantDrawBox == 0) {
+		drawBox(boxLeft - 1, boxTop - 1, boxRight + 1, boxBottom + 1);
 	}
 
-	save_clip();
-	reset_clip();
+	saveClip();
+	resetClip();
 
 	if (behaviour != heroBehaviour) { // unselected
-		draw_splitted_box(boxLeft, boxTop, boxRight, boxBottom, 0);
+		drawSplittedBox(boxLeft, boxTop, boxRight, boxBottom, 0);
 	} else { // selected
-		draw_splitted_box(boxLeft, boxTop, boxRight, boxBottom, 69);
+		drawSplittedBox(boxLeft, boxTop, boxRight, boxBottom, 69);
 
 		// behaviour menu title
-		draw_splitted_box(110, 239, 540, 279, 0);
-		draw_box(110, 239, 540, 279);
+		drawSplittedBox(110, 239, 540, 279, 0);
+		drawBox(110, 239, 540, 279);
 
-		set_font_color(15);
+		setFontColor(15);
 
 		if (heroBehaviour == 2 && autoAgressive == 1) {
-			get_menu_text(4, dialText);
+			getMenuText(4, dialText);
 		} else {
-			get_menu_text(heroBehaviour, dialText);
+			getMenuText(heroBehaviour, dialText);
 		}
 
-		draw_text((650 - get_text_size(dialText)) / 2, 240, dialText);
+		drawText((650 - getTextSize(dialText)) / 2, 240, dialText);
 	}
 
-	render_behaviour_model(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
+	renderBehaviourModel(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
 
 	copyBlockPhys(boxLeft, boxTop, boxRight, boxBottom);
 	copyBlockPhys(110, 239, 540, 279);
 
-	load_clip();
+	loadClip();
 }
 
-void draw_behaviour_menu(int32 angle) {
-	draw_box(100, 100, 550, 290);
-	draw_transparent_box(101, 101, 549, 289, 2);
+void drawBehaviourMenu(int32 angle) {
+	drawBox(100, 100, 550, 290);
+	drawTransparentBox(101, 101, 549, 289, 2);
 
 	setAnimAtKeyframe(behaviourAnimState[NORMAL], animTable[heroAnimIdx[NORMAL]], behaviourEntity, &behaviourAnimData[NORMAL]);
-	draw_behaviour(NORMAL, angle, 0);
+	drawBehaviour(NORMAL, angle, 0);
 
 	setAnimAtKeyframe(behaviourAnimState[ATHLETIC], animTable[heroAnimIdx[ATHLETIC]], behaviourEntity, &behaviourAnimData[ATHLETIC]);
-	draw_behaviour(ATHLETIC, angle, 0);
+	drawBehaviour(ATHLETIC, angle, 0);
 
 	setAnimAtKeyframe(behaviourAnimState[AGGRESSIVE], animTable[heroAnimIdx[AGGRESSIVE]], behaviourEntity, &behaviourAnimData[AGGRESSIVE]);
-	draw_behaviour(AGGRESSIVE, angle, 0);
+	drawBehaviour(AGGRESSIVE, angle, 0);
 
 	setAnimAtKeyframe(behaviourAnimState[DISCRETE], animTable[heroAnimIdx[DISCRETE]], behaviourEntity, &behaviourAnimData[DISCRETE]);
-	draw_behaviour(DISCRETE, angle, 0);
+	drawBehaviour(DISCRETE, angle, 0);
 
-	draw_info_menu(100, 300);
+	drawInfoMenu(100, 300);
 
 	copyBlockPhys(100, 100, 550, 290);
 }
 
 /** Process hero behaviour menu */
-void process_behaviour_menu() {
+void processBehaviourMenu() {
 	int32 tmpLanguageCD;
 	int32 tmpTextBank;
 	int32 tmpHeroBehaviour;
 	int32 tmpTime;
 
 	if (heroBehaviour == PROTOPACK) {
-		stop_samples();
+		stopSamples();
 		setBehaviour(NORMAL);
 	}
 
@@ -1030,9 +1030,9 @@ void process_behaviour_menu() {
 	tmpTextBank = currentTextBank;
 	currentTextBank = -1;
 
-	init_text_bank(0);
+	initTextBank(0);
 
-	draw_behaviour_menu(sceneHero->angle);
+	drawBehaviourMenu(sceneHero->angle);
 
 	tmpHeroBehaviour = heroBehaviour;
 
@@ -1063,18 +1063,18 @@ void process_behaviour_menu() {
 		}
 
 		if (tmpHeroBehaviour != heroBehaviour) {
-			draw_behaviour(tmpHeroBehaviour, sceneHero->angle, 1);
+			drawBehaviour(tmpHeroBehaviour, sceneHero->angle, 1);
 			tmpHeroBehaviour = heroBehaviour;
 			setActorAngleSafe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
 			setAnimAtKeyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
 
 			while (pressedKey) {
 				readKeys();
-				draw_behaviour(heroBehaviour, -1, 1);
+				drawBehaviour(heroBehaviour, -1, 1);
 			}
 		}
 		
-		draw_behaviour(heroBehaviour, -1, 1);
+		drawBehaviour(heroBehaviour, -1, 1);
 
 		fpsCycles(50);
 		lbaTime++;
@@ -1086,7 +1086,7 @@ void process_behaviour_menu() {
 	initEngineProjections();
 
 	currentTextBank = tmpTextBank;
-	init_text_bank(currentTextBank + 3);
+	initTextBank(currentTextBank + 3);
 
 	cfgfile.LanguageCDId = tmpLanguageCD;
 }
@@ -1096,14 +1096,14 @@ void process_behaviour_menu() {
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_magicitems_box(int32 left, int32 top, int32 right, int32 bottom, int32 color) { // Rect
-	draw_line(left, top, right, top, color);			// top line
-	draw_line(left, top, left, bottom, color);			// left line
-	draw_line(right, ++top, right, bottom, color);		// right line
-	draw_line(++left, bottom, right, bottom, color);	// bottom line
+void drawMagicItemsBox(int32 left, int32 top, int32 right, int32 bottom, int32 color) { // Rect
+	drawLine(left, top, right, top, color);			// top line
+	drawLine(left, top, left, bottom, color);			// left line
+	drawLine(right, ++top, right, bottom, color);		// right line
+	drawLine(++left, bottom, right, bottom, color);	// bottom line
 }
 
-void draw_item(int32 item) {
+void drawItem(int32 item) {
 	int32 itemX = (item / 4) * 85 + 64;
 	int32 itemY = (item & 3) * 75 + 52;
 
@@ -1113,41 +1113,41 @@ void draw_item(int32 item) {
 	int32 bottom = itemY + 32;
 
 	if (inventorySelectedItem == item) {
-		draw_splitted_box(left, top, right, bottom, inventorySelectedColor);
+		drawSplittedBox(left, top, right, bottom, inventorySelectedColor);
 	} else {
-		draw_splitted_box(left, top, right, bottom, 0);
+		drawSplittedBox(left, top, right, bottom, 0);
 	}
 
 	if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
-		prepare_iso_model(inventoryTable[item]);
+		prepareIsoModel(inventoryTable[item]);
 		itemAngle[item] += 8;
-		render_inventory_item(itemX, itemY, inventoryTable[item], itemAngle[item], 15000);
+		renderInventoryItem(itemX, itemY, inventoryTable[item], itemAngle[item], 15000);
 
 		if (item == 15) { // has GAS
-			set_font_color(15);
-			draw_text(left + 3, top + 32, ITOA(inventoryNumGas));
+			setFontColor(15);
+			drawText(left + 3, top + 32, ITOA(inventoryNumGas));
 		}
 	}
 
-	draw_box(left, top, right, bottom);
+	drawBox(left, top, right, bottom);
 	copyBlockPhys(left, top, right, bottom);
 }
 
-void draw_inventory_items() {
+void drawInventoryItems() {
 	int32 item;
 
-	draw_transparent_box(17, 10, 622, 320, 4);
-	draw_box(17, 10, 622, 320);
-	draw_magicitems_box(110, 18, 188, 311, 75);
+	drawTransparentBox(17, 10, 622, 320, 4);
+	drawBox(17, 10, 622, 320);
+	drawMagicItemsBox(110, 18, 188, 311, 75);
 	copyBlockPhys(17, 10, 622, 320);
 
 	for (item = 0; item < NUM_INVENTORY_ITEMS; item++) {
-		draw_item(item);
+		drawItem(item);
 	}
 }
 
 /** Process in-game inventory menu */
-void process_inventory_menu() {
+void processInventoryMenu() {
 	int32 di = 1;
 	int32 prevSelectedItem, tmpLanguageCD, bx, tmpAlphaLight, tmpBetaLight;
 
@@ -1156,7 +1156,7 @@ void process_inventory_menu() {
 
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 
-	set_light_vector(896, 950, 0);
+	setLightVector(896, 950, 0);
 
 	inventorySelectedColor = 68;
 
@@ -1164,17 +1164,17 @@ void process_inventory_menu() {
 		gameFlags[GAMEFLAG_HAS_CLOVER_LEAF] = 1;
 	}
 
-	draw_inventory_items();
+	drawInventoryItems();
 
 	tmpLanguageCD = cfgfile.LanguageCDId;
 	cfgfile.LanguageCDId = 0;
 
-	init_text_bank(2);
+	initTextBank(2);
 
 	bx = 3;
 
-	set_font_cross_color(4);
-	init_dialogue_box();
+	setFontCrossColor(4);
+	initDialogueBox();
 
 	while (skipIntro != 1) {
 		readKeys();
@@ -1205,7 +1205,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem >= NUM_INVENTORY_ITEMS) {
 				inventorySelectedItem = 0;
 			}
-			draw_item(prevSelectedItem);
+			drawItem(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1214,7 +1214,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem < 0) {
 				inventorySelectedItem = NUM_INVENTORY_ITEMS - 1;
 			}
-			draw_item(prevSelectedItem);
+			drawItem(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1223,7 +1223,7 @@ void process_inventory_menu() {
 			if (inventorySelectedItem < 0) {
 				inventorySelectedItem += NUM_INVENTORY_ITEMS;
 			}
-			draw_item(prevSelectedItem);
+			drawItem(prevSelectedItem);
 			bx = 3;
 		}
 
@@ -1232,17 +1232,17 @@ void process_inventory_menu() {
 			if (inventorySelectedItem >= NUM_INVENTORY_ITEMS) {
 				inventorySelectedItem -= NUM_INVENTORY_ITEMS;
 			}
-			draw_item(prevSelectedItem);
+			drawItem(prevSelectedItem);
 			bx = 3;
 		}
 
 		if (bx == 3) {
-			init_inventory_dialogue_box();
+			initInventoryDialogueBox();
 
 			if (gameFlags[inventorySelectedItem] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && inventorySelectedItem < NUM_INVENTORY_ITEMS) {
-				init_text(inventorySelectedItem + 100);
+				initText(inventorySelectedItem + 100);
 			} else {
-				init_text(128);
+				initText(128);
 			}
 			bx = 0;
 		}
@@ -1258,22 +1258,22 @@ void process_inventory_menu() {
 
 		if (loopPressedKey & 1) {
 			if (bx == 2) {
-				init_inventory_dialogue_box();
+				initInventoryDialogueBox();
 				bx = 0;
 			} else {
 				if (gameFlags[inventorySelectedItem] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && inventorySelectedItem < NUM_INVENTORY_ITEMS) {
-					init_inventory_dialogue_box();
-					init_text(inventorySelectedItem + 100);
+					initInventoryDialogueBox();
+					initText(inventorySelectedItem + 100);
 				}
 			}
 		}
 
-		draw_item(inventorySelectedItem);
+		drawItem(inventorySelectedItem);
 
 		if ((loopPressedKey & 2) && gameFlags[inventorySelectedItem] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && inventorySelectedItem < NUM_INVENTORY_ITEMS) {
 			loopInventoryItem = inventorySelectedItem;
 			inventorySelectedColor = 91;
-			draw_item(inventorySelectedItem);
+			drawItem(inventorySelectedItem);
 			break;
 		}
 	}
@@ -1287,7 +1287,7 @@ void process_inventory_menu() {
 
 	cfgfile.LanguageCDId = tmpLanguageCD;
 
-	init_text_bank(currentTextBank + 3);
+	initTextBank(currentTextBank + 3);
 
 	while (skipIntro != 0 && skipedKey != 0) {
 		readKeys();

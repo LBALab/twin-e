@@ -32,6 +32,6 @@
 
 /** Process actor life script
 	@param actorIdx Current processed actor index */
-void process_life_script(int32 actorIdx);
+void processLifeScript(int32 actorIdx);
 
 #endif

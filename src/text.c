@@ -61,7 +61,7 @@ int16 spaceChar = 0x20;
 
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
-void init_text_bank(int32 bankIdx) { // InitDial
+void initTextBank(int32 bankIdx) { // InitDial
 	int32 langIdx;
 	int32 hqrSize;
 
@@ -91,7 +91,7 @@ void init_text_bank(int32 bankIdx) { // InitDial
 	@param x X coordinate in screen
 	@param y Y coordinate in screen
 	@param character ascii character to display */
-void draw_character(int32 x, int32 y, uint8 character) { // drawCharacter
+void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 	uint8 sizeX;
 	uint8 sizeY;
 	uint8 keptsizeX;
@@ -181,18 +181,18 @@ void draw_character(int32 x, int32 y, uint8 character) { // drawCharacter
 	@param y Y coordinate in screen
 	@param character ascii character to display
 	@param color character color */
-void draw_character_shadow(int32 x, int32 y, uint8 character, int32 color) { // drawDoubleLetter
+void drawCharacterShadow(int32 x, int32 y, uint8 character, int32 color) { // drawDoubleLetter
 	int32 left, top, right, bottom;
 
 	if (character != 0x20)
 	{
 		// shadow color
-		set_font_color(0);
-		draw_character(x + 2, y + 4, character);
+		setFontColor(0);
+		drawCharacter(x + 2, y + 4, character);
 
 		// text color
-		set_font_color(color);
-		draw_character(x, y, character);
+		setFontColor(color);
+		drawCharacter(x, y, character);
 
 		left = x;
 		top = y;
@@ -208,7 +208,7 @@ void draw_character_shadow(int32 x, int32 y, uint8 character, int32 color) { // 
 	@param x X coordinate in screen
 	@param y Y coordinate in screen
 	@param dialogue ascii text to display */
-void draw_text(int32 x, int32 y, int8 *dialogue) { // Font
+void drawText(int32 x, int32 y, int8 *dialogue) { // Font
 	uint8 currChar;
 
 	if (fontPtr == 0)   // if the font is not defined
@@ -224,7 +224,7 @@ void draw_text(int32 x, int32 y, int8 *dialogue) { // Font
 			x += dialCharSpace;
 		else {
 			dialTextSize = *(fontPtr + (*((int16 *)(fontPtr + currChar * 4))));  // get the length of the character
-			draw_character(x, y, currChar); // draw the character on screen
+			drawCharacter(x, y, currChar); // draw the character on screen
 			// add the length of the space between 2 characters
 			x += dialSpaceBetween;
 			// add the length of the current character
@@ -235,7 +235,7 @@ void draw_text(int32 x, int32 y, int8 *dialogue) { // Font
 
 /** Gets dialogue text width size
 	@param dialogue ascii text to display */
-int32 get_text_size(int8 *dialogue) {  // SizeFont
+int32 getTextSize(int8 *dialogue) {  // SizeFont
 	uint8 currChar;
 	dialTextSize = 0;
 
@@ -256,30 +256,30 @@ int32 get_text_size(int8 *dialogue) {  // SizeFont
 	return (dialTextSize);
 }
 
-void init_dialogue_box() { // InitDialWindow
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
+void initDialogueBox() { // InitDialWindow
+	blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
 
 	if (newGameVar4 != 0) {
-		draw_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
-		draw_transparent_box(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
+		drawBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+		drawTransparentBox(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
 	}
 
 	copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)workVideoBuffer);
+	blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)workVideoBuffer);
 }
 
-void init_inventory_dialogue_box() { // SecondInitDialWindow
-	blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
+void initInventoryDialogueBox() { // SecondInitDialWindow
+	blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
 	copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 	printText8Var3 = 0;
 }
 
 // TODO: refactor this code
-void init_text(int32 index) { // initText
+void initText(int32 index) { // initText
 	printTextVar13 = 0;
 
-	if (!get_text(index)) {
+	if (!getText(index)) {
 		return;
 	}
 
@@ -300,7 +300,7 @@ void init_text(int32 index) { // initText
 	printText8Var8 = currDialTextPtr;
 
 	// lba font is get while engine start
-	set_font_parameters(2, 7);
+	setFontParameters(2, 7);
 }
 
 void initProgressiveTextBuffer() {
@@ -357,7 +357,7 @@ void getWordSize(uint8 *arg1, uint8 *arg2) {
 
 	wordSizeChar = temp;
 	*arg2 = 0;
-	wordSizePixel = get_text_size((int8*)arg2Save);
+	wordSizePixel = getTextSize((int8*)arg2Save);
 }
 
 void processTextLine() {
@@ -448,9 +448,9 @@ void printText10Sub() { // printText10Sub()
 	polyRenderType = 0; // POLYGONTYPE_FLAT
 	numOfVertex = 3;
 
-	if (compute_polygons())
+	if (computePolygons())
 	{
-		render_polygons(polyRenderType, dialTextStopColor);
+		renderPolygons(polyRenderType, dialTextStopColor);
 	}
 
 	copyBlockPhys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
@@ -476,8 +476,8 @@ void printText10Sub2() { // printText10Sub2()
 	counter2 = dialTextStartColor;
 
 	while (--counter >= 0) {
-		set_font_color(counter2);
-		draw_character_shadow(*(ptr + 1), *(ptr + 2), (uint8)*ptr, counter2);
+		setFontColor(counter2);
+		drawCharacterShadow(*(ptr + 1), *(ptr + 2), (uint8)*ptr, counter2);
 		counter2 -= dialTextStepSize;
 		if (counter2 > dialTextStopColor)
 			counter2 = dialTextStopColor;
@@ -511,7 +511,7 @@ int printText10() { // printText10()
 			return 0;
 		}
 		if (printText8Var6 != 0) {
-			blit_box(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
+			blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
 			copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
 			printText8Var3 = 0;
 			printText8Var6 = 0;
@@ -575,19 +575,19 @@ int printText10() { // printText10()
 }
 
 // TODO: refactor this code
-void draw_text_fullscreen(int32 index) { // printTextFullScreen
+void drawTextFullscreen(int32 index) { // printTextFullScreen
 	int32 printedText;
 	int32 skipText = 0;
 
-	save_clip();
-	reset_clip();
+	saveClip();
+	resetClip();
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	// TODO: get right VOX entry index
 	// TODO: if we don't display text, than still plays vox file
 
-	init_text(index);
-	init_dialogue_box();
+	initText(index);
+	initDialogueBox();
 
 	do {
 		readKeys();
@@ -628,12 +628,12 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	printTextVar13 = 0;
 
 	if (printedText != 0) {
-		load_clip();
+		loadClip();
 		return;
 	}
 
 	if (skipText != 0) {
-		load_clip();
+		loadClip();
 		return;
 	}
 
@@ -649,20 +649,20 @@ void draw_text_fullscreen(int32 index) { // printTextFullScreen
 	do {
 		readKeys();
 		if (skipIntro != 0) {
-			load_clip();
+			loadClip();
 			return;
 		}
 		if (skipedKey != 0) {
-			load_clip();
+			loadClip();
 			return;
 		}
 		delay(1);
 	} while(!pressedKey);
 
-	load_clip();
+	loadClip();
 }
 
-void set_font(uint8 *font, int32 spaceBetween, int32 charSpace) {
+void setFont(uint8 *font, int32 spaceBetween, int32 charSpace) {
 	fontPtr = font;
 	dialCharSpace = charSpace;
 	dialSpaceBetween = spaceBetween;
@@ -671,14 +671,14 @@ void set_font(uint8 *font, int32 spaceBetween, int32 charSpace) {
 /** Set font type parameters
 	@param spaceBetween number in pixels of space between characters
 	@param charSpace number in pixels of the character space */
-void set_font_parameters(int32 spaceBetween, int32 charSpace) {
+void setFontParameters(int32 spaceBetween, int32 charSpace) {
 	dialSpaceBetween = spaceBetween;
 	dialCharSpace = charSpace;
 }
 
 /** Set the font cross color
 	@param color color number to choose */
-void set_font_cross_color(int32 color) { // TestCoulDial
+void setFontCrossColor(int32 color) { // TestCoulDial
 	dialTextStepSize = -1;
 	dialTextBufferSize = 14;
 	dialTextStartColor = color << 4;
@@ -687,7 +687,7 @@ void set_font_cross_color(int32 color) { // TestCoulDial
 
 /** Set the font color
 	@param color color number to choose */
-void set_font_color(int32 color) {
+void setFontColor(int32 color) {
 	dialTextColor = color;
 }
 
@@ -695,7 +695,7 @@ void set_font_color(int32 color) {
 	@param stopColor color number to stop
 	@param startColor color number to start
 	@param stepSize step size to change between those colors */
-void set_text_cross_color(int32 stopColor, int32 startColor, int32 stepSize) {
+void setTextCrossColor(int32 stopColor, int32 startColor, int32 stepSize) {
 	dialTextStartColor = startColor;
 	dialTextStopColor = stopColor;
 	dialTextStepSize = stepSize;
@@ -704,7 +704,7 @@ void set_text_cross_color(int32 stopColor, int32 startColor, int32 stepSize) {
 
 /** Get dialogue text into text buffer
 	@param index dialogue index */
-int32 get_text(int32 index) { // findString
+int32 getText(int32 index) { // findString
 	int32 currIdx = 0;
 	int32 orderIdx = 0;
 	int32 numEntries;
@@ -741,7 +741,7 @@ int32 get_text(int32 index) { // findString
 	@param src source text buffer
 	@param dst destination text buffer
 	@param size text size */
-void copy_text(int8 *src, int8 *dst, int32 size) { // copyStringToString
+void copyText(int8 *src, int8 *dst, int32 size) { // copyStringToString
 	int32 i;
 	for (i = 0; i < size; i++)
 		*(dst++) = *(src++);
@@ -750,14 +750,14 @@ void copy_text(int8 *src, int8 *dst, int32 size) { // copyStringToString
 /** Gets menu dialogue text
 	@param index text index to display
 	@param dialogue dialogue text buffer to display */
-void get_menu_text(int32 index, int8 *text) { // GetMultiText
+void getMenuText(int32 index, int8 *text) { // GetMultiText
 	if (index == currMenuTextIndex) {
 		if (currMenuTextBank == currentTextBank) {
 			strcpy(text, currMenuTextBuffer);
 			return;
 		}
 	}
-	if (!get_text(index)) {
+	if (!getText(index)) {
 		// if doesn't have text
 		text[0] = 0;
 		return;
@@ -766,15 +766,15 @@ void get_menu_text(int32 index, int8 *text) { // GetMultiText
 	if ((currDialTextSize - 1) > 0xFF)
 		currDialTextSize = 0xFF;
 
-	copy_text((int8 *) currDialTextPtr, text, currDialTextSize);
+	copyText((int8 *) currDialTextPtr, text, currDialTextSize);
 	currDialTextSize++;
-	copy_text(text, currMenuTextBuffer, currDialTextSize);
+	copyText(text, currMenuTextBuffer, currDialTextSize);
 
 	currMenuTextIndex = index;
 	currMenuTextBank = currentTextBank;
 }
 
-void text_clip_full() { // newGame2
+void textClipFull() { // newGame2
 	dialTextBoxLeft = 8;
 	dialTextBoxTop = 8;
 	dialTextBoxRight = 631;
@@ -784,7 +784,7 @@ void text_clip_full() { // newGame2
 	dialTextBoxParam2 = 607;
 }
 
-void text_clip_small() { // newGame4
+void textClipSmall() { // newGame4
 	dialTextBoxLeft = 16;
 	dialTextBoxTop = 334;
 	dialTextBoxRight = 623;
@@ -793,13 +793,13 @@ void text_clip_small() { // newGame4
 	dialTextBoxParam2 = 591;
 }
 
-void draw_ask_question(int32 index) { // MyDial
+void drawAskQuestion(int32 index) { // MyDial
 	int32 textStatus = 1;
 
 	// TODO: get right VOX entry index
 
-	init_text(index);
-	init_dialogue_box();
+	initText(index);
+	initDialogueBox();
 
 	do {
 		readKeys();
@@ -955,7 +955,7 @@ void display_dialogue_fullscreen(int32 dialog, uint8 color) { //char *dialogue
 		return;
 
 	// Init of our temporary text buffers
-	get_text(dialog);
+	getText(dialog);
 	init_text_buf(&compText, currDialTextPtr);
 	alloc_text_buf(&lineText, 100);
 	alloc_text_buf(&wordText, 30);
@@ -982,7 +982,7 @@ void display_dialogue_fullscreen(int32 dialog, uint8 color) { //char *dialogue
 					// Draw character
 					printf( "%c", *localSeek );
 				}
-				draw_character_shadow(x, y, currChar, 1); // draw the character on screen
+				drawCharacterShadow(x, y, currChar, 1); // draw the character on screen
 				// add the length of the space between 2 characters
 				x += dialSpaceBetween;
 				// add the length of the current character
@@ -1024,7 +1024,7 @@ void display_dialogue_fullscreen(int32 dialog, uint8 color) { //char *dialogue
 			x += dialCharSpace;
 		else
 		{
-			draw_character_shadow(x, y, currChar, 1); // draw the character on screen
+			drawCharacterShadow(x, y, currChar, 1); // draw the character on screen
 			// add the length of the space between 2 characters
 			x += dialSpaceBetween;
 			// add the length of the current character

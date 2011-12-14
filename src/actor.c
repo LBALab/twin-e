@@ -197,7 +197,7 @@ int32 initBody(int32 bodyIdx, int32 actorIdx) {
 						printf("HQR ERROR: Loading body entities\n");
 						exit(1);
 					}
-					prepare_iso_model(bodyTable[currentPositionInBodyPtrTab]);
+					prepareIsoModel(bodyTable[currentPositionInBodyPtrTab]);
 					*((uint16*)bodyPtr3) = currentPositionInBodyPtrTab + 0x8000;
 					index = currentPositionInBodyPtrTab;
 					currentPositionInBodyPtrTab++;
@@ -334,7 +334,7 @@ void initModelActor(int32 bodyIdx, int16 actorIdx) {
 		if (localActor->previousAnimIdx == -1)
 			return;
 
-		copy_actor_intern_anim(bodyTable[currentIndex], bodyTable[localActor->entity]);
+		copyActorInternAnim(bodyTable[currentIndex], bodyTable[localActor->entity]);
 
 		return;
 	}
@@ -535,12 +535,12 @@ void processActorExtraBonus(int32 actorIdx) { // GiveExtraBonus
 		if (actor->dynamicFlags.bIsDead) {
 			addExtraBonus(actor->X, actor->Y, actor->Z, 0x100, 0, currentBonus, actor->bonusAmount);
 			// FIXME add constant for sample index
-			play_sample(11, 0x1000, 1, actor->X, actor->Y, actor->Z);
+			playSample(11, 0x1000, 1, actor->X, actor->Y, actor->Z);
 		} else {
-			int32 angle = get_angle(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+			int32 angle = getAngle(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
 			addExtraBonus(actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z, 200, angle, currentBonus, actor->bonusAmount);
 			// FIXME add constant for sample index
-			play_sample(11, 0x1000, 1, actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z);
+			playSample(11, 0x1000, 1, actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z);
 		}
 	}
 }

@@ -30,12 +30,12 @@
 
 #include "sys.h"
 
-int32 showCredits;
+int32 canShowCredits;
 
 /** Main menu new game options */
-void new_game_menu();
+void newGameMenu();
 
 /** Main menu continue game options */
-void continue_game_menu();
+void continueGameMenu();
 
 #endif

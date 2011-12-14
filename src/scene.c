@@ -48,7 +48,7 @@
 uint8* currentScene;
 
 
-void set_actor_staticflags(int32 actorIdx, uint16 staticFlags) {
+void setActorStaticFlags(int32 actorIdx, uint16 staticFlags) {
 	if (staticFlags & 0x1) {
 		sceneActors[actorIdx].staticFlags.bComputeCollisionWithObj = 1;
 	}
@@ -100,7 +100,7 @@ void set_actor_staticflags(int32 actorIdx, uint16 staticFlags) {
 	}
 }
 
-void load_scene() {
+void loadScene() {
 	int32 i;
 	int32 scriptSize = 0;
 	uint8* localScene = currentScene;
@@ -182,7 +182,7 @@ void load_scene() {
 
 		staticFlags = *((uint16*)localScene);
 		localScene += 2;
-		set_actor_staticflags(i, staticFlags);
+		setActorStaticFlags(i, staticFlags);
 
 		sceneActors[i].entity = *((uint16*)localScene);
 		localScene += 2;
@@ -287,20 +287,20 @@ void load_scene() {
 }
 
 /** Initialize new scene */
-int32 init_scene(int32 index) {
+int32 initScene(int32 index) {
 	int32 sceneSize;
 
 	// load scene from file
 	sceneSize = hqrGetallocEntry(&currentScene, HQR_SCENE_FILE, index);
 
-	load_scene();
+	loadScene();
 
 	return 1;
 }
 
 
 /** Reset scene */
-void reset_scene() {
+void resetScene() {
 	int32 i;
 
 	resetExtras();
@@ -318,7 +318,7 @@ void reset_scene() {
 }
 
 /** Change to another scene */
-void change_scene() {
+void changeScene() {
 	int32 a;
 	
 	// change twinsen house destroyed hard-coded
@@ -329,9 +329,9 @@ void change_scene() {
 	previousSceneIdx = currentSceneIdx;
 	currentSceneIdx = needChangeScene;
 
-	stop_samples();
+	stopSamples();
 
-	reset_scene();
+	resetScene();
 	loadHeroEntities();
 
 	sceneHero->controlMode = 1;
@@ -340,14 +340,14 @@ void change_scene() {
 	sceneHero->positionInMoveScript = -1;
 	sceneHero->labelIdx = -1;
 
-	init_scene(needChangeScene);
+	initScene(needChangeScene);
 
 	//TODO: treat holomap trajectories
 
 	if (needChangeScene == 116 || needChangeScene == 117)
 		currentTextBank = 10;
 
-	init_text_bank(currentTextBank + 3);
+	initTextBank(currentTextBank + 3);
 	initGrid(needChangeScene);
 
 	if (heroPositionType == POSITION_TYPE_ZONE) {
@@ -366,7 +366,7 @@ void change_scene() {
 	sceneHero->Y = heroYBeforeFall = newHeroY;
 	sceneHero->Z = newHeroZ;
 
-	set_light_vector(alphaLight, betaLight, 0);
+	setLightVector(alphaLight, betaLight, 0);
 
 	if (previousSceneIdx != needChangeScene) {
 		previousHeroBehaviour = heroBehaviour;
@@ -400,7 +400,7 @@ void change_scene() {
 	changeRoomVar10 = 1;
 	changeRoomVar11 = 14;
 
-	set_light_vector(alphaLight, betaLight, 0);
+	setLightVector(alphaLight, betaLight, 0);
 
 	if (sceneMusic != -1) {
 		playMidiMusic(sceneMusic, -1);
@@ -408,7 +408,7 @@ void change_scene() {
 }
 
 /** Process scene environment sound */
-void process_environment_sound() {
+void processEnvironmentSound() {
 	int16 s, currentAmb, decal, repeat;
 	int16 sampleIdx = -1;
 
@@ -428,7 +428,7 @@ void process_environment_sound() {
 					decal = sampleRound[currentAmb];
 					repeat = sampleRepeat[currentAmb];
 
-					play_sample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110);
+					playSample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110);
 					break ;
 				}
 			}
@@ -443,7 +443,7 @@ void process_environment_sound() {
 }
 
 /** Process zone extra bonus */
-void process_zone_extra_bonus(ZoneStruct *zone) {
+void processZoneExtraBonus(ZoneStruct *zone) {
 	int32 a, numBonus;
 	int8 bonusTable[8], currentBonus;
 
@@ -466,7 +466,7 @@ void process_zone_extra_bonus(ZoneStruct *zone) {
 				currentBonus = 1;
 			}
 
-			angle = get_angle(Abs(zone->topRight.X + zone->bottomLeft.X)/2, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, sceneHero->X, sceneHero->Z);
+			angle = getAngle(Abs(zone->topRight.X + zone->bottomLeft.X)/2, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, sceneHero->X, sceneHero->Z);
 			index = addExtraBonus(Abs(zone->topRight.X + zone->bottomLeft.X)/2, zone->topRight.Y, Abs(zone->topRight.Z + zone->bottomLeft.Z)/2, 180, angle, currentBonus + 3, zone->infoData.generic.info2);
 			
 			if (index != -1) {
@@ -480,7 +480,7 @@ void process_zone_extra_bonus(ZoneStruct *zone) {
 
 /** Process actor zones
 	@param actorIdx Process actor index */
-void process_actor_zones(int32 actorIdx) {
+void processActorZones(int32 actorIdx) {
 	int32 currentX, currentY, currentZ, z, tmpCellingGrid;
 	ActorStruct *actor;
 
@@ -538,31 +538,31 @@ void process_actor_zones(int32 actorIdx) {
 
 						useCellingGrid = zone->infoData.CeillingGrid.newGrid;
 						cellingGridIdx = z;
-						freeze_time();
+						freezeTime();
 						initCellingGrid(useCellingGrid);
-						unfreeze_time();
+						unfreezeTime();
 					}
 				}
 				break;
 			case kObject:
 				if (!actorIdx && heroAction != 0) {
 					initAnim(ANIM_ACTION, 1, 0, 0);
-					process_zone_extra_bonus(zone);
+					processZoneExtraBonus(zone);
 				}
 				break;
 			case kText:
 				if (!actorIdx && heroAction != 0) {
-					freeze_time();
-					set_font_cross_color(zone->infoData.DisplayText.textColor);
+					freezeTime();
+					setFontCrossColor(zone->infoData.DisplayText.textColor);
 					talkingActor = actorIdx;
-					draw_text_fullscreen(zone->infoData.DisplayText.textIdx);
-					unfreeze_time();
-					redraw_engine_actions(1);
+					drawTextFullscreen(zone->infoData.DisplayText.textIdx);
+					unfreezeTime();
+					redrawEngineActions(1);
 				}
 				break;
 			case kLadder:
 				if (!actorIdx && heroBehaviour != PROTOPACK && (actor->anim == ANIM_FORWARD || actor->anim == ANIM_TOP_LADDER || actor->anim == ANIM_CLIMB_LADDER)) {
-					rotate_actor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
+					rotateActor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
 					destX += processActorX;
 					destZ += processActorZ;
 

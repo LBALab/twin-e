@@ -41,12 +41,12 @@ int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index);
 	@param filename HQR file name
 	@param index entry index to extract
 	@return entry real size */
-int32 hqr_entry_size(int8 *filename, int32 index);
+int32 hqrEntrySize(int8 *filename, int32 index);
 
 /** Get a HQR total number of entries
 	@param filename HQR file name
 	@return total number of entries */
-int32 hqr_num_entries(int8 *filename);
+int32 hqrNumEntries(int8 *filename);
 
 /** Get a HQR entry pointer with memory allocation
 	@param ptr pointer to save the entry

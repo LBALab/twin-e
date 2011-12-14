@@ -48,14 +48,14 @@ extern uint8 *plasmaEffectPtr;
 /** Process the plasma effect
 	@param top top height where the effect will be draw in the front buffer
 	@param color plasma effect start color */
-void process_plasma_effect(int32 top, int32 color);
+void processPlasmaEffect(int32 top, int32 color);
 
 /** Draw the entire button box
 	@param left start width to draw the button
 	@param top start height to draw the button
 	@param right end width to draw the button
 	@param bottom end height to draw the button */
-void draw_box(int32 left, int32 top, int32 right, int32 bottom);
+void drawBox(int32 left, int32 top, int32 right, int32 bottom);
 
 /** Draws inside buttons transparent area
 	@param left start width to draw the button
@@ -63,26 +63,26 @@ void draw_box(int32 left, int32 top, int32 right, int32 bottom);
 	@param right end width to draw the button
 	@param bottom end height to draw the button
 	@param colorAdj index to adjust the transparent box color */
-void draw_transparent_box(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
+void drawTransparentBox(int32 left, int32 top, int32 right, int32 bottom, int32 colorAdj);
 
 /** Where the main menu options are processed
 	@param menuSettings menu settings array with the information to build the menu options
 	@return pressed menu button identification */
-int32 process_menu(int16 * menuSettings);
+int32 processMenu(int16 * menuSettings);
 
 /** Used to run the main menu */
 void mainMenu();
 
 /** Used to run the in-game give-up menu */
-int32 giveup_menu();
+int32 giveupMenu();
 
 /** Used to run the options menu */
-int32 options_menu();
+int32 optionsMenu();
 
 /** Process hero behaviour menu */
-void process_behaviour_menu();
+void processBehaviourMenu();
 
 /** Process in-game inventory menu */
-void process_inventory_menu();
+void processInventoryMenu();
 
 #endif

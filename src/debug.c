@@ -111,14 +111,14 @@ void debugFillButton(int32 X, int32 Y, int32 width, int32 height, int8 color) {
 
 void debugDrawButton(int32 left, int32 top, int32 right, int32 bottom, int8 *text, int32 textLeft, int32 textRight, int32 isActive, int8 color) {
 	debugFillButton(left + 1, top + 1, right - left - 1, bottom - top - 1, color);
-	draw_box(left, top, right, bottom);
+	drawBox(left, top, right, bottom);
 	ttfDrawText(textLeft, textRight, text, 0);
 	copyBlockPhys(left, top, right, bottom);
 }
 
 void debugDrawWindowBox(int32 left, int32 top, int32 right, int32 bottom, int32 alpha) {
-	draw_transparent_box(left, top, right, bottom, alpha);
-	draw_box(left, top, right, bottom);
+	drawTransparentBox(left, top, right, bottom, alpha);
+	drawBox(left, top, right, bottom);
 	//copyBlockPhys(left,top,right,bottom);
 }
 
@@ -255,7 +255,7 @@ void debugResetButton(int32 type) {
 }
 
 void debugRedrawScreen() {
-	redraw_engine_actions(1);
+	redrawEngineActions(1);
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 	debugDrawWindows();
 }
@@ -475,13 +475,13 @@ int32 debugProcessButton(int32 X, int32 Y) {
 
 void debugPlasmaWindow(int8 *text, int32 color) {
 	int32 textSize;
-	process_plasma_effect(5, color);
+	processPlasmaEffect(5, color);
 	if (!(rand() % 5)) {
 		plasmaEffectPtr[rand() % 320 * 10 + 6400] = 255;
 	}
-	textSize = get_text_size(text);
-	draw_text((SCREEN_WIDTH / 2) - (textSize / 2), 10, text);
-	draw_box(5, 5, 634, 50);
+	textSize = getTextSize(text);
+	drawText((SCREEN_WIDTH / 2) - (textSize / 2), 10, text);
+	drawBox(5, 5, 634, 50);
 	copyBlockPhys(5, 5, 634, 50);
 }
 
