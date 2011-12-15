@@ -683,76 +683,81 @@ void processExtras() {
 			if (extra->type & 0x200) {
 				int32 actorIdx, actorIdxAttacked, tmpAngle, angle;
 
-				actorIdxAttacked = extra->lifeTime;
+                ExtraListStruct *extraKey = &extraList[extra->actorIdx];
+                actorIdxAttacked = extra->lifeTime;
 				actorIdx = extra->actorIdx;
 
-				currentExtraX = sceneActors[actorIdxAttacked].X;
-				currentExtraY = sceneActors[actorIdxAttacked].Y + 1000;
-				currentExtraZ = sceneActors[actorIdxAttacked].Z;
-
-				tmpAngle = getAngle(extra->X, extra->Z, currentExtraX, currentExtraZ);
+                tmpAngle = getAngle(extra->X, extra->Z, sceneHero->X, sceneHero->Z);
 				angle = (tmpAngle - extra->angle) & 0x3FF;
 
 				if (angle > 400 && angle < 600) {
-					// TODO: reverse this part of the code
+                    playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
+                    
+                    if (extra->info1 > 1) {
+                        projectPositionOnScreen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
+                        addOverlay(koNumber, extra->info1, projPosX, projPosY, koNormal, 0, 2);
+                    }
+                    
+                    addOverlay(koSprite, SPRITEHQR_KEY, 10, 30, koNormal, 0, 2);
+
+                    inventoryNumKeys += extra->info1;
+                    extra->info0 = -1;
+                    
+                    magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, SPRITEHQR_KEY, 0, 8000, 0);
+				} else {
+                    /*
+                    v15 = GetAngle(ebp0),
+                    v16 = GetRealValue(v3),
+                    Rotate(ebp0),
+                    *(_WORD *)(v0 + 4) -= destZ,
+                    Rotate(ebp0),
+                    *(_WORD *)(v0 + 2) += destX,
+                    *(_WORD *)(v0 + 6) += destZ,
+                    setActorAngle(0, *(_WORD *)(v0 + 18), 50, v3),
+                    sub_1848C(v0, magicBallIdx) == v36)
+                    */
+
+				    int32 angle, pos;
+
+					angle = getAngle(extra->Y, 0, currentExtraY, moveAngle);
+					pos = getRealAngle(&extra->trackActorMove);
+
+					if (!pos) {
+						pos = 1;
+					}
+
+					rotateActor(pos, 0, angle);
+					extra->Y -= destZ;
+
+					rotateActor(0, destX, tmpAngle);
+					extra->X += destX;
+					extra->Z += destZ;
+
+					setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
+
+                    // check magicball collision with key
+					if (actorIdx == checkExtraCollisionWithExtra(extra, magicBallIdx)) {
+						if (i == magicBallIdx) {
+							magicBallIdx = -1;
+						}
+
+						extra->info0 = -1;
+					}
 				}
 
-				/*
-				v13 = *(_WORD *)(v0 + 24);
-				v36 = v13;
-				v14 = 34 * v13;
-				v32 = *(__int16 *)((char *)&extraList[0].X + v14);
-				v37 = *(__int16 *)((char *)&extraList[0].Y + v14);
-				v35 = *(__int16 *)((char *)&extraList[0].Z + v14);
-				v12 = GetAngle(ebp0) - *(_WORD *)(v0 + 22);
-				HIBYTE(v12) &= 3u;
-				if ( v12 < 600 && v12 > 400
-				  || (v15 = GetAngle(ebp0),
-					  v16 = GetRealValue(v3),
-					  Rotate(ebp0),
-					  *(_WORD *)(v0 + 4) -= destZ,
-					  Rotate(ebp0),
-					  *(_WORD *)(v0 + 2) += destX,
-					  *(_WORD *)(v0 + 6) += destZ,
-					  setActorAngle(0, *(_WORD *)(v0 + 18), 50, v3),
-					  sub_1848C(v0, magicBallIdx) == v36) )
-				{
-				  HQ_3D_MixSample(0x61u);
-				  v30 = 34 * v36;
-				  if ( *(__int16 *)((char *)&extraList[0].field_20 + v30) > 1 )
-				  {
-					projectPositionOnScreen(ebp0);
-					addOverlayObject(
-					  1,
-					  *(__int16 *)((char *)&extraList[0].field_20 + v30),
-					  projectedPositionX,
-					  projectedPositionY,
-					  158,
-					  0,
-					  2);
-				  }
-				  addOverlayObject(0, 6, 10, 30, 0, 0, 2);
-				  v17 = 34 * v36;
-				  v18 = *(__int16 *)((char *)&extraList[0].field_20 + v17);
-				  *(__int16 *)((char *)&extraList[0].field_0 + v17) = -1;
-				  v19 = *(_WORD *)(v0 + 6);
-				  v20 = *(_WORD *)(v0 + 4);
-				  v21 = *(_WORD *)(v0 + 2);
-				  numKey += v18;
-				  magicBallIdx = ExtraSearch(-1, v21, v20, v19, 6, 0, 8000, 0);
-				  goto LABEL_108;
-				}
-				if ( extraList[v36].field_0 == -1 )
-				{
-				  v22 = 44;
-				  if ( *(_WORD *)v0 == 42 )
-					v22 = 109;
-				  if ( *(_WORD *)v0 == 43 )
-					v22 = 110;
-				  magicBallIdx = ExtraSearch(-1, *(_WORD *)(v0 + 2), *(_WORD *)(v0 + 4), *(_WORD *)(v0 + 6), v22, 0, 8000, 0);
-				  goto LABEL_108;
-				}
-				*/
+                if (extraKey->info0 == -1) {
+                    int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
+
+					if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
+						spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
+					}
+					if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
+						spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
+					}
+
+					magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 8000, 0);
+                    continue;
+                }
 			}
 			// process extra collision with actors
 			if (extra->type & 0x4) {

@@ -577,3 +577,49 @@ int32 checkExtraCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 oldX, int32
 
 	return 0;
 }
+
+/** Check extra collision with another extra
+	@param extra to process
+	@param extraIdx extra index to check collision */
+int32 checkExtraCollisionWithExtra(ExtraListStruct* extra, int32 extraIdx) {
+	int32 i;
+	int32 xLeft, xRight, yLeft, yRight, zLeft, zRight;
+	int16 * spriteBounding;
+
+	spriteBounding = (int16*)(spriteBoundingBoxPtr + extra->info0 * 16 + 4);
+
+	xLeft  = *(spriteBounding++) + extra->X;
+	xRight = *(spriteBounding++) + extra->X;
+
+	yLeft  = *(spriteBounding++) + extra->Y;
+	yRight = *(spriteBounding++) + extra->Y;
+
+	zLeft  = *(spriteBounding++) + extra->Z;
+	zRight = *(spriteBounding++) + extra->Z;
+
+    for (i = 0; i < EXTRA_MAX_ENTRIES; i++) {
+		ExtraListStruct *extraTest = &extraList[i];
+		if ( i != extraIdx && extraTest->info0 != -1) {
+			int32 xLeftTest, xRightTest, yLeftTest, yRightTest, zLeftTest, zRightTest;
+            int16 * spriteBoundingTest;
+	        spriteBoundingTest = (int16*)(spriteBoundingBoxPtr + extraTest->info0 * 16 + 4);
+
+			xLeftTest  = *(spriteBounding++) + extraTest->X;
+	        xRightTest = *(spriteBounding++) + extraTest->X;
+
+	        yLeftTest  = *(spriteBounding++) + extraTest->Y;
+	        yRightTest = *(spriteBounding++) + extraTest->Y;
+
+	        zLeftTest  = *(spriteBounding++) + extraTest->Z;
+	        zRightTest = *(spriteBounding++) + extraTest->Z;
+
+            if (xLeft < xLeftTest) {
+			    if (xLeft < xRightTest && xRight > xLeftTest && yLeft < yRightTest && yRight > yLeftTest && zLeft < zRightTest && zRight > zLeftTest) {
+				    return i;
+			    }
+            }
+		}
+	}
+
+	return -1;
+}
