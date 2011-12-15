@@ -88,4 +88,9 @@ int32 checkExtraCollisionWithActors(ExtraListStruct* extra, int32 actorIdx);
 /** Check extra collision with bricks */
 int32 checkExtraCollisionWithBricks(int32 X, int32 Y, int32 Z, int32 oldX, int32 oldY, int32 oldZ);
 
+/** Check extra collision with another extra
+	@param extra to process
+	@param extraIdx extra index to check collision */
+int32 checkExtraCollisionWithExtra(ExtraListStruct* extra, int32 extraIdx);
+
 #endif
