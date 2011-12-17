@@ -385,8 +385,6 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 					projectPositionOnScreen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
 
 					if (projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580) {
-						int32 specialType;
-
 						drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ;
 						drawList[drawListPos].index = 0x1800 + i;
 						drawListPos++;
@@ -399,6 +397,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 							drawList[drawListPos].X = shadowX;
 							drawList[drawListPos].Y = shadowY;
 							drawList[drawListPos].Z = shadowZ;
+							drawList[drawListPos].field_A = 0;
 							drawListPos++;
 						}		
 					}
@@ -475,7 +474,6 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 			// Drawing shadows
 			else if (flags == 0xC00 && !cropBottomScreen) {
 				int32 spriteWidth, spriteHeight, tmpX, tmpY, tmpZ;
-				// uint8 *spritePtr = spriteTable[actor->entity];
 				DrawListStruct shadow =	drawList[pos];
 
 				// get actor position on screen
@@ -483,11 +481,11 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 
 				getSpriteSize(shadow.field_A, &spriteWidth, &spriteHeight, spriteShadowPtr);
 
-				// calculate sprite position on screen
-				renderLeft   = projPosX - (spriteWidth  - actorIdx) / 2;
-				renderTop    = projPosY - (spriteHeight - actorIdx) / 2;
-				renderRight  = projPosX + (spriteWidth  - actorIdx) / 2;
-				renderBottom = projPosY + (spriteHeight - actorIdx) / 2;
+				// calculate sprite size and position on screen
+				renderLeft   = projPosX - (spriteWidth / 2);
+				renderTop    = projPosY - (spriteHeight / 2);
+				renderRight  = projPosX + (spriteWidth / 2);
+				renderBottom = projPosY + (spriteHeight / 2);
 
 				setClip(renderLeft, renderTop, renderRight, renderBottom);
 
@@ -502,6 +500,9 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 				drawOverModelActor(tmpX, tmpY, tmpZ);
 
 				addRedrawArea(textWindowLeft, textWindowTop, renderRight, renderBottom);
+
+				// show clipping area
+				//drawBox(renderLeft, renderTop, renderRight, renderBottom);
 			}
 			// Drawing unknown
 			else if (flags < 0x1000) {
