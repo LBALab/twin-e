@@ -137,6 +137,12 @@ int32 mANGLE(int32 actorIdx, ActorStruct *actor) {
 		if (actor->move.numOfStep == 0) {
 			moveActor(actor->angle, currentScriptValue, actor->speed, move);
 		}
+		if (actor->angle == currentScriptValue) {
+			clearRealAngle(actor);
+			return 0;
+		}
+		continueMove = 0;
+		actor->positionInMoveScript -= 3;
 	}
 	return 0;
 }
