@@ -74,12 +74,7 @@ void getShadowPosition(int32 X, int32 Y, int32 Z) {
 	processActorZ = Z;
 
 	if (*ptr) {
-		uint8* tempPtr;
-
-		tempPtr = getBlockLibrary(*(ptr++) - 1) + 3;
-
-		shadowCollisionType = *(tempPtr + *(ptr) * 4);
-
+		shadowCollisionType = getBlockLibrary(*(ptr) - 1) + 3 + *(ptr + 1) * 4;
 		reajustActorPosition(shadowCollisionType);
 	}
 
