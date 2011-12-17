@@ -703,7 +703,9 @@ void processExtras() {
                     inventoryNumKeys += extraKey->info1;
                     extraKey->info0 = -1;
                     
+					extra->info0 = -1;
                     magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, SPRITEHQR_KEY, 0, 8000, 0);
+					continue;
 				} else {
 					int32 angle, pos;
 
@@ -724,7 +726,7 @@ void processExtras() {
 					setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
 
 					if (actorIdx == checkExtraCollisionWithExtra(extra, magicBallIdx)) {
-						/*playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
+						playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
                     
 						if (extraKey->info1 > 1) {
 							projectPositionOnScreen(extraKey->X - cameraX, extraKey->Y - cameraY, extraKey->Z - cameraZ);
@@ -736,23 +738,25 @@ void processExtras() {
 						inventoryNumKeys += extraKey->info1;
 						extraKey->info0 = -1;
 	                    
-						magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, SPRITEHQR_KEY, 0, 8000, 0);*/
-
-						if (extraKey->info0 == -1) {
-							int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
-
-							if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
-								spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
-							}
-							if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
-								spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
-							}
-
-							magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 8000, 0);
-						}
+						extra->info0 = -1;
+						magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, SPRITEHQR_KEY, 0, 8000, 0);
+						continue;
 					}
 				}
-				continue;
+				if (extraKey->info0 == -1) {
+					int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
+
+					if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
+						spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
+					}
+					if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
+						spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
+					}
+
+					extra->info0 = -1;
+					magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 8000, 0);
+					continue;
+				}
 			}
 			// process extra collision with actors
 			if (extra->type & 0x4) {
