@@ -150,11 +150,11 @@ int32 processLifeConditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 		otherActor = &sceneActors[actorIdx];
 		if (!otherActor->dynamicFlags.bIsDead) {
-			if (Abs(otherActor->Y - actor->Y) >= 1500) {
+			if (actor->Y - otherActor->Y >= 1500) {
 				currentScriptValue = 0x7D00;	
 			} else {
 				currentScriptValue = getDistance2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
-				if (currentScriptValue > 0x7D00) {
+				if (Abs(currentScriptValue) > 0x7D00) {
 					currentScriptValue = 0x7D00;
 				}
 			}
@@ -289,7 +289,7 @@ int32 processLifeConditions(ActorStruct *actor) {
 
 		if (!targetActor->dynamicFlags.bIsDead) {
 			currentScriptValue = getDistance3D(actor->X, actor->Y, actor->Z, targetActor->X, targetActor->Y, targetActor->Z);		
-			if (currentScriptValue > 0x7D00) { // TODO: recheck this
+			if (Abs(currentScriptValue) > 0x7D00) {
 				currentScriptValue = 0x7D00;
 			}
 		} else {
