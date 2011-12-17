@@ -15,7 +15,6 @@ This is the place to list every TODO we need to make for this project.
 
   * Finish scripting while doing the following tasks:
   
-  # Extras Bonus: add extra shadows;
   # Voice: play dialogues voices;
   # Text: implement bubble hint when text option is disabled;
   # Holomap: create holomap routines;
