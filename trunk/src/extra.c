@@ -342,10 +342,10 @@ int32 addExtraAimingAtKey(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprit
 			extra->Y = Y;
 			extra->Z = Z;
 			extra->actorIdx = extraIdx;
-			extra->lifeTime = 0x0FA0;
+			extra->destZ = 0x0FA0;
 			extra->strengthOfHit = 0;
 			setActorAngle(0, 0x0FA0, 50, &extra->trackActorMove);
-			extra->angle = getAngle(X, Z, sceneActors[0].X, sceneActors[0].Z);	
+			extra->angle = getAngle(X, Z, extraList[extraIdx].X, extraList[extraIdx].Z);	
 
 			return i;
 		}
@@ -687,39 +687,27 @@ void processExtras() {
                 actorIdxAttacked = extra->lifeTime;
 				actorIdx = extra->actorIdx;
 
-                tmpAngle = getAngle(extra->X, extra->Z, sceneHero->X, sceneHero->Z);
+                tmpAngle = getAngle(extra->X, extra->Z, extraKey->X, extraKey->Z);
 				angle = (tmpAngle - extra->angle) & 0x3FF;
 
 				if (angle > 400 && angle < 600) {
                     playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
                     
-                    if (extra->info1 > 1) {
-                        projectPositionOnScreen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
-                        addOverlay(koNumber, extra->info1, projPosX, projPosY, koNormal, 0, 2);
+                    if (extraKey->info1 > 1) {
+                        projectPositionOnScreen(extraKey->X - cameraX, extraKey->Y - cameraY, extraKey->Z - cameraZ);
+                        addOverlay(koNumber, extraKey->info1, projPosX, projPosY, koNormal, 0, 2);
                     }
                     
                     addOverlay(koSprite, SPRITEHQR_KEY, 10, 30, koNormal, 0, 2);
 
-                    inventoryNumKeys += extra->info1;
-                    extra->info0 = -1;
+                    inventoryNumKeys += extraKey->info1;
+                    extraKey->info0 = -1;
                     
                     magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, SPRITEHQR_KEY, 0, 8000, 0);
 				} else {
-                    /*
-                    v15 = GetAngle(ebp0),
-                    v16 = GetRealValue(v3),
-                    Rotate(ebp0),
-                    *(_WORD *)(v0 + 4) -= destZ,
-                    Rotate(ebp0),
-                    *(_WORD *)(v0 + 2) += destX,
-                    *(_WORD *)(v0 + 6) += destZ,
-                    setActorAngle(0, *(_WORD *)(v0 + 18), 50, v3),
-                    sub_1848C(v0, magicBallIdx) == v36)
-                    */
+					int32 angle, pos;
 
-				    int32 angle, pos;
-
-					angle = getAngle(extra->Y, 0, currentExtraY, moveAngle);
+					angle = getAngle(extra->Y, 0, extraKey->Y, moveAngle);
 					pos = getRealAngle(&extra->trackActorMove);
 
 					if (!pos) {
@@ -735,29 +723,36 @@ void processExtras() {
 
 					setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
 
-                    // check magicball collision with key
 					if (actorIdx == checkExtraCollisionWithExtra(extra, magicBallIdx)) {
-						if (i == magicBallIdx) {
-							magicBallIdx = -1;
+						/*playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
+                    
+						if (extraKey->info1 > 1) {
+							projectPositionOnScreen(extraKey->X - cameraX, extraKey->Y - cameraY, extraKey->Z - cameraZ);
+							addOverlay(koNumber, extraKey->info1, projPosX, projPosY, koNormal, 0, 2);
 						}
+	                    
+						addOverlay(koSprite, SPRITEHQR_KEY, 10, 30, koNormal, 0, 2);
 
-						extra->info0 = -1;
+						inventoryNumKeys += extraKey->info1;
+						extraKey->info0 = -1;
+	                    
+						magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, SPRITEHQR_KEY, 0, 8000, 0);*/
+
+						if (extraKey->info0 == -1) {
+							int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
+
+							if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
+								spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
+							}
+							if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
+								spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
+							}
+
+							magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 8000, 0);
+						}
 					}
 				}
-
-                if (extraKey->info0 == -1) {
-                    int32 spriteIdx = SPRITEHQR_MAGICBALL_YELLOW_TRANS;
-
-					if (extra->info0 == SPRITEHQR_MAGICBALL_GREEN) {
-						spriteIdx = SPRITEHQR_MAGICBALL_GREEN_TRANS;
-					}
-					if (extra->info0 == SPRITEHQR_MAGICBALL_RED) {
-						spriteIdx = SPRITEHQR_MAGICBALL_RED_TRANS;
-					}
-
-					magicBallIdx = addExtra(-1, extra->X, extra->Y, extra->Z, spriteIdx, 0, 8000, 0);
-                    continue;
-                }
+				continue;
 			}
 			// process extra collision with actors
 			if (extra->type & 0x4) {
