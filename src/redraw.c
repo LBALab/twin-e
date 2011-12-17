@@ -391,9 +391,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 						drawList[drawListPos].index = 0x1800 + i;
 						drawListPos++;
 
-						specialType = extra->info0 & 0x7FFF;
-
-						if (cfgfile.ShadowMode == 2 && (extra->info0 & 0x8000) && specialType != kHitStars && specialType != kExplodeCloud) {
+						if (cfgfile.ShadowMode == 2 && !(extra->info0 & 0x8000)) {
 							getShadowPosition(extra->X, extra->Y, extra->Z);
 			
 							drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ - 1;
