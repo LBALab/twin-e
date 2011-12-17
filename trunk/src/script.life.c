@@ -1227,7 +1227,7 @@ int32 lFADE_PAL_ALARM(int32 actorIdx, ActorStruct *actor) {
 /*0x58*/
 int32 lEXPLODE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 otherActorIdx = *(scriptPtr++);
-	ActorStruct *otherActor = &sceneActors[actorIdx];
+	ActorStruct *otherActor = &sceneActors[otherActorIdx];
 
 	addExtraExplode(otherActor->X, otherActor->Y, otherActor->Z); // RECHECK this
 
