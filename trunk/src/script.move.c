@@ -40,7 +40,7 @@ uint8 *scriptPtr;
 int32 continueMove;
 int32 scriptPosition;
 ActorMoveStruct *move;
-
+int32 numRepeatSample = 1;
 
 typedef int32 ScriptMoveFunc(int32 actorIdx, ActorStruct *actor);
 
@@ -469,15 +469,16 @@ int32 mPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 
 /*0x1F*/
 int32 mREPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor) {
-	int32 sampleIdx = *((int16 *)scriptPtr);
-	playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+	numRepeatSample = *((int16 *)scriptPtr);
+	actor->positionInMoveScript += 2;
 	return 0;
 }
 
 /*0x20*/
 int32 mSIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
-	playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+	playSample(sampleIdx, 0x1000, numRepeatSample, actor->X, actor->Y, actor->Z);
+	numRepeatSample = 1;
 	actor->positionInMoveScript += 2;
 	return 0;
 }
