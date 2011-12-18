@@ -835,7 +835,7 @@ int32 giveupMenu() {
 	int16 * localMenu;
 
 	copyScreen(frontVideoBuffer, workVideoBuffer);
-	stopSamples();
+	pauseSamples();
 
 	if (cfgfile.UseAutoSaving == 1)
 		localMenu = GiveUpMenuSettings;
@@ -857,8 +857,12 @@ int32 giveupMenu() {
 	} while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
 
 	if (menuId == GIVEUPMENU_QUIT)
+	{
+		stopSamples();
 		return 1;
+	}
 
+	resumeSamples();
 	return 0;
 }
 
