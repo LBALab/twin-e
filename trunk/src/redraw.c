@@ -721,14 +721,12 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 				setCameraPosition(40, 40, 128, 200, 200);
 				setCameraAngle(0, 0, 0, 60, 0, 0, 16000);
 
-				overlayRotation += 8;
+				overlayRotation += 1; // overlayRotation += 8;
 
 				renderIsoModel(0, 0, 0, 0, overlayRotation, 0, inventoryTable[item]);
 				drawBox(10, 10, 69, 69);
 				addRedrawArea(10, 10, 69, 69);
 				initEngineProjections();
-
-				delay(15);
 			}
 				break;
 			case koText: {
