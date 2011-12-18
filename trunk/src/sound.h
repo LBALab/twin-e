@@ -72,6 +72,7 @@ void resumeSamples();
 /** Stop samples */
 void stopSamples();
 
+int32 getSampleChannel(int32 index);
 void stopSample(int32 index);
 
 #endif
