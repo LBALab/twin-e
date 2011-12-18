@@ -692,9 +692,11 @@ void processAnimActions(int32 actorIdx) {
 			}
 				break;
 			case kSampleStop: {
+				int32 sampleIdx = -1;
 				animPos = *(data++);
+				sampleIdx = *(data++);
 				if (animPos == actor->animPosition) {
-					stopSamples();
+					stopSample(sampleIdx);
 				}
 				data += 2;
 			}

@@ -263,7 +263,7 @@ void processFrame() {
 			break;
 		}
 		case STOP_SAMPLE: {
-			stopSamples();
+			stopSample(sample.sampleNum);
 			break;
 		}
 		case DELTA_FRAME: {

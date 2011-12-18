@@ -116,6 +116,8 @@ int sdlInitialize() {
 	amask = 0xff000000;
 #endif
 
+	printf("Initialising SDL device. Please wait...\n");
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
@@ -150,9 +152,7 @@ int sdlInitialize() {
 		printf("Running with SDL version: %d.%d.%d\n\n", link_version->major, link_version->minor, link_version->patch);
 	}
 
-	
-
-	printf("Initialising SDL device. Please wait...\n");
+	printf("Initialising Sound device. Please wait...\n\n");
 
 	// Verify if we want to use high quality sounds
 	if (cfgfile.Sound > 1)
@@ -165,7 +165,7 @@ int sdlInitialize() {
 		exit(1);
 	}
 
-	printf("Initialising Sound device. Please wait...\n\n");
+	Mix_AllocateChannels(32);
 
 	SDL_WM_SetCaption("Prequengine: a Little Big Adventure engine", "LBAPrequel");
 	SDL_PumpEvents();

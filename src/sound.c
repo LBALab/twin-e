@@ -47,6 +47,8 @@ int32 channel;
 /** Samples chunk variable */
 Mix_Chunk *sample;
 
+int32 channelIdx = -1;
+
 /** Sample volume
 	@param channel sample channel
 	@param volume sample volume number */
@@ -120,7 +122,12 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 
 		Mix_SetDistance(1, distance);*/
 
-		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
+		channelIdx++;
+		if (channelIdx > NUM_CHANNELS - 1) // reset count
+			channelIdx = 0;
+		samplesPlaying[channelIdx] = index;
+
+		if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
 
 		/*if (cfgfile.Debug)
@@ -151,11 +158,37 @@ void pauseSamples() {
 /** Stop samples */
 void stopSamples() {
 	if (cfgfile.Sound) {
+		memset(samplesPlaying, 0, sizeof(int32) * NUM_CHANNELS);
 		Mix_HaltChannel(-1);
 		//clean up
 		Mix_FreeChunk(sample);
 		sample = NULL; //make sure we free it
 		/*if (cfgfile.Debug)
 			printf("Stop VOC samples\n");*/
+	}
+}
+
+int32 getSampleChannel(int32 index) {
+	int32 c = 0;
+	for (c = 0; c < NUM_CHANNELS; c++) {
+		if (samplesPlaying[c] == index) {
+			return c;
+		}
+	}
+	return -1;
+}
+
+/** Stop samples */
+void stopSample(int32 index) {
+	if (cfgfile.Sound) {
+		int32 stopChannel = getSampleChannel(index);
+		if (stopChannel != -1) {
+			Mix_HaltChannel(stopChannel);
+			//clean up
+			Mix_FreeChunk(sample);
+			sample = NULL; //make sure we free it
+			/*if (cfgfile.Debug)
+				printf("Stop VOC samples\n");*/
+		}
 	}
 }
