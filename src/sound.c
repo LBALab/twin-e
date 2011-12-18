@@ -40,6 +40,7 @@
 #include "movements.h"
 #include "grid.h"
 #include "collision.h"
+#include "text.h"
 
 
 /** SDL_Mixer channels */
@@ -205,5 +206,38 @@ void stopSample(int32 index) {
 			/*if (cfgfile.Debug)
 				printf("Stop VOC samples\n");*/
 		}
+	}
+}
+
+
+void playVoxSample(int32 index) {
+	if (cfgfile.Sound) {
+		int32 sampSize = 0;
+		SDL_RWops *rw;
+		uint8* sampPtr;
+
+		sampSize = hqrGetallocEntry(&sampPtr, currentVoxBankFile, index);
+
+		// Fix incorrect sample files first byte
+		if (*sampPtr != 'C')
+			*sampPtr = 'C';
+
+		rw = SDL_RWFromMem(sampPtr, sampSize);
+		sample = Mix_LoadWAV_RW(rw, 1);
+
+		channelIdx++;
+		if (channelIdx > NUM_CHANNELS - 1) // reset count
+			channelIdx = 0;
+		samplesPlaying[channelIdx] = index;
+
+		sampleVolume(channelIdx, cfgfile.VoiceVolume - 1);
+
+		if (Mix_PlayChannel(channelIdx, sample, 0) == -1)
+			printf("Error while playing VOC: Sample %d \n", index);
+
+		/*if (cfgfile.Debug)
+			printf("Playing VOC: Sample %d\n", index);*/
+
+		free(sampPtr);
 	}
 }

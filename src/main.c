@@ -112,6 +112,13 @@ int8 CFGList[][22] = {
 	"InterfaceStyle"
 };
 
+int8 LanguageTypes[][8] = {
+	"English",
+	"Français",
+	"Deutsch",
+	"Español",
+	"Italiano"
+};
 
 /** Allocate video memory, both front and back buffers */
 void allocVideoMemory() {
@@ -177,9 +184,11 @@ void initConfigurations() {
 			switch (cfgtype) {
 			case 0:
 				sscanf(buffer, "Language: %s", cfgfile.Language);
+				cfgfile.LanguageId = 0; // TODO
 				break;
 			case 1:
 				sscanf(buffer, "LanguageCD: %s", cfgfile.LanguageCD);
+				cfgfile.LanguageCDId = 1; // TODO
 				break;
 			case 2:
 				sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayTextStr);
@@ -195,6 +204,7 @@ void initConfigurations() {
 				// case 4,18: unused
 			case 19:
 				sscanf(buffer, "WaveVolume: %d", &cfgfile.WaveVolume);
+				cfgfile.VoiceVolume = cfgfile.WaveVolume;
 				break;
 			case 20:
 				sscanf(buffer, "VoiceVolume: %d", &cfgfile.VoiceVolume);
