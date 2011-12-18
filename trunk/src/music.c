@@ -72,6 +72,7 @@ void musicVolume(int32 volume) {
 	@param loops number of*/
 void musicFadeIn(int32 loops, int32 ms) {
 	Mix_FadeInMusic(current_track, loops, ms);
+	musicVolume(cfgfile.MusicVolume);
 }
 
 /** Fade music out
@@ -80,7 +81,9 @@ void musicFadeOut(int32 ms) {
 	while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
 		SDL_Delay(100);
 	}
+	Mix_HaltMusic();
 	Mix_RewindMusic();
+	musicVolume(cfgfile.MusicVolume);
 }
 
 
