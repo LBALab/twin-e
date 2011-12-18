@@ -446,7 +446,9 @@ int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor) {
 /*0x1C*/
 int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor) {
 	int32 sampleIdx = *((int16 *)scriptPtr);
-	playSample(sampleIdx, 0x1000, 0, actor->X, actor->Y, actor->Z);
+	if (getSampleChannel(sampleIdx) == -1) { // if its not playing
+		playSample(sampleIdx, 0x1000, 0, actor->X, actor->Y, actor->Z);
+	}
 	actor->positionInMoveScript += 2;
 	return 0;
 }

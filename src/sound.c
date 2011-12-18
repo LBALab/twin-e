@@ -80,9 +80,14 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		sampleVolume(-1, cfgfile.WaveVolume);
+		channelIdx++;
+		if (channelIdx > NUM_CHANNELS - 1) // reset count
+			channelIdx = 0;
+		samplesPlaying[channelIdx] = index;
 
-		if (Mix_PlayChannel(-1, sample, repeat - 1) == -1)
+		sampleVolume(channelIdx, cfgfile.WaveVolume);
+
+		if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
 
 		/*if (cfgfile.Debug)
@@ -115,17 +120,17 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		sampleVolume(-1, cfgfile.WaveVolume);
+		channelIdx++;
+		if (channelIdx > NUM_CHANNELS - 1) // reset count
+			channelIdx = 0;
+		samplesPlaying[channelIdx] = index;
+
+		sampleVolume(channelIdx, cfgfile.WaveVolume);
 
 		/*distance = Abs(getDistance3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
 		distance = getAverageValue(0, distance, 10000, 255);
 
 		Mix_SetDistance(1, distance);*/
-
-		channelIdx++;
-		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;
-		samplesPlaying[channelIdx] = index;
 
 		if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
@@ -178,11 +183,21 @@ int32 getSampleChannel(int32 index) {
 	return -1;
 }
 
+void removeSampleChannel(int32 index) {
+	int32 c = 0;
+	for (c = 0; c < NUM_CHANNELS; c++) {
+		if (samplesPlaying[c] == index) {
+			samplesPlaying[c] = 0; // RECHECK zero value here
+		}
+	}
+}
+
 /** Stop samples */
 void stopSample(int32 index) {
 	if (cfgfile.Sound) {
 		int32 stopChannel = getSampleChannel(index);
 		if (stopChannel != -1) {
+			removeSampleChannel(index);
 			Mix_HaltChannel(stopChannel);
 			//clean up
 			Mix_FreeChunk(sample);
