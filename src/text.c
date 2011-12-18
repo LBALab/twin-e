@@ -101,6 +101,50 @@ void initVoxBank(bankIdx) {
 	// TODO check the rest to reverse
 }
 
+
+int32 initVoxToPlay(int32 index) { // setVoxFileAtDigit
+	int32 i = 0;
+	int32 currIdx = 0;
+	int32 orderIdx = 0;
+
+	int16 *localOrderBuf = (int16 *) dialOrderPtr;
+
+	// choose right text from order index
+	for (i = 0; i < numDialTextEntries; i++) {
+		orderIdx = *(localOrderBuf++);
+		if (orderIdx == index) {
+			currIdx = i;
+			break;
+		}
+	}
+
+	currDialTextEntry = currIdx;
+
+	return 1;
+}
+
+int32 playVox(int32 index){
+	if (cfgfile.LanguageCDId && index) {
+		if (getSampleChannel(index) == -1) {
+			playVoxSample(index);
+			return 1;
+		} else {
+			if (printTextVar5) {
+				currDialTextEntry++;
+				return 1;
+			}
+		}
+	}
+
+	return 0;
+}
+
+void stopVox(int32 index){
+	stopSample(index);
+}
+
+
+
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
 void initTextBank(int32 bankIdx) { // InitDial
@@ -124,7 +168,7 @@ void initTextBank(int32 bankIdx) { // InitDial
 
 	hqrSize = hqrGetallocEntry(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
 
-	if (cfgfile.LanguageCDId != 0) {
+	if (cfgfile.LanguageCDId) {
 		initVoxBank(bankIdx);
 	}
 }
@@ -616,14 +660,6 @@ int printText10() { // printText10()
 	return 1;
 }
 
-void playVox(int32 index){
-	playVoxSample(index);
-}
-
-void stopVox(int32 index){
-	stopSample(index);
-}
-
 // TODO: refactor this code
 void drawTextFullscreen(int32 index) { // printTextFullScreen
 	int32 printedText;
@@ -633,85 +669,99 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 	resetClip();
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 
-	// TODO: get right VOX entry index
-	// TODO: if we don't display text, than still plays vox file
+	// get right VOX entry index
+	if (cfgfile.LanguageCDId) {
+		initVoxToPlay(index);
+	}
+	
+	// if we don't display text, than still plays vox file
+	if (cfgfile.FlagDisplayText) {
+		initText(index);
+		initDialogueBox();
 
-	initText(index);
-	initDialogueBox();
+		do {
+			readKeys();
+			printedText = printText10();
+			playVox(currDialTextEntry);
 
-	playVox(currDialTextEntry);
+			if (printedText == 2) {
+				do {
+					readKeys();
+					if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
+						break;
+					}
+					playVox(currDialTextEntry);
+					delay(1);
+				} while(1);
 
-	do {
-		readKeys();
-		printedText = printText10();
-		// TODO: missing vox processing (printText4 cseg01:0001C58C)
+				do {
+					readKeys();
+					if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
+						break;
+					}
+					playVox(currDialTextEntry);
+					delay(1);
+				} while(1);
+			}
 
-		if (printedText == 2) {
-			do {
-				readKeys();
-				if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
-					break;
-				}
-				// TODO: missing vox processing (printText4 cseg01:0001C58C)
-				delay(1);
-			} while(1);
+			if (skipIntro == 1) {
+				skipText = 1;
+			}
+			
+			if (!printedText && !playVox(index)) {
+				break;
+			}
 
-			do {
-				readKeys();
-				if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
-					break;
-				}
-				// TODO: missing vox processing (printText4 cseg01:0001C58C)
-				delay(1);
-			} while(1);
+			delay(1);
+		} while(!skipText);
+
+		printTextVar5 = 0;
+
+		if (cfgfile.LanguageCDId) {
+			stopVox(currDialTextEntry);
 		}
 
-		if (skipIntro == 1) {
-			skipText = 1;
-		}
+		printTextVar13 = 0;
 
-		// TODO: missing vox processing  (printText11)
-		delay(1);
-	} while(!skipText);
-
-	printTextVar5 = 0;
-
-	// TODO: missing vox processing (printText7)
-	stopVox(currDialTextEntry);
-
-	printTextVar13 = 0;
-
-	if (printedText != 0) {
-		loadClip();
-		return;
-	}
-
-	if (skipText != 0) {
-		loadClip();
-		return;
-	}
-
-	// RECHECK this later
-	// wait displaying text
-	do {
-		readKeys();
-		delay(1);
-	} while(skipIntro || skipedKey || pressedKey);
-
-	// RECHECK this later
-	// wait key to display next text
-	do {
-		readKeys();
-		if (skipIntro != 0) {
+		if (printedText != 0) {
 			loadClip();
 			return;
 		}
-		if (skipedKey != 0) {
+
+		if (skipText != 0) {
 			loadClip();
 			return;
 		}
-		delay(1);
-	} while(!pressedKey);
+
+		// RECHECK this later
+		// wait displaying text
+		do {
+			readKeys();
+			delay(1);
+		} while(skipIntro || skipedKey || pressedKey);
+
+		// RECHECK this later
+		// wait key to display next text
+		do {
+			readKeys();
+			if (skipIntro != 0) {
+				loadClip();
+				return;
+			}
+			if (skipedKey != 0) {
+				loadClip();
+				return;
+			}
+			delay(1);
+		} while(!pressedKey);
+	} else {
+		/*
+		while (playVox(index) && skipIntro != 1 );
+		printTextVar5 = 0;
+		if ( languageCD1 && voxFileHandle && printText6() )
+			printText7();
+		*/
+	}
 
 	loadClip();
 }
