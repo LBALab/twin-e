@@ -36,6 +36,7 @@
 #include "sdlengine.h"
 #include "main.h"
 #include "sound.h"
+#include "music.h"
 #include "filereader.h"
 #include "lbaengine.h"
 #include "keyboard.h"
@@ -375,6 +376,9 @@ void playFlaMovie(int8 *filename) {
 void playMovie(int8 *movie) {
 	int32 i;
 	int8 fileBuf[256];
+
+	stopMusic();
+	stopSamples();
 
 	// take extension if movie name has it
 	for (i = 0; i < (int32)strlen(movie); i++) {
