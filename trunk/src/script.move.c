@@ -453,7 +453,8 @@ int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor) {
 
 /*0x1D*/
 int32 mSAMPLE_STOP(int32 actorIdx, ActorStruct *actor) {
-	stopSamples(); // TODO: stop specific sample
+	int32 sampleIdx = *((int16 *)scriptPtr);
+	stopSample(sampleIdx);
 	actor->positionInMoveScript += 2;
 	return 0;
 }
@@ -466,9 +467,9 @@ int32 mPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 
 /*0x1F*/
 int32 mREPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor) {
-	// TODO
-	actor->positionInMoveScript += 2;
-	return -1;
+	int32 sampleIdx = *((int16 *)scriptPtr);
+	playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+	return 0;
 }
 
 /*0x20*/

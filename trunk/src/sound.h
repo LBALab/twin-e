@@ -32,11 +32,15 @@
 
 /** Total number of sprites allowed in the game */
 #define NUM_SAMPLES 243
+#define NUM_CHANNELS 32
 
 /** Table with all loaded samples */
 uint8* samplesTable[NUM_SAMPLES];
 /** Table with all loaded samples sizes */
 uint32 samplesSizeTable[NUM_SAMPLES];
+
+/** Samples playing at the same time */
+int32 samplesPlaying[NUM_CHANNELS];
 
 /** Sample volume
 	@param channel sample channel
@@ -65,5 +69,7 @@ void pauseSamples();
 
 /** Stop samples */
 void stopSamples();
+
+void stopSample(int32 index);
 
 #endif
