@@ -93,6 +93,10 @@ int16 pt8s4[96];
 int32 printText8PrepareBufferVar2;
 
 
+int32 currDialTextEntry; // ordered entry
+uint8 currentVoxBankFile[256];
+
+
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
 void initTextBank(int32 bankIdx);

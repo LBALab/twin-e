@@ -38,6 +38,7 @@
 #include "keyboard.h"
 #include "images.h"
 #include "renderer.h"
+#include "sound.h"
 
 // RECHECK THIS LATER
 int32 currentBankIdx = -1; // textVar1
@@ -51,13 +52,54 @@ uint8 *dialOrderPtr; // bufOrder
 /** Number of dialogues text entries */
 int16 numDialTextEntries;
 
-
 // TODO: refactor this
 int32 wordSizeChar;
 int32 wordSizePixel;
 
 int16 spaceChar = 0x20;
 
+/** FLA movie extension */
+#define VOX_EXT ".vox"
+/** Common movie directory */
+#define VOX_DIR "vox//"
+
+int8 * LanguagePrefixTypes[] = {
+	"EN_",
+	"FR_",
+	"DE_",
+	"SP_",
+	"IT_"
+};
+
+int8 * LanguageSufixTypes[] = {
+	"sys",
+	"cre",
+	"gam",
+	"000",
+	"001",
+	"002",
+	"003",
+	"004",
+	"005",
+	"006",
+	"007",
+	"008",
+	"009",
+	"010",
+	"011"
+};
+
+
+void initVoxBank(bankIdx) {
+	// get the correct vox hqr file
+	memset(currentVoxBankFile, 0, sizeof(int8));
+	sprintf(currentVoxBankFile, VOX_DIR);
+	strcat(currentVoxBankFile, LanguagePrefixTypes[cfgfile.LanguageId]);
+	strcat(currentVoxBankFile, LanguageSufixTypes[bankIdx]);
+	strcat(currentVoxBankFile, VOX_EXT);
+
+	// TODO check the rest to reverse
+}
 
 /** Initialize dialogue
 	@param bankIdx Text bank index*/
@@ -82,9 +124,9 @@ void initTextBank(int32 bankIdx) { // InitDial
 
 	hqrSize = hqrGetallocEntry(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
 
-	/*if (cfgfile.LanguageCDId != 0) {
-		loadVox(bankIdx);
-	}*/
+	if (cfgfile.LanguageCDId != 0) {
+		initVoxBank(bankIdx);
+	}
 }
 
 /** Draw a certain character in the screen
@@ -574,6 +616,14 @@ int printText10() { // printText10()
 	return 1;
 }
 
+void playVox(int32 index){
+	playVoxSample(index);
+}
+
+void stopVox(int32 index){
+	stopSample(index);
+}
+
 // TODO: refactor this code
 void drawTextFullscreen(int32 index) { // printTextFullScreen
 	int32 printedText;
@@ -589,17 +639,20 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 	initText(index);
 	initDialogueBox();
 
+	playVox(currDialTextEntry);
+
 	do {
 		readKeys();
 		printedText = printText10();
-		
+		// TODO: missing vox processing (printText4 cseg01:0001C58C)
+
 		if (printedText == 2) {
 			do {
 				readKeys();
 				if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
 					break;
 				}
-				// TODO: missing vox processing
+				// TODO: missing vox processing (printText4 cseg01:0001C58C)
 				delay(1);
 			} while(1);
 
@@ -608,7 +661,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 				if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
 					break;
 				}
-				// TODO: missing vox processing
+				// TODO: missing vox processing (printText4 cseg01:0001C58C)
 				delay(1);
 			} while(1);
 		}
@@ -617,13 +670,14 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 			skipText = 1;
 		}
 
-		// TODO: missing vox processing
+		// TODO: missing vox processing  (printText11)
 		delay(1);
 	} while(!skipText);
 
 	printTextVar5 = 0;
 
-	// TODO: missing vox processing
+	// TODO: missing vox processing (printText7)
+	stopVox(currDialTextEntry);
 
 	printTextVar13 = 0;
 
@@ -733,6 +787,9 @@ int32 getText(int32 index) { // findString
 	currDialTextPtr = (dialTextPtr + ptrCurrentEntry);
 	currDialTextSize = ptrNextEntry - ptrCurrentEntry;
 	numDialTextEntries = numEntries;
+
+	// RECHECK: this was added for vox playback
+	currDialTextEntry = currIdx;
 
 	return 1;
 }
