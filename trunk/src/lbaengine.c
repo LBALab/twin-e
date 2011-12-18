@@ -133,7 +133,7 @@ int32 runGameEngine() { // mainLoopInteration
 		if (loopCurrentKey == 0x40) {
 			int tmpLangCD = cfgfile.LanguageCDId;
 			freezeTime();
-			stopSamples();
+			pauseSamples();
 			OptionsMenuSettings[5] = 15;
 			cfgfile.LanguageCDId = 0;
 			initTextBank(0);
@@ -141,6 +141,7 @@ int32 runGameEngine() { // mainLoopInteration
 			cfgfile.LanguageCDId = tmpLangCD;
 			initTextBank(currentTextBank + 3);
 			//TODO: play music
+			resumeSamples();
 			unfreezeTime();
 			redrawEngineActions(1);
 		}

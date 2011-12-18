@@ -67,6 +67,8 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 /** Pause samples */
 void pauseSamples();
 
+void resumeSamples();
+
 /** Stop samples */
 void stopSamples();
 
