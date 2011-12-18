@@ -94,6 +94,7 @@ int32 printText8PrepareBufferVar2;
 
 
 int32 currDialTextEntry; // ordered entry
+int32 nextDialTextEntry; // ordered entry
 uint8 currentVoxBankFile[256];
 
 

@@ -125,12 +125,13 @@ int32 initVoxToPlay(int32 index) { // setVoxFileAtDigit
 
 int32 playVox(int32 index){
 	if (cfgfile.LanguageCDId && index) {
-		if (getSampleChannel(index) == -1) {
+		if (!isSamplePlaying(index)) {
 			playVoxSample(index);
 			return 1;
 		} else {
-			if (printTextVar5) {
-				currDialTextEntry++;
+			if (printTextVar5 && !isSamplePlaying(index)) {
+				removeSampleChannel(index);
+				currDialTextEntry+=printTextVar5;
 				return 1;
 			}
 		}

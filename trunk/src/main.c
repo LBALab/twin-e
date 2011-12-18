@@ -192,7 +192,7 @@ void initConfigurations() {
 				break;
 			case 2:
 				sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayTextStr);
-				if (strcmp(cfgfile.FlagDisplayTextStr,"ON")) {
+				if (!strcmp(cfgfile.FlagDisplayTextStr,"ON")) {
 					cfgfile.FlagDisplayText = 1;
 				} else {
 					cfgfile.FlagDisplayText = 0;

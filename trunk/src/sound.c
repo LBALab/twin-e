@@ -209,6 +209,17 @@ void stopSample(int32 index) {
 	}
 }
 
+int32 isSamplePlaying(int32 index) {
+	int32 channel = getSampleChannel(index);
+	if (channel != -1) {
+		if(Mix_Playing(channel)) {
+			return 1;
+		} else {
+			removeSampleChannel(channel);
+		}
+	}
+	return 0;
+}
 
 void playVoxSample(int32 index) {
 	if (cfgfile.Sound) {
@@ -217,10 +228,12 @@ void playVoxSample(int32 index) {
 		uint8* sampPtr;
 
 		sampSize = hqrGetallocEntry(&sampPtr, currentVoxBankFile, index);
-
+		
 		// Fix incorrect sample files first byte
-		if (*sampPtr != 'C')
+		if (*sampPtr != 'C') {
+			printTextVar5 = *sampPtr;
 			*sampPtr = 'C';
+		}
 
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
