@@ -397,7 +397,7 @@ void processFoundItem(int32 item) {
 		}
 
 		if (textState == 0 || textState == 2) {
-			delay(15);
+			sdldelay(15);
 		}
 
 		flipRedrawAreas();
@@ -500,7 +500,7 @@ void processGameoverAnimation() { // makeGameOver
 			copyBlockPhys(120, 120, 519, 359);
 
 			lbaTime++;
-			delay(15);
+			sdldelay(15);
 		}
 
 		playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);

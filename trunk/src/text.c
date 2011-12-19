@@ -557,7 +557,7 @@ void printText10Sub2() { // printText10Sub2()
 
 	ptr = pt8s4 + currentIndex;
 
-	delay(15);
+	sdldelay(15);
 
 	counter = printText8Var3;
 	counter2 = dialTextStartColor;
@@ -692,7 +692,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 						break;
 					}
 					playVox(currDialTextEntry);
-					delay(1);
+					sdldelay(1);
 				} while(1);
 
 				do {
@@ -701,7 +701,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 						break;
 					}
 					playVox(currDialTextEntry);
-					delay(1);
+					sdldelay(1);
 				} while(1);
 			}
 
@@ -713,7 +713,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 				break;
 			}
 
-			delay(1);
+			sdldelay(1);
 		} while(!skipText);
 
 		printTextVar5 = 0;
@@ -738,7 +738,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 		// wait displaying text
 		do {
 			readKeys();
-			delay(1);
+			sdldelay(1);
 		} while(skipIntro || skipedKey || pressedKey);
 
 		// RECHECK this later
@@ -753,7 +753,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 				loadClip();
 				return;
 			}
-			delay(1);
+			sdldelay(1);
 		} while(!pressedKey);
 	} else {
 		/*
@@ -917,18 +917,18 @@ void drawAskQuestion(int32 index) { // MyDial
 			do {
 				readKeys();
 				// TODO: missing vox processing
-				delay(1);
+				sdldelay(1);
 			} while(skipIntro || skipedKey || pressedKey);
 
 			do {
 				readKeys();
 				// TODO: missing vox processing
-				delay(1);
+				sdldelay(1);
 			} while(!skipIntro && !skipedKey && !pressedKey);
 		}
 
 		// TODO: missing vox processing
-		delay(1);
+		sdldelay(1);
 	} while(textStatus);
 
 	// TODO: missing vox processing

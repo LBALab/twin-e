@@ -198,7 +198,7 @@ void fpsCycles(int32 fps) {
 
 /** Deplay certain seconds till proceed
 	@param time time in seconds to delay */
-void delay(uint32 time) {
+void sdldelay(uint32 time) {
 	SDL_Delay(time);
 }
 
