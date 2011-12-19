@@ -511,7 +511,7 @@ void drawButton(int16 *menuSettings, int32 mode) {
 		topHeight += 56; // increase button top height
 
 		// slow down the CPU
-		delay(1);
+		sdldelay(1);
 	} while (currentButton < maxButton);
 }
 
@@ -1257,7 +1257,7 @@ void processInventoryMenu() {
 
 		// TRICKY: 3D model rotation delay - only apply when no text is drawing
 		if (bx == 0 || bx == 2) {
-			delay(15);
+			sdldelay(15);
 		}
 
 		if (loopPressedKey & 1) {
@@ -1295,6 +1295,6 @@ void processInventoryMenu() {
 
 	while (skipIntro != 0 && skipedKey != 0) {
 		readKeys();
-		delay(1);
+		sdldelay(1);
 	}
 }
