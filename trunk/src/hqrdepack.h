@@ -55,4 +55,7 @@ int32 hqrNumEntries(int8 *filename);
 	@return entry real size */
 int32 hqrGetallocEntry(uint8 ** ptr, int8 *filename, int32 index);
 
+int32 hqrGetVoxEntry(uint8 * ptr, int8 *filename, int32 index, int32 hiddenIndex);
+int32 hqrGetallocVoxEntry(uint8 ** ptr, int8 *filename, int32 index, int32 hiddenIndex);
+
 #endif

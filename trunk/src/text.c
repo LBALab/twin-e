@@ -109,6 +109,9 @@ int32 initVoxToPlay(int32 index) { // setVoxFileAtDigit
 
 	int16 *localOrderBuf = (int16 *) dialOrderPtr;
 
+	voxHiddenIndex = 0;
+	hasHiddenVox = 0;
+
 	// choose right text from order index
 	for (i = 0; i < numDialTextEntries; i++) {
 		orderIdx = *(localOrderBuf++);
@@ -120,27 +123,36 @@ int32 initVoxToPlay(int32 index) { // setVoxFileAtDigit
 
 	currDialTextEntry = currIdx;
 
+	playVoxSample(currDialTextEntry);
+
 	return 1;
 }
 
-int32 playVox(int32 index){
+int32 playVox(int32 index) {
 	if (cfgfile.LanguageCDId && index) {
-		if (!isSamplePlaying(index)) {
+		if (hasHiddenVox && !isSamplePlaying(index)) {
 			playVoxSample(index);
 			return 1;
-		} else {
-			if (printTextVar5 && !isSamplePlaying(index)) {
-				removeSampleChannel(index);
-				currDialTextEntry+=printTextVar5;
-				return 1;
-			}
 		}
 	}
 
 	return 0;
 }
 
-void stopVox(int32 index){
+int32 playVoxSimple(int32 index) {
+	if (cfgfile.LanguageCDId && index) {
+		playVox(index);
+
+		if (isSamplePlaying(index)) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+void stopVox(int32 index) {
+	hasHiddenVox = 0;
 	stopSample(index);
 }
 
@@ -709,16 +721,16 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 				skipText = 1;
 			}
 			
-			if (!printedText && !playVox(index)) {
+			if (!printedText && !isSamplePlaying(currDialTextEntry)) {
 				break;
 			}
 
 			sdldelay(1);
 		} while(!skipText);
 
-		printTextVar5 = 0;
+		hasHiddenVox = 0;
 
-		if (cfgfile.LanguageCDId) {
+		if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
 			stopVox(currDialTextEntry);
 		}
 
@@ -755,13 +767,13 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 			}
 			sdldelay(1);
 		} while(!pressedKey);
-	} else {
-		/*
-		while (playVox(index) && skipIntro != 1 );
-		printTextVar5 = 0;
-		if ( languageCD1 && voxFileHandle && printText6() )
-			printText7();
-		*/
+	} else { // RECHECK THIS
+		while (playVox(currDialTextEntry) && skipIntro != 1 );
+		hasHiddenVox = 0;
+		voxHiddenIndex = 0;
+		if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
+			stopVox(currDialTextEntry);
+		}
 	}
 
 	loadClip();
@@ -904,7 +916,10 @@ void textClipSmall() { // newGame4
 void drawAskQuestion(int32 index) { // MyDial
 	int32 textStatus = 1;
 
-	// TODO: get right VOX entry index
+	// get right VOX entry index
+	if (cfgfile.LanguageCDId) {
+		initVoxToPlay(index);
+	}
 
 	initText(index);
 	initDialogueBox();
@@ -916,26 +931,30 @@ void drawAskQuestion(int32 index) { // MyDial
 		if (textStatus == 2) {
 			do {
 				readKeys();
-				// TODO: missing vox processing
+				playVox(currDialTextEntry);
 				sdldelay(1);
 			} while(skipIntro || skipedKey || pressedKey);
 
 			do {
 				readKeys();
-				// TODO: missing vox processing
+				playVox(currDialTextEntry);
 				sdldelay(1);
 			} while(!skipIntro && !skipedKey && !pressedKey);
 		}
 
-		// TODO: missing vox processing
 		sdldelay(1);
 	} while(textStatus);
 
-	// TODO: missing vox processing
+	if (cfgfile.LanguageCDId) {
+		while(playVoxSimple(currDialTextEntry));
 
-	printTextVar5 = 0;
+		hasHiddenVox = 0;
+		voxHiddenIndex = 0;
 
-	// TODO: missing vox processing
+		if(isSamplePlaying(currDialTextEntry)) {
+			stopVox(currDialTextEntry);
+		}
+	}
 
 	printTextVar13 = 0;
 }

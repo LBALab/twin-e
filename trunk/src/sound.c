@@ -81,10 +81,13 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		channelIdx++;
+		/*channelIdx++;
 		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;
-		samplesPlaying[channelIdx] = index;
+			channelIdx = 0;*/
+		channelIdx = getFreeSampleChannelIndex();
+		if (channelIdx != -1) {
+			samplesPlaying[channelIdx] = index;
+		}
 
 		sampleVolume(channelIdx, cfgfile.WaveVolume);
 
@@ -121,10 +124,13 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		channelIdx++;
+		/*channelIdx++;
 		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;
-		samplesPlaying[channelIdx] = index;
+			channelIdx = 0;*/
+		channelIdx = getFreeSampleChannelIndex();
+		if (channelIdx != -1) {
+			samplesPlaying[channelIdx] = index;
+		}
 
 		sampleVolume(channelIdx, cfgfile.WaveVolume);
 
@@ -164,7 +170,7 @@ void pauseSamples() {
 /** Stop samples */
 void stopSamples() {
 	if (cfgfile.Sound) {
-		memset(samplesPlaying, 0, sizeof(int32) * NUM_CHANNELS);
+		memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
 		Mix_HaltChannel(-1);
 		//clean up
 		Mix_FreeChunk(sample);
@@ -184,13 +190,8 @@ int32 getSampleChannel(int32 index) {
 	return -1;
 }
 
-void removeSampleChannel(int32 index) {
-	int32 c = 0;
-	for (c = 0; c < NUM_CHANNELS; c++) {
-		if (samplesPlaying[c] == index) {
-			samplesPlaying[c] = 0; // RECHECK zero value here
-		}
-	}
+void removeSampleChannel(int32 c) {
+	samplesPlaying[c] = -1;
 }
 
 /** Stop samples */
@@ -221,27 +222,43 @@ int32 isSamplePlaying(int32 index) {
 	return 0;
 }
 
+int32 getFreeSampleChannelIndex() {
+	int i = 0;
+	for (i = 0; i < NUM_CHANNELS; i++) {
+		if (samplesPlaying[i] == -1) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 void playVoxSample(int32 index) {
 	if (cfgfile.Sound) {
 		int32 sampSize = 0;
 		SDL_RWops *rw;
-		uint8* sampPtr;
+		uint8* sampPtr = 0;
 
-		sampSize = hqrGetallocEntry(&sampPtr, currentVoxBankFile, index);
+		//sampSize = hqrGetallocEntry(&sampPtr, currentVoxBankFile, index);
+		sampSize = hqrGetallocVoxEntry(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
+		//sampSize = hqrGetVoxEntry(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
 		
 		// Fix incorrect sample files first byte
 		if (*sampPtr != 'C') {
-			printTextVar5 = *sampPtr;
+			hasHiddenVox = *sampPtr;
+			voxHiddenIndex++;
 			*sampPtr = 'C';
 		}
 
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		channelIdx++;
+		/*channelIdx++;
 		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;
-		samplesPlaying[channelIdx] = index;
+			channelIdx = 0;*/
+		channelIdx = getFreeSampleChannelIndex();
+		if (channelIdx != -1) {
+			samplesPlaying[channelIdx] = index;
+		}
 
 		sampleVolume(channelIdx, cfgfile.VoiceVolume - 1);
 

@@ -75,6 +75,7 @@ void stopSamples();
 int32 getSampleChannel(int32 index);
 void stopSample(int32 index);
 
+int32 getFreeSampleChannelIndex();
 void removeSampleChannel(int32 index);
 int32 isSamplePlaying(int32 index);
 void playVoxSample(int32 index);

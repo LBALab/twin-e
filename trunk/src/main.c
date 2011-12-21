@@ -50,6 +50,7 @@
 #include "gamestate.h"
 #include "keyboard.h"
 #include "actor.h"
+#include "sound.h"
 
 /** Engine current version */
 const int8* ENGINE_VERSION = (int8*) "0.1.1";
@@ -335,6 +336,7 @@ void initEngine() {
 void initAll() {
 	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
 	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
+	memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
 
 	currentTextBank = -1;
 	currMenuTextIndex = -1;

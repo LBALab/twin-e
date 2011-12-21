@@ -46,17 +46,17 @@ void newGame() {
 	tmpFlagDisplayText = cfgfile.FlagDisplayText;
 	cfgfile.FlagDisplayText = 1;
 
-#ifndef _DEBUG	
+//#ifndef _DEBUG	
 	// intro screen 1 - twinsun
 	loadImage( RESSHQR_INTROSCREEN1IMG, 1 );
-#endif
+//#endif
 	newGameVar4 = 0;
 	newGameVar5 = 1;
 
 	initTextBank(2);
 	textClipFull();
 	setFontCrossColor(15);
-#ifndef _DEBUG	
+//#ifndef _DEBUG	
 	drawTextFullscreen(150);
 	readKeys();
 
@@ -71,18 +71,18 @@ void newGame() {
 			drawTextFullscreen(152);
 		}
 	}
-#endif
+//#endif
 	newGameVar5 = 0;
 	textClipSmall();
 	newGameVar4 = 1;
-#ifndef _DEBUG
+//#ifndef _DEBUG
 	fadeToBlack(paletteRGBACustom);
 	clearScreen();
 	flip();
 	
 	playMidiMusic(1, 0);
 	playMovie(FLA_INTROD);
-#endif
+//#endif
 	clearScreen();
 	flip();
 
