@@ -86,7 +86,8 @@ int32 TEXT_CurrentLetterY;
 uint8 *printText8Var8;
 int32 newGameVar4;
 int32 newGameVar5;
-int32 printTextVar5;
+int32 hasHiddenVox; // printTextVar5
+int32 voxHiddenIndex;
 int32 printText10Var1;
 int32 addLineBreakX;
 int16 pt8s4[96];
@@ -154,5 +155,10 @@ void textClipFull();
 void textClipSmall();
 
 void drawAskQuestion(int32 index);
+
+int32 playVox(int32 index);
+int32 playVoxSimple(int32 index);
+void stopVox(int32 index);
+int32 initVoxToPlay(int32 index);
 
 #endif

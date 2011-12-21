@@ -418,7 +418,7 @@ void processFoundItem(int32 item) {
 
 	// TODO: process vox play
 	/*{
-		while (printText11()) {
+		while (playVoxSimple()) {
 			readKeys();
 			if (skipIntro == 1) {
 				break;
@@ -434,6 +434,8 @@ void processFoundItem(int32 item) {
 		readKeys();
 		delaySkip(1);
 	} while (!skipIntro);*/
+	
+	// StopVox
 
 	sceneHero->animTimerData = tmpAnimTimer;
 }
@@ -459,7 +461,15 @@ void processGameChoices(int32 choiceIdx) {
 	processMenu(gameChoicesSettings);
 	choiceAnswer = gameChoices[gameChoicesSettings[0]];
 
-	// TODO: process vox play
+	// get right VOX entry index
+	if (cfgfile.LanguageCDId) {
+		initVoxToPlay(choiceAnswer);
+		while(playVoxSimple(currDialTextEntry));
+		stopVox(currDialTextEntry);
+
+		hasHiddenVox = 0;
+		voxHiddenIndex = 0;
+	}
 }
 
 void processGameoverAnimation() { // makeGameOver

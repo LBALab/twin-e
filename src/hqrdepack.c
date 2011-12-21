@@ -243,3 +243,146 @@ int32 hqrGetallocEntry(uint8 ** ptr, int8 *filename, int32 index) {
 
 	return size;
 }
+
+/** Get a HQR entry pointer
+	@param ptr pointer to save the entry
+	@param filename HQR file name
+	@param index entry index to extract
+	@return entry real size*/
+int32 hqrGetVoxEntry(uint8 * ptr, int8 *filename, int32 index, int32 hiddenIndex) {
+	uint32 headerSize;
+	uint32 offsetToData;
+	uint32 realSize;
+	uint32 compSize;
+	uint16 mode;
+
+	if (!filename)
+		return 0;
+
+	if (!fropen2(&fr, (char*)filename, "rb"))
+		printf("HQR: %s can't be found !\n", filename);
+
+	frread(&fr, &headerSize, 4);
+
+	if ((uint32)index >= headerSize / 4) {
+		printf("\nHQR WARNING: Invalid entry index!!\n");
+		frclose(&fr);
+		return 0;
+	}
+
+	frseek(&fr, index*4);
+	frread(&fr, &offsetToData, 4);
+
+	frseek(&fr, offsetToData);
+	frread(&fr, &realSize, 4);
+	frread(&fr, &compSize, 4);
+	frread(&fr, &mode, 2);
+
+	// exist hidden entries
+	if (hiddenIndex > 0) {
+		int32 i = 0;
+		for (i = 0; i < hiddenIndex; i++) {
+			frseek(&fr, offsetToData + compSize + 10); // hidden entry
+			offsetToData = offsetToData + compSize + 10; // current hidden offset
+			
+			frread(&fr, &realSize, 4);
+			frread(&fr, &compSize, 4);
+			frread(&fr, &mode, 2);
+		}
+	}
+
+	if (!ptr)
+		ptr = (uint8*)malloc(realSize);
+
+	if (!ptr) {
+		printf("\nHQR WARNING: Unable to allocate memory!!\n");
+		frclose(&fr);
+		return 0;
+	}
+
+	// uncompressed
+	if (mode == 0) {
+		frread(&fr, ptr, realSize);
+	}
+	// compressed: modes (1 & 2)
+	else if (mode == 1 || mode == 2) {
+		uint8* compDataPtr = 0;
+		compDataPtr = (uint8*)malloc(compSize);
+		frread(&fr, compDataPtr, compSize);
+		hqrDecompressEntry(ptr, compDataPtr, realSize, mode);
+		free(compDataPtr);
+	}
+
+	frclose(&fr);
+
+	return realSize;
+}
+
+/** Get a HQR entry pointer
+	@param filename HQR file name
+	@param index entry index to extract
+	@return entry real size */
+int hqrVoxEntrySize(int8 *filename, int32 index, int32 hiddenIndex) {
+	uint32 headerSize;
+	uint32 offsetToData;
+	uint32 realSize;
+	uint32 compSize;
+
+	if (!filename)
+		return 0;
+
+	if (!fropen2(&fr, (char*)filename, "rb")) {
+		printf("HQR: %s can't be found !\n", filename);
+		exit(1);
+	}
+
+	frread(&fr, &headerSize, 4);
+
+	if ((uint32)index >= headerSize / 4) {
+		printf("\nHQR WARNING: Invalid entry index!!\n");
+		frclose(&fr);
+		return 0;
+	}
+
+	frseek(&fr, index*4);
+	frread(&fr, &offsetToData, 4);
+
+	frseek(&fr, offsetToData);
+	frread(&fr, &realSize, 4);
+	frread(&fr, &compSize, 4);
+
+	// exist hidden entries
+	if (hiddenIndex > 0) {
+		int32 i = 0;
+		for (i = 0; i < hiddenIndex; i++) {
+			frseek(&fr, offsetToData + compSize + 10); // hidden entry
+			offsetToData = offsetToData + compSize + 10; // current hidden offset
+			
+			frread(&fr, &realSize, 4);
+			frread(&fr, &compSize, 4);
+		}
+	}
+
+	frclose(&fr);
+
+	return realSize;
+}
+
+/** Get a HQR entry pointer with memory allocation
+	@param ptr pointer to save the entry
+	@param filename HQR file name
+	@param index entry index to extract
+	@return entry real size */
+int32 hqrGetallocVoxEntry(uint8 ** ptr, int8 *filename, int32 index, int32 hiddenIndex) {
+	int32 size;
+	size = hqrVoxEntrySize(filename, index, hiddenIndex);
+
+	*ptr = (uint8*)malloc(size * sizeof(uint8));
+	if (!*ptr) {
+		printf("HQR WARNING: unable to allocate entry memory!!\n");
+		return 0;
+	}
+	hqrGetVoxEntry(*ptr, filename, index, hiddenIndex);
+
+	return size;
+}
