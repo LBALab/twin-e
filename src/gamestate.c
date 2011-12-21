@@ -329,12 +329,12 @@ void processFoundItem(int32 item) {
 
 	playSample(41, 0x1000, 1, 0x80, 0x80, 0x80);
 
-	// TODO: process vox play
+	// process vox play
 	{
 		int32 tmpLanguageCDId;
 		stopMusic();
 		tmpLanguageCDId = cfgfile.LanguageCDId;
-		cfgfile.LanguageCDId = 0;
+		//cfgfile.LanguageCDId = 0; // comented so we can init vox bank
 		initTextBank(2);
 		cfgfile.LanguageCDId = tmpLanguageCDId;
 	}
@@ -346,7 +346,9 @@ void processFoundItem(int32 item) {
 	textState = 1;
 	quitItem = 0;
 
-	// TODO: process vox play
+	if (cfgfile.LanguageCDId) {
+		initVoxToPlay(item);
+	}
 
 	currentAnim = animTable[getBodyAnimIndex(ANIM_FOUND_ITEM, 0)];
 
@@ -415,17 +417,14 @@ void processFoundItem(int32 item) {
 
 		lbaTime++;
 	}
-
-	// TODO: process vox play
-	/*{
-		while (playVoxSimple()) {
-			readKeys();
-			if (skipIntro == 1) {
-				break;
-			}
-			delaySkip(1);
+	
+	while (playVoxSimple(currDialTextEntry)) {
+		readKeys();
+		if (skipIntro == 1) {
+			break;
 		}
-	}*/
+		delaySkip(1);
+	}
 
 	initEngineProjections();
 	initTextBank(currentTextBank + 3);
@@ -435,7 +434,9 @@ void processFoundItem(int32 item) {
 		delaySkip(1);
 	} while (!skipIntro);*/
 	
-	// StopVox
+	if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
+		stopVox(currDialTextEntry);
+	}
 
 	sceneHero->animTimerData = tmpAnimTimer;
 }
