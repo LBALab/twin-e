@@ -150,7 +150,7 @@ int32 processLifeConditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 		otherActor = &sceneActors[actorIdx];
 		if (!otherActor->dynamicFlags.bIsDead) {
-			if (actor->Y - otherActor->Y >= 1500) {
+			if (Abs(actor->Y - otherActor->Y) >= 1500) {
 				currentScriptValue = 0x7D00;	
 			} else {
 				currentScriptValue = getDistance2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
@@ -211,11 +211,11 @@ int32 processLifeConditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 
 		if (!targetActor->dynamicFlags.bIsDead) {
-			if (targetActor->Y - actor->Y >= 1500) {
+			if (Abs(targetActor->Y - actor->Y) >= 1500) {
 				moveAngle = 0x7D00;
 			} else {
 				newAngle = getAngle(actor->X, actor->Z, targetActor->X, targetActor->Z);
-				if (moveAngle > 0x7D00) {
+				if (Abs(moveAngle) > 0x7D00) {
 					moveAngle = 0x7D00;
 				} 
 
@@ -225,7 +225,7 @@ int32 processLifeConditions(ActorStruct *actor) {
 					heroAngle = actor->angle + 0x480 - newAngle + 0x400;
 					heroAngle &= 0x3FF;
 
-					if (heroAngle >= 0x100) {
+					if (Abs(heroAngle) >= 0x100) {
 						currentScriptValue = 0x7D00;
 					} else {
 						currentScriptValue = moveAngle;
