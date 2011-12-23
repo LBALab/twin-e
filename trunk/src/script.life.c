@@ -1145,7 +1145,7 @@ int32 lSAY_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 	addOverlay(koText, textEntry, 0, 0, actorIdx, koFollowActor, 2);
 
 	freezeTime();
-	// TODO: set vox file
+	initVoxToPlay(textEntry);
 	unfreezeTime();
 
 	return 0;
@@ -1160,7 +1160,7 @@ int32 lSAY_MESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	addOverlay(koText, textEntry, 0, 0, otherActorIdx, koFollowActor, 2);
 
 	freezeTime();
-	// TODO: set vox file
+	initVoxToPlay(textEntry);
 	unfreezeTime();
 
 	return 0;
