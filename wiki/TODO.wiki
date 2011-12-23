@@ -13,7 +13,6 @@ This is the place to list every TODO we need to make for this project.
 
 = In-Game =
  
-  # Text: implement bubble hint when text option is disabled;
   # Holomap: create holomap routines;
   # Renderer: implement missing rendering types and fix rendering issues;
 
@@ -22,7 +21,6 @@ This is the place to list every TODO we need to make for this project.
 
   # Zoom feature; (lZOOM)
   # Dialogue bubble; (lBUBBLE_ON, lBUBBLE_OFF)
-  # Vox on say messages; (lSAY_MESSAGE, lSAY_MESSAGE_OBJ)
   # Holomap trajectories (lHOLOMAP_TRAJ)
   # Fade Palette scripts; (lSET_NORMAL_PAL, lSET_DARK_PAL, lFADE_PAL_RED, lFADE_ALARM_RED, lFADE_ALARM_PAL, lFADE_RED_PAL, lFADE_RED_ALARM, lFADE_PAL_ALARM)
 
