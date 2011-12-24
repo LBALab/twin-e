@@ -791,7 +791,14 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 		flipRedrawAreas();
 	}
 
-	// TODO change palettes
+	if (lockPalette) {
+		if (useAlternatePalette) {
+			fadeToPal(paletteRGBA);
+		} else {
+			fadeToPal(mainPaletteRGBA);
+		}
+		lockPalette = 0;
+	}
 }
 
 void drawBubble(int32 actorIdx) {
