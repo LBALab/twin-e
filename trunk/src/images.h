@@ -46,6 +46,13 @@ int16 palCustom;
 /** flag to check in the game palette was changed */
 int16 palReseted;
 
+/** flag to check if the main flag is locked */
+int16 lockPalette;
+
+/** flag to check if we are using a different palette than the main one */
+int16 useAlternatePalette;
+
+
 /** Load and display Adeline Logo */
 void adelineLogo();
 

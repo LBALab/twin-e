@@ -193,7 +193,7 @@ int32 runGameEngine() { // mainLoopInteration
 				clearScreen();
 				flip();
 				setPalette(paletteRGBA);
-				// lockPalette = 1; // TODO
+				lockPalette = 1;
 			}							 
 				break;
 			case kiProtoPack:
@@ -447,7 +447,7 @@ int32 runGameEngine() { // mainLoopInteration
 
 							sceneHero->life = 50;
 							reqBgRedraw = 1;
-							// TODO: lockPalette = 1;
+							lockPalette = 1;
 							inventoryNumLeafs--;
 							cropBottomScreen = 0;
 						} else { // game over
@@ -529,7 +529,7 @@ int32 gameEngineLoop() { // mainLoop
 	uint32 start;
 
 	reqBgRedraw = 1;
-	// TODO lockPalette = 1;
+	lockPalette = 1;
 	setActorAngle(0, -256, 5, &loopMovePtr);
 
 	while (quitGame == -1) {
