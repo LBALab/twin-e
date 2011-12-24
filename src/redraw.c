@@ -790,4 +790,6 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 	} else {
 		flipRedrawAreas();
 	}
+
+	// TODO change palettes
 }

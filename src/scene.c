@@ -44,6 +44,7 @@
 #include "sound.h"
 #include "animations.h"
 #include "extra.h"
+#include "images.h"
 
 uint8* currentScene;
 
@@ -314,7 +315,7 @@ void resetScene() {
 	}
 
 	currentPositionInBodyPtrTab = 0;
-	// useAlternatePalette = 0;
+	useAlternatePalette = 0;
 }
 
 /** Change to another scene */
@@ -394,7 +395,7 @@ void changeScene() {
 	useCellingGrid = -1;
 	cellingGridIdx = -1;
 	reqBgRedraw = 1;
-	// TODO: lockpalette = 0;
+	lockPalette = 0;
 
 	needChangeScene = -1;
 	changeRoomVar10 = 1;
