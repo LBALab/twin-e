@@ -179,6 +179,25 @@ void adjustPalette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity) 
 	}
 
 	setPalette(localPalette);
+
+	/*
+	 v5 = a4;
+  v6 = 0;
+  do
+  {
+    v13 = a5;
+    v7 = 3 * v6;
+    *(&v10 + 3 * v6) = RegleTrois32(a1, *(_BYTE *)v5, 100, a5);
+    *(&v11 + 3 * v6) = RegleTrois32(a2, *(_BYTE *)(v5 + 1), 100, v13);
+    v8 = *(_BYTE *)(v5 + 2);
+    ++v6;
+    v5 += 3;
+    v12[v7] = RegleTrois32(a3, v8, 100, v13);
+  }
+  while ( v6 < 256 );
+  return setPalette((int)&v10);
+
+	*/
 }
 
 /** Adjust between two palettes
@@ -186,6 +205,39 @@ void adjustPalette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity) 
 	@param pal2 palette to adjust */
 void adjustCrossPalette(uint8 * pal1, uint8 * pal2) {
 	// TODO
+
+	/*
+	   v15 = 0;
+	  do
+	  {
+		v2 = a1; // pal1
+		v3 = a2; // pal2
+		v4 = 0;
+		do
+		{
+		  v16 = 3 * v4;
+		  v5 = RegleTrois32(*(_BYTE *)v2, *(_BYTE *)v3, 100, v15);
+		  v6 = v15;
+		  *(&v12 + v16) = v5; // R
+		  v7 = RegleTrois32(*(_BYTE *)(v2 + 1), *(_BYTE *)(v3 + 1), 100, v6);
+		  v8 = v15;
+		  *(&v13 + v16) = v7; // G
+		  v9 = *(_BYTE *)(v3 + 2);
+		  ++v4;
+		  v3 += 3;
+		  v10 = *(_BYTE *)(v2 + 2);
+		  v2 += 3;
+		  v14[v16] = RegleTrois32(v10, v9, 100, v8);
+		}
+		while ( v4 < 256 );
+		waitRetrace();
+		++v15;
+		result = setPalette((int)&v12);
+	  }
+	  while ( v15 <= 100 );
+	  return result;
+
+	*/
 }
 
 /** Fade image to black
