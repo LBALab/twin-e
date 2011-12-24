@@ -52,6 +52,11 @@ int16 lockPalette;
 /** flag to check if we are using a different palette than the main one */
 int16 useAlternatePalette;
 
+/** main game palette */
+uint8* mainPalette;
+
+/** SDL converted in-game palette */
+uint8 mainPaletteRGBA[NUMOFCOLORS * 4];
 
 /** Load and display Adeline Logo */
 void adelineLogo();
