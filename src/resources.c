@@ -53,7 +53,11 @@ int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
 /** Init palettes */
 void initPalettes() {
 	// Init standard palette
-	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_MAINPAL);
+	hqrGetallocEntry(&mainPalette, HQR_RESS_FILE, RESSHQR_MAINPAL);
+	convertPalToRGBA(mainPalette, mainPaletteRGBA);
+	
+	memcpy(palette, mainPalette, NUMOFCOLORS * 3);
+
 	convertPalToRGBA(palette, paletteRGBA);
 	setPalette(paletteRGBA);
 
@@ -109,7 +113,7 @@ void initResources() {
 	initPalettes();
 
 	// load LBA font
-	size = hqrGetallocEntry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
+	hqrGetallocEntry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
 
 	setFontParameters(2, 8);
 	setFontColor(14);
@@ -118,7 +122,7 @@ void initResources() {
 	hqrGetallocEntry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
 
 	// load sprite actors bounding box data
-	size = hqrGetallocEntry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
+	hqrGetallocEntry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
 
 	preloadSprites();
 	preloadAnimations();

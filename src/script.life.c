@@ -1263,12 +1263,24 @@ int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor) {
 
 /*0x5C*/
 int32 lSET_DARK_PAL(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_DARKPAL);
+	if (!lockPalette) {
+		convertPalToRGBA(palette, paletteRGBA);
+		setPalette(paletteRGBA);
+	}
+	useAlternatePalette = 1;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x5D*/
 int32 lSET_NORMAL_PAL(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	useAlternatePalette = 0;
+	if (!lockPalette) {
+		setPalette(mainPaletteRGBA);
+	}
+	return 0;
 }
 
 /*0x5E*/
