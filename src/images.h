@@ -107,6 +107,11 @@ int32 crossDot(int32 modifier, int32 color, int32 param, int32 intensity);
 	@param intensity intensity value to adjust */
 void adjustPalette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity);
 
+/** Adjust between two palettes
+	@param pal1 palette from adjust
+	@param pal2 palette to adjust */
+void adjustCrossPalette(uint8 * pal1, uint8 * pal2);
+
 /** Fade image to black
 	@param palette current palette to fade */
 void fadeToBlack(uint8 *palette);
@@ -120,6 +125,14 @@ void blackToWhite();
 
 /** Resets both in-game and sdl palettes */
 void setBackPal();
+
+/** Fade palette to red palette
+	@param palette current palette to fade */
+void fadePalRed(uint8 *palette);
+
+/** Fade red to palette
+	@param palette current palette to fade */
+void fadeRedPal(uint8 *palette);
 
 /** Copy a determinate screen buffer to another
 	@param source screen buffer

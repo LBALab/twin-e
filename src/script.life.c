@@ -1204,32 +1204,60 @@ int32 lGRM_OFF(int32 actorIdx, ActorStruct *actor) {
 
 /*0x52*/
 int32 lFADE_PAL_RED(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	fadePalRed(mainPalette);
+	useAlternatePalette = 0;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x53*/
 int32 lFADE_ALARM_RED(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+	fadePalRed(palette);
+	useAlternatePalette = 1;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x54*/
 int32 lFADE_ALARM_PAL(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+	adjustCrossPalette(palette, mainPalette);
+	useAlternatePalette = 0;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x55*/
 int32 lFADE_RED_PAL(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	fadeRedPal(mainPalette);
+	useAlternatePalette = 0;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x56*/
 int32 lFADE_RED_ALARM(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+	fadeRedPal(palette);
+	useAlternatePalette = 1;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x57*/
 int32 lFADE_PAL_ALARM(int32 actorIdx, ActorStruct *actor) {
-	return -1;
+	freezeTime();
+	hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+	adjustCrossPalette(mainPalette, palette);
+	useAlternatePalette = 1;
+	unfreezeTime();
+	return 0;
 }
 
 /*0x58*/
