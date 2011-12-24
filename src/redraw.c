@@ -793,3 +793,35 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 
 	// TODO change palettes
 }
+
+void drawBubble(int32 actorIdx) {
+	// TODO draw bubble sprite
+	//SPRITEHQR_DIAG_BUBBLE_RIGHT
+	//SPRITEHQR_DIAG_BUBBLE_LEFT
+
+	/*
+	projectPositionOnScreen(v1);
+  if ( a1 != word_40EF0 )
+  {
+    LOBYTE(talkIconNumber) = talkIconNumber ^ 1;
+    word_40EF0 = a1;
+  }
+  v2 = HQR_Get(HQRPtrSpriteExtra, talkIconNumber);
+  GetDxDyGraph(0, (int)&v6, (int)&v5, v2);
+  if ( talkIconNumber == 90 )
+    v3 = projectedPositionX + 10;
+  else
+    v3 = projectedPositionX - 10 - v6;
+  renderLeft = v3;
+  renderTop = projectedPositionY - 20;
+  renderRight = v6 + v3 - 1;
+  renderBottom = v5 + projectedPositionY - 20 - 1;
+  SetClip(v3, (signed __int16)(projectedPositionY - 20), renderRight, renderBottom);
+  HQR_Get(HQRPtrSpriteExtra, talkIconNumber);
+  AffGraph(v1);
+  if ( (signed __int16)textWindowLeft <= (signed __int16)textWindowRight
+    && (signed __int16)textWindowTop <= (signed __int16)textWindowBottom )
+    CopyBlockPhys(v1);
+  return UnSetClip();
+	*/
+}

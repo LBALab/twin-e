@@ -98,4 +98,7 @@ void blitBackgroundAreas();
 	@param bgRedraw true if we want to redraw background grid, false if we want to update certain screen areas */
 void redrawEngineActions(int32 bgRedraw);
 
+/** Draw dialogue sprite image */
+void drawBubble(int32 actorIdx);
+
 #endif
