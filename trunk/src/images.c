@@ -181,6 +181,13 @@ void adjustPalette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity) 
 	setPalette(localPalette);
 }
 
+/** Adjust between two palettes
+	@param pal1 palette from adjust
+	@param pal2 palette to adjust */
+void adjustCrossPalette(uint8 * pal1, uint8 * pal2) {
+	// TODO
+}
+
 /** Fade image to black
 	@param palette current palette to fade */
 void fadeToBlack(uint8 *palette) {
@@ -233,6 +240,29 @@ void setBackPal() {
 	setPalette(paletteRGBA);
 
 	palReseted = 1;
+}
+
+/** Fade palette to red palette
+	@param palette current palette to fade */
+void fadePalRed(uint8 *palette) {
+	int32 i = 100;
+
+	for (i = 100; i >= 0; i -= 2) {
+		adjustPalette(0xFF, 0, 0, (uint8 *) palette, i);
+		fpsCycles(50);
+	}
+}
+
+
+/** Fade red to palette
+	@param palette current palette to fade */
+void fadeRedPal(uint8 *palette) {
+	int32 i = 0;
+
+	for (i = 0; i <= 100; i += 2) {
+		adjustPalette(0xFF, 0, 0, (uint8 *) palette, i);
+		fpsCycles(50);
+	}
 }
 
 /** Copy a determinate screen buffer to another
