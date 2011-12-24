@@ -571,7 +571,9 @@ int32 lMESSAGE(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	freezeTime();
-	// TODO: draw_bubble(otherActorIdx);
+	if (showDialogueBubble) {
+		drawBubble(actorIdx);
+	}
 	setFontCrossColor(actor->talkColor);
 	talkingActor = actorIdx;
 	drawTextFullscreen(textIdx);
@@ -786,7 +788,9 @@ int32 lMESSAGE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	freezeTime();
-	// TODO: draw_bubble(otherActorIdx);
+	if (showDialogueBubble) {
+		drawBubble(otherActorIdx);
+	}
 	setFontCrossColor(sceneActors[otherActorIdx].talkColor);
 	talkingActor = otherActorIdx;
 	drawTextFullscreen(textIdx);
@@ -1055,7 +1059,9 @@ int32 lASK_CHOICE(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	freezeTime();
-	// TODO: bubble
+	if (showDialogueBubble) {
+		drawBubble(actorIdx);
+	}
 	setFontCrossColor(actor->talkColor);
 	processGameChoices(choiceIdx);
 	numChoices = 0;
@@ -1072,7 +1078,9 @@ int32 lBIG_MESSAGE(int32 actorIdx, ActorStruct *actor) {
 
 	freezeTime();
 	textClipFull();
-	// TODO: draw_bubble(otherActorIdx);
+	if (showDialogueBubble) {
+		drawBubble(actorIdx);
+	}
 	setFontCrossColor(actor->talkColor);
 	talkingActor = actorIdx;
 	drawTextFullscreen(textIdx);
@@ -1236,12 +1244,14 @@ int32 lEXPLODE_OBJ(int32 actorIdx, ActorStruct *actor) {
 
 /*0x59*/
 int32 lBUBBLE_ON(int32 actorIdx, ActorStruct *actor) {
-	return -1; // TODO
+	showDialogueBubble = 1;
+	return 0;
 }
 
 /*0x5A*/
 int32 lBUBBLE_OFF(int32 actorIdx, ActorStruct *actor) {
-	return -1; // TODO
+	showDialogueBubble = 1;
+	return 0;
 }
 
 /*0x5B*/
@@ -1251,7 +1261,9 @@ int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	freezeTime();
-	// TODO: bubble
+	if (showDialogueBubble) {
+		drawBubble(otherActorIdx);
+	}
 	setFontCrossColor(sceneActors[otherActorIdx].talkColor);
 	processGameChoices(choiceIdx);
 	numChoices = 0;
