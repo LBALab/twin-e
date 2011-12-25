@@ -107,8 +107,6 @@ void preloadInventoryItems() {
 
 /** Initialize resource pointers */
 void initResources() {
-	int32 size = 0;
-
 	// Menu and in-game palette
 	initPalettes();
 
