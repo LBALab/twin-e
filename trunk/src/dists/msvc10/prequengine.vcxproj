@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9C2E8EF0-AE31-4569-BA57-976C90C79B3A}</ProjectGuid>
+    <RootNamespace>prequengine</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS; GAMEMOD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;SDL_image.lib;SDL_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;NCONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;SDL_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\actor.c" />
+    <ClCompile Include="..\..\animations.c" />
+    <ClCompile Include="..\..\collision.c" />
+    <ClCompile Include="..\..\debug.c" />
+    <ClCompile Include="..\..\debug.grid.c" />
+    <ClCompile Include="..\..\debug.scene.c" />
+    <ClCompile Include="..\..\extra.c" />
+    <ClCompile Include="..\..\filereader.c" />
+    <ClCompile Include="..\..\gamestate.c" />
+    <ClCompile Include="..\..\grid.c" />
+    <ClCompile Include="..\..\holomap.c" />
+    <ClCompile Include="..\..\hqrdepack.c" />
+    <ClCompile Include="..\..\images.c" />
+    <ClCompile Include="..\..\interface.c" />
+    <ClCompile Include="..\..\keyboard.c" />
+    <ClCompile Include="..\..\lbaengine.c" />
+    <ClCompile Include="..\..\main.c" />
+    <ClCompile Include="..\..\menu.c" />
+    <ClCompile Include="..\..\menuoptions.c" />
+    <ClCompile Include="..\..\movements.c" />
+    <ClCompile Include="..\..\movies.c" />
+    <ClCompile Include="..\..\music.c" />
+    <ClCompile Include="..\..\redraw.c" />
+    <ClCompile Include="..\..\renderer.c" />
+    <ClCompile Include="..\..\resources.c" />
+    <ClCompile Include="..\..\scene.c" />
+    <ClCompile Include="..\..\script.life.c" />
+    <ClCompile Include="..\..\script.move.c" />
+    <ClCompile Include="..\..\sdlengine.c" />
+    <ClCompile Include="..\..\sound.c" />
+    <ClCompile Include="..\..\sys.c" />
+    <ClCompile Include="..\..\text.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\actor.h" />
+    <ClInclude Include="..\..\animations.h" />
+    <ClInclude Include="..\..\collision.h" />
+    <ClInclude Include="..\..\debug.grid.h" />
+    <ClInclude Include="..\..\debug.h" />
+    <ClInclude Include="..\..\debug.scene.h" />
+    <ClInclude Include="..\..\extra.h" />
+    <ClInclude Include="..\..\filereader.h" />
+    <ClInclude Include="..\..\gamestate.h" />
+    <ClInclude Include="..\..\grid.h" />
+    <ClInclude Include="..\..\holomap.h" />
+    <ClInclude Include="..\..\hqrdepack.h" />
+    <ClInclude Include="..\..\images.h" />
+    <ClInclude Include="..\..\interface.h" />
+    <ClInclude Include="..\..\keyboard.h" />
+    <ClInclude Include="..\..\lbaengine.h" />
+    <ClInclude Include="..\..\main.h" />
+    <ClInclude Include="..\..\menu.h" />
+    <ClInclude Include="..\..\menuoptions.h" />
+    <ClInclude Include="..\..\movements.h" />
+    <ClInclude Include="..\..\movies.h" />
+    <ClInclude Include="..\..\music.h" />
+    <ClInclude Include="..\..\redraw.h" />
+    <ClInclude Include="..\..\renderer.h" />
+    <ClInclude Include="..\..\resources.h" />
+    <ClInclude Include="..\..\scene.h" />
+    <ClInclude Include="..\..\script.life.h" />
+    <ClInclude Include="..\..\script.move.h" />
+    <ClInclude Include="..\..\sdlengine.h" />
+    <ClInclude Include="..\..\shadeangletab.h" />
+    <ClInclude Include="..\..\sound.h" />
+    <ClInclude Include="..\..\sys.h" />
+    <ClInclude Include="..\..\text.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
