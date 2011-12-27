@@ -783,10 +783,6 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 		needChangeScene = -1;
 	}
 
-    if (zoomScreen) {
-        zoomScreenScale();
-    }
-
 	if (bgRedraw) {
 		flip();
 		moveNextAreas();
@@ -803,6 +799,10 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 		}
 		lockPalette = 0;
 	}
+
+	if (zoomScreen) {
+        //zoomScreenScale();
+    }
 }
 
 void drawBubble(int32 actorIdx) {
@@ -839,17 +839,20 @@ void drawBubble(int32 actorIdx) {
 
 void zoomScreenScale() {
     int h, w;
-    uint8 * zoomWorkVideoBuffer = NULL;
+	uint8 * dest;
+    uint8 * zoomWorkVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint8));
     memcpy(zoomWorkVideoBuffer, workVideoBuffer, SCREEN_WIDTH*SCREEN_HEIGHT);
 
-    for (h = 0; h < SCREEN_HEIGHT / SCALE; h++) {
-		for (w = 0; w < SCREEN_WIDTH / SCALE; w++) {
-			*workVideoBuffer++ = *zoomWorkVideoBuffer;
-			*workVideoBuffer++ = *zoomWorkVideoBuffer++;
-		}
-		memcpy(workVideoBuffer, workVideoBuffer - SCREEN_WIDTH, SCREEN_WIDTH);
-		workVideoBuffer += SCREEN_WIDTH;
-	}
+	dest = workVideoBuffer;
 
-    free(zoomWorkVideoBuffer);
+    for (h = 0; h < SCREEN_HEIGHT; h++) {
+		for (w = 0; w < SCREEN_WIDTH; w++) {
+			*dest++ = *zoomWorkVideoBuffer;
+			*dest++ = *zoomWorkVideoBuffer++;
+		}
+		//memcpy(dest, dest - SCREEN_WIDTH, SCREEN_WIDTH);
+		//dest += SCREEN_WIDTH;
+	}
+	copyScreen(workVideoBuffer, frontVideoBuffer);
+    //free(zoomWorkVideoBuffer);
 }
