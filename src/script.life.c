@@ -940,8 +940,22 @@ int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor) {
 
 /*0x39*/
 int32 lZOOM(int32 actorIdx, ActorStruct *actor) {
-	scriptPtr++; // TODO implement zoon image
-	return -1;
+	zoomScreen = *(scriptPtr++);
+	
+    if (zoomScreen && !drawInGameTransBox && cfgfile.SceZoom) {
+        fadeToBlack(mainPaletteRGBA);
+        initMCGA();
+        setBackPal();
+        lockPalette = 1;
+    } else if (!zoomScreen && drawInGameTransBox) {
+        fadeToBlack(mainPaletteRGBA);
+        initSVGA();
+        setBackPal();
+        lockPalette = 1;
+        reqBgRedraw = 1;
+    }
+    
+    return 0;
 }
 
 /*0x3A*/

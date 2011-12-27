@@ -331,6 +331,13 @@ void initEngine() {
 	mainMenu();
 }
 
+void initMCGA() {
+    drawInGameTransBox = 1;
+}
+
+void initSVGA() {
+    drawInGameTransBox = 0;
+}
 
 /** Initialize all needed stuffs at first time running engine */
 void initAll() {
@@ -355,6 +362,8 @@ void initAll() {
 
 	initKeymap();
 	initResources();
+
+    initSVGA();
 }
 
 /** Main engine function
