@@ -134,6 +134,9 @@ ConfigFile cfgfile;
 /** CD Game directory */
 int8 * cdDir;
 
+void initMCGA();
+void initSVGA();
+
 int8* ITOA(int32 number);
 
 #endif

@@ -41,7 +41,7 @@ int32 renderTop;
 /** Auxiliar object render bottom position on screen */
 int32 renderBottom;
 
-//short int drawInGameTransBox;
+int16 drawInGameTransBox;
 
 /** Request background redraw */
 int16 reqBgRedraw;
@@ -100,5 +100,7 @@ void redrawEngineActions(int32 bgRedraw);
 
 /** Draw dialogue sprite image */
 void drawBubble(int32 actorIdx);
+
+void zoomScreenScale();
 
 #endif

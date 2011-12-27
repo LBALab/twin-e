@@ -783,6 +783,10 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 		needChangeScene = -1;
 	}
 
+    if (zoomScreen) {
+        zoomScreenScale();
+    }
+
 	if (bgRedraw) {
 		flip();
 		moveNextAreas();
@@ -831,4 +835,21 @@ void drawBubble(int32 actorIdx) {
     CopyBlockPhys(v1);
   return UnSetClip();
 	*/
+}
+
+void zoomScreenScale() {
+    int h, w;
+    uint8 * zoomWorkVideoBuffer = NULL;
+    memcpy(zoomWorkVideoBuffer, workVideoBuffer, SCREEN_WIDTH*SCREEN_HEIGHT);
+
+    for (h = 0; h < SCREEN_HEIGHT / SCALE; h++) {
+		for (w = 0; w < SCREEN_WIDTH / SCALE; w++) {
+			*workVideoBuffer++ = *zoomWorkVideoBuffer;
+			*workVideoBuffer++ = *zoomWorkVideoBuffer++;
+		}
+		memcpy(workVideoBuffer, workVideoBuffer - SCREEN_WIDTH, SCREEN_WIDTH);
+		workVideoBuffer += SCREEN_WIDTH;
+	}
+
+    free(zoomWorkVideoBuffer);
 }

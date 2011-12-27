@@ -60,7 +60,7 @@ int32 loopActorStep; // mainLoopVar17
 /** Disable screen recenter */
 int16 disableScreenRecenter;
 
-
+int32 zoomScreen;
 
 void freezeTime();
 void unfreezeTime();
