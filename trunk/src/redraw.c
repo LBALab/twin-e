@@ -811,7 +811,7 @@ void drawBubble(int32 actorIdx) {
     ActorStruct *actor = &sceneActors[actorIdx];
     
     // get actor position on screen
-    projectPositionOnScreen(actor->X - cameraX, actor->boudingBox.Y.topRight - cameraY, actor->Z - cameraZ);
+    projectPositionOnScreen(actor->X - cameraX, actor->Y + actor->boudingBox.Y.topRight - cameraY, actor->Z - cameraZ);
     
     if (actorIdx != bubbleActor) {
         bubbleSpriteIndex = bubbleSpriteIndex ^ 1;
@@ -827,7 +827,7 @@ void drawBubble(int32 actorIdx) {
     } else {
         renderLeft = projPosX - 10 - spriteWidth;
     }
-    renderTop = projPosY - spriteHeight;// - 20;
+    renderTop = projPosY - 20;
     renderRight = spriteWidth + renderLeft - 1;
     renderBottom = spriteHeight + renderTop - 1;
     
