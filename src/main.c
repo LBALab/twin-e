@@ -345,6 +345,10 @@ void initAll() {
 	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
 	memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
 
+    bubbleSpriteIndex = SPRITEHQR_DIAG_BUBBLE_LEFT;
+    bubbleActor = -1;
+    showDialogueBubble = 1;
+    
 	currentTextBank = -1;
 	currMenuTextIndex = -1;
 	currMenuTextBank = -1;

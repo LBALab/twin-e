@@ -806,35 +806,39 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 }
 
 void drawBubble(int32 actorIdx) {
-	// TODO draw bubble sprite
-	//SPRITEHQR_DIAG_BUBBLE_RIGHT
-	//SPRITEHQR_DIAG_BUBBLE_LEFT
+    int32 spriteWidth, spriteHeight;
+    uint8 *spritePtr;
+    ActorStruct *actor = &sceneActors[actorIdx];
+    
+    // get actor position on screen
+    projectPositionOnScreen(actor->X - cameraX, actor->boudingBox.Y.topRight - cameraY, actor->Z - cameraZ);
+    
+    if (actorIdx != bubbleActor) {
+        bubbleSpriteIndex = bubbleSpriteIndex ^ 1;
+        bubbleActor = actorIdx;
+    }
+    
+    spritePtr = spriteTable[bubbleSpriteIndex];
+    getSpriteSize(0, &spriteWidth, &spriteHeight, spritePtr);
 
-	/*
-	projectPositionOnScreen(v1);
-  if ( a1 != word_40EF0 )
-  {
-    LOBYTE(talkIconNumber) = talkIconNumber ^ 1;
-    word_40EF0 = a1;
-  }
-  v2 = HQR_Get(HQRPtrSpriteExtra, talkIconNumber);
-  GetDxDyGraph(0, (int)&v6, (int)&v5, v2);
-  if ( talkIconNumber == 90 )
-    v3 = projectedPositionX + 10;
-  else
-    v3 = projectedPositionX - 10 - v6;
-  renderLeft = v3;
-  renderTop = projectedPositionY - 20;
-  renderRight = v6 + v3 - 1;
-  renderBottom = v5 + projectedPositionY - 20 - 1;
-  SetClip(v3, (signed __int16)(projectedPositionY - 20), renderRight, renderBottom);
-  HQR_Get(HQRPtrSpriteExtra, talkIconNumber);
-  AffGraph(v1);
-  if ( (signed __int16)textWindowLeft <= (signed __int16)textWindowRight
-    && (signed __int16)textWindowTop <= (signed __int16)textWindowBottom )
-    CopyBlockPhys(v1);
-  return UnSetClip();
-	*/
+    // calculate sprite position on screen
+    if (bubbleSpriteIndex == SPRITEHQR_DIAG_BUBBLE_RIGHT) {
+        renderLeft = projPosX + 10;
+    } else {
+        renderLeft = projPosX - 10 - spriteWidth;
+    }
+    renderTop = projPosY - spriteHeight;// - 20;
+    renderRight = spriteWidth + renderLeft - 1;
+    renderBottom = spriteHeight + renderTop - 1;
+    
+    setClip(renderLeft, renderTop, renderRight, renderBottom);
+    
+    drawSprite(0, renderLeft, renderTop, spritePtr);
+    if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
+        copyBlockPhys(renderLeft, renderTop, renderRight, renderBottom);
+    }
+    
+    resetClip();
 }
 
 void zoomScreenScale() {

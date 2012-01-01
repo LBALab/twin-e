@@ -51,6 +51,10 @@ int32 currNumOfRedrawBox; // fullRedrawVar8
 /** Number of redraw regions in the screen */
 int32 numOfRedrawBox;
 
+/** Save last actor that bubble dialog icon */
+int32 bubbleActor;
+int32 bubbleSpriteIndex;
+
 enum OverlayType {
 	koSprite = 0,
 	koNumber = 1,
