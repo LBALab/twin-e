@@ -32,6 +32,10 @@
 
 int32 canShowCredits;
 
+int8 playerName[256];
+int8 enterPlayerNameVar1;
+int32 enterPlayerNameVar2;
+
 /** Main menu new game options */
 void newGameMenu();
 
