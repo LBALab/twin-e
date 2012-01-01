@@ -20,9 +20,9 @@ This is the place to list every TODO we need to make for this project.
 = Scripting =
 
   # Zoom feature; (lZOOM)
-  # Dialogue bubble; (lBUBBLE_ON, lBUBBLE_OFF)
+
   # Holomap trajectories (lHOLOMAP_TRAJ)
-  # Fade Palette scripts; (lSET_NORMAL_PAL, lSET_DARK_PAL, lFADE_PAL_RED, lFADE_ALARM_RED, lFADE_ALARM_PAL, lFADE_RED_PAL, lFADE_RED_ALARM, lFADE_PAL_ALARM)
+  # Fade Palette scripts; (lFADE_ALARM_PAL, lFADE_PAL_ALARM)
 
 
 = Refactoring =
