@@ -260,8 +260,8 @@ int32 enterPlayerName(int32 textIdx) {
 		}
 
 		// FIXME: remove this lines after implementing everything
-		/*if (skipIntro)
-			break;*/
+		if (skipIntro)
+			break;
 	}
 
 	enterPlayerNameVar2 = 0;
