@@ -211,25 +211,40 @@ int32 processLifeConditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 
 		if (!targetActor->dynamicFlags.bIsDead) {
-			if (Abs(targetActor->Y - actor->Y) >= 1500) {
-				moveAngle = 0x7D00;
-			} else {
+			if (Abs(targetActor->Y - actor->Y) < 1500) {
 				newAngle = getAngle(actor->X, actor->Z, targetActor->X, targetActor->Z);
 				if (Abs(moveAngle) > 0x7D00) {
 					moveAngle = 0x7D00;
-				} 
+				}
+			} else {
+				moveAngle = 0x7D00;
+			}
 
-				if (!targetActorIdx) {
+			if (!targetActorIdx) {
+				int32 heroAngle;
+
+				heroAngle = actor->angle + 0x480 - newAngle + 0x400;
+				heroAngle &= 0x3FF;
+
+				if (Abs(heroAngle) > 0x100) {
+					currentScriptValue = 0x7D00;
+				} else {
+					currentScriptValue = moveAngle;
+				}
+			} else {
+				if (heroBehaviour == DISCRETE) {
 					int32 heroAngle;
 
 					heroAngle = actor->angle + 0x480 - newAngle + 0x400;
 					heroAngle &= 0x3FF;
 
-					if (Abs(heroAngle) >= 0x100) {
+					if (Abs(heroAngle) > 0x100) {
 						currentScriptValue = 0x7D00;
 					} else {
 						currentScriptValue = moveAngle;
 					}
+				} else {
+					currentScriptValue = moveAngle;
 				}
 			}
 		} else {
