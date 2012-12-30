@@ -20,7 +20,6 @@ This is the place to list every TODO we need to make for this project.
 = Scripting =
 
   # Zoom feature; (lZOOM)
-
   # Holomap trajectories (lHOLOMAP_TRAJ)
   # Fade Palette scripts; (lFADE_ALARM_PAL, lFADE_PAL_ALARM)
 
@@ -28,7 +27,7 @@ This is the place to list every TODO we need to make for this project.
 = Refactoring =
 
   # Do endian for reading content from pointers for proper portability;
-  # Comment and reorganize the code for renderer and text files;
+  # Comment and reorganize the code for renderer and text files; Extras file also need some constants
   # Do a proper resource system, changing each request resource when need it;
   # Do a proper sound system with cached resources. Also save the sample handle to proper stop/pause/resume it. Take the advantage of Channels. Use panning and distance to all samples in scene;
   # Improve Keyboard routines. Its now based in original but can be tricky to port it;
