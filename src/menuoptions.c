@@ -173,6 +173,51 @@ void drawSelectableCharacters(void) {
 	}
 }
 
+// 0001F18C
+void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
+/*
+	int v4; // ebp@0
+  int v6; // [sp+0h] [bp-14h]@0
+  int v7; // [sp+0h] [bp-14h]@4
+  int v8; // [sp+4h] [bp-10h]@0
+  int v9; // [sp+4h] [bp-10h]@4
+
+  LOWORD(v8) = a1 - buttonDrawVar1 / 2;
+  if ( !a4 )
+  {
+    v6 = (signed __int16)(a2 + 25);
+    blitRectangle(v4);
+    drawBoxInsideTrans(v4);
+  }
+  if ( a4 == 1 )
+  {
+    makeFireEffect(v4);
+    if ( !(rand(v6, v8) % 5) )
+      *(_BYTE *)(10 * rand(v7, v9) % 320 + bufSpeak + 6400) = -1;
+  }
+  if ( a4 == 2 )
+    Box(v4);
+  DrawCadre();
+  CoulFont(0xFu);
+  SizeFont(a3);
+  Font(v4);
+  return CopyBlockPhys(v4);
+	*/
+
+	// TODO: implement the other types (don't seam to be used)
+	/*if (type == 1) {
+		processPlasmaEffect(top, 1);
+	}
+	
+	drawBox(x, top, dialTextBoxRight, dialTextBoxBottom);
+	drawTransparentBox(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
+
+	setFontColor(15);
+	drawText(centerX - getTextSize(playerName) / 2, top, playerName);
+
+	copyBlockPhys(x, y, x + 320, y + 25);*/
+}
+
 int32 enterPlayerName(int32 textIdx) {
 	int8 buffer[256];
 
@@ -185,14 +230,14 @@ int32 enterPlayerName(int32 textIdx) {
 
 	while(1) {
 		copyScreen(workVideoBuffer, frontVideoBuffer);
-		flip(frontVideoBuffer);
+		flip(); //frontVideoBuffer
 		initTextBank(0);
 		getMenuText(textIdx, buffer);
 		setFontColor(15);
 		drawText(320 - (getTextSize(buffer) / 2), 20, buffer);
 		copyBlockPhys(0, 0, 639, 99);
 		playerName[0] = enterPlayerNameVar1;
-		//drawSmallButton(320, 100, (int)playerName, 1);
+		drawPlayerName(320, 100, playerName, 1);
 		drawSelectableCharacters();
 
 		do {
@@ -211,14 +256,17 @@ int32 enterPlayerName(int32 textIdx) {
 		while (!skipIntro) {
 			readKeys();
 			// TODO
+			drawPlayerName(320, 100, playerName, 1);
 		}
 
 		// FIXME: remove this lines after implementing everything
-		if (skipIntro)
-			break;
+		/*if (skipIntro)
+			break;*/
 	}
+
+	enterPlayerNameVar2 = 0;
 	copyScreen(workVideoBuffer, frontVideoBuffer);
-	flip(frontVideoBuffer);
+	flip(); // frontVideoBuffer
 
 	return 1;
 }
