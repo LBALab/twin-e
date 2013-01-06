@@ -570,7 +570,7 @@ void processAnimActions(int32 actorIdx) {
 				animPos = *(data++);
 				if (animPos == actor->animPosition) {
 					int16 sampleIdx = *((int16 *)data);
-					playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
 				}
 				data+=2;
 			}
@@ -582,7 +582,7 @@ void processAnimActions(int32 actorIdx) {
 					sampleIdx = *((int16 *)data); data+=2;
 					frequency = *((int16 *)data); data+=2;
 					frequency = Rnd(frequency) + 0x1000 - (Abs(frequency) >> 1);
-					playSample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z, actorIdx);
 				} else {
 					data+=4;
 				}
@@ -640,7 +640,7 @@ void processAnimActions(int32 actorIdx) {
 					int16 sampleIdx, repeat;
 					sampleIdx = *((int16 *)data); data+=2;
 					repeat = *((int16 *)data); data+=2;
-					playSample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z, actorIdx);
 				} else {
 					data+=4;
 				}
@@ -705,7 +705,7 @@ void processAnimActions(int32 actorIdx) {
 				animPos = *(data++);
 				if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
 					int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
-					playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
 				}
 			}
 				break;
@@ -713,7 +713,7 @@ void processAnimActions(int32 actorIdx) {
 				animPos = *(data++);
 				if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
 					int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
-					playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z);
+					playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
 				}
 			}
 				break;

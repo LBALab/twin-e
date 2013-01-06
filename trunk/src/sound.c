@@ -97,6 +97,17 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 	}
 }
 
+void setSamplePosition(int32 channelIdx, int32 x, int32 y, int32 z) {
+	int32 distance;
+	distance = Abs(getDistance3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
+	distance = getAverageValue(0, distance, 10000, 255);
+	if (distance > 255) { // don't play it if its to far away
+		distance = 255;
+	}
+
+	Mix_SetDistance(channelIdx, distance);
+}
+
 /** Play samples
 	@param index sample index under flasamp.hqr file
 	@param frequency frequency used to play the sample
@@ -104,9 +115,8 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 	@param x unknown x variable
 	@param y unknown y variable
 	@param z unknown z variable */
-void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z) {
+void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z, int32 actorIdx) {
 	if (cfgfile.Sound) {
-		//int32 distance;
 		int32 sampSize = 0;
 		SDL_RWops *rw;
 		uint8* sampPtr;
@@ -121,22 +131,25 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 		sample = Mix_LoadWAV_RW(rw, 1);
 
 		channelIdx = getFreeSampleChannelIndex();
+
+		// only play if we have a free channel, otherwise we won't be able to control the sample
 		if (channelIdx != -1) {
 			samplesPlaying[channelIdx] = index;
+			sampleVolume(channelIdx, cfgfile.WaveVolume);
+
+			if (actorIdx != -1) {
+				setSamplePosition(channelIdx, x, y, z);
+
+				// save the actor index for the channel so we can check the position
+				samplesPlayingActors[channelIdx] = actorIdx;
+			}
+
+			if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
+				printf("Error while playing VOC: Sample %d \n", index);
+
+			/*if (cfgfile.Debug)
+				printf("Playing VOC: Sample %d\n", index);*/
 		}
-
-		sampleVolume(channelIdx, cfgfile.WaveVolume);
-
-		/*distance = Abs(getDistance3D(newCameraX << 9, newCameraY << 8, newCameraZ << 9, x, y, z));
-		distance = getAverageValue(0, distance, 10000, 255);
-
-		Mix_SetDistance(1, distance);*/
-
-		if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
-			printf("Error while playing VOC: Sample %d \n", index);
-
-		/*if (cfgfile.Debug)
-			printf("Playing VOC: Sample %d\n", index);*/
 
 		free(sampPtr);
 	}
@@ -173,6 +186,16 @@ void stopSamples() {
 	}
 }
 
+int32 getActorChannel(int32 index) {
+	int32 c = 0;
+	for (c = 0; c < NUM_CHANNELS; c++) {
+		if (samplesPlayingActors[c] == index) {
+			return c;
+		}
+	}
+	return -1;
+}
+
 int32 getSampleChannel(int32 index) {
 	int32 c = 0;
 	for (c = 0; c < NUM_CHANNELS; c++) {
@@ -185,6 +208,7 @@ int32 getSampleChannel(int32 index) {
 
 void removeSampleChannel(int32 c) {
 	samplesPlaying[c] = -1;
+	samplesPlayingActors[c] = -1;
 }
 
 /** Stop samples */

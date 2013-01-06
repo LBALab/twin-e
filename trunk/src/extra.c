@@ -691,7 +691,7 @@ void processExtras() {
 				angle = (tmpAngle - extra->angle) & 0x3FF;
 
 				if (angle > 400 && angle < 600) {
-                    playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
+                    playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z, 0);
                     
                     if (extraKey->info1 > 1) {
                         projectPositionOnScreen(extraKey->X - cameraX, extraKey->Y - cameraY, extraKey->Z - cameraZ);
@@ -726,7 +726,7 @@ void processExtras() {
 					setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
 
 					if (actorIdx == checkExtraCollisionWithExtra(extra, magicBallIdx)) {
-						playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z);
+						playSample(97, 0x1000, 1, sceneHero->X, sceneHero->Y, sceneHero->Z, 0);
                     
 						if (extraKey->info1 > 1) {
 							projectPositionOnScreen(extraKey->X - cameraX, extraKey->Y - cameraY, extraKey->Z - cameraZ);
@@ -803,7 +803,7 @@ void processExtras() {
 					// if extra is magic ball
 					if (i == magicBallIdx) {
 						// FIXME: add constant for sample index
-						playSample(86, Rnd(300) + 3946, 1, extra->X, extra->Y, extra->Z);
+						playSample(86, Rnd(300) + 3946, 1, extra->X, extra->Y, extra->Z, -1);
 
 						// cant bounce with not magic points
 						if (magicBallNumBounce <= 0) {
@@ -878,7 +878,7 @@ void processExtras() {
 				// if hero touch extra
 				if (checkExtraCollisionWithActors(extra, -1) == 0) {
 					// FIXME: add constant for sample index
-					playSample(97, 0x1000, 1, extra->X, extra->Y, extra->Z);
+					playSample(97, 0x1000, 1, extra->X, extra->Y, extra->Z, -1);
 
 					if (extra->info1 > 1 && !(loopPressedKey & 2)) {
 						projectPositionOnScreen(extra->X - cameraX, extra->Y - cameraY, extra->Z - cameraZ);
