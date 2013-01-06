@@ -4,7 +4,7 @@ Prequengine: a Little Big Adventure engine Changes
 # 0.1.3 - 00.00.2013
 	- [FIXED] (issue #37) Multiple voice samples were been playing at the same time.
 	- [FIXED] (issue #41) Playing samples according with actors position in scenes.
-	- [FIXED] issue with text special characters.
+	- [FIXED] (issue #34) Incorrect text display of special characters.
 
 # 0.1.2 - 30.12.2012:
 	- [FIXED] issue with null animation pointers.
