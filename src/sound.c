@@ -199,7 +199,7 @@ void stopSample(int32 index) {
 	if (cfgfile.Sound) {
 		int32 stopChannel = getSampleChannel(index);
 		if (stopChannel != -1) {
-			removeSampleChannel(index);
+			removeSampleChannel(stopChannel);
 			Mix_HaltChannel(stopChannel);
 			//clean up
 			Mix_FreeChunk(sample);
@@ -210,8 +210,7 @@ void stopSample(int32 index) {
 	}
 }
 
-int32 isSamplePlaying(int32 index) {
-	int32 channel = getSampleChannel(index);
+int32 isChannelPlaying(int32 channel) {
 	if (channel != -1) {
 		if(Mix_Playing(channel)) {
 			return 1;
@@ -222,11 +221,22 @@ int32 isSamplePlaying(int32 index) {
 	return 0;
 }
 
+int32 isSamplePlaying(int32 index) {
+	int32 channel = getSampleChannel(index);
+	return isChannelPlaying(channel);
+}
+
 int32 getFreeSampleChannelIndex() {
 	int i = 0;
 	for (i = 0; i < NUM_CHANNELS; i++) {
 		if (samplesPlaying[i] == -1) {
 			return i;
+		}
+	}
+	//FIXME if didn't find any, lets free what is not in use
+	for (i = 0; i < NUM_CHANNELS; i++) {
+		if (samplesPlaying[i] != -1) {
+			isChannelPlaying(i);
 		}
 	}
 	return -1;
@@ -256,17 +266,19 @@ void playVoxSample(int32 index) {
 		if (channelIdx > NUM_CHANNELS - 1) // reset count
 			channelIdx = 0;*/
 		channelIdx = getFreeSampleChannelIndex();
+		
+		// only play if we have a free channel, otherwise we won't be able to control the sample
 		if (channelIdx != -1) {
 			samplesPlaying[channelIdx] = index;
+		
+			sampleVolume(channelIdx, cfgfile.VoiceVolume - 1);
+
+			if (Mix_PlayChannel(channelIdx, sample, 0) == -1)
+				printf("Error while playing VOC: Sample %d \n", index);
+
+			/*if (cfgfile.Debug)
+				printf("Playing VOC: Sample %d\n", index);*/
 		}
-
-		sampleVolume(channelIdx, cfgfile.VoiceVolume - 1);
-
-		if (Mix_PlayChannel(channelIdx, sample, 0) == -1)
-			printf("Error while playing VOC: Sample %d \n", index);
-
-		/*if (cfgfile.Debug)
-			printf("Playing VOC: Sample %d\n", index);*/
 
 		free(sampPtr);
 	}

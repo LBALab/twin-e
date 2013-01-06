@@ -205,6 +205,7 @@ int32 processLifeConditions(ActorStruct *actor) {
 		int32 targetActorIdx;
 		ActorStruct *targetActor;
 
+		newAngle = 0;
 		targetActorIdx = *(scriptPtr++);
 		targetActor = &sceneActors[targetActorIdx];
 
