@@ -1,6 +1,33 @@
 Prequengine: a Little Big Adventure engine Changes
 - List of all changes during public version releases
 
+# 0.1.3 - 00.00.2013
+	- [FIXED] (issue #37) Multiple voice samples were been playing at the same time
+	
+
+# 0.1.2 - 30.12.2012:
+	- [ADDED] Meca-pinguin support
+	- [FIXED] issue with null animation pointers.
+	- [ADDED] Extra explosions. Meca-pinguins can now explode when they "die".
+	- [ADDED] Magicball aiming at key.
+	- [ADDED] Extra shadows.
+	- [FIXED] issue with actors shadow size
+	- [FIXED] issue with magicball shadow crashing the game
+	- [FIXED] (issue #18) with ANGLE move script.
+	- [FIXED] (issue #19) with DISTANCE conditions command
+	- [ADDED] hability to stop a single sample
+	- [FIXED] issue with fade out music which prevents all sounds to be played
+	- [ADDED] Pause and resume samples
+	- [FIXED] issue with SAMPLE_ALWAYS move script command
+	- [FIXED] issue with inventory item overlay rotation speed
+	- [FIXED] issue with REPEAT_SAMPLE move script command
+	- [FIXED] issue with music and samples not stopping while playing FLA movies
+	- [ADDED] Scene music only plays once as original game
+	- [ADDED] Voices are fully supported
+	- [ADDED] Dialog text buble
+	- [ADDED] Palette related script commands (responsible with palette fadings)
+	- [FIXED] issue with the CONE_VIEW script command. It was causing an incorrect behavior when Twinsen was near a Guard.
+
 # 0.1.1 - 13.02.2010:
 	- [FIXED] (issue #8) Application window close button didn't quit the game
 	- [FIXED] (issue #9) Menu "Continue game" was always playing intro screens. It nows only plays if we are at Chapter 1 (Still at Prison in Citaldel Island)
