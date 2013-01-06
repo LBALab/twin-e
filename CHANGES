@@ -6,6 +6,7 @@ Prequengine: a Little Big Adventure engine Changes
 	- [FIXED] (issue #41) Playing samples according with actors position in scenes.
 	- [FIXED] (issue #34) Incorrect text display of special characters.
 	- [FIXED] (issue #35) Voices don't stop playing when you skip a text dialog.
+	- [FIXED] (issue #39) Key sprite overlay with incorrect Y position when open doors above the ground
 
 # 0.1.2 - 30.12.2012:
 	- [FIXED] issue with null animation pointers.

@@ -622,7 +622,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 			case koFollowActor: {
 				ActorStruct *actor = &sceneActors[overlay->info1];
 
-				projectPositionOnScreen(actor->X - cameraX, actor->boudingBox.Y.topRight - cameraY, actor->Z - cameraZ);
+				projectPositionOnScreen(actor->X - cameraX, actor->Y + actor->boudingBox.Y.topRight - cameraY, actor->Z - cameraZ);
 				
 				overlay->X = projPosX;
 				overlay->Y = projPosY;
