@@ -72,12 +72,22 @@ void resumeSamples();
 /** Stop samples */
 void stopSamples();
 
+/** Get the channel where the sample is playing */
 int32 getSampleChannel(int32 index);
+
+/** Stops a specific sample */
 void stopSample(int32 index);
 
+/** Find a free channel slot to use */
 int32 getFreeSampleChannelIndex();
+
+/** Remove a sample from the channel usage list */
 void removeSampleChannel(int32 index);
+
+/** Check if a sample is playing */
 int32 isSamplePlaying(int32 index);
+
+/** Play VOX sample */
 void playVoxSample(int32 index);
 
 #endif

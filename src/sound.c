@@ -42,7 +42,6 @@
 #include "collision.h"
 #include "text.h"
 
-
 /** SDL_Mixer channels */
 int32 channel;
 /** Samples chunk variable */
@@ -81,9 +80,6 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		/*channelIdx++;
-		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;*/
 		channelIdx = getFreeSampleChannelIndex();
 		if (channelIdx != -1) {
 			samplesPlaying[channelIdx] = index;
@@ -124,9 +120,6 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		/*channelIdx++;
-		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;*/
 		channelIdx = getFreeSampleChannelIndex();
 		if (channelIdx != -1) {
 			samplesPlaying[channelIdx] = index;
@@ -248,9 +241,7 @@ void playVoxSample(int32 index) {
 		SDL_RWops *rw;
 		uint8* sampPtr = 0;
 
-		//sampSize = hqrGetallocEntry(&sampPtr, currentVoxBankFile, index);
 		sampSize = hqrGetallocVoxEntry(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
-		//sampSize = hqrGetVoxEntry(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
 		
 		// Fix incorrect sample files first byte
 		if (*sampPtr != 'C') {
@@ -262,9 +253,6 @@ void playVoxSample(int32 index) {
 		rw = SDL_RWFromMem(sampPtr, sampSize);
 		sample = Mix_LoadWAV_RW(rw, 1);
 
-		/*channelIdx++;
-		if (channelIdx > NUM_CHANNELS - 1) // reset count
-			channelIdx = 0;*/
 		channelIdx = getFreeSampleChannelIndex();
 		
 		// only play if we have a free channel, otherwise we won't be able to control the sample
