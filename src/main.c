@@ -344,6 +344,7 @@ void initAll() {
 	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
 	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
 	memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
+	memset(itemAngle, 256, sizeof(itemAngle)); // reset inventory items angles
 
     bubbleSpriteIndex = SPRITEHQR_DIAG_BUBBLE_LEFT;
     bubbleActor = -1;
