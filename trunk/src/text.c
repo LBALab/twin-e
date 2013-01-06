@@ -771,9 +771,10 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 		while (playVox(currDialTextEntry) && skipIntro != 1 );
 		hasHiddenVox = 0;
 		voxHiddenIndex = 0;
-		if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
-			stopVox(currDialTextEntry);
-		}
+	}
+
+	if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
+		stopVox(currDialTextEntry);
 	}
 
 	loadClip();
