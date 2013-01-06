@@ -585,7 +585,7 @@ void printText10Sub2() { // printText10Sub2()
 
 }
 
-void TEXT_GetLetterSize(int8 character, int32 *pLetterWidth, int32 *pLetterHeight, int8 * pFont) { // TEXT_GetLetterSize
+void TEXT_GetLetterSize(int8 character, int32 *pLetterWidth, int32 *pLetterHeight, byte * pFont) { // TEXT_GetLetterSize
 	byte *temp;
 
 	temp = (byte*) (pFont + *((int16 *)(pFont + character * 4)));
