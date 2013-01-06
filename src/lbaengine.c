@@ -80,6 +80,13 @@ void unfreezeTime() {
 		lbaTime = saveFreezedTime;
 }
 
+void processActorSamplePosition(int32 actorIdx) {
+	int32 channelIdx;
+	ActorStruct *actor = &sceneActors[actorIdx];
+	channelIdx = getActorChannel(actorIdx);
+	setSamplePosition(channelIdx, actor->X, actor->Y, actor->Z);
+}
+
 /** Game engine main loop
 	@return true if we want to show credit sequence */
 int32 runGameEngine() { // mainLoopInteration
@@ -357,7 +364,7 @@ int32 runGameEngine() { // mainLoopInteration
 					initAnim(ANIM_LANDDEATH, 4, 0, 0);
 					actor->controlMode = 0;
 				} else {
-					playSample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z);
+					playSample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z, a);
 
 					if (a == mecaPinguinIdx) {
 						addExtraExplode(actor->X, actor->Y, actor->Z);
@@ -389,6 +396,8 @@ int32 runGameEngine() { // mainLoopInteration
 				processLifeScript(a);
 			}
 
+			processActorSamplePosition(a);
+
 			if (quitGame != -1) {
 				return quitGame;
 			}
@@ -402,7 +411,7 @@ int32 runGameEngine() { // mainLoopInteration
 					if ((brickSound & 0xF) == 1) {
 						if (a) { // all other actors
 							int32 rnd = Rnd(2000) + 3096;
-							playSample(0x25, rnd, 1, actor->X, actor->Y, actor->Z);
+							playSample(0x25, rnd, 1, actor->X, actor->Y, actor->Z, a);
 							if (actor->bonusParameter & 0x1F0) {
 								if (!(actor->bonusParameter & 1)) {
 									processActorExtraBonus(a);

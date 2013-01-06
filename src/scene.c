@@ -429,7 +429,7 @@ void processEnvironmentSound() {
 					decal = sampleRound[currentAmb];
 					repeat = sampleRepeat[currentAmb];
 
-					playSample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110);
+					playSample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110, -1);
 					break ;
 				}
 			}

@@ -327,7 +327,7 @@ void processFoundItem(int32 item) {
 	boxBottomRightX = projPosX + 65;
 	boxBottomRightY = projPosY + 65;
 
-	playSample(41, 0x1000, 1, 0x80, 0x80, 0x80);
+	playSample(41, 0x1000, 1, 0x80, 0x80, 0x80, -1);
 
 	// process vox play
 	{
@@ -514,7 +514,7 @@ void processGameoverAnimation() { // makeGameOver
 			sdldelay(15);
 		}
 
-		playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80);
+		playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80, -1);
 		blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 		setCameraAngle(0, 0, 0, 0, 0, 0, 3200);
 		renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);

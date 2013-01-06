@@ -29,6 +29,7 @@
 #define SOUND_H
 
 #include "sys.h"
+#include "sys.h"
 
 /** Total number of sprites allowed in the game */
 #define NUM_SAMPLES 243
@@ -41,6 +42,9 @@ uint32 samplesSizeTable[NUM_SAMPLES];
 
 /** Samples playing at the same time */
 int32 samplesPlaying[NUM_CHANNELS];
+
+/** Samples playing at a actors position */
+int32 samplesPlayingActors[NUM_CHANNELS];
 
 /** Sample volume
 	@param channel sample channel
@@ -55,6 +59,9 @@ void sampleVolume(int32 channel, int32 volume);
 	@param y unknown y variable */
 void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y);
 
+/** Update sample position in channel */
+void setSamplePosition(int32 channelIdx, int32 x, int32 y, int32 z);
+
 /** Play samples
 	@param index sample index under flasamp.hqr file
 	@param frequency frequency used to play the sample
@@ -62,7 +69,7 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 	@param x unknown x variable
 	@param y unknown y variable
 	@param z unknown z variable */
-void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z);
+void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z, int32 actorIdx);
 
 /** Pause samples */
 void pauseSamples();
@@ -71,6 +78,9 @@ void resumeSamples();
 
 /** Stop samples */
 void stopSamples();
+
+/** Get the channel where the actor sample is playing */
+int32 getActorChannel(int32 index);
 
 /** Get the channel where the sample is playing */
 int32 getSampleChannel(int32 index);
