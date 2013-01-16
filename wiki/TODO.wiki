@@ -29,5 +29,5 @@ This is the place to list every TODO we need to make for this project.
   # Do endian for reading content from pointers for proper portability;
   # Comment and reorganize the code for renderer and text files; Extras file also need some constants
   # Do a proper resource system, changing each request resource when need it;
-  # Do a proper sound system with cached resources. Also save the sample handle to proper stop/pause/resume it. Take the advantage of Channels. Use panning and distance to all samples in scene;
+  # Do a proper sound system with cached resources.
   # Improve Keyboard routines. Its now based in original but can be tricky to port it;
