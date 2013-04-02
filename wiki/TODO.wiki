@@ -21,7 +21,6 @@ This is the place to list every TODO we need to make for this project.
 
   # Zoom feature; (lZOOM)
   # Holomap trajectories (lHOLOMAP_TRAJ)
-  # Fade Palette scripts; (lFADE_ALARM_PAL, lFADE_PAL_ALARM)
 
 
 = Refactoring =
