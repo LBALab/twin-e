@@ -62,7 +62,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\libs\win32\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\libs\win32\SDL\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;SDL_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -70,7 +70,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>..\..\..\libs\win32\SDL\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\libs\win32\SDL\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,7 +84,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\libs\win32\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\libs\win32\SDL\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL.lib;SDLmain.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -93,77 +93,77 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>..\..\..\libs\win32\SDL\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\libs\win32\SDL\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\actor.c" />
-    <ClCompile Include="..\..\animations.c" />
-    <ClCompile Include="..\..\collision.c" />
-    <ClCompile Include="..\..\debug.c" />
-    <ClCompile Include="..\..\debug.grid.c" />
-    <ClCompile Include="..\..\debug.scene.c" />
-    <ClCompile Include="..\..\extra.c" />
-    <ClCompile Include="..\..\filereader.c" />
-    <ClCompile Include="..\..\gamestate.c" />
-    <ClCompile Include="..\..\grid.c" />
-    <ClCompile Include="..\..\holomap.c" />
-    <ClCompile Include="..\..\hqrdepack.c" />
-    <ClCompile Include="..\..\images.c" />
-    <ClCompile Include="..\..\interface.c" />
-    <ClCompile Include="..\..\keyboard.c" />
-    <ClCompile Include="..\..\lbaengine.c" />
-    <ClCompile Include="..\..\main.c" />
-    <ClCompile Include="..\..\menu.c" />
-    <ClCompile Include="..\..\menuoptions.c" />
-    <ClCompile Include="..\..\movements.c" />
-    <ClCompile Include="..\..\movies.c" />
-    <ClCompile Include="..\..\music.c" />
-    <ClCompile Include="..\..\redraw.c" />
-    <ClCompile Include="..\..\renderer.c" />
-    <ClCompile Include="..\..\resources.c" />
-    <ClCompile Include="..\..\scene.c" />
-    <ClCompile Include="..\..\script.life.c" />
-    <ClCompile Include="..\..\script.move.c" />
-    <ClCompile Include="..\..\sdlengine.c" />
-    <ClCompile Include="..\..\sound.c" />
-    <ClCompile Include="..\..\sys.c" />
-    <ClCompile Include="..\..\text.c" />
+    <ClCompile Include="..\..\src\actor.c" />
+    <ClCompile Include="..\..\src\animations.c" />
+    <ClCompile Include="..\..\src\collision.c" />
+    <ClCompile Include="..\..\src\debug.c" />
+    <ClCompile Include="..\..\src\debug.grid.c" />
+    <ClCompile Include="..\..\src\debug.scene.c" />
+    <ClCompile Include="..\..\src\extra.c" />
+    <ClCompile Include="..\..\src\filereader.c" />
+    <ClCompile Include="..\..\src\gamestate.c" />
+    <ClCompile Include="..\..\src\grid.c" />
+    <ClCompile Include="..\..\src\holomap.c" />
+    <ClCompile Include="..\..\src\hqrdepack.c" />
+    <ClCompile Include="..\..\src\images.c" />
+    <ClCompile Include="..\..\src\interface.c" />
+    <ClCompile Include="..\..\src\keyboard.c" />
+    <ClCompile Include="..\..\src\lbaengine.c" />
+    <ClCompile Include="..\..\src\main.c" />
+    <ClCompile Include="..\..\src\menu.c" />
+    <ClCompile Include="..\..\src\menuoptions.c" />
+    <ClCompile Include="..\..\src\movements.c" />
+    <ClCompile Include="..\..\src\movies.c" />
+    <ClCompile Include="..\..\src\music.c" />
+    <ClCompile Include="..\..\src\redraw.c" />
+    <ClCompile Include="..\..\src\renderer.c" />
+    <ClCompile Include="..\..\src\resources.c" />
+    <ClCompile Include="..\..\src\scene.c" />
+    <ClCompile Include="..\..\src\script.life.c" />
+    <ClCompile Include="..\..\src\script.move.c" />
+    <ClCompile Include="..\..\src\sdlengine.c" />
+    <ClCompile Include="..\..\src\sound.c" />
+    <ClCompile Include="..\..\src\sys.c" />
+    <ClCompile Include="..\..\src\text.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\actor.h" />
-    <ClInclude Include="..\..\animations.h" />
-    <ClInclude Include="..\..\collision.h" />
-    <ClInclude Include="..\..\debug.grid.h" />
-    <ClInclude Include="..\..\debug.h" />
-    <ClInclude Include="..\..\debug.scene.h" />
-    <ClInclude Include="..\..\extra.h" />
-    <ClInclude Include="..\..\filereader.h" />
-    <ClInclude Include="..\..\gamestate.h" />
-    <ClInclude Include="..\..\grid.h" />
-    <ClInclude Include="..\..\holomap.h" />
-    <ClInclude Include="..\..\hqrdepack.h" />
-    <ClInclude Include="..\..\images.h" />
-    <ClInclude Include="..\..\interface.h" />
-    <ClInclude Include="..\..\keyboard.h" />
-    <ClInclude Include="..\..\lbaengine.h" />
-    <ClInclude Include="..\..\main.h" />
-    <ClInclude Include="..\..\menu.h" />
-    <ClInclude Include="..\..\menuoptions.h" />
-    <ClInclude Include="..\..\movements.h" />
-    <ClInclude Include="..\..\movies.h" />
-    <ClInclude Include="..\..\music.h" />
-    <ClInclude Include="..\..\redraw.h" />
-    <ClInclude Include="..\..\renderer.h" />
-    <ClInclude Include="..\..\resources.h" />
-    <ClInclude Include="..\..\scene.h" />
-    <ClInclude Include="..\..\script.life.h" />
-    <ClInclude Include="..\..\script.move.h" />
-    <ClInclude Include="..\..\sdlengine.h" />
-    <ClInclude Include="..\..\shadeangletab.h" />
-    <ClInclude Include="..\..\sound.h" />
-    <ClInclude Include="..\..\sys.h" />
-    <ClInclude Include="..\..\text.h" />
+    <ClInclude Include="..\..\src\actor.h" />
+    <ClInclude Include="..\..\src\animations.h" />
+    <ClInclude Include="..\..\src\collision.h" />
+    <ClInclude Include="..\..\src\debug.grid.h" />
+    <ClInclude Include="..\..\src\debug.h" />
+    <ClInclude Include="..\..\src\debug.scene.h" />
+    <ClInclude Include="..\..\src\extra.h" />
+    <ClInclude Include="..\..\src\filereader.h" />
+    <ClInclude Include="..\..\src\gamestate.h" />
+    <ClInclude Include="..\..\src\grid.h" />
+    <ClInclude Include="..\..\src\holomap.h" />
+    <ClInclude Include="..\..\src\hqrdepack.h" />
+    <ClInclude Include="..\..\src\images.h" />
+    <ClInclude Include="..\..\src\interface.h" />
+    <ClInclude Include="..\..\src\keyboard.h" />
+    <ClInclude Include="..\..\src\lbaengine.h" />
+    <ClInclude Include="..\..\src\main.h" />
+    <ClInclude Include="..\..\src\menu.h" />
+    <ClInclude Include="..\..\src\menuoptions.h" />
+    <ClInclude Include="..\..\src\movements.h" />
+    <ClInclude Include="..\..\src\movies.h" />
+    <ClInclude Include="..\..\src\music.h" />
+    <ClInclude Include="..\..\src\redraw.h" />
+    <ClInclude Include="..\..\src\renderer.h" />
+    <ClInclude Include="..\..\src\resources.h" />
+    <ClInclude Include="..\..\src\scene.h" />
+    <ClInclude Include="..\..\src\script.life.h" />
+    <ClInclude Include="..\..\src\script.move.h" />
+    <ClInclude Include="..\..\src\sdlengine.h" />
+    <ClInclude Include="..\..\src\shadeangletab.h" />
+    <ClInclude Include="..\..\src\sound.h" />
+    <ClInclude Include="..\..\src\sys.h" />
+    <ClInclude Include="..\..\src\text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
