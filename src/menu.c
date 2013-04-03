@@ -49,53 +49,48 @@
 #include "grid.h"
 #include "gamestate.h"
 
-/** Plasma effect file size: RESS.hqr:51 */
-#define PLASMA_EFFECT_FILESIZE	262176
-
-/** Main menu new game option key */
-#define MAINMENU_NEWGAME		20
-/** Main menu continue game option key */
-#define MAINMENU_CONTINUEGAME	21
-/** Main menu option key */
-#define MAINMENU_OPTIONS		23
-/** Main menu quit key */
-#define MAINMENU_QUIT			22
-
-/** Give up menu continue game key */
-#define GIVEUPMENU_CONTINUE		28
-/** give up menu quit game key */
-#define GIVEUPMENU_QUIT			27
-
-/** options menu return game key */
-#define OPTIONSMENU_RETURNGAME		15
-/** options menu return menu key */
-#define OPTIONSMENU_RETURNMENU		26
-/** options menu volume key */
-#define OPTIONSMENU_VOLUME			30
-/** options menu save game management key */
-#define OPTIONSMENU_SAVEMANAGE		46
-/** options menu advanced options key */
-#define OPTIONSMENU_ADVOPTIONS		47
-
 /** Main menu background image number
-
 	Used when returning from credit sequence to redraw the main menu background image */
-#define MAINMENU_BKGIMAGE		9999
-/** Menu buttons width */
-#define MAINMENU_BUTTONWIDTH	320
-/** Used to calculate the spanning between button and screen */
-#define MAINMENU_BUTTONSPAN		550
+uint32 kPlasmaEffectFilesize = 262176;
 
-/** Music volume button key */
-#define MUSICVOLUME				1
-/** Sound effects volume button key */
-#define SOUNDVOLUME				2
-/** CD volume button key */
-#define CDVOLUME				3
-/** Line-in volume button key */
-#define LINEVOLUME				4
-/** Master volume button key */
-#define MASTERVOLUME			5
+/** Menu buttons width */
+uint16 kMainMenuButtonWidth = 320;
+/** Used to calculate the spanning between button and screen */
+uint16 kMainMenuButtonSpan = 550;
+
+
+/** Main menu types */
+enum MainMenuType {
+	kNewGame		= 20,
+	kContinueGame	= 21,
+	kOptions		= 23,
+	kQuit			= 22,
+	kBackground		= 9999
+};
+
+/** Give up menu types */
+enum GiveUpMenuType {
+	kContinue		= 28,
+	kGiveUp			= 27 // quit
+};
+
+/** Options menu types */
+enum OptionsMenuType {
+	kReturnGame		= 15,
+	kReturnMenu		= 26,
+	kVolume			= 30,
+	kSaveManage		= 46,
+	kAdvanced		= 47
+};
+
+/** Volume menu types */
+enum VolumeMenuType {
+	kMusicVolume	= 1,
+	kSoundVolume	= 2,
+	kCDVolume		= 3,
+	kLineVolume		= 4,
+	kMasterVolume	= 5
+};
 
 /** Main Menu Settings
 
@@ -320,7 +315,7 @@ void processPlasmaEffect(int32 top, int32 color) {
 	bh = bl + 15;
 
 	for (i = 25; i >= 0; i--) {
-		for (j = MAINMENU_BUTTONWIDTH; j >= 0; j--) {
+		for (j = kMainMenuButtonWidth; j >= 0; j--) {
 			temp3 = *temp;
 			temp3 = temp3 >> 1;
 			temp3 += bl;
@@ -371,8 +366,8 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
 	int8 dialText[256];
 	int32 textSize;
 
-	left = width - MAINMENU_BUTTONSPAN / 2;
-	right = width + MAINMENU_BUTTONSPAN / 2;
+	left = width - kMainMenuButtonSpan / 2;
+	right = width + kMainMenuButtonSpan / 2;
 
 	// topheigh is the center Y pos of the button
 	top = topheight - 25;		// this makes the button be 50 height
@@ -497,13 +492,13 @@ void drawButton(int16 *menuSettings, int32 mode) {
 		localData += 1;
 		if (mode != 0) {
 			if (currentButton == buttonNumber) {
-				drawButtonGfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
+				drawButtonGfx(kMainMenuButtonWidth, topHeight, menuItemId, menuItemValue, 1);
 			}
 		} else {
 			if (currentButton == buttonNumber) {
-				drawButtonGfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 1);
+				drawButtonGfx(kMainMenuButtonWidth, topHeight, menuItemId, menuItemValue, 1);
 			} else {
-				drawButtonGfx(MAINMENU_BUTTONWIDTH, topHeight, menuItemId, menuItemValue, 0);
+				drawButtonGfx(kMainMenuButtonWidth, topHeight, menuItemId, menuItemValue, 0);
 			}
 		}
 
@@ -546,9 +541,9 @@ int32 processMenu(int16 * menuSettings) {
 			if (lbaTime - localTime <= 11650) {
 				if (skipIntro == 46)
 					if (skipedKey != 32)
-						return MAINMENU_BKGIMAGE;
+						return kBackground;
 			} else {
-				return MAINMENU_BKGIMAGE;
+				return kBackground;
 			}
 		}
 
@@ -581,7 +576,7 @@ int32 processMenu(int16 * menuSettings) {
 				id = *(localData + currentButton * 2 + 4); // get button parameters from settings array
 
 				switch (id) {
-				case MUSICVOLUME: {
+				case kMusicVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
 						cfgfile.MusicVolume -= 4;
 					}
@@ -591,7 +586,7 @@ int32 processMenu(int16 * menuSettings) {
 					musicVolume(cfgfile.MusicVolume);
 					break;
 				}
-				case SOUNDVOLUME: {
+				case kSoundVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
 						cfgfile.WaveVolume -= 4;
 					}
@@ -601,7 +596,7 @@ int32 processMenu(int16 * menuSettings) {
 					sampleVolume(-1, cfgfile.WaveVolume);
 					break;
 				}
-				case CDVOLUME: {
+				case kCDVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
 						cfgfile.CDVolume -= 4;
 					}
@@ -610,7 +605,7 @@ int32 processMenu(int16 * menuSettings) {
 					}
 					break;
 				}
-				case LINEVOLUME: {
+				case kLineVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
 						cfgfile.LineVolume -= 4;
 					}
@@ -619,7 +614,7 @@ int32 processMenu(int16 * menuSettings) {
 					}
 					break;
 				}
-				case MASTERVOLUME: {
+				case kMasterVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
 						cfgfile.MasterVolume -= 4;
 					}
@@ -674,7 +669,7 @@ int32 advoptionsMenu() {
 
 	do {
 		switch (processMenu(AdvOptionsMenuSettings)) {
-		case OPTIONSMENU_RETURNMENU: {
+		case kReturnMenu: {
 			ret = 1; // quit option menu
 			break;
 		}
@@ -685,7 +680,7 @@ int32 advoptionsMenu() {
 	} while (ret != 1);
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
-	flip(workVideoBuffer);
+	flip();
 
 	return 0;
 }
@@ -698,7 +693,7 @@ int32 savemanageMenu() {
 
 	do {
 		switch (processMenu(SaveManageMenuSettings)) {
-		case OPTIONSMENU_RETURNMENU: {
+		case kReturnMenu: {
 			ret = 1; // quit option menu
 			break;
 		}
@@ -709,7 +704,7 @@ int32 savemanageMenu() {
 	} while (ret != 1);
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
-	flip(workVideoBuffer);
+	flip();
 
 	return 0;
 }
@@ -722,7 +717,7 @@ int32 volumeMenu() {
 
 	do {
 		switch (processMenu(VolumeMenuSettings)) {
-		case OPTIONSMENU_RETURNMENU: {
+		case kReturnMenu: {
 			ret = 1; // quit option menu
 			break;
 		}
@@ -733,7 +728,7 @@ int32 volumeMenu() {
 	} while (ret != 1);
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
-	flip(workVideoBuffer);
+	flip();
 
 	return 0;
 }
@@ -749,26 +744,26 @@ int32 optionsMenu() {
 
 	do {
 		switch (processMenu(OptionsMenuSettings)) {
-		case OPTIONSMENU_RETURNGAME:
-		case OPTIONSMENU_RETURNMENU: {
+		case kReturnGame:
+		case kReturnMenu: {
 			ret = 1; // quit option menu
 			break;
 		}
-		case OPTIONSMENU_VOLUME: {
+		case kVolume: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
-			flip(workVideoBuffer);
+			flip();
 			volumeMenu();
 			break;
 		}
-		case OPTIONSMENU_SAVEMANAGE: {
+		case kSaveManage: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
-			flip(workVideoBuffer);
+			flip();
 			savemanageMenu();
 			break;
 		}
-		case OPTIONSMENU_ADVOPTIONS: {
+		case kAdvanced: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
-			flip(workVideoBuffer);
+			flip();
 			advoptionsMenu();
 			break;
 		}
@@ -778,7 +773,7 @@ int32 optionsMenu() {
 	} while (ret != 1);
 
 	copyScreen(workVideoBuffer, frontVideoBuffer);
-	flip(workVideoBuffer);
+	flip();
 
 	return 0;
 }
@@ -791,7 +786,7 @@ void mainMenu() {
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 
 	// load menu effect file only once
-	plasmaEffectPtr = malloc(PLASMA_EFFECT_FILESIZE);
+	plasmaEffectPtr = (uint8 *)malloc(kPlasmaEffectFilesize);
 	hqrGetEntry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
 	while (!cfgfile.Quit) {
@@ -801,26 +796,26 @@ void mainMenu() {
 		stopSamples();
 
 		switch (processMenu(MainMenuSettings)) {
-		case MAINMENU_NEWGAME: {
+		case kNewGame: {
 			newGameMenu();
 			break;
 		}
-		case MAINMENU_CONTINUEGAME: {
+		case kContinueGame: {
 			continueGameMenu();
 			break;
 		}
-		case MAINMENU_OPTIONS: {
+		case kOptions: {
 			copyScreen(workVideoBuffer, frontVideoBuffer);
-			flip(workVideoBuffer);
-			OptionsMenuSettings[5] = OPTIONSMENU_RETURNMENU;
+			flip();
+			OptionsMenuSettings[5] = kReturnMenu;
 			optionsMenu();
 			break;
 		}
-		case MAINMENU_QUIT: {
+		case kQuit: {
 			cfgfile.Quit = 1;
 			break;
 		}
-		case MAINMENU_BKGIMAGE: {
+		case kBackground: {
 			loadMenuImage(1);
 		}
 		}
@@ -854,9 +849,9 @@ int32 giveupMenu() {
 		initTextBank(currentTextBank + 3);
 
 		fpsCycles(cfgfile.Fps);
-	} while (menuId != GIVEUPMENU_QUIT && menuId != GIVEUPMENU_CONTINUE);
+	} while (menuId != kGiveUp && menuId != kContinue);
 
-	if (menuId == GIVEUPMENU_QUIT)
+	if (menuId == kGiveUp)
 	{
 		stopSamples();
 		return 1;
