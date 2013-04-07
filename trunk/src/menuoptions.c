@@ -28,14 +28,14 @@
 #include "menuoptions.h"
 #include "lbaengine.h"
 #include "main.h"
-#include "images.h"
+#include "screens.h"
 #include "resources.h"
 #include "sdlengine.h"
 #include "text.h"
 #include "gamestate.h"
 #include "music.h"
 #include "keyboard.h"
-#include "movies.h"
+#include "flamovies.h"
 #include "scene.h"
 #include "interface.h"
 #include "menu.h"
@@ -91,7 +91,7 @@ void newGame() {
 	flip();
 	
 	playMidiMusic(1, 0);
-	playMovie(FLA_INTROD);
+	playFlaMovie(FLA_INTROD);
 
 	clearScreen();
 	flip();
@@ -123,7 +123,7 @@ void showCredits() {
 	clearScreen();
 	flip();
 
-	playMovie(FLA_THEEND);
+	playFlaMovie(FLA_THEEND);
 
 	clearScreen();
 	flip();

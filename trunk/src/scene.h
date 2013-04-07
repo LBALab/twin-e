@@ -41,10 +41,12 @@
 #define NUM_MAX_ZONES		100
 #define NUM_MAX_TRACKS		200
 
-#define POSITION_TYPE_NONE		0
-#define POSITION_TYPE_ZONE		1
-#define POSITION_TYPE_SCENE		2
-#define POSITION_TYPE_REBORN	3
+enum ScenePositionType {
+	kNoPosition	= 0,
+	kZone		= 1,
+	kScene		= 2,
+	kReborn		= 3
+};
 
 
 int32 needChangeScene;

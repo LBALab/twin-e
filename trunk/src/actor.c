@@ -104,24 +104,24 @@ void setBehaviour(int32 behaviour) {
 	int32 bodyIdx;
 
 	switch (behaviour) {
-	case NORMAL:
-		heroBehaviour = NORMAL;
+	case kNormal:
+		heroBehaviour = kNormal;
 		sceneHero->entityDataPtr = heroEntityNORMAL;
 		break;
-	case ATHLETIC:
-		heroBehaviour = ATHLETIC;
+	case kAthletic:
+		heroBehaviour = kAthletic;
 		sceneHero->entityDataPtr = heroEntityATHLETIC;
 		break;
-	case AGGRESSIVE:
-		heroBehaviour = AGGRESSIVE;
+	case kAggressive:
+		heroBehaviour = kAggressive;
 		sceneHero->entityDataPtr = heroEntityAGGRESSIVE;
 		break;
-	case DISCRETE:
-		heroBehaviour = DISCRETE;
+	case kDiscrete:
+		heroBehaviour = kDiscrete;
 		sceneHero->entityDataPtr = heroEntityDISCRETE;
 		break;
-	case PROTOPACK:
-		heroBehaviour = PROTOPACK;
+	case kProtoPack:
+		heroBehaviour = kProtoPack;
 		sceneHero->entityDataPtr = heroEntityPROTOPACK;
 		break;
 	};
@@ -136,7 +136,7 @@ void setBehaviour(int32 behaviour) {
 	sceneHero->anim = -1;
 	sceneHero->animType = 0;
 
-	initAnim(ANIM_STANDING, 0, 255, 0);
+	initAnim(kStanding, 0, 255, 0);
 }
 
 /** Initialize sprite actor
@@ -265,8 +265,8 @@ void initModelActor(int32 bodyIdx, int16 actorIdx) {
 	if (localActor->staticFlags.bIsSpriteActor)
 		return;
 
-	if (actorIdx == 0 && heroBehaviour == PROTOPACK && localActor->armor != 0 && localActor->armor != 1) { // if hero
-		setBehaviour(NORMAL);
+	if (actorIdx == 0 && heroBehaviour == kProtoPack && localActor->armor != 0 && localActor->armor != 1) { // if hero
+		setBehaviour(kNormal);
 	}
 
 	if (bodyIdx != -1) {
@@ -460,7 +460,7 @@ void hitActor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32
 	actor->hitBy = actorIdx;
 
 	if (actor->armor <= strengthOfHit) {
-		if (actor->anim == ANIM_BIG_HIT || actor->anim == ANIM_HIT2) {
+		if (actor->anim == kBigHit || actor->anim == kHit2) {
 			int32 tmpAnimPos;
 			tmpAnimPos = actor->animPosition;
 			if (actor->animExtra) {
@@ -474,9 +474,9 @@ void hitActor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32
 			} 
 			
 			if (rand() & 1) {
-				initAnim(ANIM_HIT2, 3, 255, actorIdxAttacked);
+				initAnim(kHit2, 3, 255, actorIdxAttacked);
 			} else {
-				initAnim(ANIM_BIG_HIT, 3, 255, actorIdxAttacked);
+				initAnim(kBigHit, 3, 255, actorIdxAttacked);
 			}
 		}
 
@@ -492,7 +492,7 @@ void hitActor(int32 actorIdx, int32 actorIdxAttacked, int32 strengthOfHit, int32
 			actor->life = 0;
 		}
 	} else {
-		initAnim(ANIM_HIT, 3, 255, actorIdxAttacked);
+		initAnim(kHit, 3, 255, actorIdxAttacked);
 	}
 }
 

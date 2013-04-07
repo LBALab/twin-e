@@ -41,11 +41,11 @@
 #include "gamestate.h"
 #include "grid.h"
 #include "music.h"
-#include "movies.h"
+#include "flamovies.h"
 #include "resources.h"
 #include "collision.h"
 #include "text.h"
-#include "images.h"
+#include "screens.h"
 #include "sdlengine.h"
 #include "keyboard.h"
 #include "interface.h"
@@ -233,7 +233,7 @@ int32 processLifeConditions(ActorStruct *actor) {
 					currentScriptValue = moveAngle;
 				}
 			} else {
-				if (heroBehaviour == DISCRETE) {
+				if (heroBehaviour == kDiscrete) {
 					int32 heroAngle;
 
 					heroAngle = actor->angle + 0x480 - newAngle + 0x400;
@@ -611,7 +611,7 @@ int32 lSET_DIRMODE(int32 actorIdx, ActorStruct *actor) {
 	int32 controlMode = *(scriptPtr++);
 
 	actor->controlMode = controlMode;
-	if (controlMode == kFOLLOW) {
+	if (controlMode == kFollow) {
 		actor->followedActor = *(scriptPtr++);
 	}
 
@@ -624,7 +624,7 @@ int32 lSET_DIRMODE_OBJ(int32 actorIdx, ActorStruct *actor) {
 	int32 controlMode = *(scriptPtr++);
 
 	sceneActors[otherActorIdx].controlMode = controlMode;
-	if (controlMode == kFOLLOW) {
+	if (controlMode == kFollow) {
 		sceneActors[otherActorIdx].followedActor = *(scriptPtr++);
 	}
 
@@ -652,7 +652,7 @@ int32 lCAM_FOLLOW(int32 actorIdx, ActorStruct *actor) {
 int32 lSET_BEHAVIOUR(int32 actorIdx, ActorStruct *actor) {
 	int32 behavior = *(scriptPtr++);
 
-	initAnim(ANIM_STANDING, 0, 255, 0);
+	initAnim(kStanding, 0, 255, 0);
 	setBehaviour(behavior);
 
 	return 0;
@@ -905,7 +905,7 @@ int32 lGIVE_BONUS(int32 actorIdx, ActorStruct *actor) {
 int32 lCHANGE_CUBE(int32 actorIdx, ActorStruct *actor) {
 	int32 sceneIdx = *(scriptPtr++);
 	needChangeScene = sceneIdx;
-	heroPositionType = POSITION_TYPE_SCENE;
+	heroPositionType = kScene;
 	return 0;
 }
 
@@ -1043,7 +1043,7 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 	int32 nameSize = strlen(movie);
 	scriptPtr += nameSize + 1;
 
-	playMovie(movie);
+	playFlaMovie(movie);
 	setPalette(paletteRGBA);
 	clearScreen();
 	flip();

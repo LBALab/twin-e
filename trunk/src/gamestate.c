@@ -39,7 +39,7 @@
 #include "resources.h"
 #include "extra.h"
 #include "sound.h"
-#include "images.h"
+#include "screens.h"
 #include "music.h"
 #include "filereader.h"
 #include "menuoptions.h"
@@ -48,11 +48,11 @@
 #define SAVE_DIR "save//"
 
 int32 magicLevelStrengthOfHit[] = {
-	MAGIC_STRENGTH_NONE,
-	MAGIC_STRENGTH_YELLOW_BALL,
-	MAGIC_STRENGTH_GREEN_BALL,
-	MAGIC_STRENGTH_RED_BALL,
-	MAGIC_STRENGTH_FIRE_BALL,
+	kNoBallStrenght,
+	kYellowBallStrenght,
+	kGreenBallStrenght,
+	kRedBallStrenght,
+	kFireBallStrength,
 	0
 };
 
@@ -173,7 +173,7 @@ void initEngineVars(int32 save) { // reinitAll
 	if (save == -1) {
 		loadGame();
 		if (newHeroX == -1) {
-			heroPositionType = POSITION_TYPE_NONE;	
+			heroPositionType = kNoPosition;	
 		}
 	}
 }
@@ -230,7 +230,7 @@ void loadGame() {
 	frclose(&fr);
 
 	currentSceneIdx = -1;
-	heroPositionType = POSITION_TYPE_REBORN;
+	heroPositionType = kReborn;
 }
 
 void saveGame() {
@@ -350,7 +350,7 @@ void processFoundItem(int32 item) {
 		initVoxToPlay(item);
 	}
 
-	currentAnim = animTable[getBodyAnimIndex(ANIM_FOUND_ITEM, 0)];
+	currentAnim = animTable[getBodyAnimIndex(kFoundItem, 0)];
 
 	tmpAnimTimer = sceneHero->animTimerData;
 	

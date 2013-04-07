@@ -25,8 +25,8 @@
 	$Id$
 */
 
-#ifndef MOVIES_H
-#define MOVIES_H
+#ifndef FLAMOVIES_H
+#define FLAMOVIES_H
 
 #include "main.h"
 
@@ -78,8 +78,8 @@ typedef struct FLASampleStruct {
 /** FLA movie file buffer */
 unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
 
-/** General function to play movies
-	@param movie - movie file path */
-void playMovie(int8 *movie);
+/** Play FLA movies
+	@param flaName FLA movie name */
+void playFlaMovie(int8 *flaName);
 
 #endif

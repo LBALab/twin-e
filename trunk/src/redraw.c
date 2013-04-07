@@ -30,7 +30,7 @@
 #include "lbaengine.h"
 #include "renderer.h"
 #include "interface.h"
-#include "images.h"
+#include "screens.h"
 #include "grid.h"
 #include "scene.h"
 #include "actor.h"

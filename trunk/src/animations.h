@@ -34,54 +34,33 @@
 /** Total number of animations allowed in the game */
 #define NUM_ANIMS 600
 
-/** Standing anim value */
-#define ANIM_STANDING		0
-/** Forward anim value */
-#define ANIM_FORWARD		1
-/** Backward anim value */
-#define ANIM_BACKWARD		2
-/** Turn left anim value */
-#define ANIM_TURNLEFT		3
-/** Turn right anim value */
-#define ANIM_TURNRIGHT		4
-/** Hit anim value */
-#define ANIM_HIT			5
-/** Big hit anim value */
-#define ANIM_BIG_HIT		6
-/** Fall anim value */
-#define ANIM_FALL			7
-/** Landing anim value */
-#define ANIM_LANDING		8
-/** Landing hit anim value */
-#define ANIM_LANDING_HIT	9
-/** Dead anim value */
-#define ANIM_LANDDEATH		10
-/** Action anim value */
-#define ANIM_ACTION			11
-/** Climbing ladder anim value */
-#define ANIM_CLIMB_LADDER	12
-/** Reach top of ladder anim value */
-#define ANIM_TOP_LADDER		13
-/** Jump anim value */
-#define ANIM_JUMP			14
-/** Magic ball throw anim value */
-#define ANIM_THROW_BALL		15
-/** Hide anim value */
-#define ANIM_HIDE			16
-/** Hide anim value */
-#define ANIM_KICK			17
-/** Hide anim value */
-#define ANIM_RIGHT_PUNCH	18
-/** Hide anim value */
-#define ANIM_LEFT_PUNCH		19
-/** Found item anim value */
-#define ANIM_FOUND_ITEM		20
-/** Drawn anim value */
-#define ANIM_DRAWN			21
-/** Hit anim value */
-#define ANIM_HIT2			22
-/** Sabre attack anim value */
-#define ANIM_SABRE_ATTACK	23
+enum AnimationTypes {
+	kStanding			= 0,
+	kForward			= 1,
+	kBackward			= 2,
+	kTurnLeft			= 3,
+	kTurnRight			= 4,
+	kHit				= 5,
+	kBigHit				= 6,
+	kFall				= 7,
+	kLanding			= 8,
+	kLandingHit			= 9,
+	kLandDeath			= 10,
+	kAction				= 11,
+	kClimbLadder		= 12,
+	kTopLadder			= 13,
+	kJump				= 14,
+	kThrowBall			= 15,
+	kHide				= 16,
+	kKick				= 17,
+	kRightPunch			= 18,
+	kLeftPunch			= 19,
+	kFoundItem			= 20,
+	kDrawn				= 21,
+	kHit2				= 22,
+	kSabreAttack		= 23
+};
+
 
 /** Table with all loaded animations */
 uint8* animTable[NUM_ANIMS];

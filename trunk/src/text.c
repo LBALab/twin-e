@@ -36,7 +36,7 @@
 #include "interface.h"
 #include "lbaengine.h"
 #include "keyboard.h"
-#include "images.h"
+#include "screens.h"
 #include "renderer.h"
 #include "sound.h"
 

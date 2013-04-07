@@ -33,7 +33,7 @@
 #endif
 
 #include "sound.h"
-#include "movies.h"
+#include "flamovies.h"
 #include "main.h"
 #include "resources.h"
 #include "hqrdepack.h"

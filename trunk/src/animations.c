@@ -1176,7 +1176,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 		}
 
 		// process wall hit while running
-		if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == ATHLETIC && actor->anim == ANIM_FORWARD) {
+		if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == kAthletic && actor->anim == kForward) {
 			rotateActor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
 
 			destX += processActorX;
@@ -1185,7 +1185,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 			if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
 				if (getBrickShape(destX, processActorY + 0x100, destZ)) {
 					addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
-					initAnim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);
+					initAnim(kBigHit, 2, 0, currentlyProcessedActorIdx);
 
 					if (currentlyProcessedActorIdx == 0) {
 						heroMoved = 1;
@@ -1210,9 +1210,9 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 					stopFalling();
 					processActorY = (collisionY << 8) + 0x100;
 				} else {
-					if (!actorIdx && heroBehaviour == ATHLETIC && actor->anim == brickShape) {
+					if (!actorIdx && heroBehaviour == kAthletic && actor->anim == brickShape) {
 						addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
-						initAnim(ANIM_BIG_HIT, 2, 0, currentlyProcessedActorIdx);	
+						initAnim(kBigHit, 2, 0, currentlyProcessedActorIdx);	
 
 						if (!actorIdx) {
 							heroMoved = 1;
@@ -1268,7 +1268,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 							heroYBeforeFall = processActorY;
 						}
 
-						initAnim(ANIM_FALL, 0, 255, actorIdx);
+						initAnim(kFall, 0, 255, actorIdx);
 					}
 				}
 			}

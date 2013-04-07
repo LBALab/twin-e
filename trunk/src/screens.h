@@ -25,8 +25,8 @@
 	$Id$
 */
 
-#ifndef IMAGES_H
-#define IMAGES_H
+#ifndef SCREENS_H
+#define SCREENS_H
 
 #include "sys.h"
 #include "main.h"
