@@ -73,6 +73,7 @@
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>..\..\libs\win32\SDL\lib</AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -111,7 +112,7 @@
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\holomap.c" />
     <ClCompile Include="..\..\src\hqrdepack.c" />
-    <ClCompile Include="..\..\src\images.c" />
+    <ClCompile Include="..\..\src\screens.c" />
     <ClCompile Include="..\..\src\interface.c" />
     <ClCompile Include="..\..\src\keyboard.c" />
     <ClCompile Include="..\..\src\lbaengine.c" />
@@ -119,7 +120,7 @@
     <ClCompile Include="..\..\src\menu.c" />
     <ClCompile Include="..\..\src\menuoptions.c" />
     <ClCompile Include="..\..\src\movements.c" />
-    <ClCompile Include="..\..\src\movies.c" />
+    <ClCompile Include="..\..\src\flamovies.c" />
     <ClCompile Include="..\..\src\music.c" />
     <ClCompile Include="..\..\src\redraw.c" />
     <ClCompile Include="..\..\src\renderer.c" />
@@ -145,7 +146,7 @@
     <ClInclude Include="..\..\src\grid.h" />
     <ClInclude Include="..\..\src\holomap.h" />
     <ClInclude Include="..\..\src\hqrdepack.h" />
-    <ClInclude Include="..\..\src\images.h" />
+    <ClInclude Include="..\..\src\screens.h" />
     <ClInclude Include="..\..\src\interface.h" />
     <ClInclude Include="..\..\src\keyboard.h" />
     <ClInclude Include="..\..\src\lbaengine.h" />
@@ -153,7 +154,7 @@
     <ClInclude Include="..\..\src\menu.h" />
     <ClInclude Include="..\..\src\menuoptions.h" />
     <ClInclude Include="..\..\src\movements.h" />
-    <ClInclude Include="..\..\src\movies.h" />
+    <ClInclude Include="..\..\src\flamovies.h" />
     <ClInclude Include="..\..\src\music.h" />
     <ClInclude Include="..\..\src\redraw.h" />
     <ClInclude Include="..\..\src\renderer.h" />

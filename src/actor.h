@@ -36,16 +36,14 @@
 /** Total number of bodies allowed in the game */
 #define NUM_BODIES 200
 
-/** Normal hehaviour type*/
-#define NORMAL			0
-/** Athletic hehaviour type*/
-#define ATHLETIC		1
-/** Aggressive hehaviour type*/
-#define AGGRESSIVE		2
-/** Discrete hehaviour type*/
-#define DISCRETE		3
-/** Protopack hehaviour type*/
-#define PROTOPACK		4
+enum HeroBehaviourType {
+	kNormal		= 0,
+	kAthletic	= 1,
+	kAggressive = 2,
+	kDiscrete	= 3,
+	kProtoPack	= 4
+};
+
 
 /** Table with all loaded sprites */
 uint8* spriteTable[NUM_SPRITES];

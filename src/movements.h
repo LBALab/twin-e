@@ -33,14 +33,14 @@
 
 /** Control mode types */
 enum ControlMode {
-	kNO_MOVE	  = 0,
-	kMANUAL		  = 1,
-	kFOLLOW		  = 2,
-	kTRACK		  = 3,
-	kFOLLOW_2	  = 4,
-	kTRACK_ATTACK = 5,
-	kSAME_XZ	  = 6,
-	kRANDOM		  = 7
+	kNoMove			= 0,
+	kManual			= 1,
+	kFollow			= 2,
+	kTrack			= 3,
+	kFollow2		= 4,
+	kTrackAttack	= 5,
+	kSameXZ			= 6,
+	kRandom			= 7
 };
 
 /** Hero moved */

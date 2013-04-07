@@ -44,7 +44,7 @@
 #include "sound.h"
 #include "animations.h"
 #include "extra.h"
-#include "images.h"
+#include "screens.h"
 
 uint8* currentScene;
 
@@ -351,13 +351,13 @@ void changeScene() {
 	initTextBank(currentTextBank + 3);
 	initGrid(needChangeScene);
 
-	if (heroPositionType == POSITION_TYPE_ZONE) {
+	if (heroPositionType == kZone) {
 		newHeroX = zoneHeroX;
 		newHeroY = zoneHeroY;
 		newHeroZ = zoneHeroZ;
 	}
 
-	if (heroPositionType == POSITION_TYPE_SCENE || heroPositionType == POSITION_TYPE_NONE) {
+	if (heroPositionType == kScene || heroPositionType == kNoPosition) {
 		newHeroX = sceneHeroX;
 		newHeroY = sceneHeroY;
 		newHeroZ = sceneHeroZ;
@@ -383,7 +383,7 @@ void changeScene() {
 
 	inventoryNumKeys = 0;
 	disableScreenRecenter = 0;
-	heroPositionType = POSITION_TYPE_NONE;
+	heroPositionType = kNoPosition;
 	sampleAmbienceTime = 0;
 
 	newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
@@ -512,7 +512,7 @@ void processActorZones(int32 actorIdx) {
 					zoneHeroX = actor->X - zone->bottomLeft.X + zone->infoData.ChangeScene.X;
 					zoneHeroY = actor->Y - zone->bottomLeft.Y + zone->infoData.ChangeScene.Y;
 					zoneHeroZ = actor->Z - zone->bottomLeft.Z + zone->infoData.ChangeScene.Z;
-					heroPositionType = POSITION_TYPE_ZONE;
+					heroPositionType = kZone;
 				}
 				break;
 			case kCamera:
@@ -547,7 +547,7 @@ void processActorZones(int32 actorIdx) {
 				break;
 			case kObject:
 				if (!actorIdx && heroAction != 0) {
-					initAnim(ANIM_ACTION, 1, 0, 0);
+					initAnim(kAction, 1, 0, 0);
 					processZoneExtraBonus(zone);
 				}
 				break;
@@ -562,7 +562,7 @@ void processActorZones(int32 actorIdx) {
 				}
 				break;
 			case kLadder:
-				if (!actorIdx && heroBehaviour != PROTOPACK && (actor->anim == ANIM_FORWARD || actor->anim == ANIM_TOP_LADDER || actor->anim == ANIM_CLIMB_LADDER)) {
+				if (!actorIdx && heroBehaviour != kProtoPack && (actor->anim == kForward || actor->anim == kTopLadder || actor->anim == kClimbLadder)) {
 					rotateActor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
 					destX += processActorX;
 					destZ += processActorZ;
@@ -571,9 +571,9 @@ void processActorZones(int32 actorIdx) {
 						if (getBrickShape(destX, actor->Y + 0x100, destZ)) {
 							currentActorInZone = 1;
 							if (actor->Y >= Abs(zone->bottomLeft.Y + zone->topRight.Y) / 2) {
-								initAnim(ANIM_TOP_LADDER, 2, 0, actorIdx); // reached end of ladder
+								initAnim(kTopLadder, 2, 0, actorIdx); // reached end of ladder
 							} else {
-								initAnim(ANIM_CLIMB_LADDER, 0, 255, actorIdx); // go up in ladder
+								initAnim(kClimbLadder, 0, 255, actorIdx); // go up in ladder
 							}
 						}
 					}

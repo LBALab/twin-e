@@ -48,7 +48,7 @@
 
 #include "sdlengine.h"
 #include "main.h"
-#include "images.h"
+#include "screens.h"
 #include "music.h"
 #include "lbaengine.h"
 #include "debug.h"

@@ -36,7 +36,7 @@
 #include "interface.h"
 #include "text.h"
 #include "lbaengine.h"
-#include "images.h"
+#include "screens.h"
 #include "redraw.h"
 
 enum ButtonType {

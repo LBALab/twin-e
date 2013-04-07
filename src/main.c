@@ -34,11 +34,11 @@
 #include "main.h"
 #include "resources.h"
 #include "sdlengine.h"
-#include "images.h"
+#include "screens.h"
 #include "music.h"
 #include "menu.h"
 #include "interface.h"
-#include "movies.h"
+#include "flamovies.h"
 #include "hqrdepack.h"
 #include "scene.h"
 #include "grid.h"
@@ -53,7 +53,7 @@
 #include "sound.h"
 
 /** Engine current version */
-const int8* ENGINE_VERSION = (int8*) "0.1.1";
+const int8* ENGINE_VERSION = (int8*) "0.1.3";
 
 /** Engine configuration filename */
 const int8* CONFIG_FILENAME = (int8*) "lba.cfg";
@@ -81,7 +81,7 @@ int8 CFGList[][22] = {
 	"MidiExec:",
 	"MidiBase:",
 	"MidiType:",
-	"MidiIRQ:",
+	"MidiIRQ:",  //10
 	"MidiDMA:",
 	"WaveDriver:",
 	"WaveExec:",
@@ -90,7 +90,7 @@ int8 CFGList[][22] = {
 	"WaveDMA:",
 	"WaveRate:",
 	"MixerDriver:",
-	"MixerBase:",
+	"MixerBase:",  //20
 	"WaveVolume:",
 	"VoiceVolume:",
 	"MusicVolume:",
@@ -100,25 +100,26 @@ int8 CFGList[][22] = {
 	"Version:",
 	"FullScreen:",
 	"UseCD:",
-	"Sound:",
+	"Sound:", //30
 	"Movie:",
 	"CrossFade:",
 	"Fps:",
 	"Debug:",
-	"UseAutoSaving:", // 18
-	"CombatAuto:",
+	"UseAutoSaving:",
+	"CombatAuto:", 
 	"Shadow:",
 	"SceZoom:",
 	"FillDetails:",
-	"InterfaceStyle"
+	"InterfaceStyle" // 40
 };
 
-int8 LanguageTypes[][8] = {
+int8 LanguageTypes[][10] = {
 	"English",
 	"Français",
 	"Deutsch",
 	"Español",
-	"Italiano"
+	"Italiano",
+	"Português"
 };
 
 /** Allocate video memory, both front and back buffers */
@@ -156,7 +157,7 @@ int getConfigTypeIndex(int8* lineBuffer) {
 		*ptr = 0;
 	}
 
-	for (i = 0; i <= (sizeof(CFGList) / 18); i++) {
+	for (i = 0; i < (sizeof(CFGList) / 22); i++) {
 		if (strlen(CFGList[i])) {
 			if (!strcmp(CFGList[i], buffer)) {
 				return i;
@@ -165,6 +166,33 @@ int getConfigTypeIndex(int8* lineBuffer) {
 	}
 
 	return -1;
+}
+
+/** Gets configuration type index from lba.cfg config file
+	@param lineBuffer buffer with config line
+	@return config type index */
+int getLanguageTypeIndex(int8* language) {
+	int32 i;
+	char buffer[256];
+	char* ptr;
+
+	strcpy(buffer, language);
+
+	ptr = strchr(buffer, ' ');
+
+	if (ptr) {
+		*ptr = 0;
+	}
+
+	for (i = 0; i < (sizeof(LanguageTypes) / 10); i++) {
+		if (strlen(LanguageTypes[i])) {
+			if (!strcmp(LanguageTypes[i], buffer)) {
+				return i;
+			}
+		}
+	}
+
+	return 0; // English
 }
 
 /** Init configuration file \a lba.cfg */
@@ -185,11 +213,11 @@ void initConfigurations() {
 			switch (cfgtype) {
 			case 0:
 				sscanf(buffer, "Language: %s", cfgfile.Language);
-				cfgfile.LanguageId = 0; // TODO
+				cfgfile.LanguageId = getLanguageTypeIndex(cfgfile.Language);
 				break;
 			case 1:
 				sscanf(buffer, "LanguageCD: %s", cfgfile.LanguageCD);
-				cfgfile.LanguageCDId = 1; // TODO
+				cfgfile.LanguageCDId = getLanguageTypeIndex(cfgfile.Language) + 1;
 				break;
 			case 2:
 				sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayTextStr);
@@ -322,7 +350,7 @@ void initEngine() {
 		loadImageDelay(RESSHQR_RELLENTIMG, 2);
 	}
 
-	playMovie(FLA_DRAGON3);
+	playFlaMovie(FLA_DRAGON3);
 
 #endif
 
@@ -382,7 +410,7 @@ int main(int argc, char *argv[]) {
 	printf("Prequengine v%s closed\n", ENGINE_VERSION);
 	if (cfgfile.Debug) {
 		printf("\nPress <ENTER> to quit debug mode\n");
-		//getchar();
+		getchar();
 	}
 	return 0;
 }

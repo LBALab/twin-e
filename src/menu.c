@@ -32,7 +32,7 @@
 #include "resources.h"
 #include "music.h"
 #include "sound.h"
-#include "images.h"
+#include "screens.h"
 #include "sdlengine.h"
 #include "hqrdepack.h"
 #include "lbaengine.h"
@@ -983,17 +983,17 @@ void drawBehaviourMenu(int32 angle) {
 	drawBox(100, 100, 550, 290);
 	drawTransparentBox(101, 101, 549, 289, 2);
 
-	setAnimAtKeyframe(behaviourAnimState[NORMAL], animTable[heroAnimIdx[NORMAL]], behaviourEntity, &behaviourAnimData[NORMAL]);
-	drawBehaviour(NORMAL, angle, 0);
+	setAnimAtKeyframe(behaviourAnimState[kNormal], animTable[heroAnimIdx[kNormal]], behaviourEntity, &behaviourAnimData[kNormal]);
+	drawBehaviour(kNormal, angle, 0);
 
-	setAnimAtKeyframe(behaviourAnimState[ATHLETIC], animTable[heroAnimIdx[ATHLETIC]], behaviourEntity, &behaviourAnimData[ATHLETIC]);
-	drawBehaviour(ATHLETIC, angle, 0);
+	setAnimAtKeyframe(behaviourAnimState[kAthletic], animTable[heroAnimIdx[kAthletic]], behaviourEntity, &behaviourAnimData[kAthletic]);
+	drawBehaviour(kAthletic, angle, 0);
 
-	setAnimAtKeyframe(behaviourAnimState[AGGRESSIVE], animTable[heroAnimIdx[AGGRESSIVE]], behaviourEntity, &behaviourAnimData[AGGRESSIVE]);
-	drawBehaviour(AGGRESSIVE, angle, 0);
+	setAnimAtKeyframe(behaviourAnimState[kAggressive], animTable[heroAnimIdx[kAggressive]], behaviourEntity, &behaviourAnimData[kAggressive]);
+	drawBehaviour(kAggressive, angle, 0);
 
-	setAnimAtKeyframe(behaviourAnimState[DISCRETE], animTable[heroAnimIdx[DISCRETE]], behaviourEntity, &behaviourAnimData[DISCRETE]);
-	drawBehaviour(DISCRETE, angle, 0);
+	setAnimAtKeyframe(behaviourAnimState[kDiscrete], animTable[heroAnimIdx[kDiscrete]], behaviourEntity, &behaviourAnimData[kDiscrete]);
+	drawBehaviour(kDiscrete, angle, 0);
 
 	drawInfoMenu(100, 300);
 
@@ -1007,17 +1007,17 @@ void processBehaviourMenu() {
 	int32 tmpHeroBehaviour;
 	int32 tmpTime;
 
-	if (heroBehaviour == PROTOPACK) {
+	if (heroBehaviour == kProtoPack) {
 		stopSamples();
-		setBehaviour(NORMAL);
+		setBehaviour(kNormal);
 	}
 
 	behaviourEntity = bodyTable[sceneHero->entity];
 
-	heroAnimIdx[NORMAL]     = heroAnimIdxNORMAL;
-	heroAnimIdx[ATHLETIC]   = heroAnimIdxATHLETIC;
-	heroAnimIdx[AGGRESSIVE] = heroAnimIdxAGGRESSIVE;
-	heroAnimIdx[DISCRETE]   = heroAnimIdxDISCRETE;
+	heroAnimIdx[kNormal]     = heroAnimIdxNORMAL;
+	heroAnimIdx[kAthletic]   = heroAnimIdxATHLETIC;
+	heroAnimIdx[kAggressive] = heroAnimIdxAGGRESSIVE;
+	heroAnimIdx[kDiscrete]   = heroAnimIdxDISCRETE;
 
 	setActorAngleSafe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
 

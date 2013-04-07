@@ -35,7 +35,7 @@
 #include "scene.h"
 #include "sdlengine.h"
 #include "interface.h"
-#include "images.h"
+#include "screens.h"
 #include "actor.h"
 #include "renderer.h"
 #include "redraw.h"

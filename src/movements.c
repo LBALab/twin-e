@@ -144,7 +144,7 @@ int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2) {
 		flag = 0;
 	}
 
-	moveAngle = (int32)sqrt(newX + newZ);
+	moveAngle = (int32)sqrt((newX + newZ));
 
 	if (!moveAngle) {
 		return 0;
@@ -349,15 +349,15 @@ void processActorMovements(int32 actorIdx) {
 		heroPressedKey = key;
 	} else {
 		if (!actor->staticFlags.bIsSpriteActor) {
-			if (actor->controlMode != kMANUAL) {
+			if (actor->controlMode != kManual) {
 				actor->angle = getRealAngle(&actor->move);
 			}
 		}
 
 		switch (actor->controlMode) {
-		case kNO_MOVE:
+		case kNoMove:
 			break;
-		case kMANUAL:
+		case kManual:
 			if (!actorIdx) { // take this out when we want to give manual movements to other characters than Hero
 				heroAction = 0;
 
@@ -368,17 +368,17 @@ void processActorMovements(int32 actorIdx) {
 
 				// Process hero actions
 				switch (heroBehaviour) {
-				case NORMAL:
+				case kNormal:
 					if (skipIntro == 0x39) {
 						heroAction = 1;
 					}
 					break;
-				case ATHLETIC:
+				case kAthletic:
 					if (skipIntro == 0x39) {
-						initAnim(ANIM_JUMP, 1, 0, actorIdx);
+						initAnim(kJump, 1, 0, actorIdx);
 					}
 					break;
-				case AGGRESSIVE:
+				case kAggressive:
 					if (skipIntro == 0x39) {
 						if (autoAgressive) {
 							heroMoved = 1;
@@ -388,34 +388,34 @@ void processActorMovements(int32 actorIdx) {
 
 								switch (aggresiveMode) {
 								case 0:
-									initAnim(ANIM_KICK, 1, 0, actorIdx);
+									initAnim(kKick, 1, 0, actorIdx);
 									break;
 								case 1:
-									initAnim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
+									initAnim(kRightPunch, 1, 0, actorIdx);
 									break;
 								case 2:
-									initAnim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
+									initAnim(kLeftPunch, 1, 0, actorIdx);
 									break;
 								}
 							}
 						} else {
 							if (key & 8) {
-								initAnim(ANIM_RIGHT_PUNCH, 1, 0, actorIdx);
+								initAnim(kRightPunch, 1, 0, actorIdx);
 							}
 
 							if (key & 4) {
-								initAnim(ANIM_LEFT_PUNCH, 1, 0, actorIdx);
+								initAnim(kLeftPunch, 1, 0, actorIdx);
 							}
 
 							if (key & 1) {
-								initAnim(ANIM_KICK, 1, 0, actorIdx);
+								initAnim(kKick, 1, 0, actorIdx);
 							}
 						}
 					}
 					break;
-				case DISCRETE:
+				case kDiscrete:
 					if (skipIntro == 0x39) {
-						initAnim(ANIM_HIDE, 0, 255, actorIdx);
+						initAnim(kHide, 0, 255, actorIdx);
 					}
 					break;
 				}
@@ -425,7 +425,7 @@ void processActorMovements(int32 actorIdx) {
 				if (usingSabre == 0) { // Use Magic Ball
 					if (gameFlags[GAMEFLAG_HAS_MAGICBALL]) {
 						if (magicBallIdx == -1) {
-							initAnim(ANIM_THROW_BALL, 1, 0, actorIdx);
+							initAnim(kThrowBall, 1, 0, actorIdx);
 						}
 
 						heroMoved = 1;
@@ -437,7 +437,7 @@ void processActorMovements(int32 actorIdx) {
 							initModelActor(2, actorIdx);
 						}
 
-						initAnim(ANIM_SABRE_ATTACK, 1, 0, actorIdx);
+						initAnim(kSabreAttack, 1, 0, actorIdx);
 
 						heroMoved = 1;
 						actor->angle = getRealAngle(&actor->move);
@@ -454,7 +454,7 @@ void processActorMovements(int32 actorIdx) {
 
 				if (key != heroPressedKey || loopPressedKey != heroPressedKey2) {
 					if (heroMoved) {
-						initAnim(ANIM_STANDING, 0, 255, actorIdx);
+						initAnim(kStanding, 0, 255, actorIdx);
 					}
 				}
 
@@ -462,20 +462,20 @@ void processActorMovements(int32 actorIdx) {
 
 				if (key & 1) { // walk forward
 					if (!currentActorInZone) {
-						initAnim(ANIM_FORWARD, 0, 255, actorIdx);
+						initAnim(kForward, 0, 255, actorIdx);
 					}
 					heroMoved = 1;
 				}
 
 				if (key & 2 && !(key & 1)) { // walk backward
-					initAnim(ANIM_BACKWARD, 0, 255, actorIdx);
+					initAnim(kBackward, 0, 255, actorIdx);
 					heroMoved = 1;
 				}
 
 				if (key & 4) { // turn left
 					heroMoved = 1;
 					if (actor->anim == 0) {
-						initAnim(ANIM_TURNLEFT, 0, 255, actorIdx);
+						initAnim(kTurnLeft, 0, 255, actorIdx);
 					} else {
 						if (!actor->dynamicFlags.bIsRotationByAnim) {
 							actor->angle = getRealAngle(&actor->move);
@@ -486,7 +486,7 @@ void processActorMovements(int32 actorIdx) {
 				if (key & 8) { // turn right
 					heroMoved = 1;
 					if (actor->anim == 0) {
-						initAnim(ANIM_TURNRIGHT, 0, 255, actorIdx);
+						initAnim(kTurnRight, 0, 255, actorIdx);
 					} else {
 						if (!actor->dynamicFlags.bIsRotationByAnim) {
 							actor->angle = getRealAngle(&actor->move);
@@ -510,7 +510,7 @@ void processActorMovements(int32 actorIdx) {
 				heroPressedKey2 = loopPressedKey;
 			}
 			break;
-		case kFOLLOW: {
+		case kFollow: {
 			int32 newAngle = getAngle(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
 			if (actor->staticFlags.bIsSpriteActor) {
 				actor->angle = newAngle;
@@ -519,19 +519,19 @@ void processActorMovements(int32 actorIdx) {
 			}
 		}
 			break;
-		case kTRACK:
+		case kTrack:
 			if (actor->positionInMoveScript == -1) {
 				actor->positionInMoveScript = 0;
 			}
 			break;
-		case kFOLLOW_2:		// unused
-		case kTRACK_ATTACK: // unused
+		case kFollow2:		// unused
+		case kTrackAttack: // unused
 			break;
-		case kSAME_XZ:
+		case kSameXZ:
 			actor->X = sceneActors[actor->followedActor].X;
 			actor->Z = sceneActors[actor->followedActor].Z;
 			break;
-		case kRANDOM: {
+		case kRandom: {
 			if (!actor->dynamicFlags.bIsRotationByAnim) {
 				if (actor->brickShape & 0x80) {
 					moveActor(actor->angle, (((rand() & 0x100) + (actor->angle - 0x100)) & 0x3FF ), actor->speed, &actor->move);                     

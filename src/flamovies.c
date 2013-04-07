@@ -29,10 +29,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include <SDL/SDL_ffmpeg.h>
-
-#include "movies.h"
-#include "images.h"
+#include "flamovies.h"
+#include "screens.h"
 #include "sdlengine.h"
 #include "main.h"
 #include "sound.h"
@@ -46,27 +44,19 @@
 #define CONF_MOVIE_FLA     1
 #define CONF_MOVIE_FLAWIDE 2
 #define CONF_MOVIE_FLAPCX  3
-#define CONF_MOVIE_AVI     4
 
 /** FLA movie extension */
 #define FLA_EXT ".fla"
-/** Common movie directory */
-#define MOVIES_DIR "movies//"
-/** Common movie extension */
-#define MOVIES_EXT ".avi"
 
-/** Load palette frame opcode */
-#define LOAD_PALETTE	0
-/** Fade frame opcode */
-#define FADE			1
-/** Play sample frame opcode */
-#define PLAY_SAMPLE		2
-/** Stop sample frame opcode */
-#define STOP_SAMPLE		4
-/** Draw delta frame opcode */
-#define DELTA_FRAME		5
-/** Draw key frame opcode */
-#define KEY_FRAME		7
+/** FLA Frame Opcode types */
+enum FlaFrameOpcode {
+	kLoadPalette	= 0,
+	kFade			= 1,
+	kPlaySample		= 2,
+	kStopSample		= 4,
+	kDeltaFrame		= 5,
+	kKeyFrame		= 7
+};
 
 /** Auxiliar FLA fade out variable */
 int32 _fadeOut;
@@ -79,10 +69,6 @@ int32 flaSampleTable[100];
 int32 samplesInFla;
 /** Auxiliar work video buffer */
 uint8* workVideoBufferCopy;
-/** Auxiliar scale buffer */
-//unsigned char workVideoBufferNonScale[(SCREEN_WIDTH*SCREEN_HEIGHT)/(SCALE*SCALE)];
-/** FLA movie pointer */
-//unsigned char * flaPtr;
 /** FLA movie header data */
 FLAHeaderStruct flaHeaderData;
 /** FLA movie header data */
@@ -242,13 +228,13 @@ void processFrame() {
 		ptr += 2;
 
 		switch (opcode - 1) {
-		case LOAD_PALETTE: {
+		case kLoadPalette: {
 			int16 numOfColor = *((int16*)ptr);
 			int16 startColor = *((int16*)(ptr + 2));
 			memcpy((palette + (startColor*3)), (ptr + 4), numOfColor*3);
 			break;
 		}
-		case FADE: {
+		case kFade: {
 			// FLA movies don't use cross fade
 			// fade out tricky
 			if (_fadeOut != 1) {
@@ -258,22 +244,22 @@ void processFrame() {
 			}
 			break;
 		}
-		case PLAY_SAMPLE: {
+		case kPlaySample: {
 			memcpy(&sample, ptr, sizeof(FLASampleStruct));
 			playFlaSample(sample.sampleNum, sample.freq, sample.repeat, sample.x, sample.y);
 			break;
 		}
-		case STOP_SAMPLE: {
+		case kStopSample: {
 			stopSample(sample.sampleNum);
 			break;
 		}
-		case DELTA_FRAME: {
+		case kDeltaFrame: {
 			drawDeltaFrame(ptr, FLASCREEN_WIDTH);
 			if (_fadeOut == 1)
 				fadeOutFrames++;
 			break;
 		}
-		case KEY_FRAME: {
+		case kKeyFrame: {
 			drawKeyFrame(ptr, FLASCREEN_WIDTH, FLASCREEN_HEIGHT);
 			break;
 		}
@@ -289,18 +275,46 @@ void processFrame() {
 	//free(workVideoBufferCopy);
 }
 
+/** Play FLA PCX Screens
+	@param flaName FLA movie name */
+void fla_pcxList(int8 *flaName) {
+	// TODO if is using FLA PCX than show the images instead
+}
+
 /** Play FLA movies
-	@param filname FLA movie file name */
-void playFlaMovie(int8 *filename) {
+	@param flaName FLA movie name */
+void playFlaMovie(int8 *flaName) {
 	int32 i;
 	int32 quit = 0;
 	int32 currentFrame;
 	int16 tmpValue;
+	int8 fileNamePath[256];
+
+	stopSamples();
+
+	// Play FLA PCX instead of movies
+	if (cfgfile.Movie == CONF_MOVIE_FLAPCX) {
+		fla_pcxList(flaName);
+		return;
+	}
+
+	stopMusic();
+
+	// take extension if movie name has it
+	for (i = 0; i < (int32)strlen(flaName); i++) {
+		if(flaName[i] == '.') {
+			flaName[i] = 0;
+		}
+	}
+
+	sprintf(fileNamePath, FLA_DIR);
+	strcat(fileNamePath, flaName);
+	strcat(fileNamePath, FLA_EXT);
 
 	_fadeOut = -1;
 	fadeOutFrames = 0;
 
-	if (!fropen2(&frFla, filename, "rb"))
+	if (!fropen2(&frFla, fileNamePath, "rb"))
 		return;
 
 	workVideoBufferCopy = workVideoBuffer;
@@ -346,7 +360,7 @@ void playFlaMovie(int8 *filename) {
 
 					// TRICKY: fade in tricky
 					if (fadeOutFrames >= 2) {
-						flip(frontVideoBuffer);
+						flip();
 						convertPalToRGBA(palette, paletteRGBACustom);
 						fadeToPal(paletteRGBACustom);
 						_fadeOut = -1;
@@ -358,218 +372,22 @@ void playFlaMovie(int8 *filename) {
 					fpsCycles(flaHeaderData.speed + 1);
 
 					readKeys();
+
 					if (skipIntro)
 						break;
 				}
 			} while (!quit);
 		}
 	}
-	if (cfgfile.CrossFade)
+	
+	if (cfgfile.CrossFade) {
 		crossFade(frontVideoBuffer, paletteRGBACustom);
-	else
+	} else {
 		fadeToBlack(paletteRGBACustom);
-	stopSamples();
-}
-
-/** Generic play movies, according with the settings
-	@param movie - movie file path */
-void playMovie(int8 *movie) {
-	int32 i;
-	int8 fileBuf[256];
-
-	stopMusic();
-	stopSamples();
-
-	// take extension if movie name has it
-	for (i = 0; i < (int32)strlen(movie); i++) {
-		if(movie[i] == '.') {
-			movie[i] = 0;
-		}
 	}
 
-	switch(cfgfile.Movie) {
-	case CONF_MOVIE_NONE:
-		break;
-	case CONF_MOVIE_FLA:
-	case CONF_MOVIE_FLAWIDE:
-		sprintf(fileBuf, FLA_DIR);
-		strcat(fileBuf, movie);
-		strcat(fileBuf, FLA_EXT);
-		playFlaMovie(fileBuf);
-		break;
-	case CONF_MOVIE_FLAPCX:
-	case CONF_MOVIE_AVI:
-		sprintf(fileBuf, MOVIES_DIR);
-		strcat(fileBuf, movie);
-		strcat(fileBuf, MOVIES_EXT);
-	default:
-		printf("Movie type not supported yet!! Type: %d", cfgfile.Movie);
-	}
+	stopSamples();
 }
-
-
-//
-//int audioCallback(void *udata, Uint8 *stream, int len)
-//{
-//
-//    /* unpack our void pointer */
-//    SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
-//
-//    int unsigned charsUsed;
-//    int offset = 0;
-//    SDL_ffmpegAudioFrame *frame = SDL_ffmpegGetAudioFrame(file);
-//    if(!frame) return -1;
-//
-//    while(len > 0) {
-//
-//        /* check if we need a new frame */
-//        if(!frame->size) {
-//            frame = SDL_ffmpegGetAudioFrame(file);
-//            if(!frame) return -1;
-//        }
-//
-//        if(frame->size <= len) {
-//            /* this frame is smaller or equal to the amount of data needed. */
-//            unsigned charsUsed = frame->size;
-//        } else {
-//            /* this frame has more data than needed */
-//            unsigned charsUsed = len;
-//        }
-//
-//        /* copy the correct amount of data */
-//        memcpy(stream+offset, frame->buffer, unsigned charsUsed);
-//        /* adjust the needed length accordingly */
-//        len -= unsigned charsUsed;
-//        offset += unsigned charsUsed;
-//
-//        /* we release our audio data, so the decode thread can fill it again */
-//        /* we also inform this function of the amount of unsigned chars we used, so it can */
-//        /* move the buffer accordingly */
-//        /* important! this call is paired with SDL_ffmpegGetAudio */
-//        SDL_ffmpegReleaseAudio(file, frame, unsigned charsUsed);
-//    }
-//
-//    return 0;
-//}
-//
-//
-//
-//void play_avi_movie(char *filename)
-//{
-//    int s;
-//	int w,h;
-//	int done = 0;
-//    SDL_ffmpegFile* film = SDL_ffmpegOpen(filename);
-//	SDL_ffmpegStream *str;
-//	SDL_AudioSpec *specs;
-//
-//	/* open file from arg[1] */
-//    if(!film) {
-//        printf("error opening file\n");
-//        return;
-//    }
-//
-//    /* print some info on detected stream to output */
-//    for(s = 0; s<film->AStreams; s++) {
-//        str = SDL_ffmpegGetAudioStream(film, s);
-//
-//        printf("Info on audiostream #%i:\n", s);
-//        printf("\tChannels: %i\n",      str->channels);
-//        if(strlen(str->language)) printf("\tLanguage: %s\n",      str->language);
-//        printf("\tSampleRate: %i\n",    str->sampleRate);
-//    }
-//
-//    for(s = 0; s<film->VStreams; s++) {
-//        str = SDL_ffmpegGetVideoStream(film, s);
-//
-//        printf("Info on videostream #%i:\n", s);
-//        if(strlen(str->language)) printf("\tLanguage: %s\n",      str->language);
-//        printf("\tFrame: %ix%i\n",  str->width, str->height);
-//        printf("\tFrameRate: %.2ffps\n",  1.0 / (str->frameRate[0] / str->frameRate[1]));
-//    }
-//
-//    /* select the streams you want to decode (example just uses 0 as a default) */
-//    SDL_ffmpegSelectVideoStream(film, 0);
-//    SDL_ffmpegSelectAudioStream(film, 0);
-//
-//    /* get the audiospec which fits the selected videostream, if no videostream */
-//    /* is selected, default values are used (2 channel, 48Khz) */
-//    specs = SDL_ffmpegGetAudioSpec(film, 512, audioCallback);
-//
-//
-//    /* we get the size from our active video stream, if no active video stream */
-//    /* exists, width and height are set to default values (320x240) */
-//    SDL_ffmpegGetVideoSize(film, &w, &h);
-//
-//    /* we start our decode thread, this always tries to buffer in some frames */
-//    /* so we can enjoy smooth playback */
-//    SDL_ffmpegStartDecoding(film);
-//
-//    /* we unpause the audio so our audiobuffer gets read */
-//    SDL_PauseAudio(0);
-//
-//    while( !done ) {
-//		SDL_ffmpegVideoFrame* frame;
-//
-//        /* just some standard SDL event stuff */
-//        SDL_Event event;
-//        while(SDL_PollEvent(&event)) {
-//
-//            if(event.type == SDL_QUIT) {
-//                done = 1;
-//                break;
-//            }
-//
-//            if(event.type == SDL_MOUSEBUTTONDOWN) {
-//				int x,y;
-//				int64_t time;
-//
-//                SDL_PumpEvents();
-//
-//                SDL_GetMouseState(&x, &y);
-//                /* by clicking you turn on the stream, seeking to the percentage */
-//                /* in time, based on the x-position you clicked on */
-//                time = ((double)x / w) * SDL_ffmpegGetDuration(film);
-//
-//                /* we seek to time (milliseconds) */
-//                SDL_ffmpegSeek(film, time);
-//
-//                /* by passing 0(false) as our second argument, we play the file */
-//                /* passing a non-zero value would mean we pause our file */
-//                SDL_ffmpegPause(film, 0);
-//            }
-//        }
-//
-//        /* we retrieve the current image from the file */
-//        /* we get 0 if no file could be retrieved */
-//        /* important! please note this call should be paired with SDL_ffmpegReleaseVideo */
-//        frame = SDL_ffmpegGetVideoFrame(film);
-//
-//        if(frame) {
-//
-//            /* we got a frame, so we better show this one */
-//            SDL_BlitSurface(frame->buffer, 0, screen, 0);
-//
-//            /* After releasing this frame, you can no longer use it. */
-//            /* you should call this function every time you get a frame! */
-//            SDL_ffmpegReleaseVideo(film, frame);
-//
-//            /* we flip the double buffered screen so we might actually see something */
-//            SDL_Flip(screen);
-//        }
-//
-//        /* we wish not to kill our poor cpu, so we give it some timeoff */
-//        SDL_Delay(5);
-//    }
-//
-//    /* after all is said and done, we should call this */
-//    SDL_ffmpegFree(film);
-//
-//    /* the SDL_Quit function offcourse... */
-//    SDL_Quit();
-//
-//    return;
-//}
 
 /*
 void fla_pcxList(char *flaName)

@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "images.h"
+#include "screens.h"
 #include "resources.h"
 #include "main.h"
 #include "sdlengine.h"

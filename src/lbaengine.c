@@ -28,7 +28,7 @@
 #include "lbaengine.h"
 #include "main.h"
 #include "sdlengine.h"
-#include "images.h"
+#include "screens.h"
 #include "grid.h"
 #include "debug.grid.h"
 #include "scene.h"
@@ -155,7 +155,7 @@ int32 runGameEngine() { // mainLoopInteration
 
 		// inventory menu
 		loopInventoryItem = -1;
-		if (loopCurrentKey == 0x36 && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) {
+		if (loopCurrentKey == 0x36 && sceneHero->entity != -1 && sceneHero->controlMode == kManual) {
 			freezeTime();
 			processInventoryMenu();
 			
@@ -171,8 +171,8 @@ int32 runGameEngine() { // mainLoopInteration
 				break;
 			case kiUseSabre:
 				if (sceneHero->body == 2) {
-					if (heroBehaviour == PROTOPACK) {
-						setBehaviour(NORMAL);
+					if (heroBehaviour == kProtoPack) {
+						setBehaviour(kNormal);
 					}
 					initModelActor(2, 0);
 					initAnim(24, 1, 0, 0);
@@ -210,10 +210,10 @@ int32 runGameEngine() { // mainLoopInteration
 					sceneHero->body = 1;
 				}
 
-				if (heroBehaviour == PROTOPACK) {
-					setBehaviour(NORMAL);
+				if (heroBehaviour == kProtoPack) {
+					setBehaviour(kNormal);
 				} else {
-					setBehaviour(PROTOPACK);
+					setBehaviour(kProtoPack);
 				}
 				break;
 			case kiPinguin: {
@@ -272,7 +272,7 @@ int32 runGameEngine() { // mainLoopInteration
 		}
 
 		// Process behaviour menu - Press CTRL
-		if ((loopCurrentKey == 0x1D || loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) && sceneHero->entity != -1 && sceneHero->controlMode == kMANUAL) { // F1..F4 Keys
+		if ((loopCurrentKey == 0x1D || loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) && sceneHero->entity != -1 && sceneHero->controlMode == kManual) { // F1..F4 Keys
 			freezeTime();
 			processBehaviourMenu();
 			unfreezeTime();
@@ -305,10 +305,10 @@ int32 runGameEngine() { // mainLoopInteration
 				sceneHero->body = 1;
 			}
 
-			if (heroBehaviour == PROTOPACK) {
-				setBehaviour(NORMAL);
+			if (heroBehaviour == kProtoPack) {
+				setBehaviour(kNormal);
 			} else {
-				setBehaviour(PROTOPACK);
+				setBehaviour(kProtoPack);
 			}
 		}
 
@@ -361,7 +361,7 @@ int32 runGameEngine() { // mainLoopInteration
 		if (!actor->dynamicFlags.bIsDead) {
 			if (actor->life == 0) {
 				if (a == 0) { // if its hero who died
-					initAnim(ANIM_LANDDEATH, 4, 0, 0);
+					initAnim(kLandDeath, 4, 0, 0);
 					actor->controlMode = 0;
 				} else {
 					playSample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z, a);
@@ -422,7 +422,7 @@ int32 runGameEngine() { // mainLoopInteration
 							if (heroBehaviour != 4 || (brickSound & 0x0F) != actor->anim) {
 								if (!cropBottomScreen)
 								{
-									initAnim(ANIM_DRAWN, 4, 0, 0);
+									initAnim(kDrawn, 4, 0, 0);
 									projectPositionOnScreen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 									cropBottomScreen = projPosY;
 								}
@@ -452,7 +452,7 @@ int32 runGameEngine() { // mainLoopInteration
 							newCameraY = (sceneHero->Y >> 8);
 							newCameraZ = (sceneHero->Z >> 9);
 
-							heroPositionType = POSITION_TYPE_REBORN;
+							heroPositionType = kReborn;
 
 							sceneHero->life = 50;
 							reqBgRedraw = 1;

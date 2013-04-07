@@ -43,11 +43,14 @@
 #define GAMEFLAG_HAS_CLOVER_LEAF		27
 #define GAMEFLAG_INVENTORY_DISABLED		70
 
-#define MAGIC_STRENGTH_NONE			2
-#define MAGIC_STRENGTH_YELLOW_BALL	3
-#define MAGIC_STRENGTH_GREEN_BALL	4
-#define MAGIC_STRENGTH_RED_BALL		6
-#define MAGIC_STRENGTH_FIRE_BALL	8
+/** Magicball strength*/
+enum MagicballStrengthType {
+	kNoBallStrenght			= 2,
+	kYellowBallStrenght		= 3,
+	kGreenBallStrenght		= 4,
+	kRedBallStrenght		= 6,
+	kFireBallStrength		= 8
+};
 
 /** LBA engine game flags to save quest states */
 uint8 gameFlags[256];

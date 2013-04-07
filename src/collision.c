@@ -484,20 +484,20 @@ void stopFalling() { // ReceptionObj()
 		if (fall >= 0x1000) {
 			addExtraSpecial(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
 			processActorPtr->life--;
-			initAnim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
+			initAnim(kLandingHit, 2, 0, currentlyProcessedActorIdx);	
 		} else if (fall >= 0x800) {
 			addExtraSpecial(processActorPtr->X, processActorPtr->Y + 1000, processActorPtr->Z, kHitStars);
 			processActorPtr->life--;
-			initAnim(ANIM_LANDING_HIT, 2, 0, currentlyProcessedActorIdx);	
+			initAnim(kLandingHit, 2, 0, currentlyProcessedActorIdx);	
 		} else if (fall > 10) {
-			initAnim(ANIM_LANDING, 2, 0, currentlyProcessedActorIdx);	
+			initAnim(kLanding, 2, 0, currentlyProcessedActorIdx);	
 		} else {
-			initAnim(ANIM_STANDING, 0, 0, currentlyProcessedActorIdx);	
+			initAnim(kStanding, 0, 0, currentlyProcessedActorIdx);	
 		}
 
 		heroYBeforeFall = 0;
 	} else {
-		initAnim(ANIM_LANDING, 2, processActorPtr->animExtra, currentlyProcessedActorIdx);
+		initAnim(kLanding, 2, processActorPtr->animExtra, currentlyProcessedActorIdx);
 	}
 
 	processActorPtr->dynamicFlags.bIsFalling = 0;

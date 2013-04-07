@@ -29,7 +29,7 @@
 #include "text.h"
 #include "scene.h"
 #include "animations.h"
-#include "images.h"
+#include "screens.h"
 #include "sdlengine.h"
 #include "sound.h"
 
