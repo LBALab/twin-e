@@ -15,7 +15,7 @@ OBJS=   actor.o \
 	grid.o \
 	holomap.o \
 	hqrdepack.o \
-	images.o \
+	screens.o \
 	interface.o \
 	keyboard.o \
 	lbaengine.o \
@@ -23,7 +23,7 @@ OBJS=   actor.o \
 	menu.o \
 	menuoptions.o \
 	movements.o \
-	movies.o \
+	flamovies.o \
 	music.o \
 	redraw.o \
 	renderer.o \
