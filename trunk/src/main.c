@@ -81,18 +81,18 @@ int8 CFGList[][22] = {
 	"MidiExec:",
 	"MidiBase:",
 	"MidiType:",
-	"MidiIRQ:",  //10
-	"MidiDMA:",
-	"WaveDriver:",
+	"MidiIRQ:",  
+	"MidiDMA:", // 10
+	"WaveDriver:", 
 	"WaveExec:",
 	"WaveBase:",
 	"WaveIRQ:",
 	"WaveDMA:",
 	"WaveRate:",
 	"MixerDriver:",
-	"MixerBase:",  //20
+	"MixerBase:",  
 	"WaveVolume:",
-	"VoiceVolume:",
+	"VoiceVolume:", // 20
 	"MusicVolume:",
 	"CDVolume:",
 	"LineVolume:",
@@ -100,9 +100,9 @@ int8 CFGList[][22] = {
 	"Version:",
 	"FullScreen:",
 	"UseCD:",
-	"Sound:", //30
+	"Sound:",
 	"Movie:",
-	"CrossFade:",
+	"CrossFade:", // 30
 	"Fps:",
 	"Debug:",
 	"UseAutoSaving:",
@@ -110,7 +110,8 @@ int8 CFGList[][22] = {
 	"Shadow:",
 	"SceZoom:",
 	"FillDetails:",
-	"InterfaceStyle" // 40
+	"InterfaceStyle", 
+	"WallCollision" // 39
 };
 
 int8 LanguageTypes[][10] = {
@@ -291,6 +292,9 @@ void initConfigurations() {
 				break;
 			case 38:
 				sscanf(buffer, "InterfaceStyle: %d", &cfgfile.InterfaceStyle);
+				break;
+			case 39:
+				sscanf(buffer, "WallCollision: %d", &cfgfile.WallCollision);
 				break;
 			}
 		}
