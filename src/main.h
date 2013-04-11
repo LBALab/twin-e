@@ -123,6 +123,8 @@ typedef struct ConfigFile {
 	int32 Quit;
 	/** Flag to change interface style */
 	int32 InterfaceStyle;
+	/** Flag to toggle Wall Collision */
+	int32 WallCollision;
 } ConfigFile;
 
 /** Configuration file structure
