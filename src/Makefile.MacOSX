@@ -35,7 +35,7 @@ OBJS=actor.o \
 	text.o
 
 LIBS=$(SDL_LIBS) -framework SDL_mixer -framework SDL_ttf
-TARGET=prequengine
+TARGET=twin-e
 INSTALLDIR=../bin
 
 all: $(TARGET)

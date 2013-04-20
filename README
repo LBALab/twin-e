@@ -1,6 +1,7 @@
-Prequengine: a Little Big Adventure engine
+TwinEngine: a Little Big Adventure engine
 	
-Copyright (C) 2008 Prequengine team
+Copyright (C) 2013 The TwinEngine team
+Copyright (C) 2008-2013 Prequengine team
 Copyright (C) 2002-2007 The TwinEngine team
 
 This program is free software; you can redistribute it and/or
@@ -20,26 +21,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 # - Brief description -
 
-Welcome to Prequengine project.
+Welcome to TwinEngine project.
 This project allows you to play Little Big Adventure 1 (LBA1 for short) game.
-It will allow other project modifications to build different games using this engine.
 
 Will be release various public versions during development for testing proposes.
 We appreciate everyone's help to fix all the issues the game may have.
 
+This project was merged with prequengine.
+
 
 # - Not available original features (yet) -
 
-Currently, most of the game features are implemented, the ones that makes you finish the 
-entire game. Although, there are still some particulary features not yet implemented:
-	- Few AI scripts commands;
-	- Show Holomap locations;
-	- Play voice samples while displaying text;
-	- Show bubble cloud while playing voices without text;
-	- Use Meca-Pinguins;
-	- Magicball aiming for keys;
-	- Finish main menu;
-	- Few rendering types;
+The game is at beta stage with most the game features implemented. The entire game is compatible
+and few features are missing.  
+Check the TODO list at https://code.google.com/p/twin-e/wiki/TODO for more informations
 
 
 # - How to use it -
@@ -48,36 +43,23 @@ For public releases, you just need to copy all package content to LBA1 (or other
 game directory. Some files must be overriden to properly run the application engine.
 
 For the compiled version, you just need to copy the application engine and lba.cfg file 
-to LBA1 (or other projects) game directory to play it. You will need the original game
-to play with this engine and also midi_mi_win.hqr file created by LbaWin project
-so you can play and listening MIDI files (this need to be change in future revisions).
-
-
-# - High Quality Music - 
-
-All musics in game (midi, CD) can be replace with MP3/OGG files with better sound
-quality. 
-
-For CD tracks, just create a folder named "music" and inside all CD tracks 
-names like: 1.mp3, 4.mp3, 8.ogg.
-
-For Midi, just create new HQR file with all MP3/OGG files inside. HQR file must 
-be named "midi_mi_win_mp3.hqr" or "midi_mi_win_ogg.hqr".
+to LBA1 game directory to play it. You will need the original game to play with this engine.
 
 
 # - Compiling -
 
-You need libSDL, libSDL_Mixer in order to properly compile prequengine.
-As addicional for in-game debug you need libSDL_ttf.
+You need libSDL, libSDL_Mixer in order to properly compile twin-e.
+As addicional for in-game debug you'll need libSDL_ttf.
+
 
 # on GNU/Linux:
 
 After installing the libsdl, libsdl_mixer and libsdl_ttf development packages,
 go to the trunk/src directory and type "make" (without the quotes, off course).
 This will compile the source code and create an executable file called
-"prequengine". Copy this file to the same place in your system where you have
+"twin-e". Copy this file to the same place in your system where you have
 made a copy of the "lba" directory from the LBA1 CDROM. Also copy the "lba.cfg"
-file to that location. Go to that dir and type "./prequengine"
+file to that location. Go to that dir and type "./twin-e"
 
 If you are a Ubuntu user, the procedure should look like this:
 
@@ -85,9 +67,9 @@ sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
 cd trunk/src
 make
 cp ./lba.cfg ~/Desktop/lba/
-cp ./prequengine ~/Desktop/lba/
+cp ./twin-e ~/Desktop/lba/
 cd ~/Desktop/lba
-./prequengine
+./twin-e
 
 (supposing that you have made a copy of the LBA1 CDROM's "lba" directory in your Desktop)
 
