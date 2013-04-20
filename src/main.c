@@ -52,6 +52,7 @@
 #include "keyboard.h"
 #include "actor.h"
 #include "sound.h"
+#include "midiwintab.h"
 
 /** Engine current version */
 const int8* ENGINE_VERSION = (int8*) "0.2.0";
@@ -307,6 +308,18 @@ void initConfigurations() {
 	fclose(fd);
 }
 
+/** Create Midi Win HQR file */
+void createMidiWinHQR() {
+	FILE *fd;
+    if (!(fd = fopen(HQR_MIDI_MI_WIN_FILE, "r")))
+    {
+		printf("Creating %s file... ", HQR_MIDI_MI_WIN_FILE);
+		fd = fopen(HQR_MIDI_MI_WIN_FILE, "wb");
+		fwrite(arrMidiWin, 1, arrMidiWinSize, fd );
+		printf("DONE!\n");
+	}
+}
+
 /** Initialize LBA engine */
 void initEngine() {
 	// getting configuration file
@@ -327,6 +340,9 @@ void initEngine() {
 
 	allocVideoMemory();
 	clearScreen();
+
+	// if midi win file doens't exist them create it
+	createMidiWinHQR();
 
 	// Toggle fullscreen if Fullscreen flag is set
 	toggleFullscreen();
