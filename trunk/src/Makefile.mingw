@@ -38,9 +38,9 @@ OBJS=   actor.o \
 
 LIBS=$(LDFLAGS)
 
-all: prequengine_mingw
+all: twin-e_mingw
 
-prequengine_mingw: $(OBJS)
+twin-e_mingw: $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LIBS)
 
 .c.o:
@@ -48,7 +48,7 @@ prequengine_mingw: $(OBJS)
 
 clean:
 	@del $(OBJS)
-	@del prequengine_mingw.exe
+	@del twin-e_mingw.exe
 	@del *.bak
 	@del stderr.txt
 	@del stdout.txt

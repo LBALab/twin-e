@@ -1,14 +1,14 @@
 Main team members:
-	Alexandre Fontoura	alexfont	Project Admin/Developer
-
+	Alexandre Fontoura	alexfont		Project Admin/Developer
+	Vincent Hamm 		yaz0r			Project Admin/Developer
+	
 Contributions/Retired team members:
-	Felipe Sanches		jucablues 	Developer
-	Arthur Blot				Developer
-	Toël Hartmann		toel__		Developer
-	Kyuubu 			wett		Developer
+	Arthur Blot			arthur.blot78	Developer
+	Felipe Sanches		jucablues 		Developer
+	Kyuubu 				wett			Developer
+	Toël Hartmann		toel__			Developer
 
 Special Thanks:
-	Vincent Hamm (yaz0r) for releasing TwinEngine code to public
 	Sebástien Viannay for some specific infomation about scene format and actors static/dynamic flags
 
 Bug reporters:
