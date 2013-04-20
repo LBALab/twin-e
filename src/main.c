@@ -54,7 +54,7 @@
 #include "sound.h"
 
 /** Engine current version */
-const int8* ENGINE_VERSION = (int8*) "0.1.3";
+const int8* ENGINE_VERSION = (int8*) "0.2.0";
 
 /** Engine configuration filename */
 const int8* CONFIG_FILENAME = (int8*) "lba.cfg";
@@ -313,8 +313,8 @@ void initEngine() {
 	initConfigurations();
 
 	// Show engine information
-	printf("Prequengine v%s\n", ENGINE_VERSION);
-	printf("(c)2008 The Prequel Engine dev-team. Refer to AUTHORS file for further details.\n");
+	printf("TwinEngine v%s\n\n", ENGINE_VERSION);
+	printf("(c)2002 The TwinEngine team. Refer to AUTHORS file for further details.\n");
 	printf("Released under the terms of the GNU GPL license version 2 (or, at your opinion, any later). See COPYING file.\n\n");
 	printf("The original Little Big Adventure game is:\n\t(c)1994 by Adeline Software International, All Rights Reserved.\n\n");
 
@@ -412,7 +412,7 @@ int main(int argc, char *argv[]) {
 	initEngine();
 	sdlClose();
 	printf("\n\nLBA/Relentless < %s / %s >\n\nOK.\n\n", __DATE__, __TIME__);
-	printf("Prequengine v%s closed\n", ENGINE_VERSION);
+	printf("TwinEngine v%s closed\n", ENGINE_VERSION);
 	if (cfgfile.Debug) {
 		printf("\nPress <ENTER> to quit debug mode\n");
 		getchar();
@@ -438,30 +438,13 @@ int8* ITOA(int32 number) {
 }
 
 
-/** \mainpage LBA Prequel Engine Doxxy Documentation
+/** \mainpage Twinsen's Engine Doxxy Documentation
 
 	\section intro_sec Introduction
 
-	LBA Prequel is project based upon the popular Little Big Adventure games
-	released respectively in 1994 (Relentless in North America) and
-	1997 (Twinsen's Odyssey). Based on the actual LBA game engine,
-	our goal is to create an original game that is loosely based on the
-	story of Twinsen's ancestor, Hegesippe.
-
-	\section proj_sec The Project
-
-	While making the first game write and design we notice we need something
-	more from using the original game engine. Something that could make the
-	difference. Better movies quality, sound quality, quick all the old
-	sound formats the engine support, etc.. So, because of this type of things
-	we, the Prequel team, decide to create a side project which aims to build
-	an engine based on reverse of the original LBA1 engine. We want to make
-	an exact engine since we don't wanna loose all that atmosphere the original
-	games gives to us.
-
-	Even beeing a side project, the engine, for another project, the game, this
-	engine will be available for all people who'd like to make a modification
-	game of LBA1.
+	TwinEngine is a reimplementation project upon the popular 
+	Little Big Adventure games released respectively in 
+	1994 (Relentless in North America) and 	1997 (Twinsen's Odyssey). 
 
 	\section doc_sec Documentation
 
@@ -477,7 +460,8 @@ int8* ITOA(int32 number) {
 
 	Copyright (c) Adeline Software International 1994, All Rights Reserved.\n
 	Copyright (c) 2002-2007 The TwinEngine team.\n
-	Copyright (c) 2008 Prequengine team.
+	Copyright (c) 2008-2013 Prequengine team \n
+	Copyright (c) 2013 The TwinEngine team 
 
 	\section licenc_sec License
 

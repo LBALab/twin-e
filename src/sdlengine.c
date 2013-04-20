@@ -168,7 +168,7 @@ int sdlInitialize() {
 
 	Mix_AllocateChannels(32);
 
-	SDL_WM_SetCaption("Prequengine: a Little Big Adventure engine", "LBAPrequel");
+	SDL_WM_SetCaption("Little Big Adventure: TwinEngine", "twin-e");
 	SDL_PumpEvents();
 
 	keyboard = SDL_GetKeyState(&size);
