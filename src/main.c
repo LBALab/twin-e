@@ -3,9 +3,10 @@
 	This file contains the main engine functions. It also contains
 	configurations file definitions.
 
-	Prequengine: a Little Big Adventure engine
-
-	Copyright (C) 2008 Prequengine team \n
+	TwinEngine: a Little Big Adventure engine
+	
+	Copyright (C) 2013 The TwinEngine team \n
+	Copyright (C) 2008-2013 Prequengine team \n
 	Copyright (C) 2002-2007 The TwinEngine team \n
 
 	This program is free software; you can redistribute it and/or \n
