@@ -146,7 +146,6 @@
     <ClInclude Include="..\..\src\grid.h" />
     <ClInclude Include="..\..\src\holomap.h" />
     <ClInclude Include="..\..\src\hqrdepack.h" />
-    <ClInclude Include="..\..\src\midiwintab.h" />
     <ClInclude Include="..\..\src\screens.h" />
     <ClInclude Include="..\..\src\interface.h" />
     <ClInclude Include="..\..\src\keyboard.h" />
