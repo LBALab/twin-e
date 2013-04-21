@@ -532,174 +532,199 @@ int32 verifyAnimAtKeyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTi
 	return 0;
 }
 
+//--------------------------------
+//helper class
+struct _DataReader {
+    uint8* ptr;
+};
+typedef struct _DataReader DataReader;
+
+int8 readByte(DataReader* data){
+    return *(data->ptr++);
+}
+
+int16 readWord(DataReader* data){
+    int16 result;
+    result = *(data->ptr);
+    data->ptr += 2;
+    return result;
+}
+//--------------------------------
+
+void skipBytes(DataReader* data, int n){
+    data->ptr += n;
+}
+
 /** Process acotr animation actions
 	@param actorIdx Actor index */
 void processAnimActions(int32 actorIdx) {
 	int32 index=0, endAnimEntityIdx, actionType, animPos;
-	uint8 *data;
 	ActorStruct *actor;
 
 	actor = &sceneActors[actorIdx];
-	data = actor->animExtraPtr;
+	if (!actor->animExtraPtr) return; // avoid null pointers
 
-	if (!data) return; // avoid null pointers
+	DataReader* data = (DataReader*) malloc(sizeof(DataReader));
+    data->ptr = actor->animExtraPtr;
 
-	endAnimEntityIdx = *(data++);
+	endAnimEntityIdx = readByte(data);
 	while (index++ < endAnimEntityIdx) {
-		actionType = *(data++) - 5;
+		actionType = readByte(data) - 5;
 		if (actionType >= ACTION_LAST) return;
 
 		switch (actionType) {
 		    case ACTION_HITTING:
-			    animPos = *(data++) - 1;
-			    if (animPos == actor->animPosition) {
-				    actor->strengthOfHit = *(data);
-				    actor->dynamicFlags.bIsHitting = 1;
-			    }
-			    data++;
+			    animPos = readByte(data) - 1;
+		        if (animPos == actor->animPosition) {
+			        actor->strengthOfHit = readByte(data);
+			        actor->dynamicFlags.bIsHitting = 1;
+		        } else {
+                    skipBytes(data, 1);
+                }
 			    break;
 		    case ACTION_SAMPLE:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
-				    int16 sampleIdx = *((int16 *)data);
+				    int16 sampleIdx = readWord(data);
 				    playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
-			    }
-			    data+=2;
+			    } else {
+                    skipBytes(data, 2);
+                }
 			    break;
 		    case ACTION_SAMPLE_FREQ:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int16 sampleIdx, frequency;
-				    sampleIdx = *((int16 *)data); data+=2;
-				    frequency = *((int16 *)data); data+=2;
+				    sampleIdx = readWord(data);
+				    frequency = readWord(data);
 				    frequency = Rnd(frequency) + 0x1000 - (Abs(frequency) >> 1);
 				    playSample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z, actorIdx);
 			    } else {
-				    data+=4;
+                    skipBytes(data, 4);
 			    }
 			    break;
 		    case ACTION_THROW_EXTRA_BONUS:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int32 yHeight, var_C, var_24, var_14, cx, dx, var;
 
-				    yHeight = *((int16 *)data); data+=2;
-				    var_C = *(data++);
-				    cx = *((int16 *)data); data+=2;
-				    dx = actor->angle + *((int16 *)data); data+=2;
-				    var_24 = *((int16 *)data); data+=2;
-				    var_14 = *(data++);
-				    var = *(data++);
+				    yHeight = readWord(data);
+				    var_C = readByte(data);
+				    cx = readWord(data);
+				    dx = actor->angle + readWord(data);
+				    var_24 = readWord(data);
+				    var_14 = readByte(data);
+				    var = readByte(data);
 
 				    addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, cx, dx, var_24, var_14, var);
 			    } else {
-				    data += 11;
+				    skipBytes(data, 11);
 			    }
 			    break;
 		    case ACTION_THROW_MAGIC_BALL:
 			    if (magicBallIdx == -1) {
-				    animPos = *(data++);
+				    animPos = readByte(data);
 				    if (animPos == actor->animPosition) {
 					    int32 var_8, dx, var_24, var_14;
 
-					    var_8 = *((int16 *)data); data += 2;
-					    dx = *((int16 *)data); data += 2;
-					    var_24 = *((int16 *)data); data += 2;
-					    var_14 = *(data++);
+					    var_8 = readWord(data);
+					    dx = readWord(data);
+					    var_24 = readWord(data);
+					    var_14 = readByte(data);
 
 					    addExtraThrowMagicball(actor->X, actor->Y + var_8, actor->Z, dx, actor->angle, var_24, var_14);
 				    } else {
-					    data += 7;
+					    skipBytes(data, 7);
 				    }
 			    } else {
-				    data += 8;
+				    skipBytes(data, 8);
 			    }
     			break;
 		    case ACTION_SAMPLE_REPEAT:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int16 sampleIdx, repeat;
-				    sampleIdx = *((int16 *)data); data+=2;
-				    repeat = *((int16 *)data); data+=2;
+				    sampleIdx = readWord(data);
+				    repeat = readWord(data);
 				    playSample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z, actorIdx);
 			    } else {
-				    data+=4;
+				    skipBytes(data, 4);
 			    }
     			break;
 		    case ACTION_UNKNOWN_6:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int32 var_8, var_C, dx, var_24, temp;
 
-				    var_8 = *((int16 *)data); data += 2;
-				    var_C = *(data++);
-				    dx = *(data++);
-				    var_24 = *((int16 *)data); data += 2;
-				    temp = *(data++);
+				    var_8 = readWord(data);
+				    var_C = readByte(data);
+				    dx = readByte(data);
+				    var_24 = readWord(data);
+				    temp = readByte(data);
 
 				    addExtraAiming(actorIdx, actor->X, actor->Y + var_8, actor->Z, var_C, dx, var_24, temp);
 			    } else {
-				    data+=6;
+				    skipBytes(data, 6);
 			    }
 			    break;
 		    case ACTION_UNKNOWN_7:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int32 yHeight, var_C, var_24, var_14, cx, dx, var;
 
-				    yHeight = *((int16 *)data); data+=2;
-				    var_C = *(data++);
-				    dx = *((int16 *)data); data+=2;
-				    cx = actor->angle + *((int16 *)data); data+=2;
-				    var_24 = *((int16 *)data); data+=2;
-				    var_14 = *(data++);
-				    var = *(data++);
+				    yHeight = readWord(data);
+				    var_C = readByte(data);
+				    dx = readWord(data);
+				    cx = actor->angle + readWord(data);
+				    var_24 = readWord(data);
+				    var_14 = readByte(data);
+				    var = readByte(data);
 
 				    addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, dx, cx, var_24, var_14, var);
 			    } else {
-				    data += 11;
+				    skipBytes(data, 11);
 			    }
     			break;
             case ACTION_SAMPLE_STOP:
-                animPos = *(data++);
+                animPos = readByte(data);
 		        if (animPos == actor->animPosition) {
-			        int32 sampleIdx = *(data++);
+			        int32 sampleIdx = readByte(data);
 		            stopSample(sampleIdx);
 		        }
-		        data += 2;
+		        skipBytes(data, 2);
 			    break;
 		    case ACTION_SAMPLE_BRICK_1:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
 				    int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
 				    playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
 			    }
 			    break;
 		    case ACTION_SAMPLE_BRICK_2:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
 				    int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
 				    playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
 			    }
 			    break;
 		    case ACTION_HERO_HITTING:
-			    animPos = *(data++) - 1;
+			    animPos = readByte(data) - 1;
 			    if (animPos == actor->animPosition) {
 				    actor->strengthOfHit = magicLevelStrengthOfHit[magicLevelIdx];
 				    actor->dynamicFlags.bIsHitting = 1;
 			    }
 			    break;
 		    case ACTION_UNKNOWN_13:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int32 throwX, throwY, throwZ;
 				    int32 distanceX, distanceY, distanceZ;
 				    int32 spriteIdx, strength;
 				    int32 param1, param2, param3, param4;
 
-				    distanceX = *((int16 *)data); data += 2;
-				    distanceY = *((int16 *)data); data += 2;
-				    distanceZ = *((int16 *)data); data += 2;
+				    distanceX = readWord(data);
+				    distanceY = readWord(data);
+				    distanceZ = readWord(data);
 
 				    rotateActor(distanceX, distanceZ, actor->angle);
 
@@ -707,22 +732,22 @@ void processAnimActions(int32 actorIdx) {
 				    throwY = distanceY + actor->Y;
 				    throwZ = destZ + actor->Z;
 
-				    spriteIdx = *(data++);
+				    spriteIdx = readByte(data);
 
-				    param1 = *((int16 *)data); data += 2;
-				    param2 = *((int16 *)data) + actor->angle; data += 2;
-				    param3 = *((int16 *)data); data += 2;
-				    param4 = *(data++);
+				    param1 = readWord(data);
+				    param2 = readWord(data) + actor->angle;
+				    param3 = readWord(data);
+				    param4 = readByte(data);
 
-				    strength = *(data++);
+				    strength = readByte(data);
 
 				    addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
 			    } else {
-				    data += 15;
+				    skipBytes(data, 15);
 			    }
 			    break;
 		    case ACTION_UNKNOWN_14:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int32 newAngle, throwX, throwY, throwZ;
 				    int32 distanceX, distanceY, distanceZ;
@@ -731,9 +756,9 @@ void processAnimActions(int32 actorIdx) {
 
 				    newAngle = getAngle(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
 
-				    distanceX = *((int16 *)data); data += 2;
-				    distanceY = *((int16 *)data); data += 2;
-				    distanceZ = *((int16 *)data); data += 2;
+				    distanceX = readWord(data);
+				    distanceY = readWord(data);
+				    distanceZ = readWord(data);
 
 				    rotateActor(distanceX, distanceZ, actor->angle);
 
@@ -741,40 +766,40 @@ void processAnimActions(int32 actorIdx) {
 				    throwY = distanceY + actor->Y;
 				    throwZ = destZ + actor->Z;
 
-				    spriteIdx = *(data++);
+				    spriteIdx = readByte(data);
 
-				    param1 = *((int16 *)data) + newAngle; data += 2;
-				    param2 = *((int16 *)data) + actor->angle; data += 2;
-				    param3 = *((int16 *)data); data += 2;
-				    param4 = *(data++);
+				    param1 = readWord(data) + newAngle;
+				    param2 = readWord(data) + actor->angle;
+				    param3 = readWord(data);
+				    param4 = readByte(data);
 
-				    strength = *(data++);
+				    strength = readByte(data);
 
 				    addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
 			    } else {
-				    data += 15;
+				    skipBytes(data, 15);
 			    }
 			    break;
 		    case ACTION_UNKNOWN_15:
-			    animPos = *(data++);
+			    animPos = readByte(data);
 			    if (animPos == actor->animPosition) {
 				    int32 distanceX, distanceY, distanceZ;
 				    int32 spriteIdx, targetActor, param3, param4;
 
-				    distanceX = *((int16 *)data); data += 2;
-				    distanceY = *((int16 *)data); data += 2;
-				    distanceZ = *((int16 *)data); data += 2;
+				    distanceX = readWord(data);
+				    distanceY = readWord(data);
+				    distanceZ = readWord(data);
 
 				    rotateActor( distanceX, distanceZ, actor->angle);
 
-				    spriteIdx = *(data++);
-				    targetActor = *(data++);
-				    param3 = *((int16 *)data); data += 2;
-				    param4 = *(data++);
+				    spriteIdx = readByte(data);
+				    targetActor = readByte(data);
+				    param3 = readWord(data);
+				    param4 = readByte(data);
 
 				    addExtraAiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx, targetActor, param3, param4);
 			    } else {
-				    data+=11;
+				    skipBytes(data, 11);
 			    }
 			    break;
 		    case ACTION_UNKNOWN_9:
@@ -783,6 +808,7 @@ void processAnimActions(int32 actorIdx) {
 			    break;
 		}
 	}
+    free(data);
 }
 
 /** Initialize animation
