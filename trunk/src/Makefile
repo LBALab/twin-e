@@ -10,11 +10,11 @@ OBJS=actor.o \
 	debug.scene.o \
 	extra.o \
 	filereader.o \
+	flamovies.o \
 	gamestate.o \
 	grid.o \
 	holomap.o \
 	hqrdepack.o \
-	images.o \
 	interface.o \
 	keyboard.o \
 	lbaengine.o \
@@ -22,7 +22,6 @@ OBJS=actor.o \
 	menu.o \
 	menuoptions.o \
 	movements.o \
-	movies.o \
 	music.o \
 	redraw.o \
 	renderer.o \
@@ -30,6 +29,7 @@ OBJS=actor.o \
 	scene.o \
 	script.life.o \
 	script.move.o \
+	screens.o \
 	sdlengine.o \
 	sound.o \
 	text.o
