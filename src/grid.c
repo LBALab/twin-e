@@ -289,7 +289,7 @@ int processGridMask(uint8 *buffer, uint8 *ptr) {
 	uint8 *ptr2;
 	uint8 *esi;
 	uint8 *edi;
-	uint8 iteration, ch, numOfBlock, ah, bl, al, bh;
+	uint8 iteration, numOfBlock, ah, bl, al, bh;
 	int32 ebx;
 
 	ebx = *((uint32 *)buffer); // brick flag
@@ -303,7 +303,6 @@ int processGridMask(uint8 *buffer, uint8 *ptr) {
 	edi = (uint8 *) ptr;
 
 	iteration = 0;
-	ch = 0;
 
 	do {
 		numOfBlock = 0;
@@ -572,16 +571,14 @@ void createCellingGridMap(uint8* gridPtr) {
 /** Initialize grid (background scenearios)
 	@param index grid index number */
 int32 initGrid(int32 index) {
-	int32 gridSize;
-	int32 bllSize;
-	int32 brickSize;
 
 	// load grids from file
-	gridSize = hqrGetallocEntry(&currentGrid, HQR_LBA_GRI_FILE, index);
-	// load layouts from file
-	bllSize = hqrGetallocEntry(&currentBll, HQR_LBA_BLL_FILE, index);
+	int32 gridSize = hqrGetallocEntry(&currentGrid, HQR_LBA_GRI_FILE, index);
 
-	brickSize = loadGridBricks(gridSize);
+	// load layouts from file
+	hqrGetallocEntry(&currentBll, HQR_LBA_BLL_FILE, index);
+
+	loadGridBricks(gridSize);
 
 	createGridMask();
 
@@ -595,11 +592,10 @@ int32 initGrid(int32 index) {
 /** Initialize celling grid (background scenearios)
 	@param index grid index number */
 int32 initCellingGrid(int32 index) {
-	int32 gridSize;
 	uint8* gridPtr;
 
 	// load grids from file
-	gridSize = hqrGetallocEntry(&gridPtr, HQR_LBA_GRI_FILE, index + CELLING_GRIDS_START_INDEX);
+	hqrGetallocEntry(&gridPtr, HQR_LBA_GRI_FILE, index + CELLING_GRIDS_START_INDEX);
 
 	createCellingGridMap(gridPtr);
 

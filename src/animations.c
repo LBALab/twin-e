@@ -468,7 +468,6 @@ int32 stockAnimation(uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTi
 int32 verifyAnimAtKeyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTimerDataStruct* animTimerDataPtr) {
 	int16 bodyHeader;
 
-	uint8 *edi;
 	uint8 *ebx;
 	int32 ebp;
 	int32 eax;
@@ -487,8 +486,6 @@ int32 verifyAnimAtKeyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTi
 	if (!(bodyHeader & 2)) {
 		return 0;
 	}
-
-	edi = bodyPtr + 16;
 
 	ebx = animTimerDataPtr->ptr;
 	ebp = animTimerDataPtr->time;
@@ -669,10 +666,9 @@ void processAnimActions(int32 actorIdx) {
 			case kActionUnknown7: {
 				animPos = *(data++);
 				if (animPos == actor->animPosition) {
-					int32 yHeight, var_C, var_24, var_14, cx, dx, distance, angle, var;
-
-					distance = getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
-					angle = getAngle(actor->Y, 0, sceneHero->Y, distance);
+					int32 yHeight, var_C, var_24, var_14, cx, dx, var;
+//					int32 distance = getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+//					int32 angle = getAngle(actor->Y, 0, sceneHero->Y, distance);
 
 					yHeight = *((int16 *)data);
 					data+=2;

@@ -649,8 +649,9 @@ int computePolygons() {
 	int16 oldVertexX, oldVertexY;
 	int16 currentVertexX, currentVertexY;
 	int16 size;
-	int32 temp2, temp4, temp5, temp6;
-	int32 step;
+	int32 temp2, temp4, temp6;
+//	int32 temp5;
+//	int32 step;
 	int64 vfloat, vfloat2;
 
 	pRenderV1 = vertexCoordinates;
@@ -744,7 +745,7 @@ int computePolygons() {
 
 				temp4 = ((oldVertexX - currentVertexX) << 16);  // temp4 = size in X << 16
 
-				temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
+				//temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
 				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
 
 				vfloat = ((int64)(oldVertexX - currentVertexX)) / ((int64) oldVertexY);
@@ -752,7 +753,7 @@ int computePolygons() {
 				temp6 >>= 1;
 				temp6 += 0x7FFF;
 
-				step = (uint16) temp5;  // retrieve the size of a step
+//				step = (uint16) temp5;  // retrieve the size of a step
 
 				// temp7 = (((unsigned short)temp6) | ((oldVertexX & 0xFFFF)<<16));
 				vfloat2 = oldVertexX;
@@ -891,7 +892,7 @@ int computePolygons() {
 
 				temp4 = ((currentVertexX - oldVertexX) << 16);  // temp4 = size in X << 16
 
-				temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
+				//temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
 				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
 
 				vfloat = ((int64)(currentVertexX - oldVertexX)) / ((int64) oldVertexY);
@@ -899,7 +900,7 @@ int computePolygons() {
 				temp6 >>= 1;
 				temp6 += 0x7FFF;
 
-				step = (uint16) temp5;  // retrieve the size of a step
+//				step = (uint16) temp5;  // retrieve the size of a step
 
 				// temp7 = (((unsigned short)temp6) | ((oldVertexX & 0xFFFF)<<16));
 				vfloat2 = oldVertexX;
@@ -1027,9 +1028,9 @@ void renderPolygons(int32 ecx, int32 edi) {
 
 	int16 start, stop;
 
-	int64 varf2;
-	int64 varf3;
-	int64 varf4;
+//	int64 varf2;
+//	int64 varf3;
+//	int64 varf4;
 
 	/* if (vtop <= 0 || vbottom <= 0)
 	   return;
@@ -1220,12 +1221,12 @@ void renderPolygons(int32 ecx, int32 edi) {
 				out2 = start + out;
 				hsize = stop - start;
 
-				varf2 = ptr2[480];
-				varf3 = ptr2[0];
+				//varf2 = ptr2[480];
+				//varf3 = ptr2[0];
 
 				ptr2++;
 
-				varf4 = (int64)((int32)varf2 - (int32)varf3);
+				//varf4 = (int64)((int32)varf2 - (int32)varf3);
 
 				if (hsize == 0) {
 					if (start >= 0 && start < 640)
@@ -1435,7 +1436,8 @@ void circleFill(int32 x, int32 y, int32 radius, int8 color) {
 int32 renderModelElements(uint8 *esi) {
 	uint8 *edi;
 	int16 temp;
-	int32 eax, ecx;
+	int32 eax;
+//	int32 ecx;
 
 	int16 counter;
 	int16 type;
@@ -1485,7 +1487,7 @@ int32 renderModelElements(uint8 *esi) {
 		do {    // loop that load all the polygones
 			render23 = edi;
 			currentPolyHeader = (polyHeader *) esi;
-			ecx = *((int32*)esi);
+			//ecx = *((int32*)esi);
 			esi += 2;
 			polyRenderType = currentPolyHeader->renderType;
 
@@ -1845,7 +1847,7 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
 	int32 coY;
 	int32 coZ;
 	uint8 *tmpElemPtr;
-	int32 *tmpLightMatrix;
+//	int32 *tmpLightMatrix;
 	uint8 *tmpShadePtr;
 	int32 numOfShades;
 
@@ -2044,7 +2046,7 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
 
 			tmpElemPtr = pri2Ptr2 = pri2Ptr2 + 38; // next element
 
-			tmpLightMatrix = lightMatrix = lightMatrix + 9;
+			//tmpLightMatrix = lightMatrix = lightMatrix + 9;
 		} while (--numOfPrimitives);
 	}
 

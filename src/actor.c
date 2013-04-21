@@ -74,25 +74,23 @@ void restartHeroScene() {
 
 /** Load hero 3D body and animations */
 void loadHeroEntities() {
-	int32 size;
-
-	size = hqrGetallocEntry(&heroEntityATHLETIC, HQR_FILE3D_FILE, FILE3DHQR_HEROATHLETIC);
+	hqrGetallocEntry(&heroEntityATHLETIC, HQR_FILE3D_FILE, FILE3DHQR_HEROATHLETIC);
 	sceneHero->entityDataPtr = heroEntityATHLETIC;
 	heroAnimIdxATHLETIC = getBodyAnimIndex(0, 0);
 
-	size = hqrGetallocEntry(&heroEntityAGGRESSIVE, HQR_FILE3D_FILE, FILE3DHQR_HEROAGGRESSIVE);
+	hqrGetallocEntry(&heroEntityAGGRESSIVE, HQR_FILE3D_FILE, FILE3DHQR_HEROAGGRESSIVE);
 	sceneHero->entityDataPtr = heroEntityAGGRESSIVE;
 	heroAnimIdxAGGRESSIVE = getBodyAnimIndex(0, 0);
 
-	size = hqrGetallocEntry(&heroEntityDISCRETE, HQR_FILE3D_FILE, FILE3DHQR_HERODISCRETE);
+	hqrGetallocEntry(&heroEntityDISCRETE, HQR_FILE3D_FILE, FILE3DHQR_HERODISCRETE);
 	sceneHero->entityDataPtr = heroEntityDISCRETE;
 	heroAnimIdxDISCRETE = getBodyAnimIndex(0, 0);
 
-	size = hqrGetallocEntry(&heroEntityPROTOPACK, HQR_FILE3D_FILE, FILE3DHQR_HEROPROTOPACK);
+	hqrGetallocEntry(&heroEntityPROTOPACK, HQR_FILE3D_FILE, FILE3DHQR_HEROPROTOPACK);
 	sceneHero->entityDataPtr = heroEntityPROTOPACK;
 	heroAnimIdxPROTOPACK = getBodyAnimIndex(0, 0);
 
-	size = hqrGetallocEntry(&heroEntityNORMAL, HQR_FILE3D_FILE, FILE3DHQR_HERONORMAL);
+	hqrGetallocEntry(&heroEntityNORMAL, HQR_FILE3D_FILE, FILE3DHQR_HERONORMAL);
 	sceneHero->entityDataPtr = heroEntityNORMAL;
 	heroAnimIdxNORMAL = getBodyAnimIndex(0, 0);
 
@@ -169,7 +167,7 @@ int32 initBody(int32 bodyIdx, int32 actorIdx) {
 	uint8 *bodyPtr2;
 	uint8 *bodyPtr3;
 	uint8 *bodyPtr4;
-	int16 *bodyPtr5;
+//	int16 *bodyPtr5;
 	int16 flag;
 	int32 index;
 
@@ -222,7 +220,7 @@ int32 initBody(int32 bodyIdx, int32 actorIdx) {
 				if (*bodyPtr4 != 14)
 					return (index);
 
-				bodyPtr5 = (int16 *) bodyPtr3;
+//				bodyPtr5 = (int16 *) bodyPtr3;
 
 				bottomLeftX = *((uint16*)bodyPtr3);
 				bodyPtr3 += 2;
@@ -252,7 +250,6 @@ int32 initBody(int32 bodyIdx, int32 actorIdx) {
 void initModelActor(int32 bodyIdx, int16 actorIdx) {
 	ActorStruct *localActor;
 	int32  entityIdx;
-	int32  entityIdxOld;
 	int    currentIndex;
 	uint16 *ptr;
 	int16  var1, var2, var3, var4;
@@ -280,7 +277,6 @@ void initModelActor(int32 bodyIdx, int16 actorIdx) {
 		if (localActor->entity == entityIdx)
 			return;
 
-		entityIdxOld = localActor->entity;
 		localActor->entity = entityIdx;
 		localActor->body = bodyIdx;
 		currentIndex = localActor->entity;
