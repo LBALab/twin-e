@@ -27,18 +27,20 @@ OBJS=actor.o \
 	renderer.o \
 	resources.o \
 	scene.o \
+	screens.o \
 	script.life.o \
 	script.move.o \
-	screens.o \
 	sdlengine.o \
 	sound.o \
 	text.o
 
 LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf
+TARGET=twin-e
+INSTALLDIR=../bin
 
-all: prequengine
+all: $(TARGET)
 
-prequengine: $(OBJS)
+$(TARGET): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LIBS)
 
 .c.o:
@@ -46,3 +48,6 @@ prequengine: $(OBJS)
 
 clean:
 	@rm $(OBJS)
+
+install: $(TARGET)
+	cp $(TARGET) $(INSTALLDIR)
