@@ -130,10 +130,10 @@ int sdlInitialize() {
 		exit(1);
 	}
 
-	font = TTF_OpenFont("verdana.ttf", 12);
+	font = TTF_OpenFont("FreeMono.ttf", 12);
 
 	if (font == NULL) {
-		fprintf(stderr, "Couldn't load %d pt font from %s: %s\n", 12, "verdana.ttf", SDL_GetError());
+		fprintf(stderr, "Couldn't load %d pt font from %s: %s\n", 12, "FreeMono.ttf", SDL_GetError());
 		exit(2);
 	}
 
