@@ -535,7 +535,7 @@ int32 verifyAnimAtKeyframe(int32 animIdx, uint8 *animPtr, uint8 *bodyPtr, AnimTi
 /** Process acotr animation actions
 	@param actorIdx Actor index */
 void processAnimActions(int32 actorIdx) {
-	int32 index, endAnimEntityIdx, actionType, animPos;
+	int32 index=0, endAnimEntityIdx, actionType, animPos;
 	uint8 *data;
 	ActorStruct *actor;
 
@@ -544,299 +544,244 @@ void processAnimActions(int32 actorIdx) {
 
 	if (!data) return; // avoid null pointers
 
-	index = 0;
 	endAnimEntityIdx = *(data++);
-
-	while (index < endAnimEntityIdx) {
-		actionType = *(data++);
-
-		actionType -= 5;
-		if (actionType > ACTION_LAST) {
-			return;
-		}
+	while (index++ < endAnimEntityIdx) {
+		actionType = *(data++) - 5;
+		if (actionType >= ACTION_LAST) return;
 
 		switch (actionType) {
-		case ACTION_HITTING: {
-			animPos = *(data++);
-			animPos--;
-			if (animPos == actor->animPosition) {
-				actor->strengthOfHit = *(data);
-				actor->dynamicFlags.bIsHitting = 1;
-			}
-			data++;
+		    case ACTION_HITTING:
+			    animPos = *(data++) - 1;
+			    if (animPos == actor->animPosition) {
+				    actor->strengthOfHit = *(data);
+				    actor->dynamicFlags.bIsHitting = 1;
+			    }
+			    data++;
+			    break;
+		    case ACTION_SAMPLE:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int16 sampleIdx = *((int16 *)data);
+				    playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
+			    }
+			    data+=2;
+			    break;
+		    case ACTION_SAMPLE_FREQ:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int16 sampleIdx, frequency;
+				    sampleIdx = *((int16 *)data); data+=2;
+				    frequency = *((int16 *)data); data+=2;
+				    frequency = Rnd(frequency) + 0x1000 - (Abs(frequency) >> 1);
+				    playSample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z, actorIdx);
+			    } else {
+				    data+=4;
+			    }
+			    break;
+		    case ACTION_THROW_EXTRA_BONUS:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int32 yHeight, var_C, var_24, var_14, cx, dx, var;
+
+				    yHeight = *((int16 *)data); data+=2;
+				    var_C = *(data++);
+				    cx = *((int16 *)data); data+=2;
+				    dx = actor->angle + *((int16 *)data); data+=2;
+				    var_24 = *((int16 *)data); data+=2;
+				    var_14 = *(data++);
+				    var = *(data++);
+
+				    addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, cx, dx, var_24, var_14, var);
+			    } else {
+				    data += 11;
+			    }
+			    break;
+		    case ACTION_THROW_MAGIC_BALL:
+			    if (magicBallIdx == -1) {
+				    animPos = *(data++);
+				    if (animPos == actor->animPosition) {
+					    int32 var_8, dx, var_24, var_14;
+
+					    var_8 = *((int16 *)data); data += 2;
+					    dx = *((int16 *)data); data += 2;
+					    var_24 = *((int16 *)data); data += 2;
+					    var_14 = *(data++);
+
+					    addExtraThrowMagicball(actor->X, actor->Y + var_8, actor->Z, dx, actor->angle, var_24, var_14);
+				    } else {
+					    data += 7;
+				    }
+			    } else {
+				    data += 8;
+			    }
+    			break;
+		    case ACTION_SAMPLE_REPEAT:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int16 sampleIdx, repeat;
+				    sampleIdx = *((int16 *)data); data+=2;
+				    repeat = *((int16 *)data); data+=2;
+				    playSample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z, actorIdx);
+			    } else {
+				    data+=4;
+			    }
+    			break;
+		    case ACTION_UNKNOWN_6:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int32 var_8, var_C, dx, var_24, temp;
+
+				    var_8 = *((int16 *)data); data += 2;
+				    var_C = *(data++);
+				    dx = *(data++);
+				    var_24 = *((int16 *)data); data += 2;
+				    temp = *(data++);
+
+				    addExtraAiming(actorIdx, actor->X, actor->Y + var_8, actor->Z, var_C, dx, var_24, temp);
+			    } else {
+				    data+=6;
+			    }
+			    break;
+		    case ACTION_UNKNOWN_7:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int32 yHeight, var_C, var_24, var_14, cx, dx, var;
+
+				    yHeight = *((int16 *)data); data+=2;
+				    var_C = *(data++);
+				    dx = *((int16 *)data); data+=2;
+				    cx = actor->angle + *((int16 *)data); data+=2;
+				    var_24 = *((int16 *)data); data+=2;
+				    var_14 = *(data++);
+				    var = *(data++);
+
+				    addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, dx, cx, var_24, var_14, var);
+			    } else {
+				    data += 11;
+			    }
+    			break;
+            case ACTION_SAMPLE_STOP:
+                animPos = *(data++);
+		        if (animPos == actor->animPosition) {
+			        int32 sampleIdx = *(data++);
+		            stopSample(sampleIdx);
+		        }
+		        data += 2;
+			    break;
+		    case ACTION_SAMPLE_BRICK_1:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
+				    int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
+				    playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
+			    }
+			    break;
+		    case ACTION_SAMPLE_BRICK_2:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
+				    int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
+				    playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
+			    }
+			    break;
+		    case ACTION_HERO_HITTING:
+			    animPos = *(data++) - 1;
+			    if (animPos == actor->animPosition) {
+				    actor->strengthOfHit = magicLevelStrengthOfHit[magicLevelIdx];
+				    actor->dynamicFlags.bIsHitting = 1;
+			    }
+			    break;
+		    case ACTION_UNKNOWN_13:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int32 throwX, throwY, throwZ;
+				    int32 distanceX, distanceY, distanceZ;
+				    int32 spriteIdx, strength;
+				    int32 param1, param2, param3, param4;
+
+				    distanceX = *((int16 *)data); data += 2;
+				    distanceY = *((int16 *)data); data += 2;
+				    distanceZ = *((int16 *)data); data += 2;
+
+				    rotateActor(distanceX, distanceZ, actor->angle);
+
+				    throwX = destX + actor->X;
+				    throwY = distanceY + actor->Y;
+				    throwZ = destZ + actor->Z;
+
+				    spriteIdx = *(data++);
+
+				    param1 = *((int16 *)data); data += 2;
+				    param2 = *((int16 *)data) + actor->angle; data += 2;
+				    param3 = *((int16 *)data); data += 2;
+				    param4 = *(data++);
+
+				    strength = *(data++);
+
+				    addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
+			    } else {
+				    data += 15;
+			    }
+			    break;
+		    case ACTION_UNKNOWN_14:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int32 newAngle, throwX, throwY, throwZ;
+				    int32 distanceX, distanceY, distanceZ;
+				    int32 spriteIdx, strength;
+				    int32 param1, param2, param3, param4;
+
+				    newAngle = getAngle(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
+
+				    distanceX = *((int16 *)data); data += 2;
+				    distanceY = *((int16 *)data); data += 2;
+				    distanceZ = *((int16 *)data); data += 2;
+
+				    rotateActor(distanceX, distanceZ, actor->angle);
+
+				    throwX = destX + actor->X;
+				    throwY = distanceY + actor->Y;
+				    throwZ = destZ + actor->Z;
+
+				    spriteIdx = *(data++);
+
+				    param1 = *((int16 *)data) + newAngle; data += 2;
+				    param2 = *((int16 *)data) + actor->angle; data += 2;
+				    param3 = *((int16 *)data); data += 2;
+				    param4 = *(data++);
+
+				    strength = *(data++);
+
+				    addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
+			    } else {
+				    data += 15;
+			    }
+			    break;
+		    case ACTION_UNKNOWN_15:
+			    animPos = *(data++);
+			    if (animPos == actor->animPosition) {
+				    int32 distanceX, distanceY, distanceZ;
+				    int32 spriteIdx, targetActor, param3, param4;
+
+				    distanceX = *((int16 *)data); data += 2;
+				    distanceY = *((int16 *)data); data += 2;
+				    distanceZ = *((int16 *)data); data += 2;
+
+				    rotateActor( distanceX, distanceZ, actor->angle);
+
+				    spriteIdx = *(data++);
+				    targetActor = *(data++);
+				    param3 = *((int16 *)data); data += 2;
+				    param4 = *(data++);
+
+				    addExtraAiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx, targetActor, param3, param4);
+			    } else {
+				    data+=11;
+			    }
+			    break;
+		    case ACTION_UNKNOWN_9:
+			    break;
+		    default:
+			    break;
 		}
-			break;
-		case ACTION_SAMPLE: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int16 sampleIdx = *((int16 *)data);
-				playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
-			}
-			data+=2;
-		}
-			break;
-		case ACTION_SAMPLE_FREQ: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int16 sampleIdx, frequency;
-				sampleIdx = *((int16 *)data); data+=2;
-				frequency = *((int16 *)data); data+=2;
-				frequency = Rnd(frequency) + 0x1000 - (Abs(frequency) >> 1);
-				playSample(sampleIdx, frequency, 1, actor->X, actor->Y, actor->Z, actorIdx);
-			} else {
-				data+=4;
-			}
-		}
-			break;
-		case ACTION_THROW_EXTRA_BONUS: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int32 yHeight, var_C, var_24, var_14, cx, dx, var;
-
-				yHeight = *((int16 *)data);
-				data+=2;
-				var_C = *(data++);
-				cx = *((int16 *)data);
-				data+=2;
-				dx = actor->angle + *((int16 *)data);
-				data+=2;
-				var_24 = *((int16 *)data);
-				data+=2;
-				var_14 = *(data++);
-				var = *(data++);
-
-				addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, cx, dx, var_24, var_14, var);
-			} else {
-				data += 11;
-			}
-		}
-			break;
-		case ACTION_THROW_MAGIC_BALL: {
-			if (magicBallIdx == -1) {
-				animPos = *(data++);
-				if (animPos == actor->animPosition) {
-					int32 var_8, dx, var_24, var_14;
-
-					var_8 = *((int16 *)data);
-					data += 2;
-					dx = *((int16 *)data);
-					data += 2;
-					var_24 = *((int16 *)data);
-					data += 2;
-					var_14 = *(data++);
-
-					addExtraThrowMagicball(actor->X, actor->Y + var_8, actor->Z, dx, actor->angle, var_24, var_14);
-				} else {
-					data += 7;
-				}
-			} else {
-				data += 8;
-			}
-		}
-			break;
-		case ACTION_SAMPLE_REPEAT: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int16 sampleIdx, repeat;
-				sampleIdx = *((int16 *)data); data+=2;
-				repeat = *((int16 *)data); data+=2;
-				playSample(sampleIdx, 0x1000, repeat, actor->X, actor->Y, actor->Z, actorIdx);
-			} else {
-				data+=4;
-			}
-		}
-			break;
-		case ACTION_UNKNOWN_6: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int32 var_8, var_C, dx, var_24, temp;
-
-				var_8 = *((int16 *)data);
-				data += 2;
-				var_C = *(data++);
-				dx = *(data++);
-				var_24 = *((int16 *)data);
-				data += 2;
-				temp = *(data++);
-
-				addExtraAiming(actorIdx, actor->X, actor->Y + var_8, actor->Z, var_C, dx, var_24, temp);
-			} else {
-				data+=6;
-			}
-		}
-			break;
-		case ACTION_UNKNOWN_7: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int32 yHeight, var_C, var_24, var_14, cx, dx, var;
-//					int32 distance = getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
-//					int32 angle = getAngle(actor->Y, 0, sceneHero->Y, distance);
-
-				yHeight = *((int16 *)data);
-				data+=2;
-				var_C = *(data++);
-				dx = *((int16 *)data);
-				data+=2;
-				cx = actor->angle + *((int16 *)data);
-				data+=2;
-				var_24 = *((int16 *)data);
-				data+=2;
-				var_14 = *(data++);
-				var = *(data++);
-
-				addExtraThrow(actorIdx, actor->X, actor->Y + yHeight, actor->Z, var_C, dx, cx, var_24, var_14, var);
-			} else {
-				data += 11;
-			}
-		}
-			break;
-		case ACTION_SAMPLE_STOP: {
-			int32 sampleIdx = -1;
-			animPos = *(data++);
-			sampleIdx = *(data++);
-			if (animPos == actor->animPosition) {
-				stopSample(sampleIdx);
-			}
-			data += 2;
-		}
-			break;
-		case ACTION_SAMPLE_BRICK_1: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
-				int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
-				playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
-			}
-		}
-			break;
-		case ACTION_SAMPLE_BRICK_2: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition && (actor->brickSound & 0x0F0) != 0x0F0) {
-				int16 sampleIdx = (actor->brickSound & 0x0F) + 126;
-				playSample(sampleIdx, Rnd(1000) + 3596, 1, actor->X, actor->Y, actor->Z, actorIdx);
-			}
-		}
-			break;
-		case ACTION_HERO_HITTING: {
-			animPos = *(data++);
-			animPos--;
-			if (animPos == actor->animPosition) {
-				actor->strengthOfHit = magicLevelStrengthOfHit[magicLevelIdx];
-				actor->dynamicFlags.bIsHitting = 1;
-			}
-		}
-			break;
-		case ACTION_UNKNOWN_13: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int32 throwX, throwY, throwZ;
-				int32 distanceX, distanceY, distanceZ;
-				int32 spriteIdx, strength;
-				int32 param1, param2, param3, param4;
-
-				distanceX = *((int16 *)data);
-				data += 2;
-				distanceY = *((int16 *)data);
-				data += 2;
-				distanceZ = *((int16 *)data);
-				data += 2;
-
-				rotateActor(distanceX, distanceZ, actor->angle);
-
-				throwX = destX + actor->X;
-				throwY = distanceY + actor->Y;
-				throwZ = destZ + actor->Z;
-
-				spriteIdx = *(data++);
-
-				param1 = *((int16 *)data);
-				data += 2;
-				param2 = *((int16 *)data) + actor->angle;
-				data += 2;
-				param3 = *((int16 *)data);
-				data += 2;
-				param4 = *(data++);
-
-				strength = *(data++);
-
-				addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
-			} else {
-				data += 15;
-			}
-		}
-			break;
-		case ACTION_UNKNOWN_14: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int32 newAngle, throwX, throwY, throwZ;
-				int32 distanceX, distanceY, distanceZ;
-				int32 spriteIdx, strength;
-				int32 param1, param2, param3, param4;
-
-				newAngle = getAngle(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
-
-				distanceX = *((int16 *)data);
-				data += 2;
-				distanceY = *((int16 *)data);
-				data += 2;
-				distanceZ = *((int16 *)data);
-				data += 2;
-
-				rotateActor(distanceX, distanceZ, actor->angle);
-
-				throwX = destX + actor->X;
-				throwY = distanceY + actor->Y;
-				throwZ = destZ + actor->Z;
-
-				spriteIdx = *(data++);
-
-				param1 = *((int16 *)data) + newAngle;
-				data += 2;
-				param2 = *((int16 *)data) + actor->angle;
-				data += 2;
-				param3 = *((int16 *)data);
-				data += 2;
-				param4 = *(data++);
-
-				strength = *(data++);
-
-				addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx, param1, param2, param3, param4, strength);
-			} else {
-				data += 15;
-			}
-		}
-			break;
-		case ACTION_UNKNOWN_15: {
-			animPos = *(data++);
-			if (animPos == actor->animPosition) {
-				int32 distanceX, distanceY, distanceZ;
-				int32 spriteIdx, targetActor, param3, param4;
-
-				distanceX = *((int16 *)data);
-				data += 2;
-				distanceY = *((int16 *)data);
-				data += 2;
-				distanceZ = *((int16 *)data);
-				data += 2;
-
-				rotateActor( distanceX, distanceZ, actor->angle);
-
-				spriteIdx = *(data++);
-				targetActor = *(data++);
-				param3 = *((int16 *)data);
-				data += 2;
-				param4 = *(data++);
-
-				addExtraAiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx, targetActor, param3, param4);
-			} else {
-				data+=11;
-			}
-		}
-			break;
-		case ACTION_UNKNOWN_9:
-		default:
-			break;
-		}
-		index++;
 	}
 }
 
