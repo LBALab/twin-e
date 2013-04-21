@@ -126,7 +126,7 @@ void setActorAngle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveS
 	@param x2 Actor 2 X
 	@param z2 Actor 2 Z */
 int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2) {
-	int32 newX, newZ, difX, difZ, tmpX, tmpZ, tmpEx, flag, destAngle, startAngle, stopAngle, finalAngle;
+	int32 newX, newZ, difX, difZ, tmpX, tmpZ, tmpEx, flag, destAngle, startAngle, finalAngle;
 
 	difZ = tmpZ = z2 - z1;
 	newZ = tmpZ * tmpZ;
@@ -154,7 +154,7 @@ int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2) {
 	destAngle = (difZ << 14) / moveAngle;
 
 	startAngle = 0;
-	stopAngle  = 0x100;
+//	stopAngle  = 0x100;
 
 	while (shadeAngleTab3[startAngle] > destAngle) {
 		startAngle++;

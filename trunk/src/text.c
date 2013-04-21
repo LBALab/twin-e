@@ -194,8 +194,6 @@ void initTextBank(int32 bankIdx) { // InitDial
 void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 	uint8 sizeX;
 	uint8 sizeY;
-	uint8 keptsizeX;
-	uint8 keptsizeY;
 	uint8 param1;
 	uint8 param2;
 	uint8 *data;
@@ -217,8 +215,9 @@ void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 
 	data = fontPtr + *((int16 *)(fontPtr + character * 4));
 
-	keptsizeX = (dialTextSize = sizeX = *(data++)) + 2;
-	keptsizeY = (sizeY = *(data++)) + 4;
+	dialTextSize = sizeX = *(data++);
+	sizeY = *(data++);
+
 	param1 = *(data++);
 	param2 = *(data++);
 
@@ -633,7 +632,7 @@ int printText10() { // printText10()
 
 	printText8Sub4(TEXT_CurrentLetterX, TEXT_CurrentLetterY, *printText8Ptr2);
 	printText10Sub2();
-	TEXT_GetLetterSize(*printText8Ptr2, &charWidth, &charHeight, (int8*)fontPtr);
+	TEXT_GetLetterSize(*printText8Ptr2, &charWidth, &charHeight, (uint8*)fontPtr);
 
 	if (*(printText8Ptr2) != 0x20) {
 		TEXT_CurrentLetterX += charWidth + 2;

@@ -220,13 +220,6 @@ void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
 int32 enterPlayerName(int32 textIdx) {
 	int8 buffer[256];
 
-	int32 a, b, c, e;
-
-	e = 1;
-	a = -1;
-	b = 0;
-	c = 0;
-
 	while(1) {
 		copyScreen(workVideoBuffer, frontVideoBuffer);
 		flip(); //frontVideoBuffer

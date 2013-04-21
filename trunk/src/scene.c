@@ -290,10 +290,8 @@ void loadScene() {
 
 /** Initialize new scene */
 int32 initScene(int32 index) {
-	int32 sceneSize;
-
 	// load scene from file
-	sceneSize = hqrGetallocEntry(&currentScene, HQR_SCENE_FILE, index);
+	hqrGetallocEntry(&currentScene, HQR_SCENE_FILE, index);
 
 	loadScene();
 

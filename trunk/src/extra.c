@@ -682,10 +682,9 @@ void processExtras() {
 			}
 			// process magic ball extra aiming for key
 			if (extra->type & 0x200) {
-				int32 actorIdx, actorIdxAttacked, tmpAngle, angle;
-
+				int32 actorIdx, tmpAngle, angle;
+//				int32 actorIdxAttacked = extra->lifeTime;
                 ExtraListStruct *extraKey = &extraList[extra->actorIdx];
-                actorIdxAttacked = extra->lifeTime;
 				actorIdx = extra->actorIdx;
 
                 tmpAngle = getAngle(extra->X, extra->Z, extraKey->X, extraKey->Z);

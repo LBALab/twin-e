@@ -602,8 +602,8 @@ int32 checkExtraCollisionWithExtra(ExtraListStruct* extra, int32 extraIdx) {
 		ExtraListStruct *extraTest = &extraList[i];
 		if ( i != extraIdx && extraTest->info0 != -1) {
 			int32 xLeftTest, xRightTest, yLeftTest, yRightTest, zLeftTest, zRightTest;
-            int16 * spriteBoundingTest;
-	        spriteBoundingTest = (int16*)(spriteBoundingBoxPtr + extraTest->info0 * 16 + 4);
+//            int16 * spriteBoundingTest;
+//	        spriteBoundingTest = (int16*)(spriteBoundingBoxPtr + extraTest->info0 * 16 + 4);
 
 			xLeftTest  = *(spriteBounding++) + extraTest->X;
 	        xRightTest = *(spriteBounding++) + extraTest->X;
