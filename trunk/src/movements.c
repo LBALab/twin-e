@@ -217,16 +217,7 @@ void rotateActor(int32 X, int32 Z, int32 angle) {
 	@param x2 Actor 2 X coordinate
 	@param z2 Actor 2 Z coordinate */
 int32 getDistance2D(int32 x1, int32 z1, int32 x2, int32 z2) {
-	int32 newX;
-	int32 newZ;
-
-	newX = x2 - x1;
-	newX *= newX;
-
-	newZ = z2 - z1;
-	newZ *= newZ;
-
-	return (int32)sqrt(newX + newZ);
+	return (int32)sqrt((x2-x1)*(x2-x1) + (z2-z1)*(z2-z1));
 }
 
 /** Get distance value in 3D
@@ -237,20 +228,7 @@ int32 getDistance2D(int32 x1, int32 z1, int32 x2, int32 z2) {
 	@param y2 Actor 2 Y coordinate
 	@param z2 Actor 2 Z coordinate */
 int32 getDistance3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2) {
-	int32 newX;
-	int32 newY;
-	int32 newZ;
-
-	newX = x2 - x1;
-	newX *= newX;
-
-	newY = y2 - y1;
-	newY *= newY;
-	
-	newZ = z2 - z1;
-	newZ *= newZ;
-
-	return (int32)sqrt(newX + newY + newZ);
+	return (int32)sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
 }
 
 /** Move actor around the scene
