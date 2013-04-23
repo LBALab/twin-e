@@ -196,19 +196,9 @@ int32 getRealValue(ActorMoveStruct * movePtr) {
 	@param Z Actor current Z coordinate
 	@param angle Actor angle to rotate */
 void rotateActor(int32 X, int32 Z, int32 angle) {
-	int32 angle1;
-	int32 angle2;
-
-	if (!angle) {
-		destX = X;
-		destZ = Z;
-	} else {
-		angle1 = shadeAngleTab1[angle & 0x3FF];
-		angle2 = shadeAngleTab1[(angle + 0x100) & 0x3FF];
-
-		destX = (X * angle2 + Z * angle1) >> 14;
-		destZ = (Z * angle2 - X * angle1) >> 14;
-	}
+    double radians = 2*PI*angle/0x400;
+    destX = X*cos(radians) + Z*sin(radians);
+    destZ = -X*sin(radians) + Z*cos(radians);
 }
 
 /** Get distance value in 2D
