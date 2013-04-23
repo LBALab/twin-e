@@ -152,15 +152,15 @@ int32 processLifeConditions(ActorStruct *actor) {
 		otherActor = &sceneActors[actorIdx];
 		if (!otherActor->dynamicFlags.bIsDead) {
 			if (Abs(actor->Y - otherActor->Y) >= 1500) {
-				currentScriptValue = 0x7D00;	
+				currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;	
 			} else {
 				currentScriptValue = getDistance2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
-				if (Abs(currentScriptValue) > 0x7D00) {
-					currentScriptValue = 0x7D00;
+				if (Abs(currentScriptValue) > MAX_TARGET_ACTOR_DISTANCE) {
+					currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 				}
 			}
 		} else {
-			currentScriptValue = 0x7D00;
+			currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 		}
 	}
 		break;
@@ -214,12 +214,12 @@ int32 processLifeConditions(ActorStruct *actor) {
 
 		if (!targetActor->dynamicFlags.bIsDead) {
 			if (Abs(targetActor->Y - actor->Y) < 1500) {
-				newAngle = getAngle(actor->X, actor->Z, targetActor->X, targetActor->Z);
-				if (Abs(moveAngle) > 0x7D00) {
-					moveAngle = 0x7D00;
+				newAngle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, targetActor->X, targetActor->Z);
+				if (Abs(targetActorDistance) > MAX_TARGET_ACTOR_DISTANCE) {
+					targetActorDistance = MAX_TARGET_ACTOR_DISTANCE;
 				}
 			} else {
-				moveAngle = 0x7D00;
+				targetActorDistance = MAX_TARGET_ACTOR_DISTANCE;
 			}
 
 			if (!targetActorIdx) {
@@ -229,9 +229,9 @@ int32 processLifeConditions(ActorStruct *actor) {
 				heroAngle &= 0x3FF;
 
 				if (Abs(heroAngle) > 0x100) {
-					currentScriptValue = 0x7D00;
+					currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 				} else {
-					currentScriptValue = moveAngle;
+					currentScriptValue = targetActorDistance;
 				}
 			} else {
 				if (heroBehaviour == kDiscrete) {
@@ -241,16 +241,16 @@ int32 processLifeConditions(ActorStruct *actor) {
 					heroAngle &= 0x3FF;
 
 					if (Abs(heroAngle) > 0x100) {
-						currentScriptValue = 0x7D00;
+						currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 					} else {
-						currentScriptValue = moveAngle;
+						currentScriptValue = targetActorDistance;
 					}
 				} else {
-					currentScriptValue = moveAngle;
+					currentScriptValue = targetActorDistance;
 				}
 			}
 		} else {
-			currentScriptValue = 0x7D00;
+			currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 		}
 	}
 		break;
@@ -306,11 +306,11 @@ int32 processLifeConditions(ActorStruct *actor) {
 
 		if (!targetActor->dynamicFlags.bIsDead) {
 			currentScriptValue = getDistance3D(actor->X, actor->Y, actor->Z, targetActor->X, targetActor->Y, targetActor->Z);		
-			if (Abs(currentScriptValue) > 0x7D00) {
-				currentScriptValue = 0x7D00;
+			if (Abs(currentScriptValue) > MAX_TARGET_ACTOR_DISTANCE) {
+				currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 			}
 		} else {
-			currentScriptValue = 0x7D00;
+			currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
 		}
 	}
 		break;

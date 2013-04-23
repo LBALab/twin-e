@@ -65,7 +65,7 @@ int16 previousActorY; // processActorVar3
 /** Previous process actor Z coordinate */
 int16 previousActorZ; // processActorVar4
 
-int32 moveAngle; // DoTrackVar1
+int32 targetActorDistance; // DoTrackVar1
 
 
 /** Get shadow position
@@ -97,7 +97,7 @@ void setActorAngle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveS
 	@param z1 Actor 1 Z
 	@param x2 Actor 2 X
 	@param z2 Actor 2 Z */
-int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2);
+int32 getAngleAndSetTargetActorDistance(int32 x1, int32 z1, int32 x2, int32 z2);
 
 /** Get actor real angle
 	@param movePtr time pointer to process */

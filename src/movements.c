@@ -125,58 +125,18 @@ void setActorAngle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveS
 	@param z1 Actor 1 Z
 	@param x2 Actor 2 X
 	@param z2 Actor 2 Z */
-int32 getAngle(int32 x1, int32 z1, int32 x2, int32 z2) {
-	int32 newX, newZ, difX, difZ, tmpX, tmpZ, tmpEx, flag, destAngle, startAngle, finalAngle;
+#define PI 3.14159265
+int32 getAngleAndSetTargetActorDistance(int32 x1, int32 z1, int32 x2, int32 z2) {
+    //Pythagoras
+    targetActorDistance = (int32)sqrt(((z2 - z1)*(z2 - z1) + (x2 - x1)*(x2 - x1)));
 
-	difZ = tmpZ = z2 - z1;
-	newZ = tmpZ * tmpZ;
+	if (targetActorDistance == 0)
+        return 0;
 
-	difX = tmpX = x2 - x1;
-	newX = tmpX * tmpX;
-
-	// Exchange X and Z
-	if (newX < newZ) {
-		tmpEx = difX;
-		difX = difZ;
-		difZ = tmpEx;
-
-		flag = 1;
-	} else {
-		flag = 0;
-	}
-
-	moveAngle = (int32)sqrt((newX + newZ));
-
-	if (!moveAngle) {
-		return 0;
-	}
-
-	destAngle = (difZ << 14) / moveAngle;
-
-	startAngle = 0;
-//	stopAngle  = 0x100;
-
-	while (shadeAngleTab3[startAngle] > destAngle) {
-		startAngle++;
-	}
-
-	if (shadeAngleTab3[startAngle] != destAngle) {
-		if ((shadeAngleTab3[startAngle - 1] + shadeAngleTab3[startAngle]) / 2 <= destAngle) {
-			startAngle--;
-		}
-	}
-
-	finalAngle = 128 + startAngle;
-
-	if (difX <= 0) {
-		finalAngle = -finalAngle;
-	}
-
-	if (flag & 1) {
-		finalAngle = -finalAngle + 0x100;
-	}
-
-	return finalAngle & 0x3FF;
+    //given two points, we calculate its arc-tangent in radians
+    //Then we convert from radians (360 degrees == 2*PI) to a 10bit value (360 degrees == 1024) and invert the rotation direction
+    //Then we add an offset of 90 degrees (256) and limit it to the 10bit value range.
+    return (256 + ((int32)floor((-1024 * atan2(z2-z1, x2-x1)) / (2*PI)))) % 1024;
 }
 
 /** Get actor real angle
@@ -512,7 +472,7 @@ void processActorMovements(int32 actorIdx) {
 			}
 			break;
 		case kFollow: {
-			int32 newAngle = getAngle(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
+			int32 newAngle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
 			if (actor->staticFlags.bIsSpriteActor) {
 				actor->angle = newAngle;
 			} else {

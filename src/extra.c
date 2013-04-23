@@ -125,7 +125,7 @@ int32 addExtra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 tar
 			extra->strengthOfHit = strengthOfHit;
 
 			setActorAngle(0, maxSpeed, 50, &extra->trackActorMove);
-			extra->angle = getAngle(X, Z, sceneActors[targetActor].X, sceneActors[targetActor].Z);
+			extra->angle = getAngleAndSetTargetActorDistance(X, Z, sceneActors[targetActor].X, sceneActors[targetActor].Z);
 			return i;
 		}
 	}
@@ -306,7 +306,7 @@ int32 addExtraAiming(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 spriteIdx,
 			extra->destZ = maxSpeed;
 			extra->strengthOfHit = strengthOfHit;
 			setActorAngle(0, maxSpeed, 50, &extra->trackActorMove);
-			extra->angle = getAngle(X, Z, sceneActors[targetActorIdx].X, sceneActors[targetActorIdx].Z);	
+			extra->angle = getAngleAndSetTargetActorDistance(X, Z, sceneActors[targetActorIdx].X, sceneActors[targetActorIdx].Z);	
 
 			return i;
 		}
@@ -346,7 +346,7 @@ int32 addExtraAimingAtKey(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 sprit
 			extra->destZ = 0x0FA0;
 			extra->strengthOfHit = 0;
 			setActorAngle(0, 0x0FA0, 50, &extra->trackActorMove);
-			extra->angle = getAngle(X, Z, extraList[extraIdx].X, extraList[extraIdx].Z);	
+			extra->angle = getAngleAndSetTargetActorDistance(X, Z, extraList[extraIdx].X, extraList[extraIdx].Z);	
 
 			return i;
 		}
@@ -636,7 +636,7 @@ void processExtras() {
 				currentExtraY = sceneActors[actorIdxAttacked].Y + 1000;
 				currentExtraZ = sceneActors[actorIdxAttacked].Z;
 
-				tmpAngle = getAngle(extra->X, extra->Z, currentExtraX, currentExtraZ);
+				tmpAngle = getAngleAndSetTargetActorDistance(extra->X, extra->Z, currentExtraX, currentExtraZ);
 				angle = (tmpAngle - extra->angle) & 0x3FF;
 
 				if (angle > 400 && angle < 600) {
@@ -653,7 +653,7 @@ void processExtras() {
 				} else {
 					int32 angle, pos;
 
-					angle = getAngle(extra->Y, 0, currentExtraY, moveAngle);
+					angle = getAngleAndSetTargetActorDistance(extra->Y, 0, currentExtraY, targetActorDistance);
 
 					pos = getRealAngle(&extra->trackActorMove);
 
@@ -687,7 +687,7 @@ void processExtras() {
                 ExtraListStruct *extraKey = &extraList[extra->actorIdx];
 				actorIdx = extra->actorIdx;
 
-                tmpAngle = getAngle(extra->X, extra->Z, extraKey->X, extraKey->Z);
+                tmpAngle = getAngleAndSetTargetActorDistance(extra->X, extra->Z, extraKey->X, extraKey->Z);
 				angle = (tmpAngle - extra->angle) & 0x3FF;
 
 				if (angle > 400 && angle < 600) {
@@ -709,7 +709,7 @@ void processExtras() {
 				} else {
 					int32 angle, pos;
 
-					angle = getAngle(extra->Y, 0, extraKey->Y, moveAngle);
+					angle = getAngleAndSetTargetActorDistance(extra->Y, 0, extraKey->Y, targetActorDistance);
 					pos = getRealAngle(&extra->trackActorMove);
 
 					if (!pos) {
