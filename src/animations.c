@@ -560,11 +560,12 @@ void skipBytes(DataReader* data, int n){
 void processAnimActions(int32 actorIdx) {
 	int32 index=0, endAnimEntityIdx, actionType, animPos;
 	ActorStruct *actor;
+	DataReader* data;
 
 	actor = &sceneActors[actorIdx];
 	if (!actor->animExtraPtr) return; // avoid null pointers
 
-	DataReader* data = (DataReader*) malloc(sizeof(DataReader));
+	data = (DataReader*) malloc(sizeof(DataReader));
     data->ptr = actor->animExtraPtr;
 
 	endAnimEntityIdx = readByte(data);
