@@ -128,7 +128,7 @@ void setActorAngle(int16 startAngle, int16 endAngle, int16 stepAngle, ActorMoveS
 #define PI 3.14159265
 int32 getAngleAndSetTargetActorDistance(int32 x1, int32 z1, int32 x2, int32 z2) {
     //Pythagoras
-    targetActorDistance = (int32)sqrt(((z2 - z1)*(z2 - z1) + (x2 - x1)*(x2 - x1)));
+    targetActorDistance = (int32)sqrt((int64)(((z2 - z1)*(z2 - z1) + (x2 - x1)*(x2 - x1))));
 
 	if (targetActorDistance == 0)
         return 0;
@@ -136,7 +136,7 @@ int32 getAngleAndSetTargetActorDistance(int32 x1, int32 z1, int32 x2, int32 z2) 
     //given two points, we calculate its arc-tangent in radians
     //Then we convert from radians (360 degrees == 2*PI) to a 10bit value (360 degrees == 1024) and invert the rotation direction
     //Then we add an offset of 90 degrees (256) and limit it to the 10bit value range.
-    return (256 + ((int32)floor((-1024 * atan2(z2-z1, x2-x1)) / (2*PI)))) % 1024;
+    return (256 + ((int32)floor((-1024 * atan2((int64)(z2-z1), (int32)(x2-x1))) / (2*PI)))) % 1024;
 }
 
 /** Get actor real angle
@@ -197,8 +197,8 @@ int32 getRealValue(ActorMoveStruct * movePtr) {
 	@param angle Actor angle to rotate */
 void rotateActor(int32 X, int32 Z, int32 angle) {
     double radians = 2*PI*angle/0x400;
-    destX = X*cos(radians) + Z*sin(radians);
-    destZ = -X*sin(radians) + Z*cos(radians);
+    destX = (int32)(X*cos(radians) + Z*sin(radians));
+    destZ = (int32)(-X*sin(radians) + Z*cos(radians));
 }
 
 /** Get distance value in 2D
@@ -207,7 +207,7 @@ void rotateActor(int32 X, int32 Z, int32 angle) {
 	@param x2 Actor 2 X coordinate
 	@param z2 Actor 2 Z coordinate */
 int32 getDistance2D(int32 x1, int32 z1, int32 x2, int32 z2) {
-	return (int32)sqrt((x2-x1)*(x2-x1) + (z2-z1)*(z2-z1));
+	return (int32)sqrt((int64)((x2-x1)*(x2-x1) + (z2-z1)*(z2-z1)));
 }
 
 /** Get distance value in 3D
@@ -218,7 +218,7 @@ int32 getDistance2D(int32 x1, int32 z1, int32 x2, int32 z2) {
 	@param y2 Actor 2 Y coordinate
 	@param z2 Actor 2 Z coordinate */
 int32 getDistance3D(int32 x1, int32 y1, int32 z1, int32 x2, int32 y2, int32 z2) {
-	return (int32)sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
+	return (int32)sqrt((int64)((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1)));
 }
 
 /** Move actor around the scene
