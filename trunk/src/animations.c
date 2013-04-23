@@ -545,7 +545,7 @@ int8 readByte(DataReader* data){
 
 int16 readWord(DataReader* data){
     int16 result;
-    result = *(data->ptr);
+    result = *(int16 *)(data->ptr);
     data->ptr += 2;
     return result;
 }
