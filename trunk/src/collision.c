@@ -254,7 +254,7 @@ int32 checkCollisionWithActors(int32 actorIdx) {
 						} else {
 							int32 newAngle;
 
-							newAngle = getAngle(processActorX, processActorZ, actorTest->X, actorTest->Z);
+							newAngle = getAngleAndSetTargetActorDistance(processActorX, processActorZ, actorTest->X, actorTest->Z);
 
 							if (actorTest->staticFlags.bCanBePushed && !actor->staticFlags.bCanBePushed) {
 								actorTest->lastY = 0;
@@ -308,7 +308,7 @@ int32 checkCollisionWithActors(int32 actorIdx) {
 						hitActor(actorIdx, a, 1, -1);
 					}
 
-					newAngle = getAngle(processActorX, processActorZ, actorTest->X, actorTest->Z);
+					newAngle = getAngleAndSetTargetActorDistance(processActorX, processActorZ, actorTest->X, actorTest->Z);
 
 					if (actorTest->staticFlags.bCanBePushed && !actor->staticFlags.bCanBePushed) {
 						actorTest->lastY = 0;

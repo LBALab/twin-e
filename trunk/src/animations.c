@@ -778,7 +778,7 @@ void processAnimActions(int32 actorIdx) {
 			        strength = readByte(data);
 
 			        if (animPos == actor->animPosition) {
-				        newAngle = getAngle(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
+				        newAngle = getAngleAndSetTargetActorDistance(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
 
 				        rotateActor(distanceX, distanceZ, actor->angle);
 

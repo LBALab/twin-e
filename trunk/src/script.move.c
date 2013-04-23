@@ -96,7 +96,7 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor) {
 	destY = sceneTracks[currentScriptValue].Y;
 	destZ = sceneTracks[currentScriptValue].Z;
 
-	newAngle = getAngle(actor->X, actor->Z, destX, destZ);
+	newAngle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, destX, destZ);
 
 	if (actor->staticFlags.bIsSpriteActor) {
 		actor->angle = newAngle;
@@ -104,7 +104,7 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor) {
 		moveActor(actor->angle, newAngle, actor->speed, &actor->move);
 	}
 
-	if (moveAngle > 500) {
+	if (targetActorDistance > 500) {
 		continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	}
@@ -200,7 +200,7 @@ int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor) {
 	destY = sceneTracks[currentScriptValue].Y;
 	destZ = sceneTracks[currentScriptValue].Z;
 
-	newAngle = 0x200 + getAngle(actor->X, actor->Z, destX, destZ);
+	newAngle = 0x200 + getAngleAndSetTargetActorDistance(actor->X, actor->Z, destX, destZ);
 
 	if (actor->staticFlags.bIsSpriteActor) {
 		actor->angle = newAngle;
@@ -208,7 +208,7 @@ int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor) {
 		moveActor(actor->angle, newAngle, actor->speed, &actor->move);
 	}
 
-	if (moveAngle > 500) {
+	if (targetActorDistance > 500) {
 		continueMove = 0;
 		actor->positionInMoveScript -= 2;
 	}
@@ -265,10 +265,10 @@ int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor) {
 		destY = sceneTracks[currentScriptValue].Y;
 		destZ = sceneTracks[currentScriptValue].Z;
 
-		actor->angle = getAngle(actor->X, actor->Z, destX, destZ);
-		actor->animType = getAngle(actor->Y, 0, destY, moveAngle);
+		actor->angle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, destX, destZ);
+		actor->animType = getAngleAndSetTargetActorDistance(actor->Y, 0, destY, targetActorDistance);
 
-		if (moveAngle > 100) {
+		if (targetActorDistance > 100) {
 			continueMove = 0;
 			actor->positionInMoveScript -= 2;
 		} else {
@@ -490,7 +490,7 @@ int32 mFACE_HERO(int32 actorIdx, ActorStruct *actor) {
 	if (!actor->staticFlags.bIsSpriteActor) {
 		currentScriptValue = *((int16 *)scriptPtr);
 		if (currentScriptValue == -1 && actor->move.numOfStep == 0) {
-			currentScriptValue = getAngle(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
+			currentScriptValue = getAngleAndSetTargetActorDistance(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
 			moveActor(actor->angle, currentScriptValue, actor->speed, &actor->move);
 			*((int16 *)scriptPtr) = currentScriptValue;
 		}
