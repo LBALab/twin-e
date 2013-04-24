@@ -286,54 +286,34 @@ void getBaseRotationPosition(int32 X, int32 Y, int32 Z) {
 	destZ = (baseMatrix[6] * X + baseMatrix[7] * Y + baseMatrix[8] * Z) >> 14;
 }
 
+#define PI 3.1415
 void setBaseRotation(int32 X, int32 Y, int32 Z) {
-	int32 angleXCos;
-	int32 angleXSin;
-
-	int32 angleYCos;
-	int32 angleYSin;
-
-	int32 angleZCos;
-	int32 angleZSin;
-
-	int32 matrixElem;
-
-	shadeAngleTab1 = &shadeAngleTable[0];
-	shadeAngleTab2 = &shadeAngleTable[256];
-	shadeAngleTab3 = &shadeAngleTable[384];
-
 	baseMatrixRotationX = X & 0x3FF;
 	baseMatrixRotationY = Y & 0x3FF;
 	baseMatrixRotationZ = Z & 0x3FF;
 
-	angleXCos = shadeAngleTab1[baseMatrixRotationX];
-	angleXSin = shadeAngleTab1[(baseMatrixRotationX + 256) & 0x3FF];
+    double Xradians = (double)((256-X) % 1024) * 2*PI / 1024;
+    double Yradians = (double)((256-Y) % 1024) * 2*PI / 1024;
+    double Zradians = (double)((256-Z) % 1024) * 2*PI / 1024;
+	int32 matrixElem;
 
-	angleYCos = shadeAngleTab1[baseMatrixRotationY];
-	angleYSin = shadeAngleTab1[(baseMatrixRotationY + 256) & 0x3FF];
-
-	angleZCos = shadeAngleTab1[baseMatrixRotationZ];
-	angleZSin = shadeAngleTab1[(baseMatrixRotationZ + 256) & 0x3FF];
-
-	baseMatrix[0] = angleZSin;
-	baseMatrix[1] = -angleZCos;
-	baseMatrix[3] = (angleZCos * angleXSin) >> 14;
-	baseMatrix[4] = (angleZSin * angleXSin) >> 14;
-	baseMatrix[6] = (angleZCos * angleXCos) >> 14;
-	baseMatrix[7] = (angleZSin * angleXCos) >> 14;
-
-	baseMatrix[0] = (angleZSin * angleYSin) >> 14;
-	baseMatrix[2] = (angleZSin * angleYCos) >> 14;
+	baseMatrix[0] = sin(Zradians) * sin(Yradians) * 16384;
+	baseMatrix[1] = -cos(Zradians) * 16384;
+	baseMatrix[2] = sin(Zradians) * cos(Yradians) * 16384;
+	baseMatrix[3] = cos(Zradians) * sin(Xradians) * 16384;
+	baseMatrix[4] = sin(Zradians) * sin(Xradians) * 16384;
+	baseMatrix[6] = cos(Zradians) * cos(Xradians) * 16384;
+	baseMatrix[7] = sin(Zradians) * cos(Xradians) * 16384;
 
 	matrixElem = baseMatrix[3];
 
-	baseMatrix[3] = ((angleYSin * matrixElem) + (angleYCos * angleXCos)) >> 14;
-	baseMatrix[5] = ((angleYCos * matrixElem) - (angleYSin * angleXCos)) >> 14;
+	baseMatrix[3] = sin(Yradians) * matrixElem + 16384 * cos(Yradians) * cos(Xradians);
+	baseMatrix[5] = cos(Yradians) * matrixElem - 16384 * sin(Yradians) * cos(Xradians);
 
 	matrixElem = baseMatrix[6];
 
-	baseMatrix[6] = ((angleYSin * matrixElem) - (angleXSin * angleYCos)) >> 14;
-	baseMatrix[8] = ((angleYCos * matrixElem) + (angleXSin * angleYSin)) >> 14;
+	baseMatrix[6] = sin(Yradians) * matrixElem - 16384 * sin(Xradians) * cos(Yradians);
+	baseMatrix[8] = cos(Yradians) * matrixElem + 16384 * sin(Xradians) * sin(Yradians);
 
 	getBaseRotationPosition(baseTransPosX, baseTransPosY, baseTransPosZ);
 
@@ -374,8 +354,8 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 	int32 matrix2[9];
 
 	if (renderAngleX) {
-		angleVar2 = shadeAngleTab1[renderAngleX & 0x3FF];
-		angleVar1 = shadeAngleTab1[((renderAngleX & 0x3FF)+0x100) & 0x3FF];
+		angleVar2 = shadeAngleTable[renderAngleX & 0x3FF];
+		angleVar1 = shadeAngleTable[((renderAngleX & 0x3FF)+0x100) & 0x3FF];
 
 		matrix1[0] = currentMatrix[0];
 		matrix1[3] = currentMatrix[3];
@@ -395,8 +375,8 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 	}
 
 	if (renderAngleZ) {
-		angleVar2 = shadeAngleTab1[renderAngleZ & 0x3FF];
-		angleVar1 = shadeAngleTab1[((renderAngleZ & 0x3FF)+0x100) & 0x3FF];
+		angleVar2 = shadeAngleTable[renderAngleZ & 0x3FF];
+		angleVar1 = shadeAngleTable[((renderAngleZ & 0x3FF)+0x100) & 0x3FF];
 
 		matrix2[2] = matrix1[2];
 		matrix2[5] = matrix1[5];
@@ -416,8 +396,8 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 	}
 
 	if (renderAngleY) {
-		angleVar2 = shadeAngleTab1[renderAngleY & 0x3FF];			// esi
-		angleVar1 = shadeAngleTab1[((renderAngleY & 0x3FF)+0x100) & 0x3FF];	// ecx
+		angleVar2 = shadeAngleTable[renderAngleY & 0x3FF];			// esi
+		angleVar1 = shadeAngleTable[((renderAngleY & 0x3FF)+0x100) & 0x3FF];	// ecx
 
 		tempMatrix[1] = matrix2[1];
 		tempMatrix[4] = matrix2[4];
@@ -616,10 +596,6 @@ void translateGroup(int16 ax, int16 bx, int16 cx) {
 }
 
 void setLightVector(int32 angleX, int32 angleY, int32 angleZ) {
-	shadeAngleTab1 = &shadeAngleTable[0];
-	shadeAngleTab2 = &shadeAngleTable[256];
-	shadeAngleTab3 = &shadeAngleTable[384];
-
 	// TODO: RECHECK THIS
 	/*_cameraAngleX = angleX;
 	_cameraAngleY = angleY;
@@ -2091,10 +2067,6 @@ void prepareIsoModel(uint8 *bodyPtr) { // loadGfxSub
 int renderIsoModel(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr) { // AffObjetIso
 	uint8 *ptr;
 	int16 bodyHeader;
-
-	shadeAngleTab1 = &shadeAngleTable[0];
-	shadeAngleTab2 = &shadeAngleTable[256];
-	shadeAngleTab3 = &shadeAngleTable[384];
 
 	renderAngleX = angleX;
 	renderAngleY = angleY;

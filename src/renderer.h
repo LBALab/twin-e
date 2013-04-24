@@ -48,10 +48,6 @@ int32 destX;
 int32 destY;
 int32 destZ;
 
-int16 *shadeAngleTab1; // tab1
-int16 *shadeAngleTab2; // tab2
-int16 *shadeAngleTab3; // tab3
-
 int16 polyRenderType; //FillVertic_AType;
 int32 numOfVertex;
 int16 vertexCoordinates[193];
