@@ -91,7 +91,7 @@ int8 * LanguageSufixTypes[] = {
 };
 
 
-void initVoxBank(bankIdx) {
+void initVoxBank(int32 bankIdx) {
 	// get the correct vox hqr file
 	memset(currentVoxBankFile, 0, sizeof(int8));
 	sprintf(currentVoxBankFile, VOX_DIR);
