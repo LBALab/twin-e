@@ -300,23 +300,23 @@ void setBaseRotation(int32 X, int32 Y, int32 Z) {
     Zradians = (double)((256-Z) % 1024) * 2*PI / 1024;
 	
 
-	baseMatrix[0] = sin(Zradians) * sin(Yradians) * 16384;
-	baseMatrix[1] = -cos(Zradians) * 16384;
-	baseMatrix[2] = sin(Zradians) * cos(Yradians) * 16384;
-	baseMatrix[3] = cos(Zradians) * sin(Xradians) * 16384;
-	baseMatrix[4] = sin(Zradians) * sin(Xradians) * 16384;
-	baseMatrix[6] = cos(Zradians) * cos(Xradians) * 16384;
-	baseMatrix[7] = sin(Zradians) * cos(Xradians) * 16384;
+	baseMatrix[0] = (int32)(sin(Zradians) * sin(Yradians) * 16384);
+	baseMatrix[1] = (int32)(-cos(Zradians) * 16384);
+	baseMatrix[2] = (int32)(sin(Zradians) * cos(Yradians) * 16384);
+	baseMatrix[3] = (int32)(cos(Zradians) * sin(Xradians) * 16384);
+	baseMatrix[4] = (int32)(sin(Zradians) * sin(Xradians) * 16384);
+	baseMatrix[6] = (int32)(cos(Zradians) * cos(Xradians) * 16384);
+	baseMatrix[7] = (int32)(sin(Zradians) * cos(Xradians) * 16384);
 
 	matrixElem = baseMatrix[3];
 
-	baseMatrix[3] = sin(Yradians) * matrixElem + 16384 * cos(Yradians) * cos(Xradians);
-	baseMatrix[5] = cos(Yradians) * matrixElem - 16384 * sin(Yradians) * cos(Xradians);
+	baseMatrix[3] = (int32)(sin(Yradians) * matrixElem + 16384 * cos(Yradians) * cos(Xradians));
+	baseMatrix[5] = (int32)(cos(Yradians) * matrixElem - 16384 * sin(Yradians) * cos(Xradians));
 
 	matrixElem = baseMatrix[6];
 
-	baseMatrix[6] = sin(Yradians) * matrixElem - 16384 * sin(Xradians) * cos(Yradians);
-	baseMatrix[8] = cos(Yradians) * matrixElem + 16384 * sin(Xradians) * sin(Yradians);
+	baseMatrix[6] = (int32)(sin(Yradians) * matrixElem - 16384 * sin(Xradians) * cos(Yradians));
+	baseMatrix[8] = (int32)(cos(Yradians) * matrixElem + 16384 * sin(Xradians) * sin(Yradians));
 
 	getBaseRotationPosition(baseTransPosX, baseTransPosY, baseTransPosZ);
 
