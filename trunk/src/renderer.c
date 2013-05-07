@@ -288,14 +288,17 @@ void getBaseRotationPosition(int32 X, int32 Y, int32 Z) {
 
 #define PI 3.1415
 void setBaseRotation(int32 X, int32 Y, int32 Z) {
+	int32 matrixElem;
+	double Xradians, Yradians, Zradians;
+	
 	baseMatrixRotationX = X & 0x3FF;
 	baseMatrixRotationY = Y & 0x3FF;
 	baseMatrixRotationZ = Z & 0x3FF;
 
-    double Xradians = (double)((256-X) % 1024) * 2*PI / 1024;
-    double Yradians = (double)((256-Y) % 1024) * 2*PI / 1024;
-    double Zradians = (double)((256-Z) % 1024) * 2*PI / 1024;
-	int32 matrixElem;
+    Xradians = (double)((256-X) % 1024) * 2*PI / 1024;
+    Yradians = (double)((256-Y) % 1024) * 2*PI / 1024;
+    Zradians = (double)((256-Z) % 1024) * 2*PI / 1024;
+	
 
 	baseMatrix[0] = sin(Zradians) * sin(Yradians) * 16384;
 	baseMatrix[1] = -cos(Zradians) * 16384;
