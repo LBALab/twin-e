@@ -3,6 +3,7 @@ TwinEngine Changes : a Little Big Adventure engine changes
 
 # 0.2.0 - 19.04.2013
 	- Prequengine and TwinEngine merged in a single project.
+	- Code refactoring. Hope we didn't inserted new bugs.
 	
 	- 
 

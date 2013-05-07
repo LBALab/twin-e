@@ -42,8 +42,11 @@ Check the TODO list at https://code.google.com/p/twin-e/wiki/TODO for more infor
 For public releases, you just need to copy all package content to LBA1 (or other projects)
 game directory. Some files must be overriden to properly run the application engine.
 
-For the compiled version, you just need to copy the application engine and lba.cfg file 
+For the compiled version, you just need to copy the application engine and files on folder trunk\bin
 to LBA1 game directory to play it. You will need the original game to play with this engine.
+
+At the current engine version, you will need an extra file, called midi_mi_win.hqr, that is not 
+available in the original game version but that comes with LbaWin instalation. 
 
 
 # - Compiling -
