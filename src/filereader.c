@@ -91,7 +91,7 @@ int32 fropen2(FileReader* fr, char* filename, const char* mode) {
 	fr->fd = fopen(filename, mode);
 	if (!fr->fd) {
     int i;
-    char* uppercase = (char*) malloc(strlen(filename));
+    char* uppercase = (char*) malloc(strlen(filename)+1);
 
     for(i = 0; filename[i]; i++)
     {
