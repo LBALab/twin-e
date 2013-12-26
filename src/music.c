@@ -42,6 +42,7 @@
 #include "sdlengine.h"
 #include "hqrdepack.h"
 #include "resources.h"
+#include "xmidi.h"
 
 /** MP3 music folder */
 #define MUSIC_FOLDER	"music"
@@ -180,6 +181,8 @@ void stopTrackMusic() {
 /** Play MIDI music
 	@param midiIdx music index under mini_mi_win.hqr*/
 void playMidiMusic(int32 midiIdx, int32 loop) {
+	uint8* dos_midi_ptr;
+
 	if (cfgfile.Sound) {
 		int32 midiSize;
 		int8 filename[256];
@@ -194,10 +197,12 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 		if (cfgfile.Sound > 1) {
 			if (cfgfile.Sound == 2)
 				sprintf(filename, "%s", HQR_MIDI_MI_WIN_MP3_FILE);
-			else
+			else if (cfgfile.Sound == 3)
 				sprintf(filename, "%s", HQR_MIDI_MI_WIN_OGG_FILE);
+			else
+				sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
 		} else
-			sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
+			sprintf(filename, "%s", HQR_MIDI_MI_DOS_FILE);
 
 		if (midiPtr) {
 			musicFadeOut(FADE_MS / 2);
@@ -206,6 +211,12 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 		}
 
 		midiSize = hqrGetallocEntry(&midiPtr, filename, midiIdx);
+
+		if (midiSize && strcmp(filename, HQR_MIDI_MI_DOS_FILE) == 0) {
+			midiSize = convert_to_midi(midiPtr, midiSize, &dos_midi_ptr);
+			free(midiPtr);
+			midiPtr = dos_midi_ptr;
+		}
 
 		rw = SDL_RWFromMem(midiPtr, midiSize);
 

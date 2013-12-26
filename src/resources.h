@@ -99,6 +99,7 @@
 extern int8 * HQR_RESS_FILE;
 extern int8 * HQR_TEXT_FILE;
 extern int8 * HQR_FLASAMP_FILE;
+extern int8 * HQR_MIDI_MI_DOS_FILE;
 extern int8 * HQR_MIDI_MI_WIN_FILE;
 extern int8 * HQR_MIDI_MI_WIN_MP3_FILE;
 extern int8 * HQR_MIDI_MI_WIN_OGG_FILE;

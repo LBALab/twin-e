@@ -33,6 +33,7 @@ OBJS=actor.o \
 	sdlengine.o \
 	sound.o \
 	sys.o \
+	xmidi.o \
 	text.o
 
 LIBS=$(LDFLAGS)

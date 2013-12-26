@@ -32,6 +32,7 @@ OBJS=actor.o \
 	script.move.o \
 	sdlengine.o \
 	sound.o \
+	xmidi.o \
 	text.o
 
 LIBS=$(SDL_LIBS) -framework SDL_mixer -framework SDL_ttf
