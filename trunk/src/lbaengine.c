@@ -171,11 +171,11 @@ int32 runGameEngine() { // mainLoopInteration
 				usingSabre = 0;
 				break;
 			case kiUseSabre:
-				if (sceneHero->body == 2) {
+				if (sceneHero->body != GAMEFLAG_HAS_SABRE) {
 					if (heroBehaviour == kProtoPack) {
 						setBehaviour(kNormal);
 					}
-					initModelActor(2, 0);
+					initModelActor(GAMEFLAG_HAS_SABRE, 0);
 					initAnim(24, 1, 0, 0);
 
 					usingSabre = 1;
@@ -227,7 +227,7 @@ int32 runGameEngine() { // mainLoopInteration
 
 				rotateActor(0, 800, pinguin->angle);
 
-				if (checkCollisionWithActors(mecaPinguinIdx)) {
+				if (!checkCollisionWithActors(mecaPinguinIdx)) {
 					pinguin->life = 50;
 					pinguin->body = -1;
 					initModelActor(0, mecaPinguinIdx);
