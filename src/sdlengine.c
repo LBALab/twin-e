@@ -495,6 +495,18 @@ void readKeys() {
 			case SDLK_RALT:
 				localKey = 0x38;
 				break;
+			case SDLK_F1:
+				localKey = 0x3B;
+				break;
+			case SDLK_F2:
+				localKey = 0x3C;
+				break;
+			case SDLK_F3:
+				localKey = 0x3D;
+				break;
+			case SDLK_F4:
+				localKey = 0x3E;
+				break;
 #ifdef GAMEMOD
 				// change grid camera
 			case SDLK_s:

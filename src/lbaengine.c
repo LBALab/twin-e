@@ -272,31 +272,16 @@ int32 runGameEngine() { // mainLoopInteration
 			redrawEngineActions(1);
 		}
 
-		// Process behaviour menu - Press CTRL
-		if ((loopCurrentKey == 0x1D || loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) && sceneHero->entity != -1 && sceneHero->controlMode == kManual) { // F1..F4 Keys
+		// Process behaviour menu - Press CTRL and F1..F4 Keys
+		if ((loopCurrentKey == 0x1D || loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) && sceneHero->entity != -1 && sceneHero->controlMode == kManual) {
+			if (loopCurrentKey != 0x1D) {
+				heroBehaviour = loopCurrentKey - 0x3B;
+			}
 			freezeTime();
 			processBehaviourMenu();
 			unfreezeTime();
 			redrawEngineActions(1);
-		}
-
-		// Process behavior menu - F1..F4 Keys + Interface Style
-		if (loopCurrentKey == 0x3B || loopCurrentKey == 0x3C || loopCurrentKey == 0x3D || loopCurrentKey == 0x3E) {
-			switch (cfgfile.InterfaceStyle) {
-			case 0:
-				heroBehaviour = loopCurrentKey - 0x3B;
-				freezeTime();
-				processBehaviourMenu();
-				unfreezeTime();
-				redrawEngineActions(1);
-				break;
-			case 1:
-			case 2: {
-			}
-				break;
-			}
-		}
-		
+		}	
 
 		// use Proto-Pack
 		if (loopCurrentKey == 0x24 && gameFlags[GAMEFLAG_PROTOPACK] == 1) {

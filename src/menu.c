@@ -1042,7 +1042,7 @@ void processBehaviourMenu() {
 	
 	tmpTime = lbaTime;
 
-	while (skipedKey & 4 || (skipIntro > 59 && skipIntro < 62)) {
+	while (skipedKey & 4 || (skipIntro >= 59 && skipIntro <= 62)) {
 		readKeys();
 		key = pressedKey;
 
