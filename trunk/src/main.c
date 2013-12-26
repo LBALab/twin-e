@@ -52,6 +52,7 @@
 #include "keyboard.h"
 #include "actor.h"
 #include "sound.h"
+#include "fcaseopen.h"
 
 /** Engine current version */
 const int8* ENGINE_VERSION = (int8*) "0.2.0";
@@ -203,7 +204,7 @@ void initConfigurations() {
 	int8 buffer[256];
 	int32 cfgtype = -1;
 
-	fd = fopen(CONFIG_FILENAME, "rb");
+	fd = fcaseopen(CONFIG_FILENAME, "rb");
 	if (!fd)
 		printf("Error: Can't find config file %s\n", CONFIG_FILENAME);
 

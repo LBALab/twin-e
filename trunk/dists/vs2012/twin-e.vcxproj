@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\src\debug.grid.c" />
     <ClCompile Include="..\..\src\debug.scene.c" />
     <ClCompile Include="..\..\src\extra.c" />
+    <ClCompile Include="..\..\src\fcaseopen.c" />
     <ClCompile Include="..\..\src\filereader.c" />
     <ClCompile Include="..\..\src\gamestate.c" />
     <ClCompile Include="..\..\src\grid.c" />
@@ -142,6 +143,7 @@
     <ClInclude Include="..\..\src\debug.h" />
     <ClInclude Include="..\..\src\debug.scene.h" />
     <ClInclude Include="..\..\src\extra.h" />
+    <ClInclude Include="..\..\src\fcaseopen.h" />
     <ClInclude Include="..\..\src\filereader.h" />
     <ClInclude Include="..\..\src\gamestate.h" />
     <ClInclude Include="..\..\src\grid.h" />

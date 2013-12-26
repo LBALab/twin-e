@@ -27,6 +27,7 @@
 */
 
 #include "filereader.h"
+#include "fcaseopen.h"
 #include <ctype.h>
 
 /** Feed buffer from file
@@ -88,20 +89,7 @@ void frseek(FileReader* fr, uint32 seekPosition) {
 	@param filename file path
 	@return true if file open and false if error occurred */
 int32 fropen2(FileReader* fr, char* filename, const char* mode) {
-	fr->fd = fopen(filename, mode);
-	if (!fr->fd) {
-    int i;
-    char* uppercase = (char*) malloc(strlen(filename)+1);
-
-    for(i = 0; filename[i]; i++)
-    {
-       uppercase[i] = toupper(filename[i]);
-    }
-    uppercase[i]= '\0';
-
-  	fr->fd = fopen(uppercase, mode);
-    free(uppercase);
-  }
+	fr->fd = fcaseopen(filename, mode);
 
 	if (fr->fd) {
 		fr->currSector = 0;
