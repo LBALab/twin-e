@@ -36,7 +36,7 @@ OBJS=actor.o \
 	xmidi.o \
 	text.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf
+LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
 TARGET=twin-e
 INSTALLDIR=../bin
 
