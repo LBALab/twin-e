@@ -350,7 +350,7 @@ void processActorMovements(int32 actorIdx) {
 				}
 			}
 
-			if ((loopPressedKey & 8) && !gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
+			if ((skipIntro == 0x38) && !gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
 				if (usingSabre == 0) { // Use Magic Ball
 					if (gameFlags[GAMEFLAG_HAS_MAGICBALL]) {
 						if (magicBallIdx == -1) {
