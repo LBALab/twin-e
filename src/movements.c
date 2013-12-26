@@ -362,8 +362,8 @@ void processActorMovements(int32 actorIdx) {
 					}
 				} else {
 					if (gameFlags[GAMEFLAG_HAS_SABRE]) {
-						if (actor->body != 2) {
-							initModelActor(2, actorIdx);
+						if (actor->body != GAMEFLAG_HAS_SABRE) {
+							initModelActor(GAMEFLAG_HAS_SABRE, actorIdx);
 						}
 
 						initAnim(kSabreAttack, 1, 0, actorIdx);
