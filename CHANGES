@@ -2,10 +2,12 @@ TwinEngine Changes : a Little Big Adventure engine changes
 - List of all changes during public version releases
 
 # 0.2.0 - 19.04.2013
-	- Prequengine and TwinEngine merged in a single project.
-	- Code refactoring. Hope we didn't inserted new bugs.
+	- Prequengine and TwinEngine merged into a single project.
+	- Code refactoring.
+	- Issue tracking was resetted.
 	
-	- 
+	- [FIXED] (issue #2) Correct behavior of F1..F4 keys while pressing.
+	- [FIXED] (issue #3) F4 key was making Twinsen throw Magicball.
 
 # 0.1.3 - 11.04.2013
 	- [FIXED] (issue #37) Multiple voice samples were been playing at the same time.
