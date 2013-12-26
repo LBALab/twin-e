@@ -9,6 +9,7 @@ OBJS=actor.o \
 	debug.grid.o \
 	debug.scene.o \
 	extra.o \
+	fcaseopen.o \
 	filereader.o \
 	flamovies.o \
 	gamestate.o \
