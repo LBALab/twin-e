@@ -29,71 +29,73 @@
 #include "keyboard.h"
 
 /** Initialize engine auxiliar keymap */
-void initKeymap() {
-	pressedKeyMap[0] = 0x48;
-	pressedKeyMap[1] = 0x50;
-	pressedKeyMap[2] = 0x4B;
-	pressedKeyMap[3] = 0x4D;
-	pressedKeyMap[4] = 0x47;
-	pressedKeyMap[5] = 0x49;
-	pressedKeyMap[6] = 0x51;
-	pressedKeyMap[7] = 0x4F;
+uint8 pressedKeyMap[29] = {
+	[0] = 0x48,
+	[1] = 0x50,
+	[2] = 0x4B,
+	[3] = 0x4D,
+	[4] = 0x47,
+	[5] = 0x49,
+	[6] = 0x51,
+	[7] = 0x4F,
 
-	pressedKeyMap[8] = 0x39;
-	pressedKeyMap[9] = 0x1C;
-	pressedKeyMap[10] = 0x1D;
-	pressedKeyMap[11] = 0x38;
-	pressedKeyMap[12] = 0x53;
-	pressedKeyMap[13] = 0x2A;
-	pressedKeyMap[14] = 0x36;
+	[8] = 0x39,
+	[9] = 0x1C,
+	[10] = 0x1D,
+	[11] = 0x38,
+	[12] = 0x53,
+	[13] = 0x2A,
+	[14] = 0x36,
 
-	pressedKeyMap[15] = 0x3B;
-	pressedKeyMap[16] = 0x3C;
-	pressedKeyMap[17] = 0x3D;
-	pressedKeyMap[18] = 0x3E;
-	pressedKeyMap[19] = 0x3F;
-	pressedKeyMap[20] = 0x40; // LBAKEY_F6
-	pressedKeyMap[21] = 0x41;
-	pressedKeyMap[22] = 0x42;
-	pressedKeyMap[23] = 0x43;
-	pressedKeyMap[24] = 0x44;
-	pressedKeyMap[25] = 0x57;
-	pressedKeyMap[26] = 0x58;
-	pressedKeyMap[27] = 0x2A;
-	pressedKeyMap[28] = 0x0;
+	[15] = 0x3B,
+	[16] = 0x3C,
+	[17] = 0x3D,
+	[18] = 0x3E,
+	[19] = 0x3F,
+	[20] = 0x40, // LBAKEY_F6
+	[21] = 0x41,
+	[22] = 0x42,
+	[23] = 0x43,
+	[24] = 0x44,
+	[25] = 0x57,
+	[26] = 0x58,
+	[27] = 0x2A,
+	[28] = 0x0,
+};
 
-	pressedKeyCharMap[0] = 0x0100; // up
-	pressedKeyCharMap[1] = 0x0200; // down
-	pressedKeyCharMap[2] = 0x0400; // left
-	pressedKeyCharMap[3] = 0x0800; // right
-	pressedKeyCharMap[4] = 0x0500; // home
-	pressedKeyCharMap[5] = 0x0900; // pageup
-	pressedKeyCharMap[6] = 0x0A00; // pagedown
-	pressedKeyCharMap[7] = 0x0600; // end
+uint16 pressedKeyCharMap[31] = {
+	[0] = 0x0100, // up
+	[1] = 0x0200, // down
+	[2] = 0x0400, // left
+	[3] = 0x0800, // right
+	[4] = 0x0500, // home
+	[5] = 0x0900, // pageup
+	[6] = 0x0A00, // pagedown
+	[7] = 0x0600, // end
 
-	pressedKeyCharMap[8] = 0x0101; // space bar
-	pressedKeyCharMap[9] = 0x0201; // enter
-	pressedKeyCharMap[10] = 0x0401;  // ctrl
-	pressedKeyCharMap[11] = 0x0801;  // alt
-	pressedKeyCharMap[12] = 0x1001;  // del
-	pressedKeyCharMap[13] = 0x2001;  // left shift
-	pressedKeyCharMap[14] = 0x2001;  // right shift
+	[8] = 0x0101, // space bar
+	[9] = 0x0201, // enter
+	[10] = 0x0401,  // ctrl
+	[11] = 0x0801,  // alt
+	[12] = 0x1001,  // del
+	[13] = 0x2001,  // left shift
+	[14] = 0x2001,  // right shift
 
-	pressedKeyCharMap[15] = 0x0102;  // F1
-	pressedKeyCharMap[16] = 0x0202;  // F2
-	pressedKeyCharMap[17] = 0x0402;  // F3
-	pressedKeyCharMap[18] = 0x0802;  // F4
-	pressedKeyCharMap[19] = 0x1002;  // F5
-	pressedKeyCharMap[20] = 0x2002;  // F6
-	pressedKeyCharMap[21] = 0x4002;  // F7
-	pressedKeyCharMap[22] = 0x8002;  // F8
+	[15] = 0x0102,  // F1
+	[16] = 0x0202,  // F2
+	[17] = 0x0402,  // F3
+	[18] = 0x0802,  // F4
+	[19] = 0x1002,  // F5
+	[20] = 0x2002,  // F6
+	[21] = 0x4002,  // F7
+	[22] = 0x8002,  // F8
 
-	pressedKeyCharMap[23] = 0x0103;  // F9
-	pressedKeyCharMap[24] = 0x0203;  // F10
-	pressedKeyCharMap[25] = 0x0403;  // ?
-	pressedKeyCharMap[26] = 0x0803;  // ?
-	pressedKeyCharMap[27] = 0x00FF;  // left shift
-	pressedKeyCharMap[28] = 0x00FF;
-	pressedKeyCharMap[29] = 0x0;
-	pressedKeyCharMap[30] = 0x0;
-}
+	[23] = 0x0103,  // F9
+	[24] = 0x0203,  // F10
+	[25] = 0x0403,  // ?
+	[26] = 0x0803,  // ?
+	[27] = 0x00FF,  // left shift
+	[28] = 0x00FF,
+	[29] = 0x0,
+	[30] = 0x0,
+};
