@@ -200,8 +200,8 @@ int getLanguageTypeIndex(int8* language) {
 
 /** Init configuration file \a lba.cfg */
 void initConfigurations() {
-	FILE *fd;
-	int8 buffer[256];
+	FILE *fd, *fd_test;
+	int8 buffer[256], tmp[16];
 	int32 cfgtype = -1;
 
 	fd = fcaseopen(CONFIG_FILENAME, "rb");
@@ -233,7 +233,22 @@ void initConfigurations() {
 			case 3:
 				sscanf(buffer, "FlagKeepVoice: %s", cfgfile.FlagKeepVoiceStr);
 				break;
-				// case 4,18: unused
+			case 8:
+				sscanf(buffer, "MidiType: %s", tmp);
+				if (strcmp(tmp, "auto") == 0) {
+					fd_test = fcaseopen(HQR_MIDI_MI_WIN_FILE, "rb");
+					if (fd_test) {
+						fclose(fd_test);
+						cfgfile.MidiType = 1;
+					}
+					else
+						cfgfile.MidiType = 0;
+				}
+				else if (strcmp(tmp, "midi") == 0)
+					cfgfile.MidiType = 1;
+				else 
+					cfgfile.MidiType = 0;
+				break;
 			case 19:
 				sscanf(buffer, "WaveVolume: %d", &cfgfile.WaveVolume);
 				cfgfile.VoiceVolume = cfgfile.WaveVolume;
