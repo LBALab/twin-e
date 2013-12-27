@@ -134,7 +134,7 @@ typedef struct ConfigFile {
 
 	Contains all the data used in the engine to configurated the game in particulary ways.\n
 	A detailled information of all types are in \a main.h header file. */
-ConfigFile cfgfile;
+extern ConfigFile cfgfile;
 
 /** CD Game directory */
 int8 * cdDir;

@@ -124,6 +124,7 @@ int8 LanguageTypes[][10] = {
 	"Italiano",
 	"Português"
 };
+ConfigFile cfgfile;
 
 /** Allocate video memory, both front and back buffers */
 void allocVideoMemory() {
