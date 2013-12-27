@@ -82,6 +82,8 @@ typedef struct ConfigFile {
 	int8 FlagKeepVoiceStr[3];
 	/** Save voice files on hard disk */
 	int32 FlagKeepVoice;
+	/** Type of music file to be used */
+	int8 MidiType;
 	/** Wave volume */
 	int32 WaveVolume;
 	/** Chacters voices volume */

@@ -157,11 +157,11 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 	stopMusic();
 	currentMusic = midiIdx;
 
-	sprintf(filename, "%s", HQR_MIDI_MI_DOS_FILE);
-	if (cfgfile.Sound > 1) {
+	if (cfgfile.MidiType == 0)
+		sprintf(filename, "%s", HQR_MIDI_MI_DOS_FILE);
+	else
 		sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
-	}
-	
+
 	if (midiPtr) {
 		musicFadeOut(FADE_MS / 2);
 		stopMidiMusic();
@@ -169,7 +169,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 
 	midiSize = hqrGetallocEntry(&midiPtr, filename, midiIdx);
 
-	if (cfgfile.Sound == 1) {
+	if (cfgfile.Sound == 1 && cfgfile.MidiType == 0) {
 		midiSize = convert_to_midi(midiPtr, midiSize, &dos_midi_ptr);
 		free(midiPtr);
 		midiPtr = dos_midi_ptr;
