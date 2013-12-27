@@ -415,7 +415,6 @@ void initAll() {
 	rightMouse = 0;
 	leftMouse = 0;
 
-	initKeymap();
 	initResources();
 
     initSVGA();

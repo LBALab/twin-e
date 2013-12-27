@@ -32,9 +32,9 @@
 #include "sys.h"
 
 /** Pressed key map - scanCodeTab1 */
-uint8 pressedKeyMap[29];
+extern uint8 pressedKeyMap[29];
 /** Pressed key char map - scanCodeTab2 */
-uint16 pressedKeyCharMap[31];
+extern uint16 pressedKeyCharMap[31];
 
 /** Skipped key - key1 */
 int16 skipedKey;
@@ -50,8 +50,5 @@ int16 key;
 
 int32 heroPressedKey;
 int32 heroPressedKey2;
-
-/** Initialize engine auxiliar keymap */
-void initKeymap();
 
 #endif
