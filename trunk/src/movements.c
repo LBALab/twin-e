@@ -277,6 +277,8 @@ void processActorMovements(int32 actorIdx) {
 
 		heroPressedKey = key;
 	} else {
+		int16 tempAngle;
+
 		if (!actor->staticFlags.bIsSpriteActor) {
 			if (actor->controlMode != kManual) {
 				actor->angle = getRealAngle(&actor->move);
@@ -298,17 +300,17 @@ void processActorMovements(int32 actorIdx) {
 				// Process hero actions
 				switch (heroBehaviour) {
 				case kNormal:
-					if (skipIntro == 0x39) {
+					if (loopPressedKey & 1) {
 						heroAction = 1;
 					}
 					break;
 				case kAthletic:
-					if (skipIntro == 0x39) {
+					if (loopPressedKey & 1) {
 						initAnim(kJump, 1, 0, actorIdx);
 					}
 					break;
 				case kAggressive:
-					if (skipIntro == 0x39) {
+					if (loopPressedKey & 1) {
 						if (autoAgressive) {
 							heroMoved = 1;
 							actor->angle = getRealAngle(&actor->move);
@@ -343,14 +345,14 @@ void processActorMovements(int32 actorIdx) {
 					}
 					break;
 				case kDiscrete:
-					if (skipIntro == 0x39) {
+					if (loopPressedKey & 1) {
 						initAnim(kHide, 0, 255, actorIdx);
 					}
 					break;
 				}
 			}
 
-			if ((skipIntro == 0x38) && !gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
+			if ((loopPressedKey & 8) && !gameFlags[GAMEFLAG_INVENTORY_DISABLED]) {
 				if (usingSabre == 0) { // Use Magic Ball
 					if (gameFlags[GAMEFLAG_HAS_MAGICBALL]) {
 						if (magicBallIdx == -1) {
@@ -375,7 +377,6 @@ void processActorMovements(int32 actorIdx) {
 			}
 
 			if (!loopPressedKey || heroAction) {
-				int16 tempAngle;
 
 				if (key & 3) {  // if continue walking
 					heroMoved = 0; // don't break animation
@@ -422,22 +423,23 @@ void processActorMovements(int32 actorIdx) {
 						}
 					}
 				}
-
-				tempAngle = 0;
-
-				if (key & 4) {
-					tempAngle = 0x100;
-				}
-
-				if (key & 8) {
-					tempAngle = -0x100;
-				}
-
-				moveActor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->move);
-
-				heroPressedKey  = key;
-				heroPressedKey2 = loopPressedKey;
 			}
+
+			tempAngle = 0;
+
+			if (key & 4) {
+				tempAngle = 0x100;
+			}
+
+			if (key & 8) {
+				tempAngle = -0x100;
+			}
+
+			moveActor(actor->angle, actor->angle + tempAngle, actor->speed, &actor->move);
+
+			heroPressedKey  = key;
+			heroPressedKey2 = loopPressedKey;
+			
 			break;
 		case kFollow: {
 			int32 newAngle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, sceneActors[actor->followedActor].X, sceneActors[actor->followedActor].Z);
