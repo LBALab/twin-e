@@ -45,9 +45,6 @@ game directory. Some files must be overriden to properly run the application eng
 For the compiled version, you just need to copy the application engine and files on folder trunk\bin
 to LBA1 game directory to play it. You will need the original game to play with this engine.
 
-At the current engine version, you will need an extra file, called midi_mi_win.hqr, that is not 
-available in the original game version but that comes with LbaWin instalation. 
-
 
 # - Compiling -
 
