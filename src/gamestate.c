@@ -46,7 +46,7 @@
 #include "menuoptions.h"
 #include "collision.h"
 
-#define SAVE_DIR "save//"
+#define SAVE_DIR "save/"
 
 int32 magicLevelStrengthOfHit[] = {
 	kNoBallStrenght,

@@ -32,7 +32,7 @@
 #include "main.h"
 
 /** FLA movie directory */
-#define FLA_DIR "fla//"
+#define FLA_DIR "fla/"
 
 /** FLA movie header structure */
 typedef struct FLAHeaderStruct {
