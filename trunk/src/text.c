@@ -62,7 +62,7 @@ int16 spaceChar = 0x20;
 /** FLA movie extension */
 #define VOX_EXT ".vox"
 /** Common movie directory */
-#define VOX_DIR "vox//"
+#define VOX_DIR "vox/"
 
 int8 * LanguagePrefixTypes[] = {
 	"EN_",
