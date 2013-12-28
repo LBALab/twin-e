@@ -247,7 +247,7 @@ void saveGame() {
 	frwrite(&fr, &data, 1, 1);
 
 	data = 0x00;
-	frwrite(&fr, "PrequengineSave", 16, 1);
+	frwrite(&fr, "TwinEngineSave", 15, 1);
 
 	data = 0xFF; // number of game flags
 	frwrite(&fr, &data, 1, 1);
