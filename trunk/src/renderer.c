@@ -350,6 +350,8 @@ void setCameraAngle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rot
 // ------------------------------------------------------------------------------------------------------
 
 void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
+	int32 i;
+	int32 angle;
 	int32 angleVar1;    // esi
 	int32 angleVar2;    // ecx
 
@@ -357,8 +359,10 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 	int32 matrix2[9];
 
 	if (renderAngleX) {
-		angleVar2 = shadeAngleTable[renderAngleX & 0x3FF];
-		angleVar1 = shadeAngleTable[((renderAngleX & 0x3FF)+0x100) & 0x3FF];
+		angle = renderAngleX;
+		angleVar2 = shadeAngleTable[angle & 0x3FF];
+		angle += 0x100;
+		angleVar1 = shadeAngleTable[angle & 0x3FF];
 
 		matrix1[0] = currentMatrix[0];
 		matrix1[3] = currentMatrix[3];
@@ -371,15 +375,15 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 		matrix1[7] = (currentMatrix[8] * angleVar2 + currentMatrix[7] * angleVar1) >> 14;
 		matrix1[8] = (currentMatrix[8] * angleVar1 - currentMatrix[7] * angleVar2) >> 14;
 	} else {
-		int32 i;
-
 		for (i = 0; i < 9; i++)
 			matrix1[i] = currentMatrix[i];
 	}
 
 	if (renderAngleZ) {
-		angleVar2 = shadeAngleTable[renderAngleZ & 0x3FF];
-		angleVar1 = shadeAngleTable[((renderAngleZ & 0x3FF)+0x100) & 0x3FF];
+		angle = renderAngleZ;
+		angleVar2 = shadeAngleTable[angle & 0x3FF];
+		angle += 0x100;
+		angleVar1 = shadeAngleTable[angle & 0x3FF];
 
 		matrix2[2] = matrix1[2];
 		matrix2[5] = matrix1[5];
@@ -392,15 +396,15 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 		matrix2[6] = (matrix1[7] * angleVar2 + matrix1[6] * angleVar1) >> 14;
 		matrix2[7] = (matrix1[7] * angleVar1 - matrix1[6] * angleVar2) >> 14;
 	} else {
-		int32 i;
-
 		for (i = 0; i < 9; i++)
 			matrix2[i] = matrix1[i];
 	}
 
 	if (renderAngleY) {
-		angleVar2 = shadeAngleTable[renderAngleY & 0x3FF];			// esi
-		angleVar1 = shadeAngleTable[((renderAngleY & 0x3FF)+0x100) & 0x3FF];	// ecx
+		angle = renderAngleY;
+		angleVar2 = shadeAngleTable[angle & 0x3FF];	// esi
+		angle += 0x100;
+		angleVar1 = shadeAngleTable[angle & 0x3FF];	// ecx
 
 		tempMatrix[1] = matrix2[1];
 		tempMatrix[4] = matrix2[4];
@@ -414,8 +418,6 @@ void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
 		tempMatrix[6] = (matrix2[6] * angleVar1 - matrix2[8] * angleVar2) >> 14;
 		tempMatrix[8] = (matrix2[6] * angleVar2 + matrix2[8] * angleVar1) >> 14;
 	} else {
-		int i;
-
 		for (i = 0; i < 9; i++)
 			tempMatrix[i] = matrix2[i];
 	}
@@ -1164,7 +1166,7 @@ void renderPolygons(int32 ecx, int32 edi) {
 					if (hsize > 1) {
 						uint16 ax;
 						bh ^= 1;
-						ax = *((uint16*)out2);
+						ax = (uint16)out2;
 						ax &= 1;
 						if (ax ^ bh) {
 							out2++;
@@ -1227,7 +1229,7 @@ void renderPolygons(int32 ecx, int32 edi) {
 						if (start >= 0 && start < 640)
 							*(out2) = startColor >> 8;
 					} else {
-						int currentXPos = start;
+						int32 currentXPos = start;
 						colorSize /= hsize;
 						hsize++;
 
@@ -1729,12 +1731,12 @@ int32 renderModelElements(uint8 *esi) {
 				uint32 y2;
 
 				lineCoordinatesPtr = (lineCoordinates *) esi;
-				color = (*((int32*) & lineCoordinatesPtr->data) & 0xFF00) >> 8;
+				color = (*((int32*) &lineCoordinatesPtr->data) & 0xFF00) >> 8;
 
-				x1 = *((int16*)(uint16*) & lineCoordinatesPtr->x1);
-				y1 = *((int16*)(uint16*) & lineCoordinatesPtr->y1);
-				x2 = *((int16*)(uint16*) & lineCoordinatesPtr->x2);
-				y2 = *((int16*)(uint16*) & lineCoordinatesPtr->y2);
+				x1 = *((uint16*) &lineCoordinatesPtr->x1);
+				y1 = *((uint16*) &lineCoordinatesPtr->y1);
+				x2 = *((uint16*) &lineCoordinatesPtr->x2);
+				y2 = *((uint16*) &lineCoordinatesPtr->y2);
 
 				drawLine(x1, y1, x2, y2, color);
 				break;
@@ -1850,10 +1852,10 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
 
 	if (numOfElements - 1 != 0) {
 		numOfPrimitives = numOfElements - 1;
-		currentMatrixTableEntry = (uint8 *) & matricesTable[9];
+		currentMatrixTableEntry = (uint8 *) &matricesTable[9];
 
 		do {
-			int boneType = elemEntryPtr->flag;
+			int16 boneType = elemEntryPtr->flag;
 
 			if (boneType == 0) {
 				processRotatedElement(elemEntryPtr->rotateX, elemEntryPtr->rotateY, elemEntryPtr->rotateZ, elemEntryPtr);  // rotation
@@ -1909,7 +1911,7 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
 
 			// X projection
 			{
-				coX = (coX * cameraPosY) / coZ + orthoProjX;
+				coX = orthoProjX + ((coX * cameraPosY) / coZ);
 
 				if (coX > 0xFFFF)
 					coX = 0x7FFF;
@@ -1925,7 +1927,7 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
 
 			// Y projection
 			{
-				coY = (-coY * cameraPosZ) / coZ + orthoProjY;
+				coY = orthoProjY + ((-coY * cameraPosZ) / coZ);
 
 				if (coY > 0xFFFF)
 					coY = 0x7FFF;
@@ -2025,7 +2027,7 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
 
 			tmpElemPtr = pri2Ptr2 = pri2Ptr2 + 38; // next element
 
-			//tmpLightMatrix = lightMatrix = lightMatrix + 9;
+			/*tmpLightMatrix =*/ lightMatrix = lightMatrix + 9;
 		} while (--numOfPrimitives);
 	}
 
