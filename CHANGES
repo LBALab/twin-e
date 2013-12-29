@@ -10,6 +10,7 @@ TwinEngine Changes : a Little Big Adventure engine changes
 	- [FIXED] (issue #3) F4 key was making Twinsen throw Magicball.
 	- [FIXED] (issue #5) Saber and Pingin inventory items wasn't working correctly.
 	- [FIXED] (issue #8) Some keyboard movement code was incorrectly reversed. Some actions can now be done together.
+	- [FIXED] Recenter screen pressed key that wasn't working together with other keys (for example arrow keys while running)
 
 # 0.1.3 - 11.04.2013
 	- [FIXED] (issue #37) Multiple voice samples were been playing at the same time.
