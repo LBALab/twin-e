@@ -464,6 +464,10 @@ void readKeys() {
 	for (j = 0; j < size; j++) {
 		if (keyboard[j]) {
 			switch (j) {
+			case SDLK_RETURN:
+			case SDLK_KP_ENTER:
+				localKey = 0x1C;
+				break;
 			case SDLK_SPACE:
 				localKey = 0x39;
 				break;
