@@ -299,7 +299,7 @@ int32 runGameEngine() { // mainLoopInteration
 		}
 
 		// Press Enter to Recenter Screen
-		if ((loopCurrentKey == 0x1C) && disableScreenRecenter == 0) {
+		if ((loopPressedKey & 2) && !disableScreenRecenter) {
 			newCameraX = sceneActors[currentlyFollowedActor].X >> 9;
 			newCameraY = sceneActors[currentlyFollowedActor].Y >> 8;
 			newCameraZ = sceneActors[currentlyFollowedActor].Z >> 9;
