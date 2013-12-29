@@ -60,31 +60,31 @@ void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeig
 
 	flag = 0;
 
-	if (startWidth < SCREEN_TEXTLIMIT_LEFT) {
+	if (startWidth < textWindowLeft) {
 		flag |= 1;
 	} else {
-		if (startWidth > SCREEN_TEXTLIMIT_RIGHT)
+		if (startWidth > textWindowRight)
 			return;
 	}
 
-	if (startHeight < SCREEN_TEXTLIMIT_TOP) {
+	if (startHeight < textWindowTop) {
 		flag |= 8;
 	} else {
-		if (startHeight > SCREEN_TEXTLIMIT_BOTTOM)
+		if (startHeight > textWindowBottom)
 			flag |= 4;
 	}
 
 	flag <<= 8;
 
-	if (endWidth < SCREEN_TEXTLIMIT_LEFT)
+	if (endWidth < textWindowLeft)
 		return;
-	if (endWidth <= SCREEN_TEXTLIMIT_LEFT)
+	if (endWidth <= textWindowLeft)
 		flag |= 2;
 
-	if (endHeight < SCREEN_TEXTLIMIT_TOP) {
+	if (endHeight < textWindowTop) {
 		flag |= 8;
 	} else {
-		if (endHeight > SCREEN_TEXTLIMIT_BOTTOM)
+		if (endHeight > textWindowBottom)
 			flag |= 4;
 	}
 
