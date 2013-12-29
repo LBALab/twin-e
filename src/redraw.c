@@ -299,8 +299,8 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 	
 	modelActorPos = 0;
 	drawListPos = 0;
-	spriteActorPos = modelActorPos + 0x1000;
-	shadowActorPos = modelActorPos + 0x0C00;
+	spriteActorPos = 0x1000;
+	shadowActorPos = 0x0C00;
 
 	// Process actors drawing list
 	for (modelActorPos = 0; modelActorPos < sceneNumActors; modelActorPos++, spriteActorPos++, shadowActorPos++) {
@@ -324,7 +324,8 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 					projectPositionOnScreen(actor->X - cameraX, actor->Y - cameraY, actor->Z - cameraZ);
 
 					if ((actor->staticFlags.bUsesClipping && projPosX > -112 && projPosX < 752 && projPosY > -50 && projPosY < 651) ||
-					        ((!actor->staticFlags.bUsesClipping) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
+					   ((!actor->staticFlags.bUsesClipping) && projPosX > -50 && projPosX < 680 && projPosY > -30 && projPosY < 580)) {
+						
 						tmpVal = actor->Z + actor->X - cameraX - cameraZ;
 
 						// if actor is above another actor
@@ -539,7 +540,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 					if (actor->staticFlags.bUsesClipping) {
 						drawOverSpriteActor((actor->lastX + 0x100) >> 9, actor->lastY >> 8, (actor->lastZ + 0x100) >> 9);
 					} else {
-						int tmpX, tmpY, tmpZ;
+						int32 tmpX, tmpY, tmpZ;
 
 						tmpX = (actor->X + actor->boudingBox.X.topRight + 0x100) >> 9;
 						tmpY = actor->Y >> 8;
