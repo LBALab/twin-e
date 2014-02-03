@@ -59,6 +59,8 @@ void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeig
 	int16 color;
 	int16 var2;
 	int16 xchg;
+	int32 outcode0, outcode1;
+	int32 x, y, outcodeOut;
 	int32 currentLineColor = lineColor;
 
 	// draw line from left to right
@@ -73,15 +75,14 @@ void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeig
 	}	
 
 	// Perform proper clipping (Cohen–Sutherland algorithm)
-	int32 outcode0 = checkClipping(startWidth, startHeight);
-	int32 outcode1 = checkClipping(endWidth, endHeight);
+	outcode0 = checkClipping(startWidth, startHeight);
+	outcode1 = checkClipping(endWidth, endHeight);
  
 	while ((outcode0 | outcode1) != 0) {
 		if (((outcode0 & outcode1) != 0) && (outcode0 != INSIDE)) return; // Reject lines which are behind one clipping plane
-		int32 x, y;
 
 		// At least one endpoint is outside the clip rectangle; pick it.
-		int32 outcodeOut = outcode0 ? outcode0 : outcode1;
+		outcodeOut = outcode0 ? outcode0 : outcode1;
 
 		if (outcodeOut & TOP) {           // point is above the clip rectangle
 			x = startWidth + (int)((endWidth - startWidth) * (float)(textWindowTop - startHeight) / (float)(endHeight - startHeight));
