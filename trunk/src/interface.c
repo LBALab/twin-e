@@ -31,6 +31,11 @@
 #include "main.h"
 #include "lbaengine.h"
 
+int32 clamp(int32 val, int32 min, int32 max)
+{
+	return val > min ? (val < max ? val: SCREEN_WIDTH) : 0;
+}
+
 /** Draw button line
 	@param startWidth width value where the line starts
 	@param startHeight height value where the line starts
@@ -47,6 +52,12 @@ void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeig
 	int16 xchg;
 	int32 currentLineColor = lineColor;
 
+	// clamp the values to fit the viewport (sanity check)
+	startWidth = clamp(startWidth, 0, SCREEN_WIDTH);
+	startHeight = clamp(startHeight, 0, SCREEN_WIDTH);
+	endWidth = clamp(endWidth, 0, SCREEN_WIDTH);
+	endHeight = clamp(endHeight, 0, SCREEN_WIDTH);
+	
 	// draw line from left to right
 	if (startWidth > endWidth) {
 		temp = endWidth;
