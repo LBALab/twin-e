@@ -667,15 +667,6 @@ int computePolygons() {
 	ptr1[1] = pRenderV1[1];
 	ptr1[2] = pRenderV1[2];
 
-	if (vleft < 0)
-		return ERROR_OUT_OF_SCREEN;
-	if (vright >= 640)
-		return ERROR_OUT_OF_SCREEN;
-	if (vtop < 0)
-		return ERROR_OUT_OF_SCREEN;
-	if (vbottom >= 480)
-		return ERROR_OUT_OF_SCREEN;
-
 	ptr1 = pRenderV1;
 
 	vertexParam1 = vertexParam2 = (*(ptr1++)) & 0xFF;
@@ -998,6 +989,11 @@ int computePolygons() {
 	return (1);
 }
 
+inline float clamp(float x, float a, float b)
+{
+    return x < a ? a : (x > b ? b : x);
+}
+
 void renderPolygons(int32 ecx, int32 edi) {
 	uint8 *out, *out2;
 	int16 *ptr1;
@@ -1024,13 +1020,8 @@ void renderPolygons(int32 ecx, int32 edi) {
 	 if (vtop >= 480 || vbottom >= 480)
 	   return;*/
 
-	if (vtop < 0) {
-		return;
-	}
-
-	if (vbottom >= 479) {
-		return;
-	}
+	vtop = clamp(vtop, 0, SCREEN_HEIGHT-1);
+	vbottom = clamp(vbottom, 0, SCREEN_HEIGHT-1);
 
 	out = frontVideoBuffer + 640 * vtop;
 
