@@ -411,6 +411,8 @@ void initAll() {
 	renderTop = 0;
 	renderRight = SCREEN_TEXTLIMIT_RIGHT;
 	renderBottom = SCREEN_TEXTLIMIT_BOTTOM;
+	// Set clip to fullscreen by default, allows main menu to render properly after load
+	resetClip();
 
 	rightMouse = 0;
 	leftMouse = 0;
