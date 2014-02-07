@@ -365,6 +365,7 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
 	 */
 
 	int8 dialText[256];
+	memset(dialText, 0, sizeof(dialText));
 	int32 textSize;
 
 	left = width - kMainMenuButtonSpan / 2;
@@ -788,6 +789,7 @@ void mainMenu() {
 
 	// load menu effect file only once
 	plasmaEffectPtr = (uint8 *)malloc(kPlasmaEffectFilesize);
+	memset(plasmaEffectPtr, 0, kPlasmaEffectFilesize);
 	hqrGetEntry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
 	while (!cfgfile.Quit) {
