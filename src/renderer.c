@@ -667,15 +667,6 @@ int computePolygons() {
 	ptr1[1] = pRenderV1[1];
 	ptr1[2] = pRenderV1[2];
 
-        if(vleft<0)
-		return 0;
-	if(vright>=640)
-		return 0;
-	if(vtop<0)
-		return 0;
-	if(vbottom>=480)
-		return 0;
-
 	ptr1 = pRenderV1;
 
 	vertexParam1 = vertexParam2 = (*(ptr1++)) & 0xFF;
@@ -998,7 +989,7 @@ int computePolygons() {
 	return (1);
 }
 
-FORCEINLINE float clamp(float x, float a, float b)
+FORCEINLINE int16 clamp(int16 x, int16 a, int16 b)
 {
     return x < a ? a : (x > b ? b : x);
 }
@@ -1029,16 +1020,8 @@ void renderPolygons(int32 ecx, int32 edi) {
 	 if (vtop >= 480 || vbottom >= 480)
 	   return;*/
 
-    if(vtop<0) {
-		return;
-	}
-
-	if(vbottom >= 479) {
-		return;
-	}
-
-	vtop = (int16)clamp(vtop, 0, SCREEN_HEIGHT-1);
-	vbottom = (int16)clamp(vbottom, 0, SCREEN_HEIGHT-1);
+	vtop = clamp(vtop, 0, SCREEN_HEIGHT-1);
+	vbottom = clamp(vbottom, 0, SCREEN_HEIGHT-1);
 
 	out = frontVideoBuffer + 640 * vtop;
 
@@ -1733,18 +1716,18 @@ int32 renderModelElements(uint8 *esi) {
 
 			switch (type) {
 			case RENDERTYPE_DRAWLINE: { // draw a line
-				uint32 x1;
-				uint32 y1;
-				uint32 x2;
-				uint32 y2;
+				int32 x1;
+				int32 y1;
+				int32 x2;
+				int32 y2;
 
 				lineCoordinatesPtr = (lineCoordinates *) esi;
 				color = (*((int32*) &lineCoordinatesPtr->data) & 0xFF00) >> 8;
 
-				x1 = *((uint16*) &lineCoordinatesPtr->x1);
-				y1 = *((uint16*) &lineCoordinatesPtr->y1);
-				x2 = *((uint16*) &lineCoordinatesPtr->x2);
-				y2 = *((uint16*) &lineCoordinatesPtr->y2);
+				x1 = *((int16*) &lineCoordinatesPtr->x1);
+				y1 = *((int16*) &lineCoordinatesPtr->y1);
+				x2 = *((int16*) &lineCoordinatesPtr->x2);
+				y2 = *((int16*) &lineCoordinatesPtr->y2);
 
 				drawLine(x1, y1, x2, y2, color);
 				break;
