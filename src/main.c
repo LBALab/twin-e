@@ -450,7 +450,7 @@ int8* ITOA(int32 number) {
 		numDigits = 3;
 	}
 
-	text = (int8 *)malloc(sizeof(int8) * numDigits);
+	text = (int8 *)malloc(sizeof(int8) * (numDigits + 1));
 	sprintf(text, "%d", number);
 	return text;
 }
