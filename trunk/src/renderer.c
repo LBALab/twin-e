@@ -135,13 +135,19 @@ typedef struct bodyHeaderStruct {
 	int32 keyFrameTime;
 } bodyHeaderStruct;
 
-#pragma pack(1)
 typedef struct vertexData {
 	uint8 param;
-	uint8 __padding;
 	int16 x;
 	int16 y;
 } vertexData;
+
+typedef union packed16 {
+	struct {
+		uint8 al;
+		uint8 ah;
+	} bit;
+	uint16 temp;
+} packed16;
 
 // ---- variables ----
 
@@ -212,8 +218,6 @@ uint8 *renderV19;   // RECHECK THIS
 // render polygon vars
 int16 pRenderV3[96];
 int16 *pRenderV2;
-int16 numOfVertexRemaining;
-int16 polyCropped;
 
 int16 vleft;
 int16 vtop;
@@ -635,29 +639,23 @@ FORCEINLINE int16 clamp(int16 x, int16 a, int16 b)
 
 int computePolygons() {
 	int16 vertexX, vertexY;
-	int16 *ptr3;
+	int16 *outPtr;
 	int32 i, nVertex;
-	int16 push1, push2;
-	int8 direction = 1;
-	int32 echange;
+	int8 direction, up;
 	int16 oldVertexX, oldVertexY;
 	int16 currentVertexX, currentVertexY;
-	int16 size;
-	int32 temp2, temp4, temp6;
-//	int32 temp5;
-//	int32 step;
-	int64 vfloat, vfloat2;
+	int16 vsize, hsize, ypos;
+	int16 cvalue, cdelta;
+	int64 slope, xpos;
 	vertexData *vertices;
 
 	pRenderV1 = vertexCoordinates;
 	pRenderV2 = pRenderV3;
-	numOfVertexRemaining = numOfVertex;
-	polyCropped = 0;
-
-	vleft = vtop = 32767;
-	vright = vbottom = -32768;
 
 	vertices = (vertexData*)vertexCoordinates;
+
+	vleft = vright = vertices[0].x;
+	vtop = vbottom = vertices[0].y;
 
 	for (i = 0; i < numOfVertex; i++) {
 		vertices[i].x = clamp(vertices[i].x, 0, SCREEN_WIDTH-1);
@@ -675,15 +673,14 @@ int computePolygons() {
 		if (vertexY > vbottom)
 			vbottom = vertexY;
 	}
-
 	
-	vertices[numOfVertex] = vertices[0];
+	vertexParam1 = vertexParam2 = vertices[numOfVertex-1].param;
+	currentVertexX = vertices[numOfVertex-1].x;
+	currentVertexY = vertices[numOfVertex-1].y;
 
-	vertexParam1 = vertexParam2 = vertices[0].param;
-	oldVertexX = vertices[0].x;
-	oldVertexY = vertices[0].y;
-
-	for (nVertex = 1; nVertex <= numOfVertex; nVertex++) {	
+	for (nVertex = 0; nVertex < numOfVertex; nVertex++) {			
+		oldVertexY = currentVertexY;
+		oldVertexX = currentVertexX;
 		oldVertexParam = vertexParam1;
 
 		vertexParam1 = vertexParam2 = vertices[nVertex].param;
@@ -692,309 +689,51 @@ int computePolygons() {
 
 		// drawLine(oldVertexX,oldVertexY,currentVertexX,currentVertexY,255);
 
-		if (currentVertexY == oldVertexY) { // since it's scanline based, we don't care when we are only moving along X
-			oldVertexX = size = currentVertexX;
+		if (currentVertexY == oldVertexY) continue;
+
+		up = currentVertexY < oldVertexY;
+		direction = up ? -1: 1;
+
+		vsize = abs(currentVertexY - oldVertexY);
+		hsize = abs(currentVertexX - oldVertexX);
+				
+		if (direction*oldVertexX > direction*currentVertexX) { // if we are going up right
+			xpos = currentVertexX;
+			ypos = currentVertexY;
+			cvalue = (vertexParam2 << 8) + ((oldVertexParam - vertexParam2) << 8) % vsize;
+			cdelta = ((oldVertexParam - vertexParam2) << 8) / vsize;
+			direction = -direction;  // we will draw by going down the tab
 		} else {
-			push1 = currentVertexX; // let's save the current coordinates since we are going to modify the values
-			push2 = currentVertexY;
-
-			if (currentVertexY < oldVertexY) { // if we are going up
-				size = oldVertexY - currentVertexY;
-				direction = -1;
-
-				if (oldVertexX < currentVertexX) { // if we are going up right
-					echange = oldVertexX; // we invert the vertex to draw from new to old
-					oldVertexX = currentVertexX;
-					currentVertexX = echange;
-
-					echange = currentVertexY;
-					currentVertexY = oldVertexY;
-
-					oldVertexY = echange;
-
-					echange = oldVertexParam;
-					oldVertexParam = vertexParam2;
-					vertexParam2 = echange;
-
-					direction = 1;  // we will draw by going down the tab
-				}
-
-				temp2 = oldVertexY; // temp2 is the starting Y position
-				oldVertexY = size;  // oldVertexY now become the number of pixel
-				size = temp2 * 2;
-
-				ptr3 = &polyTab[temp2 + 480]; // ptr3 is the output ptr in the renderTab
-
-				temp4 = ((oldVertexX - currentVertexX) << 16);  // temp4 = size in X << 16
-
-				//temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
-				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
-
-				vfloat = ((int64)(oldVertexX - currentVertexX)) / ((int64) oldVertexY);
-
-				temp6 >>= 1;
-				temp6 += 0x7FFF;
-
-//				step = (uint16) temp5;  // retrieve the size of a step
-
-				// temp7 = (((unsigned short)temp6) | ((oldVertexX & 0xFFFF)<<16));
-				vfloat2 = oldVertexX;
-
-				oldVertexX = oldVertexY;  // oldVertexX is now the number of vertical pixels
-
-				oldVertexY += 2;
-
-				for (i = 0; i < oldVertexY; i++) {
-					// *(ptr3)=((temp7&0xFFFF0000)>>16);
-					if ((ptr3 - polyTab) < 960)
-						*(ptr3) = (int16) vfloat2;
-					ptr3 += direction;
-					// temp7+=step;
-					vfloat2 -= vfloat;
-				}
-
-				if (polyRenderType >= 7) { // we must compute the color progression
-					int16* ptr3 = &polyTab2[temp2 + 480];
-
-					temp4 = (vertexParam2 - oldVertexParam); // compute the color difference
-
-					if (temp4 >= 0) {
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} test;
-
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} reste;
-
-						test.bit.al = oldVertexParam;
-						test.bit.ah = vertexParam2;
-
-						test.bit.ah -= test.bit.al;
-
-						test.bit.al = 0;
-
-						reste.temp = test.temp % oldVertexX;
-
-						test.temp /= oldVertexX;
-
-						reste.bit.al >>= 1;
-						reste.bit.al += 0x7F;
-
-						reste.bit.ah = oldVertexParam;
-
-						oldVertexX += 2;
-
-						for (i = 0; i < oldVertexX; i++) {
-							if ((ptr3 - polyTab2) < 960)
-								*(ptr3) = reste.temp;
-							ptr3 += direction;
-							reste.temp += test.temp;
-						}
-					} else {
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} test;
-
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} reste;
-
-						test.bit.al = oldVertexParam;
-						test.bit.ah = vertexParam2;
-
-						test.bit.ah -= test.bit.al;
-						test.bit.ah = -test.bit.ah;
-
-						test.bit.al = 0;
-
-						reste.temp = test.temp % (oldVertexX);
-
-						test.temp /= oldVertexX;
-
-						reste.bit.al >>= 1;
-						reste.bit.al = -reste.bit.al;
-						reste.bit.al += 0x7F;
-
-						reste.bit.ah = oldVertexParam;
-
-						for (i = 0; i <= oldVertexX; i++) {
-							if ((ptr3 - polyTab2) < 960)
-								*(ptr3) = reste.temp;
-							ptr3 += direction;
-							reste.temp -= test.temp;
-						}
-					}
-				}
-				direction = 1;
-				oldVertexY = push2;
-				oldVertexX = push1;
-			} else { // if we are going down
-				size = currentVertexY - oldVertexY; // size is the number of pixel we must go
-				// verticaly
-
-				if (oldVertexX > currentVertexX) { // if we are going down and to the left
-					echange = oldVertexX; // in that case, we will draw the line the other
-					// side (from new point to old point)
-					oldVertexX = currentVertexX;
-					currentVertexX = echange;
-
-					echange = currentVertexY;
-					currentVertexY = oldVertexY;
-					oldVertexY = echange;
-
-					echange = oldVertexParam;
-					oldVertexParam = vertexParam2;
-					vertexParam2 = echange;
-
-					direction = -1; // since we are going backward in the screen
-				}
-
-				temp2 = oldVertexY; // temp2 is the starting Y position
-				oldVertexY = size;  // oldVertexY now become the number of pixel
-				size = temp2 * 2;
-
-				ptr3 = &polyTab[temp2]; // ptr3 is the output ptr in the renderTab
-
-				temp4 = ((currentVertexX - oldVertexX) << 16);  // temp4 = size in X << 16
-
-				//temp5 = temp4 / oldVertexY; // temp5 is the size of a step << 16
-				temp6 = temp4 % oldVertexY; // temp6 is the remaining << 16
-
-				vfloat = ((int64)(currentVertexX - oldVertexX)) / ((int64) oldVertexY);
-
-				temp6 >>= 1;
-				temp6 += 0x7FFF;
-
-//				step = (uint16) temp5;  // retrieve the size of a step
-
-				// temp7 = (((unsigned short)temp6) | ((oldVertexX & 0xFFFF)<<16));
-				vfloat2 = oldVertexX;
-
-				oldVertexX = oldVertexY;  // oldVertexX is now the number of vertical pixels
-
-				oldVertexY += 2;
-
-				for (i = 0; i < oldVertexY; i++) {
-					// *(ptr3)=((temp7&0xFFFF0000)>>16);
-					if ((ptr3 - polyTab) < 960)
-						*(ptr3) = (int16) vfloat2;
-					ptr3 += direction;
-					// temp7+=step;
-					vfloat2 += vfloat;
-				}
-
-				if (polyRenderType >= 7) {
-					int16* ptr3 = &polyTab2[temp2];
-
-					temp4 = ((vertexParam2 - oldVertexParam)); // compute the color difference
-
-					if (temp4 >= 0) {
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} test;
-
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} reste;
-
-						test.bit.al = oldVertexParam;
-						test.bit.ah = vertexParam2;
-
-						test.bit.ah -= test.bit.al;
-
-						test.bit.al = 0;
-
-						reste.temp = test.temp % oldVertexX;
-
-						test.temp /= oldVertexX;
-
-						reste.bit.al >>= 1;
-						reste.bit.al += 0x7F;
-
-						reste.bit.ah = oldVertexParam;
-
-						oldVertexX += 2;
-
-						for (i = 0; i < oldVertexX; i++) {
-							if ((ptr3 - polyTab2) < 960)
-								*(ptr3) = reste.temp;
-							ptr3 += direction;
-							reste.temp += test.temp;
-						}
-					} else {
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							} bit;
-							uint16 temp;
-						} test;
-
-						union {
-							struct {
-								uint8 al;
-								uint8 ah;
-							}	bit;
-							uint16 temp;
-						} reste;
-
-						test.bit.al = oldVertexParam;
-						test.bit.ah = vertexParam2;
-
-						test.bit.ah -= test.bit.al;
-						test.bit.ah = -test.bit.ah;
-
-						test.bit.al = 0;
-
-						reste.temp = test.temp % (oldVertexX);
-
-						test.temp /= oldVertexX;
-
-						reste.bit.al >>= 1;
-						reste.bit.al = -reste.bit.al;
-						reste.bit.al += 0x7F;
-
-						reste.bit.ah = oldVertexParam;
-
-						for (i = 0; i <= oldVertexX; i++) {
-							if ((ptr3 - polyTab2) < 960)
-								*(ptr3) = reste.temp;
-							ptr3 += direction;
-							reste.temp -= test.temp;
-						}
-					}
-				}
-				direction = 1;
-				oldVertexY = push2;
-				oldVertexX = push1;
+			xpos = oldVertexX;
+			ypos = oldVertexY;
+			cvalue = (oldVertexParam << 8) + ((vertexParam2 - oldVertexParam) << 8) % vsize;
+			cdelta = ((vertexParam2 - oldVertexParam) << 8) / vsize;
+		}
+		outPtr = &polyTab[ypos + (up? 480: 0)]; // outPtr is the output ptr in the renderTab
+
+		slope = (int64)hsize/(int64)vsize;
+		slope = up ? -slope: slope;
+
+		for (i = 0; i < vsize + 2; i++) {
+			if ((outPtr - polyTab) < 960)
+			if ((outPtr - polyTab) > 0)
+				*(outPtr) = (int16) xpos;
+			outPtr += direction;
+			xpos += slope;
+		}
+
+		if (polyRenderType >= 7) { // we must compute the color progression
+			int16* outPtr = &polyTab2[ypos + (up? 480: 0)];
+
+			for (i = 0; i < vsize + 2; i++) {
+				if ((outPtr - polyTab2) < 960)
+				if ((outPtr - polyTab2) > 0)
+					*(outPtr) = cvalue;
+				outPtr += direction;
+				cvalue += cdelta;
 			}
 		}
-	} //while (--numOfVertexRemaining);
+	}
 
 	return (1);
 }
