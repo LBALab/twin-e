@@ -135,6 +135,14 @@ typedef struct bodyHeaderStruct {
 	int32 keyFrameTime;
 } bodyHeaderStruct;
 
+#pragma pack(1)
+typedef struct vertexData {
+	uint8 param;
+	uint8 __padding;
+	int16 x;
+	int16 y;
+} vertexData;
+
 // ---- variables ----
 
 int32 baseMatrixRotationX;
@@ -620,10 +628,15 @@ void setLightVector(int32 angleX, int32 angleY, int32 angleZ) {
 
 // ------------------------------------------------------------------------------------------------------
 
+FORCEINLINE int16 clamp(int16 x, int16 a, int16 b)
+{
+    return x < a ? a : (x > b ? b : x);
+}
+
 int computePolygons() {
 	int16 vertexX, vertexY;
-	int16 *ptr1, *ptr3;
-	int32 i;
+	int16 *ptr3;
+	int32 i, nVertex;
 	int16 push1, push2;
 	int8 direction = 1;
 	int32 echange;
@@ -634,6 +647,7 @@ int computePolygons() {
 //	int32 temp5;
 //	int32 step;
 	int64 vfloat, vfloat2;
+	vertexData *vertices;
 
 	pRenderV1 = vertexCoordinates;
 	pRenderV2 = pRenderV3;
@@ -643,42 +657,38 @@ int computePolygons() {
 	vleft = vtop = 32767;
 	vright = vbottom = -32768;
 
-	ptr1 = vertexCoordinates;
+	vertices = (vertexData*)vertexCoordinates;
 
 	for (i = 0; i < numOfVertex; i++) {
-		ptr1++;   // discarding the 1st parameter
-
-		vertexX = *(ptr1++);
+		vertices[i].x = clamp(vertices[i].x, 0, SCREEN_WIDTH-1);
+		vertexX = vertices[i].x;
 
 		if (vertexX < vleft)
 			vleft = vertexX;
 		if (vertexX > vright)
 			vright = vertexX;
 
-		vertexY = *(ptr1++);
-
+		vertices[i].y = clamp(vertices[i].y, 0, SCREEN_HEIGHT-1);
+		vertexY = vertices[i].y;
 		if (vertexY < vtop)
 			vtop = vertexY;
 		if (vertexY > vbottom)
 			vbottom = vertexY;
 	}
 
-	ptr1[0] = pRenderV1[0];
-	ptr1[1] = pRenderV1[1];
-	ptr1[2] = pRenderV1[2];
+	
+	vertices[numOfVertex] = vertices[0];
 
-	ptr1 = pRenderV1;
+	vertexParam1 = vertexParam2 = vertices[0].param;
+	oldVertexX = vertices[0].x;
+	oldVertexY = vertices[0].y;
 
-	vertexParam1 = vertexParam2 = (*(ptr1++)) & 0xFF;
-	oldVertexX = *(ptr1++);
-	oldVertexY = *(ptr1++);
-
-	do {
+	for (nVertex = 1; nVertex <= numOfVertex; nVertex++) {	
 		oldVertexParam = vertexParam1;
 
-		vertexParam1 = vertexParam2 = (*(ptr1++)) & 0xFF;
-		currentVertexX = *(ptr1++);
-		currentVertexY = *(ptr1++);
+		vertexParam1 = vertexParam2 = vertices[nVertex].param;
+		currentVertexX = vertices[nVertex].x;
+		currentVertexY = vertices[nVertex].y;
 
 		// drawLine(oldVertexX,oldVertexY,currentVertexX,currentVertexY,255);
 
@@ -984,14 +994,9 @@ int computePolygons() {
 				oldVertexX = push1;
 			}
 		}
-	} while (--numOfVertexRemaining);
+	} //while (--numOfVertexRemaining);
 
 	return (1);
-}
-
-FORCEINLINE int16 clamp(int16 x, int16 a, int16 b)
-{
-    return x < a ? a : (x > b ? b : x);
 }
 
 void renderPolygons(int32 ecx, int32 edi) {
@@ -1019,9 +1024,6 @@ void renderPolygons(int32 ecx, int32 edi) {
 	   // return;
 	 if (vtop >= 480 || vbottom >= 480)
 	   return;*/
-
-	vtop = clamp(vtop, 0, SCREEN_HEIGHT-1);
-	vbottom = clamp(vbottom, 0, SCREEN_HEIGHT-1);
 
 	out = frontVideoBuffer + 640 * vtop;
 
