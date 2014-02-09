@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 #include "renderer.h"
 #include "main.h"
@@ -654,8 +655,8 @@ int computePolygons() {
 
 	vertices = (vertexData*)vertexCoordinates;
 
-	vleft = vright = vertices[0].x;
-	vtop = vbottom = vertices[0].y;
+	vleft = vtop = 32767;
+	vright = vbottom = -32768;
 
 	for (i = 0; i < numOfVertex; i++) {
 		vertices[i].x = clamp(vertices[i].x, 0, SCREEN_WIDTH-1);
@@ -1779,6 +1780,15 @@ void prepareIsoModel(uint8 *bodyPtr) { // loadGfxSub
 	uint8 *ptr2;
 
 	bodyHeader = (bodyHeaderStruct *)bodyPtr;
+
+	// This function should only be called ONCE, otherwise it corrupts the model data.
+	// The following code implements an unused flag to indicate that a model was already processed.
+	if (!(bodyHeader->bodyFlag & 0x80))	{
+		bodyHeader->bodyFlag |= 0x80;
+	}
+	else {
+		return;
+	}
 
 	if (!(bodyHeader->bodyFlag & 2)) {	// no animation applicable
 		return;
