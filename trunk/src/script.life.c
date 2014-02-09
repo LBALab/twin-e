@@ -154,9 +154,13 @@ int32 processLifeConditions(ActorStruct *actor) {
 			if (Abs(actor->Y - otherActor->Y) >= 1500) {
 				currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;	
 			} else {
-				currentScriptValue = getDistance2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
-				if (Abs(currentScriptValue) > MAX_TARGET_ACTOR_DISTANCE) {
+				// Returns int32, so we check for integer overflow
+				int32 distance = getDistance2D(actor->X, actor->Z, otherActor->X, otherActor->Z);
+				if (Abs(distance) > MAX_TARGET_ACTOR_DISTANCE) {
 					currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
+				}
+				else {
+					currentScriptValue = distance;
 				}
 			}
 		} else {
@@ -305,9 +309,13 @@ int32 processLifeConditions(ActorStruct *actor) {
 		conditionValueSize = 2;
 
 		if (!targetActor->dynamicFlags.bIsDead) {
-			currentScriptValue = getDistance3D(actor->X, actor->Y, actor->Z, targetActor->X, targetActor->Y, targetActor->Z);		
-			if (Abs(currentScriptValue) > MAX_TARGET_ACTOR_DISTANCE) {
+			// Returns int32, so we check for integer overflow
+			int32 distance = getDistance3D(actor->X, actor->Y, actor->Z, targetActor->X, targetActor->Y, targetActor->Z);	
+			if (Abs(distance) > MAX_TARGET_ACTOR_DISTANCE) {
 				currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
+			}
+			else {
+				currentScriptValue = distance;
 			}
 		} else {
 			currentScriptValue = MAX_TARGET_ACTOR_DISTANCE;
