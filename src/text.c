@@ -224,7 +224,7 @@ void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 
 	usedColor = dialTextColor;
 
-	screen = frontVideoBuffer + screenLockupTable[y] + x;
+	screen = frontVideoBuffer + screenLookupTable[y] + x;
 
 	tempX = x;
 	tempY = y;

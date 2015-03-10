@@ -115,7 +115,7 @@ void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeig
 		endHeight = -endHeight;
 	}
 
-	out = frontVideoBuffer + screenLockupTable[startHeight] + startWidth;
+	out = frontVideoBuffer + screenLookupTable[startHeight] + startWidth;
 
 	color = currentLineColor;
 	if (endWidth < endHeight) {    // significant slope
@@ -174,8 +174,8 @@ void blitBox(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int
 	int32 i;
 	int32 j;
 
-	s = screenLockupTable[top] + source + left;
-	d = screenLockupTable[topDest] + dest + leftDest;
+	s = screenLookupTable[top] + source + left;
+	d = screenLookupTable[topDest] + dest + leftDest;
 
 	width = right - left + 1;
 	height = bottom - top + 1;
@@ -231,7 +231,7 @@ void drawTransparentBox(int32 left, int32 top, int32 right, int32 bottom, int32 
 	if (bottom > SCREEN_TEXTLIMIT_BOTTOM)
 		bottom = SCREEN_TEXTLIMIT_BOTTOM;
 
-	pos = screenLockupTable[top] + frontVideoBuffer + left;
+	pos = screenLookupTable[top] + frontVideoBuffer + left;
 	height2 = height = bottom - top;
 	height2++;
 
@@ -279,7 +279,7 @@ void drawSplittedBox(int32 left, int32 top, int32 right, int32 bottom, uint8 e) 
 	// cropping
 	offset = -((right - left) - SCREEN_WIDTH);
 
-	ptr = frontVideoBuffer + screenLockupTable[top] + left;
+	ptr = frontVideoBuffer + screenLookupTable[top] + left;
 
 	for (x = top; x < bottom; x++) {
 		for (y = left; y < right; y++) {

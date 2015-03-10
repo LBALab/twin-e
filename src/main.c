@@ -134,7 +134,7 @@ void allocVideoMemory() {
 	j = 0;
 	k = 0;
 	for (i = SCREEN_HEIGHT; i > 0; i--) {
-		screenLockupTable[j] = k;
+		screenLookupTable[j] = k;
 		j++;
 		k += SCREEN_WIDTH;
 	}
@@ -388,8 +388,8 @@ void initSVGA() {
 
 /** Initialize all needed stuffs at first time running engine */
 void initAll() {
-	blockBuffer = (uint8 *)malloc(204800);  // 204800 = 64*64*25*2
-	animBuffer1 = animBuffer2 = (uint8 *)malloc(5000);
+	blockBuffer = (uint8 *) malloc(64*64*25*2 * sizeof(uint8));
+	animBuffer1 = animBuffer2 = (uint8 *) malloc(5000 * sizeof(uint8));
 	memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
 	memset(itemAngle, 256, sizeof(itemAngle)); // reset inventory items angles
 
