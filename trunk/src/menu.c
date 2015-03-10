@@ -219,10 +219,6 @@ int16 VolumeMenuSettings[] = {
 
 /** Plasma Effect pointer to file content: RESS.HQR:51 */
 uint8 *plasmaEffectPtr;
-/** Plasma Effect variables 1 */
-uint8 *plasmaEffectVar1;
-/** Plasma Effect variables 2 */
-uint8 *plasmaEffectVar2;
 
 /** Hero behaviour menu entity */
 uint8 *behaviourEntity;
@@ -235,53 +231,49 @@ int32 inventorySelectedColor;
 int32 inventorySelectedItem; // currentSelectedObjectInInventory
 
 #define PLASMA_WIDTH 320
+#define PLASMA_HEIGHT 50
 #define SCREEN_W 640
 
 /** Plasma Effect Initialization */
 void plasmaEffectInit() {
-	uint8  *temp1 = NULL;
-	uint8  *temp2 = NULL;
 	int16  c;
-	int32  i;
-	uint32 *copy1 = NULL;
-	uint32 *copy2 = NULL;
+	int32  i, j;
 
-	plasmaEffectVar1 = plasmaEffectPtr;
-	plasmaEffectVar2 = plasmaEffectPtr + 50 * PLASMA_WIDTH;
+	for (j = 1; j < PLASMA_HEIGHT - 1; j++) {
+    	for (i = 1; i < PLASMA_WIDTH - 1; i++) {
+            /*Here we calculate the average of all 8 neighbour pixel values*/
 
-	temp1 = plasmaEffectVar1 + PLASMA_WIDTH + 1; // where start first line
-	temp2 = plasmaEffectVar2 + PLASMA_WIDTH + 1; // where start first line
+		    c  = plasmaEffectPtr[(i-1) + (j-1) * PLASMA_WIDTH];  //top-left
+		    c += plasmaEffectPtr[(i+0) + (j-1) * PLASMA_WIDTH];   //top
+		    c += plasmaEffectPtr[(i+1) + (j-1) * PLASMA_WIDTH]; //top-right
 
-	for (i = 0; i < 48 * PLASMA_WIDTH - 2; i++) { // for all the lines except the last one
-        /*Here we calculate the average of all 8 neighbour pixel values*/
-		c = temp1[-PLASMA_WIDTH - 1];
-		c += temp1[-PLASMA_WIDTH];
-		c += temp1[-PLASMA_WIDTH + 1];
-		c += temp1[-1];
-		c += temp1[+1];
-		c += temp1[PLASMA_WIDTH - 1];
-		c += temp1[PLASMA_WIDTH];
-		c += temp1[PLASMA_WIDTH + 1];
-		c = (c >> 3) | ((c & 0x0003) << 13); /*and the 2 least significant bits are used as a 
-          randomizing parameter for statistically fading the flames */
+		    c += plasmaEffectPtr[(i-1) + (j+0) * PLASMA_WIDTH]; //left
+		    c += plasmaEffectPtr[(i+1) + (j+0) * PLASMA_WIDTH]; //right
 
-        
-		if (!(c & 0x6500) &&
-            ( (temp2 >= plasmaEffectVar2 + 14720) || c > 0) ){
-			c--; /*fade this pixel*/
-		}
+		    c += plasmaEffectPtr[(i-1) + (j+1) * PLASMA_WIDTH]; // bottom-left
+		    c += plasmaEffectPtr[(i+0) + (j+1) * PLASMA_WIDTH];   // bottom
+		    c += plasmaEffectPtr[(i+1) + (j+1) * PLASMA_WIDTH]; // bottom-right
 
-		*temp2 = (uint8) c;
+		    c = (c >> 3) | ((c & 0x0003) << 13); /* And the 2 least significant bits are used as a 
+              randomizing parameter for statistically fading the flames */
 
-		temp1++;
-		temp2++;
+            
+		    if (!(c & 0x6500) &&
+                (j >= (PLASMA_HEIGHT-4) || c > 0)){
+			    c--; /*fade this pixel*/
+		    }
+
+            /* plot the pixel using the calculated color */
+            plasmaEffectPtr[i + (PLASMA_HEIGHT+j)*PLASMA_WIDTH] = (uint8) c;
+        }
 	}
 
-	copy1 = (uint32 *) plasmaEffectVar1;
-	copy2 = (uint32 *)(plasmaEffectVar2 + PLASMA_WIDTH);   // pass to the next line
+    // flip the double-buffer while scrolling the effect vertically:
+	uint8 *dest = plasmaEffectPtr;
+	uint8 *src = plasmaEffectPtr + (PLASMA_HEIGHT+1) * PLASMA_WIDTH;
+	for (i = 0; i < PLASMA_HEIGHT * PLASMA_WIDTH; i++)
+		*(dest++) = *(src++);
 
-	for (i = 0; i < 48 * PLASMA_WIDTH / 4; i++)
-		*(copy1++) = *(copy2++);  // copy current frame buffer with 1 line
 }
 
 /** Process the plasma effect
@@ -296,7 +288,7 @@ void processPlasmaEffect(int32 top, int32 color) {
 
 	plasmaEffectInit();
 
-	in = plasmaEffectVar1 + 5 * PLASMA_WIDTH;
+	in = plasmaEffectPtr + 5 * PLASMA_WIDTH;
 	out = frontVideoBuffer + screenLookupTable[top];
 
 	for (i = 0; i < 25; i++) {
