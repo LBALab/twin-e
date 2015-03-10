@@ -234,101 +234,84 @@ AnimTimerDataStruct behaviourAnimData[4];
 int32 inventorySelectedColor;
 int32 inventorySelectedItem; // currentSelectedObjectInInventory
 
+#define PLASMA_WIDTH 320
+#define SCREEN_W 640
+
 /** Plasma Effect Initialization */
 void plasmaEffectInit() {
-	uint8  *temp1 = 0;
-	uint8  *temp2 = 0;
-	int8   *temp2bis = 0;
-	int16  temp4 = 0;
-	int32  i = 0;
-	uint32 *copy1 = 0;
-	uint32 *copy2 = 0;
+	uint8  *temp1 = NULL;
+	uint8  *temp2 = NULL;
+	int16  c;
+	int32  i;
+	uint32 *copy1 = NULL;
+	uint32 *copy2 = NULL;
 
 	plasmaEffectVar1 = plasmaEffectPtr;
-	plasmaEffectVar2 = plasmaEffectPtr + 16000;
+	plasmaEffectVar2 = plasmaEffectPtr + 50 * PLASMA_WIDTH;
 
-	temp1 = plasmaEffectVar1 + 321; // where start first line
-	temp2 = plasmaEffectVar2 + 321; // where start first line
+	temp1 = plasmaEffectVar1 + PLASMA_WIDTH + 1; // where start first line
+	temp2 = plasmaEffectVar2 + PLASMA_WIDTH + 1; // where start first line
 
-	for (i = 0; i < 15358; i++) { // for all the lines except the last one
-		temp4 = 0;
+	for (i = 0; i < 48 * PLASMA_WIDTH - 2; i++) { // for all the lines except the last one
+        /*Here we calculate the average of all 8 neighbour pixel values*/
+		c = temp1[-PLASMA_WIDTH - 1];
+		c += temp1[-PLASMA_WIDTH];
+		c += temp1[-PLASMA_WIDTH + 1];
+		c += temp1[-1];
+		c += temp1[+1];
+		c += temp1[PLASMA_WIDTH - 1];
+		c += temp1[PLASMA_WIDTH];
+		c += temp1[PLASMA_WIDTH + 1];
+		c = (c >> 3) | ((c & 0x0003) << 13); /*and the 2 least significant bits are used as a 
+          randomizing parameter for statistically fading the flames */
 
-		temp4 += temp1[-1];
-		temp4 += temp1[-320];
-		temp4 += temp1[-319];
-		temp4 += temp1[-321];
-		temp4 += temp1[+1];
-		temp4 += temp1[+320];
-		temp4 += temp1[+319];
-		temp4 += temp1[+321];
-
-		temp4 = (temp4 >> 3) | ((temp4 & 0x0003) << 13);
-
-		if (!(temp4 & 0x6500)) {
-			if (temp2 >= (plasmaEffectVar2 + 14720)) {
-				temp4--;
-			} else if (temp4 > 0) {
-				temp4--;
-			}
+        
+		if (!(c & 0x6500) &&
+            ( (temp2 >= plasmaEffectVar2 + 14720) || c > 0) ){
+			c--; /*fade this pixel*/
 		}
 
+		*temp2 = (uint8) c;
+
 		temp1++;
-		*temp2 = (uint8) temp4;
 		temp2++;
 	}
 
 	copy1 = (uint32 *) plasmaEffectVar1;
-	copy2 = (uint32 *)(plasmaEffectVar2 + 320);   // pass to the next line
+	copy2 = (uint32 *)(plasmaEffectVar2 + PLASMA_WIDTH);   // pass to the next line
 
-	for (i = 0; i < 3840; i++)
+	for (i = 0; i < 48 * PLASMA_WIDTH / 4; i++)
 		*(copy1++) = *(copy2++);  // copy current frame buffer with 1 line
-
-	temp2bis = (int8 *) plasmaEffectVar2 + 12480; // pointer with 11 last lines
-
-	for (i = 1600; i >= 0; i--) { // prepare next frame
-		temp4 = *temp2bis;
-		if (temp4 <= 15) {
-			*temp2bis = -(temp4 - 11);
-		}
-		temp2++;
-	}
 }
 
 /** Process the plasma effect
 	@param top top height where the effect will be draw in the front buffer
 	@param color plasma effect start color */
 void processPlasmaEffect(int32 top, int32 color) {
-	uint8 *temp;
+	uint8 *in;
 	uint8 *out;
-	int32 i, j;
-	uint8 temp3;
-	uint8 bh, bl;
+	int32 i, j, target;
+	uint8 c;
+	uint8 max_value = color + 15;
 
 	plasmaEffectInit();
 
-	temp = plasmaEffectVar1 + 1600;
-	out = frontVideoBuffer + screenLockupTable[top];
+	in = plasmaEffectVar1 + 5 * PLASMA_WIDTH;
+	out = frontVideoBuffer + screenLookupTable[top];
 
-	bl = color;
-	bh = bl + 15;
+	for (i = 0; i < 25; i++) {
+		for (j = 0; j < kMainMenuButtonWidth; j++) {
+			c = in[i*kMainMenuButtonWidth + j] / 2 + color;
+			if (c > max_value)
+				c = max_value;
 
-	for (i = 25; i >= 0; i--) {
-		for (j = kMainMenuButtonWidth; j >= 0; j--) {
-			temp3 = *temp;
-			temp3 = temp3 >> 1;
-			temp3 += bl;
-			if (temp3 > bh)
-				temp3 = bh;
-
-			out[0] = temp3;
-			out[1] = temp3;
-			out[640] = temp3;
-			out[641] = temp3;
-
-			temp++;
-			out += 2;
+        /* 2x2 squares sharing the same pixel color: */
+            target = 2*(i*SCREEN_W + j);
+			out[target] = c;
+			out[target + 1] = c;
+			out[target + SCREEN_W] = c;
+			out[target + SCREEN_W + 1] = c;
 		}
-		out += 640; //SCREEN_WIDTH;
 	}
 }
 

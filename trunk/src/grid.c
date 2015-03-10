@@ -184,8 +184,8 @@ void copyGridMask(int32 index, int32 x, int32 y, uint8 *buffer) {
 			return;
 	}
 
-	outPtr = frontVideoBuffer + screenLockupTable[absY] + left;
-	inPtr = buffer + screenLockupTable[absY] + left;
+	outPtr = frontVideoBuffer + screenLookupTable[absY] + left;
+	inPtr = buffer + screenLookupTable[absY] + left;
 
 	do {
 		vc3 = *(ptr++);
@@ -665,7 +665,7 @@ void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSp
 		right++;
 		bottom++;
 
-		outPtr = frontVideoBuffer + screenLockupTable[top] + left;
+		outPtr = frontVideoBuffer + screenLookupTable[top] + left;
 
 		offset = -((right - left) - SCREEN_WIDTH);
 

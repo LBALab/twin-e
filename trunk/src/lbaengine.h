@@ -43,7 +43,7 @@ uint8 *frontVideoBuffer;
 uint8 *frontVideoBufferbis;
 
 /** temporary screen table */
-int32 screenLockupTable[2000];
+int32 screenLookupTable[2000];
 
 ActorMoveStruct loopMovePtr; // mainLoopVar1
 

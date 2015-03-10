@@ -96,7 +96,7 @@ void debugFillButton(int32 X, int32 Y, int32 width, int32 height, int8 color) {
 	uint8 *ptr;
 	int32 offset;
 
-	ptr = frontVideoBuffer + screenLockupTable[Y] + X;
+	ptr = frontVideoBuffer + screenLookupTable[Y] + X;
 	offset = 640 - (width);
 
 	for (i = 0; i < height; i++) {
