@@ -234,8 +234,7 @@ int32 inventorySelectedItem; // currentSelectedObjectInInventory
 #define PLASMA_HEIGHT 50
 #define SCREEN_W 640
 
-/** Plasma Effect Initialization */
-void plasmaEffectInit() {
+void plasmaEffectRenderFrame() {
 	int16  c;
 	int32  i, j;
 
@@ -286,7 +285,7 @@ void processPlasmaEffect(int32 top, int32 color) {
 	uint8 c;
 	uint8 max_value = color + 15;
 
-	plasmaEffectInit();
+	plasmaEffectRenderFrame();
 
 	in = plasmaEffectPtr + 5 * PLASMA_WIDTH;
 	out = frontVideoBuffer + screenLookupTable[top];
