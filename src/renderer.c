@@ -1141,7 +1141,7 @@ void circleFill(int32 x, int32 y, int32 radius, int8 color) {
 	}
 }
 
-int32 renderModelElements(uint8 *esi) {
+int32 renderModelElements(uint8 *pointer) {
 	uint8 *edi;
 	int16 temp;
 	int32 eax;
@@ -1186,17 +1186,17 @@ int32 renderModelElements(uint8 *esi) {
 	// prepare polygons
 
 	edi = renderTab7;			// renderTab7 coordinates buffer
-	temp = *((int16*)esi);  // we read the number of polygones
-	esi += 2;
+	temp = *((int16*) pointer);  // we read the number of polygons
+	pointer += 2;
 
 	if (temp) {
-		primitiveCounter = temp;  // the number of primitives = the number of polygones
+		primitiveCounter = temp;  // the number of primitives = the number of polygons
 
-		do {    // loop that load all the polygones
+		do {    // loop that load all the polygons
 			render23 = edi;
-			currentPolyHeader = (polyHeader *) esi;
-			//ecx = *((int32*)esi);
-			esi += 2;
+			currentPolyHeader = (polyHeader *) pointer;
+			//ecx = *((int32*) pointer);
+			pointer += 2;
 			polyRenderType = currentPolyHeader->renderType;
 
 			// TODO: RECHECK coordinates axis
@@ -1207,7 +1207,7 @@ int32 renderModelElements(uint8 *esi) {
 				destinationHeader->numOfVertex = currentPolyHeader->numOfVertex;
 				destinationHeader->colorIndex = currentPolyHeader->colorIndex;
 
-				esi += 2;
+				pointer += 2;
 				edi += 4;
 
 				counter = destinationHeader->numOfVertex;
@@ -1216,7 +1216,7 @@ int32 renderModelElements(uint8 *esi) {
 				renderV19 = edi;
 
 				do {
-					currentPolyVertex = (polyVertexHeader *) esi;
+					currentPolyVertex = (polyVertexHeader *) pointer;
 
 					shadeValue = currentPolyHeader->colorIndex + shadeTable[currentPolyVertex->shadeEntry];
 
@@ -1231,7 +1231,7 @@ int32 renderModelElements(uint8 *esi) {
 					destinationVertex->Y = currentVertex->Y;
 
 					edi += 6;
-					esi += 4;
+					pointer += 4;
 
 					currentDepth = currentVertex->Z;
 
@@ -1246,9 +1246,9 @@ int32 renderModelElements(uint8 *esi) {
 
 				color = currentPolyHeader->colorIndex;
 
-				shadeEntry = *((int16*)(esi + 2));
+				shadeEntry = *((int16*)(pointer + 2));
 
-				esi += 4;
+				pointer += 4;
 
 				*((int16*)(edi + 2)) = color + shadeTable[shadeEntry];
 
@@ -1258,8 +1258,8 @@ int32 renderModelElements(uint8 *esi) {
 				counter = destinationHeader->numOfVertex;
 
 				do {
-					eax = *((int16*)esi);
-					esi += 2;
+					eax = *((int16*) pointer);
+					pointer += 2;
 
 					currentVertex = &flattenPoints[eax / 6];
 
@@ -1282,7 +1282,7 @@ int32 renderModelElements(uint8 *esi) {
 				destinationHeader->numOfVertex = currentPolyHeader->numOfVertex;
 				destinationHeader->colorIndex = currentPolyHeader->colorIndex;
 
-				esi += 2;
+				pointer += 2;
 				edi += 4;
 
 				bestDepth = -32000;
@@ -1291,8 +1291,8 @@ int32 renderModelElements(uint8 *esi) {
 				counter = currentPolyHeader->numOfVertex;
 
 				do {
-					eax = *((int16*)esi);
-					esi += 2;
+					eax = *((int16*) pointer);
+					pointer += 2;
 
 					currentVertex = &flattenPoints[eax / 6];
 
@@ -1354,13 +1354,13 @@ int32 renderModelElements(uint8 *esi) {
 
 	// prepare lines
 
-	temp = *((int16*)esi);
-	esi += 2;
+	temp = *((int16*) pointer);
+	pointer += 2;
 	if (temp) {
 		numOfPrimitives += temp;
 		do {
 			int32 param;
-			lineDataPtr = (lineData *) esi;
+			lineDataPtr = (lineData *) pointer;
 			lineCoordinatesPtr = (lineCoordinates *) edi;
 
 			if (*((int16*)&lineDataPtr->p1) % 6 != 0 || *((int16*)&lineDataPtr->p2) % 6 != 0) {
@@ -1387,21 +1387,21 @@ int32 renderModelElements(uint8 *esi) {
 			renderTabEntryPtr->dataPtr = edi;
 			renderTabEntryPtr++;
 
-			esi += 8;
+			pointer += 8;
 			edi += 12;
 		} while (--temp);
 	}
 
 	// prepare spheres
 
-	temp = *((int16*)esi);
-	esi += 2;
+	temp = *((int16*) pointer);
+	pointer += 2;
 	if (temp) {
 		numOfPrimitives += temp;
 		do {
-			uint8 color = *(esi + 1);
-			int16 center = *((uint16*)(esi + 6));
-			int16 size = *((uint16*)(esi + 4));
+			uint8 color = *(pointer + 1);
+			int16 center = *((uint16*)(pointer + 6));
+			int16 size = *((uint16*)(pointer + 4));
 
 			*(uint8*)edi = color;
 			*((int16*)(edi + 1)) = flattenPoints[center/6].X;
@@ -1413,7 +1413,7 @@ int32 renderModelElements(uint8 *esi) {
 			renderTabEntryPtr->dataPtr = edi;
 			renderTabEntryPtr++;
 
-			esi += 8;
+			pointer += 8;
 			edi += 7;
 		} while (--temp);
 	}
@@ -1443,11 +1443,11 @@ int32 renderModelElements(uint8 *esi) {
 
 	if (numOfPrimitives) {
 		primitiveCounter = numOfPrimitives;
-		renderV19 = esi;
+		renderV19 = pointer;
 
 		do {
 			type = renderTabEntryPtr2->renderType;
-			esi = renderTabEntryPtr2->dataPtr;
+			pointer = renderTabEntryPtr2->dataPtr;
 			renderV19 += 8;
 
 			switch (type) {
@@ -1457,7 +1457,7 @@ int32 renderModelElements(uint8 *esi) {
 				int32 x2;
 				int32 y2;
 
-				lineCoordinatesPtr = (lineCoordinates *) esi;
+				lineCoordinatesPtr = (lineCoordinates *) pointer;
 				color = (*((int32*) &lineCoordinatesPtr->data) & 0xFF00) >> 8;
 
 				x1 = *((int16*) &lineCoordinatesPtr->x1);
@@ -1469,8 +1469,8 @@ int32 renderModelElements(uint8 *esi) {
 				break;
 			}
 			case RENDERTYPE_DRAWPOLYGON: { // draw a polygon
-				eax = *((int*)esi);
-				esi += 4;
+				eax = *((int*) pointer);
+				pointer += 4;
 
 				polyRenderType = eax & 0xFF;
 				numOfVertex = (eax & 0xFF00) >> 8;
@@ -1479,9 +1479,9 @@ int32 renderModelElements(uint8 *esi) {
 				destPtr = (uint8 *) vertexCoordinates;
 
 				for (i = 0; i < (numOfVertex * 3); i++) {
-					*((int16*)destPtr) = *((int16*)esi);
+					*((int16*)destPtr) = *((int16*) pointer);
 					destPtr += 2;
-					esi += 2;
+					pointer += 2;
 				}
 
 				if (computePolygons() != ERROR_OUT_OF_SCREEN) {
@@ -1497,15 +1497,15 @@ int32 renderModelElements(uint8 *esi) {
 				int32 circleParam4;
 				int32 circleParam5;
 
-				eax = *(int*) esi;
+				eax = *(int*) pointer;
 
-				circleParam1 = *(uint8*)esi;
-				circleParam4 = *((int16*)(esi + 1));
-				circleParam5 = *((int16*)(esi + 3));
-				circleParam3 = *((int16*)(esi + 5));
+				circleParam1 = *(uint8*) pointer;
+				circleParam4 = *((int16*)(pointer + 1));
+				circleParam5 = *((int16*)(pointer + 3));
+				circleParam3 = *((int16*)(pointer + 5));
 
 				if (!isUsingOrhoProjection) {
-					circleParam3 = (circleParam3 * cameraPosY) / (cameraPosX + *(int16*)esi);
+					circleParam3 = (circleParam3 * cameraPosY) / (cameraPosX + *(int16*) pointer);
 				} else {
 					circleParam3 = (circleParam3 * 34) >> 9;
 				}
@@ -1533,7 +1533,7 @@ int32 renderModelElements(uint8 *esi) {
 			}
 			}
 
-			esi = renderV19;
+			pointer = renderV19;
 			renderTabEntryPtr2++;
 		} while (--primitiveCounter);
 	} else {
