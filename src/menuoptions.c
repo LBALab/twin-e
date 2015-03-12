@@ -234,7 +234,7 @@ int32 enterPlayerName(int32 textIdx) {
 			do {
 				readKeys();
 			} while(skipIntro);
-		} while(skipedKey);
+		} while(skippedKey);
 
 		enterPlayerNameVar2 = 1;
 
@@ -278,7 +278,7 @@ void newGameMenu() {
 			readKeys();
 			do {
 				readKeys();
-			} while(skipedKey != 0);
+			} while(skippedKey != 0);
 		} while(skipIntro != 0);
 	}
 }
@@ -307,7 +307,7 @@ void continueGameMenu() {
 			readKeys();
 			do {
 				readKeys();
-			} while(skipedKey != 0);
+			} while(skippedKey != 0);
 		} while(skipIntro != 0);
 	}
 }

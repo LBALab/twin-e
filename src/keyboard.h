@@ -34,7 +34,7 @@ extern uint8 pressedKeyMap[29];
 extern uint16 pressedKeyCharMap[31];
 
 /** Skipped key - key1 */
-int16 skipedKey;
+int16 skippedKey;
 /** Pressed key - printTextVar12 */
 int16 pressedKey;
 //int printTextVar13;

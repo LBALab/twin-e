@@ -1385,7 +1385,7 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
 
 	do {
 		readKeys();
-	} while (skipIntro || skipedKey);
+	} while (skipIntro || skippedKey);
 
 	unfreezeTime();
 	

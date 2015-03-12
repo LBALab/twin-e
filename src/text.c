@@ -698,7 +698,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 			if (printedText == 2) {
 				do {
 					readKeys();
-					if (skipIntro == 0 && skipedKey == 0 && pressedKey == 0) {
+					if (skipIntro == 0 && skippedKey == 0 && pressedKey == 0) {
 						break;
 					}
 					playVox(currDialTextEntry);
@@ -707,7 +707,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 
 				do {
 					readKeys();
-					if (skipIntro != 0 || skipedKey != 0 || pressedKey != 0) {
+					if (skipIntro != 0 || skippedKey != 0 || pressedKey != 0) {
 						break;
 					}
 					playVox(currDialTextEntry);
@@ -749,7 +749,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 		do {
 			readKeys();
 			sdldelay(1);
-		} while(skipIntro || skipedKey || pressedKey);
+		} while(skipIntro || skippedKey || pressedKey);
 
 		// RECHECK this later
 		// wait key to display next text
@@ -759,7 +759,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 				loadClip();
 				return;
 			}
-			if (skipedKey != 0) {
+			if (skippedKey != 0) {
 				loadClip();
 				return;
 			}
@@ -932,13 +932,13 @@ void drawAskQuestion(int32 index) { // MyDial
 				readKeys();
 				playVox(currDialTextEntry);
 				sdldelay(1);
-			} while(skipIntro || skipedKey || pressedKey);
+			} while(skipIntro || skippedKey || pressedKey);
 
 			do {
 				readKeys();
 				playVox(currDialTextEntry);
 				sdldelay(1);
-			} while(!skipIntro && !skipedKey && !pressedKey);
+			} while(!skipIntro && !skippedKey && !pressedKey);
 		}
 
 		sdldelay(1);
