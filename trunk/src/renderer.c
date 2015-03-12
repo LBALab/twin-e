@@ -736,12 +736,11 @@ int computePolygons() {
 	return (1);
 }
 
-void renderPolygons(int32 ecx, int32 edi) {
+void renderPolygons(int32 render_type, int32 color) {
 	uint8 *out, *out2;
 	int16 *ptr1;
 	int16 *ptr2;
 	int32 vsize, hsize;
-	int32 color;
 	int32 j;
 	int32 currentLine;
 
@@ -770,9 +769,7 @@ void renderPolygons(int32 ecx, int32 edi) {
 	vsize = vbottom - vtop;
 	vsize++;
 
-	color = edi;
-
-	switch (ecx) {
+	switch (render_type) {
 	case POLYGONTYPE_TELE: // FIXME temporary fix
 	case POLYGONTYPE_FLAT: {
 		currentLine = vtop;
@@ -1114,7 +1111,7 @@ void renderPolygons(int32 ecx, int32 edi) {
 	}
 	default: {
 #ifdef GAMEMOD
-		printf("RENDER WARNING: Unsuported render type %d\n", ecx);
+		printf("RENDER WARNING: Unsuported render type %d\n", render_type);
 #endif
 		break;
 	}
