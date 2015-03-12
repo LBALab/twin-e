@@ -97,7 +97,7 @@ int32 runGameEngine() { // mainLoopInteration
 
 	previousLoopPressedKey = loopPressedKey;
 	key  = pressedKey;
-	loopPressedKey = skipedKey;
+	loopPressedKey = skippedKey;
 	loopCurrentKey = skipIntro;
 
 #ifdef GAMEMOD
@@ -112,7 +112,7 @@ int32 runGameEngine() { // mainLoopInteration
 		if (pressedKey != 0) {
 			return 0;
 		}
-		if (skipedKey != 0) {
+		if (skippedKey != 0) {
 			return 0;
 		}
 	} else {

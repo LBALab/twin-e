@@ -513,7 +513,7 @@ int32 processMenu(int16 * menuSettings) {
 		if (localData == MainMenuSettings) {
 			if (lbaTime - localTime <= 11650) {
 				if (skipIntro == 46)
-					if (skipedKey != 32)
+					if (skippedKey != 32)
 						return kBackground;
 			} else {
 				return kBackground;
@@ -611,7 +611,7 @@ int32 processMenu(int16 * menuSettings) {
 			do {
 				readKeys();
 				drawButton(localData, 1);
-			} while (pressedKey == 0 && skipedKey == 0 && skipIntro == 0);
+			} while (pressedKey == 0 && skippedKey == 0 && skipIntro == 0);
 			buttonNeedRedraw = 0;
 		} else {
 			if (musicChanged) {
@@ -625,7 +625,7 @@ int32 processMenu(int16 * menuSettings) {
 			// WARNING: this is here to prevent a fade bug while quit the menu
 			copyScreen(workVideoBuffer, frontVideoBuffer);
 		}
-	} while (!(skipedKey & 2) && !(skipedKey & 1));
+	} while (!(skippedKey & 2) && !(skippedKey & 1));
 
 	currentButton = *(localData + 5 + currentButton * 2); // get current browsed button
 
@@ -1015,7 +1015,7 @@ void processBehaviourMenu() {
 	
 	tmpTime = lbaTime;
 
-	while (skipedKey & 4 || (skipIntro >= 59 && skipIntro <= 62)) {
+	while (skippedKey & 4 || (skipIntro >= 59 && skipIntro <= 62)) {
 		readKeys();
 		key = pressedKey;
 
@@ -1155,17 +1155,17 @@ void processInventoryMenu() {
 
 		if (!di) {
 			key  = pressedKey;
-			loopPressedKey = skipedKey;
+			loopPressedKey = skippedKey;
 			loopCurrentKey = skipIntro;
 			
-			if (key != 0 || skipedKey != 0) {
+			if (key != 0 || skippedKey != 0) {
 				di = 1;
 			}
 		} else {
 			loopCurrentKey = 0;
 			key = 0;
 			loopPressedKey = 0;
-			if (!pressedKey && !skipedKey) {
+			if (!pressedKey && !skippedKey) {
 				di = 0;
 			}
 		}
@@ -1262,7 +1262,7 @@ void processInventoryMenu() {
 
 	initTextBank(currentTextBank + 3);
 
-	while (skipIntro != 0 && skipedKey != 0) {
+	while (skipIntro != 0 && skippedKey != 0) {
 		readKeys();
 		sdldelay(1);
 	}

@@ -352,7 +352,7 @@ void readKeys() {
 	uint8 *keyboard;
 
 	localKey = 0;
-	skipedKey = 0;
+	skippedKey = 0;
 	skipIntro = 0;
 
 	SDL_PumpEvents();
@@ -548,7 +548,7 @@ void readKeys() {
 			}
 			// pressed inactive keys
 			else {
-				skipedKey |= (temp & 0xFF00) >> 8;
+				skippedKey |= (temp & 0xFF00) >> 8;
 			}
 		}
 

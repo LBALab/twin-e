@@ -403,7 +403,7 @@ void processFoundItem(int32 item) {
 		flipRedrawAreas();
 		
 		readKeys();
-		if (skipedKey) {
+		if (skippedKey) {
 			if (!textState) {
 				quitItem = 1;
 			}
