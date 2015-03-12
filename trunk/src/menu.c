@@ -1085,11 +1085,8 @@ void drawItem(int32 item) {
 	int32 top    = itemY - 32;
 	int32 bottom = itemY + 32;
 
-	if (inventorySelectedItem == item) {
-		drawSplittedBox(left, top, right, bottom, inventorySelectedColor);
-	} else {
-		drawSplittedBox(left, top, right, bottom, 0);
-	}
+	drawSplittedBox(left, top, right, bottom,
+                    inventorySelectedItem == item ? inventorySelectedColor : 0);
 
 	if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
 		prepareIsoModel(inventoryTable[item]);
