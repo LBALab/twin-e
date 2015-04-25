@@ -38,7 +38,10 @@ OBJS=actor.o \
 	text.o
 
 LIBS=$(LDFLAGS)
-TARGET=twin-e_mingw.exe
+
+VERSION=v0.2.1
+TARGET=twin-e_$(VERSION).exe
+INSTALLDIR=..\bin
 
 all: $(TARGET)
 
@@ -54,3 +57,6 @@ clean:
 	@del *.bak
 	@del stderr.txt
 	@del stdout.txt
+
+install: $(TARGET)
+	move $(TARGET) "$(INSTALLDIR)"
