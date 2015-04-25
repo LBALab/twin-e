@@ -893,7 +893,7 @@ void renderPolygons(int32 render_type, int32 color) {
 					if (hsize > 1) {
 						uint16 ax;
 						bh ^= 1;
-						ax = (uint16)out2;
+						ax = (uint16)(*out2);
 						ax &= 1;
 						if (ax ^ bh) {
 							out2++;
