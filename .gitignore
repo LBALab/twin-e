@@ -1,1 +1,4 @@
 *.o
+dists/vs2012/Debug/
+dists/vs2012/twin-e.opensdf
+dists/vs2012/twin-e.sdf
