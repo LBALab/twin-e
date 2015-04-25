@@ -4,8 +4,9 @@ TwinEngine Changes : a Little Big Adventure engine changes
 # 0.2.1 - 25.04.2015
 	- Code refactoring.
 	
-	- [FIXED] (issue #4) Incorrect inventory 3D models drawing
+	- [FIXED] (issue #4)  Incorrect inventory 3D models drawing
 	- [FIXED] (issue #12) Script condition triggered incorrectly.
+	- [FIXED] (issue #13) Running and colliding with actors teleports you through them
 
 # 0.2.0 - 30.12.2014
 	- Prequengine and TwinEngine merged into a single project.
