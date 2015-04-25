@@ -237,6 +237,8 @@ int32 inventorySelectedItem; // currentSelectedObjectInInventory
 void plasmaEffectRenderFrame() {
 	int16  c;
 	int32  i, j;
+	uint8 *dest;
+	uint8 *src;
 
 	for (j = 1; j < PLASMA_HEIGHT - 1; j++) {
     	for (i = 1; i < PLASMA_WIDTH - 1; i++) {
@@ -268,8 +270,8 @@ void plasmaEffectRenderFrame() {
 	}
 
     // flip the double-buffer while scrolling the effect vertically:
-	uint8 *dest = plasmaEffectPtr;
-	uint8 *src = plasmaEffectPtr + (PLASMA_HEIGHT+1) * PLASMA_WIDTH;
+	dest = plasmaEffectPtr;
+	src = plasmaEffectPtr + (PLASMA_HEIGHT+1) * PLASMA_WIDTH;
 	for (i = 0; i < PLASMA_HEIGHT * PLASMA_WIDTH; i++)
 		*(dest++) = *(src++);
 
@@ -330,14 +332,14 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
 	int32 left;
 	int32 bottom2;
 	int32 bottom;
+	int32 textSize;
+	int8 dialText[256];
 	/*
 	 * int CDvolumeRemaped; int musicVolumeRemaped; int masterVolumeRemaped; int lineVolumeRemaped;
 	 * int waveVolumeRemaped;
 	 */
 
-	int8 dialText[256];
-	memset(dialText, 0, sizeof(dialText));
-	int32 textSize;
+	memset(dialText, 0, sizeof(dialText));	
 
 	left = width - kMainMenuButtonSpan / 2;
 	right = width + kMainMenuButtonSpan / 2;
