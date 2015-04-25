@@ -300,6 +300,9 @@ void getBaseRotationPosition(int32 X, int32 Y, int32 Z) {
 void setBaseRotation(int32 X, int32 Y, int32 Z) {
 	int32 matrixElem;
 	double Xradians, Yradians, Zradians;
+
+	shadeAngleTab3 = &shadeAngleTable[384];
+
 	
 	baseMatrixRotationX = X & 0x3FF;
 	baseMatrixRotationY = Y & 0x3FF;
