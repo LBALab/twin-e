@@ -739,7 +739,7 @@ int computePolygons() {
 	return (1);
 }
 
-void renderPolygons(int32 render_type, int32 color) {
+void renderPolygons(int32 renderType, int32 color) {
 	uint8 *out, *out2;
 	int16 *ptr1;
 	int16 *ptr2;
@@ -749,21 +749,6 @@ void renderPolygons(int32 render_type, int32 color) {
 
 	int16 start, stop;
 
-//	int64 varf2;
-//	int64 varf3;
-//	int64 varf4;
-
-	/* if (vtop <= 0 || vbottom <= 0)
-	   return;
-	 if (vleft <= 0 || vright <= 0)
-	   return;
-	 if (vleft >= 640)
-	   return;
-	 // if(vright>=640)
-	   // return;
-	 if (vtop >= 480 || vbottom >= 480)
-	   return;*/
-
 	out = frontVideoBuffer + 640 * vtop;
 
 	ptr1 = &polyTab[vtop];
@@ -772,8 +757,7 @@ void renderPolygons(int32 render_type, int32 color) {
 	vsize = vbottom - vtop;
 	vsize++;
 
-	switch (render_type) {
-	case POLYGONTYPE_TELE: // FIXME temporary fix
+	switch (renderType) {
 	case POLYGONTYPE_FLAT: {
 		currentLine = vtop;
 		do {
@@ -840,7 +824,7 @@ void renderPolygons(int32 render_type, int32 color) {
 		} while (--vsize);
 		break;
 	}
-	case POLYGONTYPE_BOPPER: { // TODO: fix this, it have bugs - (1 pixel for 2)
+	case POLYGONTYPE_BOPPER: { // FIXME: buggy
 		currentLine = vtop;
 		do {
 			if (currentLine >= 0 && currentLine < 480) {
@@ -871,13 +855,118 @@ void renderPolygons(int32 render_type, int32 color) {
 	case POLYGONTYPE_MARBLE: { // TODO: implement this
 		break;
 	}
-	/*case POLYGONTYPE_TELE: { // TODO: implement this
-		break;
-	}*/
-	case POLYGONTYPE_TRAS: { // TODO: implement this
+	case POLYGONTYPE_TELE: { // FIXME: buggy
+		int ax;
+		int bx;
+   		unsigned short int dx;
+		unsigned short int temp;
+		bx = (unsigned short)color << 0x10;
+		renderLoop = vsize;
+		do {	
+			while (1) {
+				start = ptr1[0];
+				stop = ptr1[480];
+				ptr1++;
+				hsize = stop - start;
+		
+				if(hsize)
+					break;
+
+				out2 = start + out;
+				*(out2) = ((unsigned short)(bx >> 0x18)) & 0x0F;
+
+				color = *(out2 + 1);
+
+				out += 640;
+
+				--renderLoop;
+				if (!renderLoop)
+					return;
+			}
+
+			if(stop >= start)
+			{
+				hsize++;
+				bx = (unsigned short)(color >> 0x10);
+				out2 = start + out; 
+            
+				ax = (bx & 0xF0) << 8;
+				bx = bx << 8;
+				ax += (bx & 0x0F);
+				ax -= bx;
+				ax++;
+				ax = ax >> 16;
+			
+				ax = ax / hsize;
+				temp = (ax & 0xF0);
+				temp = temp >> 8;
+				temp += (ax & 0x0F);
+				ax = temp;
+
+				dx = ax;
+
+				ax = (ax & 0x0F) + (bx & 0xF0);
+				hsize++;
+
+				if (hsize & 1) {
+					ax = 0; // not sure about this
+				}
+
+				j = hsize >> 1;
+
+				while (1) {
+					*(out2++) = ax & 0x0F;
+					ax += dx;
+
+					--j;
+					if (!j)
+						break;
+
+					*(out2++) = ax & 0x0F;
+					ax += dx;
+				}
+     		}
+        
+			out += 640;
+			--renderLoop;
+
+		}while(renderLoop);
 		break;
 	}
-	case POLYGONTYPE_TRAME: { // TODO: fix this, it have some bugs
+	case POLYGONTYPE_TRAS: { // FIXME: buggy
+		do {
+			unsigned short int bx;
+
+			start = ptr1[0];
+			stop = ptr1[480];
+
+			ptr1++;
+			hsize = stop - start;
+
+			if(hsize >= 0)
+			{
+			  hsize++;
+			  out2 = start + out;
+          
+			  if((hsize >> 1)<0)
+			  {
+				bx = color &0x0FF;
+				bx = bx << 8;
+				bx += color &0x0FF;
+   				for(j = 0; j< hsize; j++)
+				{
+				  *(out2) = (*(out2)&0x0F0F) | bx;
+				}
+			  }
+			  else{
+				*(out2++) = (*(out2) & 0x0F) | color;
+			  }
+			}
+			out += 640;
+		}while(--vsize);
+	  break;
+	}
+	case POLYGONTYPE_TRAME: { // FIXME: buggy
 		unsigned char bh = 0;
 
 		currentLine = vtop;
@@ -1114,7 +1203,7 @@ void renderPolygons(int32 render_type, int32 color) {
 	}
 	default: {
 #ifdef GAMEMOD
-		printf("RENDER WARNING: Unsuported render type %d\n", render_type);
+		printf("RENDER WARNING: Unsuported render type %d\n", renderType);
 #endif
 		break;
 	}
