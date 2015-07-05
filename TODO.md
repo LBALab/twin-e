@@ -1,27 +1,27 @@
-# Introduction #
+# TODO #
 
 This is the place to list every TODO we need to make for this project.
 
-# Menu #
+## Menu ##
 
   1. Complete other menu options including volume settings;
   1. Do Save/Load routines;
   1. Show credits in the end of game or after some seconds in Main Menu;
 
 
-# In-Game #
+## In-Game ##
 
   1. Holomap: create holomap routines;
   1. Renderer: implement missing rendering types and fix rendering issues;
 
 
-# Scripting #
+## Scripting ##
 
   1. Zoom feature; (lZOOM)
   1. Holomap trajectories (lHOLOMAP\_TRAJ)
 
 
-# Refactoring #
+## Refactoring ##
 
   1. Do endian for reading content from pointers for proper portability;
   1. Comment and reorganize the code for renderer and text files; Extras file also need some constants
