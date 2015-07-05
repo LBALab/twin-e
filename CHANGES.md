@@ -1,14 +1,15 @@
-TwinEngine Changes : a Little Big Adventure engine changes
+# TwinEngine Changes
+## A Little Big Adventure engine changes
 - List of all changes during public version releases
 
-# 0.2.1 - 25.04.2015
+## 0.2.1 - 25.04.2015
 	- Code refactoring.
 	
 	- [FIXED] (issue #4)  Incorrect inventory 3D models drawing
 	- [FIXED] (issue #12) Script condition triggered incorrectly.
 	- [FIXED] (issue #13) Running and colliding with actors teleports you through them
 
-# 0.2.0 - 30.12.2014
+## 0.2.0 - 30.12.2014
 	- Prequengine and TwinEngine merged into a single project.
 	- Code refactoring.
 	- Issue tracking was resetted.
@@ -22,7 +23,7 @@ TwinEngine Changes : a Little Big Adventure engine changes
 	- [ADDED] Support for original XMidi format.
 	- [ADDED] Config flag to automatic detect midi file, midi_mi.hqr or midi_mi_win.hqr.
 
-# 0.1.3 - 11.04.2013
+## 0.1.3 - 11.04.2013
 	- [FIXED] (issue #37) Multiple voice samples were been playing at the same time.
 	- [FIXED] (issue #41) Playing samples according with actors position in scenes.
 	- [FIXED] (issue #34) Incorrect text display of special characters.
@@ -33,7 +34,7 @@ TwinEngine Changes : a Little Big Adventure engine changes
 	- [ADDED] Missing palette related script commands (responsible with palette fadings).
 	- [ADDED] Config flag to toggle Twinsen's Wall Collision
 
-# 0.1.2 - 30.12.2012:
+## 0.1.2 - 30.12.2012:
 	- [FIXED] issue with null animation pointers.
 	- [FIXED] issue with actors shadow size.
 	- [FIXED] issue with magicball shadow crashing the game.
@@ -57,7 +58,7 @@ TwinEngine Changes : a Little Big Adventure engine changes
 	- [ADDED] Dialog text buble.
 	- [ADDED] Palette related script commands (responsible with palette fadings).
 
-# 0.1.1 - 13.02.2010:
+## 0.1.1 - 13.02.2010:
 	- [FIXED] (issue #8) Application window close button didn't quit the game.
 	- [FIXED] (issue #9) Menu "Continue game" was always playing intro screens. It nows only plays if we are at Chapter 1 (Still at Prison in Citaldel Island).
 	- [FIXED] (issue #10) Wrong bar size of Magic Level (blue bar).
@@ -78,5 +79,5 @@ TwinEngine Changes : a Little Big Adventure engine changes
 	- [ADDED] Ovelay inventory items at screen corner (ex. when we found holomap or a new locations is set).
 	- [ADDED] F1..F4 keys to change Hero behavior.
 
-# 0.1.0 - 25.01.2010:
+## 0.1.0 - 25.01.2010:
 	- First public release
