@@ -74,6 +74,10 @@ SDL_Surface *surfaceTable[16];
 TTF_Font *font;
 #endif
 
+#ifdef EMSCRIPTEN
+#define SDL_GetKeyState SDL_GetKeyboardState
+#endif
+
 /** SDL exit callback */
 //static void atexit_callback(void) {
 //	sdlClose();
@@ -140,6 +144,7 @@ int sdlInitialize() {
 	/*icon = SDL_LoadBMP("icon.bmp");
 	SDL_WM_SetIcon(icon, NULL);*/
 
+#ifndef EMSCRIPTEN
 	if (cfgfile.Debug) {
 		SDL_version compile_version;
 		const SDL_version *link_version;
@@ -148,6 +153,7 @@ int sdlInitialize() {
 		link_version = SDL_Linked_Version();
 		printf("Running with SDL version: %d.%d.%d\n\n", link_version->major, link_version->minor, link_version->patch);
 	}
+#endif
 
 	printf("Initialising Sound device. Please wait...\n\n");
 

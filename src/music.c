@@ -48,8 +48,10 @@
 /** Number of miliseconds to fade music */
 #define FADE_MS			500
 
+#ifndef EMSCRIPTEN
 /** SDL CD variable interface */
-SDL_CD *cdrom;
+//SDL_CD *cdrom;
+#endif
 /** CD drive letter */
 const int8 *cdname;
 
@@ -89,25 +91,29 @@ void musicFadeOut(int32 ms) {
 /** Play CD music
 	@param track track number to play */
 void playTrackMusicCd(int32 track) {
-	if (!cfgfile.UseCD) {
+#ifndef EMSCRIPTEN
+	/*if (!cfgfile.UseCD) {
 		return;
 	}
 
 	if (cdrom->numtracks == 10) {
 		if (CD_INDRIVE(SDL_CDStatus(cdrom)))
 			SDL_CDPlayTracks(cdrom, track, 0, 1, 0);
-	}
+	}*/
+#endif
 }
 
 /** Stop CD music */
 void stopTrackMusicCd() {
-	if (!cfgfile.UseCD) {
+#ifndef EMSCRIPTEN
+	/*if (!cfgfile.UseCD) {
 		return;
 	}
 
 	if (cdrom != NULL) {
 		SDL_CDStop(cdrom);
-	}
+	}*/
+#endif
 }
 
 /** Generic play music, according with settings it plays CD or MP3 instead
@@ -200,46 +206,48 @@ void stopMidiMusic() {
 
 /** Initialize CD-Rom */
 int initCdrom() {
-	int32 numOfCDROM;
-	int32 cdNum;
+#ifndef EMSCRIPTEN
+	//int32 numOfCDROM;
+	//int32 cdNum;
 
-	if (!cfgfile.Sound) {
-		return 0;
-	}
+	//if (!cfgfile.Sound) {
+	//	return 0;
+	//}
 
-	numOfCDROM = SDL_CDNumDrives();
-	
-	if (cfgfile.Debug)
-		printf("Found %d CDROM devices\n", numOfCDROM);
+	//numOfCDROM = SDL_CDNumDrives();
+	//
+	//if (cfgfile.Debug)
+	//	printf("Found %d CDROM devices\n", numOfCDROM);
 
-	if (!numOfCDROM) {
-		fprintf(stderr, "No CDROM devices available\n");
-		return 0;
-	}
+	//if (!numOfCDROM) {
+	//	fprintf(stderr, "No CDROM devices available\n");
+	//	return 0;
+	//}
 
-	for (cdNum = 0; cdNum < numOfCDROM; cdNum++) {
-		cdname = SDL_CDName(cdNum);
-		if (cfgfile.Debug)
-			printf("Testing drive %s\n", cdname);
-		cdrom = SDL_CDOpen(cdNum);
-		if (!cdrom) {
-			if (cfgfile.Debug)
-				fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError());
-		} else {
-			SDL_CDStatus(cdrom);
-			if (cdrom->numtracks == NUM_CD_TRACKS) {
-				printf("Assuming that it is LBA cd... %s\n\n", cdname);
-				cdDir = "LBA";
-				cfgfile.UseCD = 1;
-				return 1;
-			}
-		}
-		// not found the right CD
-		cfgfile.UseCD = 0;
-		SDL_CDClose(cdrom);
-	}
+	//for (cdNum = 0; cdNum < numOfCDROM; cdNum++) {
+	//	cdname = SDL_CDName(cdNum);
+	//	if (cfgfile.Debug)
+	//		printf("Testing drive %s\n", cdname);
+	//	cdrom = SDL_CDOpen(cdNum);
+	//	if (!cdrom) {
+	//		if (cfgfile.Debug)
+	//			fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError());
+	//	} else {
+	//		SDL_CDStatus(cdrom);
+	//		if (cdrom->numtracks == NUM_CD_TRACKS) {
+	//			printf("Assuming that it is LBA cd... %s\n\n", cdname);
+	//			cdDir = "LBA";
+	//			cfgfile.UseCD = 1;
+	//			return 1;
+	//		}
+	//	}
+	//	// not found the right CD
+	//	cfgfile.UseCD = 0;
+	//	SDL_CDClose(cdrom);
+	//}
 
-	cdrom = NULL;
+	//cdrom = NULL;
+#endif
 
 	printf("Can't find LBA CD!\n\n");
 

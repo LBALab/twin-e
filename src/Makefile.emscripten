@@ -1,0 +1,62 @@
+CC=emcc
+SDL_LIBS=-lSDL
+LDFLAGS=-mwindows $(SDL_LIBS)
+CFLAGS=-DEMSCRIPTEN
+OBJS=actor.o \
+	animations.o \
+	collision.o \
+	debug.o \
+	debug.grid.o \
+	debug.scene.o \
+	extra.o \
+	fcaseopen.o \
+	filereader.o \
+	flamovies.o \
+	gamestate.o \
+	grid.o \
+	holomap.o \
+	hqrdepack.o \
+	interface.o \
+	keyboard.o \
+	lbaengine.o \
+	main.o \
+	menu.o \
+	menuoptions.o \
+	movements.o \
+	music.o \
+	redraw.o \
+	renderer.o \
+	resources.o \
+	scene.o \
+	screens.o \
+	script.life.o \
+	script.move.o \
+	sdlengine.o \
+	sound.o \
+	sys.o \
+	xmidi.o \
+	text.o
+
+LIBS=$(LDFLAGS)
+
+VERSION=v0.2.1
+TARGET=twin-e_$(VERSION).html
+INSTALLDIR=..\bin
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $(OBJS) $(LIBS) --preload-file . -s ALLOW_MEMORY_GROWTH=1
+
+.c.o:
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@del $(OBJS)
+	@del $(TARGET)
+	@del *.bak
+	@del stderr.txt
+	@del stdout.txt
+
+install: $(TARGET)
+	move $(TARGET) "$(INSTALLDIR)"
