@@ -1,4 +1,4 @@
-TwinEngine: a Little Big Adventure engine
+# TwinEngine: a Little Big Adventure engine #
 	
 Copyright (C) 2013 The TwinEngine team
 Copyright (C) 2008-2013 Prequengine team
@@ -52,7 +52,7 @@ You need libSDL, libSDL_Mixer in order to properly compile twin-e.
 As addicional for in-game debug you'll need libSDL_ttf.
 
 
-# on GNU/Linux:
+## on GNU/Linux:
 
 After installing the libsdl, libsdl_mixer and libsdl_ttf development packages,
 go to the trunk/src directory and type "make" (without the quotes, off course).
