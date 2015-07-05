@@ -46,7 +46,7 @@ INSTALLDIR=..\bin
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LIBS) --preload-file . -s ALLOW_MEMORY_GROWTH=1
+	$(CC) -o $@ $(OBJS) $(LIBS) --preload-file data -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=0
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
