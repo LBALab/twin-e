@@ -61,6 +61,7 @@ void drawHolomapTitle(int32 width, int32 height) {  // TODO
 void processHolomap() { // TODO
 	int32 alphaLightTmp;
     int32 betaLightTmp;
+	int32 tmpLanguageCDId;
 
 	freezeTime();
 
@@ -79,6 +80,11 @@ void processHolomap() { // TODO
 	loadHolomapGFX();
 	drawHolomapTitle(320, 25);
 	setCameraPosition(320, 190, 128, 1024, 1024);
+
+	tmpLanguageCDId = cfgfile.LanguageCDId;
+	cfgfile.LanguageCDId = 0;
+	initTextBank(2);
+	setFontCrossColor(9);
 
 	// TODO
 
