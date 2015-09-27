@@ -25,16 +25,72 @@
 
 #include "holomap.h"
 #include "gamestate.h"
+#include "lbaengine.h"
+#include "screens.h"
+#include "scene.h"
+#include "sound.h"
+#include "interface.h"
+#include "sdlengine.h"
+#include "renderer.h"
+#include "text.h"
 
 /** Set Holomap location position
 	@location Scene where position must be set */
-void setHolomapPosition(int32 location) {
-	holomapFlags[location] = 0x81;
+void setHolomapPosition(int32 locationIdx) {
+	holomapFlags[locationIdx] = 0x81;
 }
 
 /** Clear Holomap location position
 	@location Scene where position must be cleared */
-void clearHolomapPosition(int32 location) {
-	holomapFlags[location] &= 0x7E; 
-	holomapFlags[location] |= 0x40;
+void clearHolomapPosition(int32 locationIdx) {
+	holomapFlags[locationIdx] &= 0x7E; 
+	holomapFlags[locationIdx] |= 0x40;
+}
+
+/** Load Holomap content */
+void loadHolomapGFX() { // TODO
+
+}
+
+/** Draw Holomap Title */
+void drawHolomapTitle(int32 width, int32 height) {  // TODO
+	
+}
+
+/** Main holomap process loop */
+void processHolomap() { // TODO
+	int32 alphaLightTmp;
+    int32 betaLightTmp;
+
+	freezeTime();
+
+	// TODO memcopy palette
+
+	alphaLightTmp = alphaLight;
+    betaLightTmp = betaLight;
+
+	fadeToBlack(paletteRGBA);
+	stopSamples();
+	resetClip();
+	clearScreen();
+	flip();
+	copyScreen(frontVideoBuffer, workVideoBuffer);
+
+	loadHolomapGFX();
+	drawHolomapTitle(320, 25);
+	setCameraPosition(320, 190, 128, 1024, 1024);
+
+	// TODO
+
+	newGameVar4 = 1;
+	fadeToBlack(paletteRGBA);
+	alphaLight = alphaLightTmp;
+    betaLight = betaLightTmp;
+	initEngineVars(0);
+
+	initTextBank(currentTextBank + 3);
+
+	// TODO memcopy reset palette
+
+	unfreezeTime();
 }

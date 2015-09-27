@@ -55,7 +55,7 @@ int32 magicLevelStrengthOfHit[] = {
 };
 
 /** Initialize engine 3D projections */
-void initEngineProjections() { // reinitAll1
+void initEngineProjections() {
 	setOrthoProjection(311, 240, 512);
 	setBaseTranslation(0, 0, 0);
 	setBaseRotation(0, 0, 0);
@@ -110,7 +110,7 @@ void initSceneVars() {
 	currentPositionInBodyPtrTab = 0;
 }
 
-void initHeroVars() { // reinitAll3
+void initHeroVars() {
 	resetActor(0); // reset Hero
 
 	magicBallIdx = -1;
@@ -129,7 +129,7 @@ void initHeroVars() { // reinitAll3
 }
 
 /** Initialize all engine variables */
-void initEngineVars(int32 save) { // reinitAll
+void initEngineVars(int32 save) {
 	resetClip();
 
 	alphaLight = 896;

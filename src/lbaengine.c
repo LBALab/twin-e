@@ -47,6 +47,7 @@
 #include "extra.h"
 #include "menuoptions.h"
 #include "collision.h"
+#include "holomap.h"
 
 #ifdef GAMEMOD
 #include "debug.h"
@@ -159,7 +160,9 @@ int32 runGameEngine() { // mainLoopInteration
 			
 			switch (loopInventoryItem) {
 			case kiHolomap:
-				printf("Use Inventory [kiHolomap] not implemented!\n");
+				processHolomap();
+				lockPalette = 1;
+				printf("TODO: Use Inventory [kiHolomap] not implemented!\n");
 				break;
 			case kiMagicBall:
 				if (usingSabre == 1) {
@@ -303,7 +306,16 @@ int32 runGameEngine() { // mainLoopInteration
 			reqBgRedraw = 1;
 		}
 
-		// TODO: draw holomap
+		// Draw holomap
+		if ( loopCurrentKey == 35 && gameFlags[GAMEFLAG_HAS_HOLOMAP] == 1 && !gameFlags[GAMEFLAG_INVENTORY_DISABLED])
+        {
+          freezeTime();
+          //TestRestoreModeSVGA(1);
+          processHolomap();
+          lockPalette = 1;
+          unfreezeTime();
+          redrawEngineActions(1);
+        }
 
 		// Process Pause - Press P
 		if (loopCurrentKey == 0x19) {

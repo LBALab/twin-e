@@ -30,11 +30,19 @@
 
 /** Set Holomap location position
 	@location Scene where position must be set */
-void setHolomapPosition(int32 location);
+void setHolomapPosition(int32 locationIdx);
 
 /** Clear Holomap location position
 	@location Scene where position must be cleared */
-void clearHolomapPosition(int32 location);
+void clearHolomapPosition(int32 locationIdx);
 
+/** Draw Holomap Title */
+void drawHolomapTitle(int32 width, int32 height);
+
+/** Load Holomap content */
+void loadHolomapGFX();
+
+/** Main holomap process loop */
+void processHolomap();
 
 #endif
