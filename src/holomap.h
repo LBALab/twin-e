@@ -39,6 +39,13 @@ void clearHolomapPosition(int32 locationIdx);
 /** Draw Holomap Title */
 void drawHolomapTitle(int32 width, int32 height);
 
+/** Draw Holomap Trajectory */
+void drawHolomapTrajectory(int32 trajectoryIndex);
+
+void loadGfxSub(uint8* modelPtr);
+void loadGfxSub1();
+void loadGfxSub2();
+
 /** Load Holomap content */
 void loadHolomapGFX();
 
