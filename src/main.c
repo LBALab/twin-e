@@ -52,7 +52,7 @@
 #include "fcaseopen.h"
 
 /** Engine current version */
-const int8* ENGINE_VERSION = (int8*) "0.2.0";
+const int8* ENGINE_VERSION = (int8*) "0.2.2";
 
 /** Engine configuration filename */
 const int8* CONFIG_FILENAME = (int8*) "lba.cfg";

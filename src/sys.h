@@ -53,6 +53,8 @@ typedef float int64;
 #define FORCEINLINE static __inline__
 #elif MINGW32
 #define FORCEINLINE inline
+#elif MACOSX
+#define FORCEINLINE static inline
 #else
 #define FORCEINLINE __forceinline
 #endif
