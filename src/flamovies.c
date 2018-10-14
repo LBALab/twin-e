@@ -262,7 +262,7 @@ void processFrame() {
 			break;
 		}
 		default: {
-			return;
+			break;
 		}
 		}
 
