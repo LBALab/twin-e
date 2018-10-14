@@ -39,7 +39,7 @@ OBJS=actor.o \
 
 LIBS=$(LDFLAGS)
 
-VERSION=v0.2.1
+VERSION=v0.2.2
 TARGET=twin-e_$(VERSION).exe
 INSTALLDIR=..\bin
 

@@ -1,7 +1,7 @@
 CC=gcc
 SDL_CFLAGS = `sdl-config --cflags`
 SDL_LIBS = `sdl-config --libs`
-CFLAGS=-ggdb -DUNIX -DGAMEMOD -Wall $(SDL_CFLAGS)
+CFLAGS=-DUNIX -Wall $(SDL_CFLAGS)
 OBJS=actor.o \
 	animations.o \
 	collision.o \
@@ -33,11 +33,13 @@ OBJS=actor.o \
 	script.move.o \
 	sdlengine.o \
 	sound.o \
+	sys.o \
 	xmidi.o \
 	text.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
-TARGET=twin-e
+LIBS=$(SDL_LIBS) -lSDL_mixer -lm
+VERSION=v0.2.2
+TARGET=twin-e_$(VERSION)
 INSTALLDIR=../bin
 
 all: $(TARGET)
@@ -50,6 +52,10 @@ $(TARGET): $(OBJS)
 
 clean:
 	@rm $(OBJS)
+	@rm $(TARGET)
+	@rm *.bak
+	@rm stderr.txt
+	@rm stdout.txt
 
 install: $(TARGET)
 	cp $(TARGET) $(INSTALLDIR)
