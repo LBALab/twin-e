@@ -56,6 +56,36 @@
 int32 isTimeFreezed = 0;
 int32 saveFreezedTime = 0;
 
+int32 quitGame;
+volatile int32 lbaTime;
+
+int16 leftMouse;
+int16 rightMouse;
+
+/** Work video buffer */
+uint8 *workVideoBuffer;
+/** Main game video buffer */
+uint8 *frontVideoBuffer;
+/** Auxiliar game video buffer */
+uint8 *frontVideoBufferbis;
+
+/** temporary screen table */
+int32 screenLookupTable[2000];
+
+ActorMoveStruct loopMovePtr; // mainLoopVar1
+
+int32 loopPressedKey;         // mainLoopVar5
+int32 previousLoopPressedKey; // mainLoopVar6
+int32 loopCurrentKey;    // mainLoopVar7
+int32 loopInventoryItem; // mainLoopVar9
+
+int32 loopActorStep; // mainLoopVar17
+
+/** Disable screen recenter */
+int16 disableScreenRecenter;
+
+int32 zoomScreen;
+
 enum InventoryItems {
 	kiHolomap = 0,
 	kiMagicBall = 1,

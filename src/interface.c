@@ -33,6 +33,15 @@ const int32 RIGHT = 2;  // 0010
 const int32 TOP = 4; // 0100
 const int32 BOTTOM = 8;    // 1000
 
+int32 textWindowTop;
+int32 textWindowTopSave;
+int32 textWindowLeft;
+int32 textWindowLeftSave;
+int32 textWindowRight;
+int32 textWindowRightSave;
+int32 textWindowBottom;
+int32 textWindowBottomSave;
+
 int32 checkClipping(int32 x, int32 y)
 {
 	int32 code = INSIDE; 

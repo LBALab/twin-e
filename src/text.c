@@ -57,6 +57,71 @@ int32 wordSizePixel;
 
 int16 spaceChar = 0x20;
 
+/** Current text bank */
+int32 currentTextBank;
+/** Current dialogue text size */
+int32 currDialTextSize;
+/** Current dialogue text pointer */
+uint8 *currDialTextPtr;
+
+/** Font buffer pointer */
+uint8 * fontPtr;
+
+/** Dialogue text size */
+int32 dialTextSize;
+/** Pixel size between dialogue text */
+int32 dialSpaceBetween;
+/** Pixel size of the space character */
+int32 dialCharSpace;
+/** Dialogue text color */
+int32 dialTextColor;
+
+/** Dialogue text start color for cross coloring dialogues */
+int32 dialTextStartColor;
+/** Dialogue text stop color for cross coloring dialogues */
+int32 dialTextStopColor;
+/** Dialogue text step size for cross coloring dialogues */
+int32 dialTextStepSize;
+/** Dialogue text buffer size for cross coloring dialogues */
+int32 dialTextBufferSize;
+
+int32 dialTextBoxLeft;   // dialogueBoxLeft
+int32 dialTextBoxTop;    // dialogueBoxTop
+int32 dialTextBoxRight;  // dialogueBoxRight
+int32 dialTextBoxBottom; // dialogueBoxBottom
+
+int32 dialTextBoxParam1; // dialogueBoxParam1
+int32 dialTextBoxParam2; // dialogueBoxParam2
+
+// TODO: refactor all this variables and related functions
+int32 printTextVar13;
+uint8 buf1[256];
+uint8 buf2[256];
+uint8 *printText8Ptr1;
+uint8 *printText8Ptr2;
+int32 printText8Var1;
+int32 printText8Var2;
+int32 printText8Var3;
+int32 TEXT_CurrentLetterX;
+int32 printText8Var5;
+int32 printText8Var6;
+int32 TEXT_CurrentLetterY;
+uint8 *printText8Var8;
+int32 newGameVar4;
+int32 newGameVar5;
+int32 hasHiddenVox; // printTextVar5
+int32 voxHiddenIndex;
+int32 printText10Var1;
+int32 addLineBreakX;
+int16 pt8s4[96];
+int32 printText8PrepareBufferVar2;
+
+int32 currDialTextEntry; // ordered entry
+int32 nextDialTextEntry; // ordered entry
+int8 currentVoxBankFile[256];
+
+int32 showDialogueBubble;
+
 /** FLA movie extension */
 #define VOX_EXT ".vox"
 /** Common movie directory */

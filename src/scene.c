@@ -46,6 +46,76 @@
 
 uint8* currentScene;
 
+int32 needChangeScene;
+int32 currentSceneIdx;
+int32 previousSceneIdx;
+
+uint8 *spriteShadowPtr;
+uint8 *spriteBoundingBoxPtr;
+
+int32 currentGameOverScene;
+int32 alphaLight;
+int32 betaLight;
+
+/** Timer for the next sample ambience in scene */
+int32 sampleAmbienceTime;
+
+int16 sampleAmbiance[4];
+int16 sampleRepeat[4];
+int16 sampleRound[4];
+int16 sampleMinDelay;
+int16 sampleMinDelayRnd;
+
+int16 samplePlayed;
+
+int16 sceneMusic;
+
+int16 sceneHeroX; // newTwinsenXByScene
+int16 sceneHeroY; // newTwinsenYByScene
+int16 sceneHeroZ; // newTwinsenZByScene
+
+int16 newHeroX; // newTwinsenX
+int16 newHeroY; // newTwinsenY
+int16 newHeroZ; // newTwinsenZ
+
+int16 zoneHeroX; // newTwinsenXByZone
+int16 zoneHeroY; // newTwinsenYByZone
+int16 zoneHeroZ; // newTwinsenZByZone
+
+/** Hero Y coordinate before fall */
+int16 heroYBeforeFall;
+
+/** Hero type of position in scene */
+int16 heroPositionType; // twinsenPositionModeInNewCube
+
+// ACTORS
+int32 sceneNumActors;
+ActorStruct sceneActors[NUM_MAX_ACTORS];
+ActorStruct *sceneHero;
+
+/** Meca pinguin actor index */
+int16 mecaPinguinIdx; // currentPingouin
+
+/** Current followed actor in scene */
+int16 currentlyFollowedActor;
+/** Current actor in zone */
+int16 currentActorInZone; // currentActorInZoneProcess
+/** Current actor manipulated in scripts */
+int16 currentScriptValue; // manipActorResult
+
+int16 talkingActor;
+
+int32 sceneNumZones;
+ZoneStruct sceneZones[NUM_MAX_ZONES];
+
+int32 sceneNumTracks;
+ScenePoint sceneTracks[NUM_MAX_TRACKS];
+
+// TODO: check what is this
+int16 changeRoomVar10;
+int16 changeRoomVar11;
+
+uint8 sceneFlags[80]; // cubeFlags
 
 void setActorStaticFlags(int32 actorIdx, uint16 staticFlags) {
 	if (staticFlags & 0x1) {

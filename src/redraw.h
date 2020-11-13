@@ -31,27 +31,27 @@
 #define OVERLAY_MAX_ENTRIES		10
 
 /** Auxiliar object render left position on screen */
-int32 renderLeft;
+extern int32 renderLeft;
 /** Auxiliar object render right position on screen */
-int32 renderRight;
+extern int32 renderRight;
 /** Auxiliar object render top position on screen */
-int32 renderTop;
+extern int32 renderTop;
 /** Auxiliar object render bottom position on screen */
-int32 renderBottom;
+extern int32 renderBottom;
 
-int16 drawInGameTransBox;
+extern int16 drawInGameTransBox;
 
 /** Request background redraw */
-int16 reqBgRedraw;
+extern int16 reqBgRedraw;
 
 /** Current number of redraw regions in the screen */
-int32 currNumOfRedrawBox; // fullRedrawVar8
+extern int32 currNumOfRedrawBox; // fullRedrawVar8
 /** Number of redraw regions in the screen */
-int32 numOfRedrawBox;
+extern int32 numOfRedrawBox;
 
 /** Save last actor that bubble dialog icon */
-int32 bubbleActor;
-int32 bubbleSpriteIndex;
+extern int32 bubbleActor;
+extern int32 bubbleSpriteIndex;
 
 enum OverlayType {
 	koSprite = 0,
@@ -77,7 +77,7 @@ typedef struct OverlayListStruct {
 	int16 lifeTime;
 } OverlayListStruct;
 
-OverlayListStruct overlayList[OVERLAY_MAX_ENTRIES];
+extern OverlayListStruct overlayList[OVERLAY_MAX_ENTRIES];
 
 void addOverlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 posType, int16 lifeTime);
 

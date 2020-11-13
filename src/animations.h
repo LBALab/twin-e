@@ -61,33 +61,33 @@ enum AnimationTypes {
 
 
 /** Table with all loaded animations */
-uint8* animTable[NUM_ANIMS];
+extern uint8* animTable[NUM_ANIMS];
 /** Table with all loaded animations sizes */
-uint32 animSizeTable[NUM_ANIMS];
+extern uint32 animSizeTable[NUM_ANIMS];
 
 /** Rotation by anim and not by engine */
-int16 processRotationByAnim;    // processActorVar5
+extern int16 processRotationByAnim;    // processActorVar5
 /** Last rotation angle */
-int16 processLastRotationAngle; // processActorVar6
+extern int16 processLastRotationAngle; // processActorVar6
 /** Current process actor index */
-int16 currentlyProcessedActorIdx;
+extern int16 currentlyProcessedActorIdx;
 
 /** Current step X coornidate */
-int16 currentStepX;
+extern int16 currentStepX;
 /** Current step Y coornidate */
-int16 currentStepY;
+extern int16 currentStepY;
 /** Current step Z coornidate */
-int16 currentStepZ;
+extern int16 currentStepZ;
 /** Current actor anim extra pointer */
-uint8 *currentActorAnimExtraPtr;
+extern uint8 *currentActorAnimExtraPtr;
 
 /** Pointer to current animation keyframe */
-uint8 *keyFramePtr;
+extern uint8 *keyFramePtr;
 /** Pointer to last animation keyframe */
-uint8 *lastKeyFramePtr;
+extern uint8 *lastKeyFramePtr;
 
-uint8 *animBuffer1;
-uint8 *animBuffer2;
+extern uint8 *animBuffer1;
+extern uint8 *animBuffer2;
 
 /** Set animation keyframe
 	@param keyframIdx Animation keyframe index

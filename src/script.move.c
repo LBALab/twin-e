@@ -34,11 +34,11 @@
 #include "redraw.h"
 #include "lbaengine.h"
 
-uint8 *scriptPtr;
-int32 continueMove;
-int32 scriptPosition;
-ActorMoveStruct *move;
-int32 numRepeatSample = 1;
+static uint8 *scriptPtr;
+static int32 continueMove;
+static int32 scriptPosition;
+static ActorMoveStruct *move;
+static int32 numRepeatSample = 1;
 
 typedef int32 ScriptMoveFunc(int32 actorIdx, ActorStruct *actor);
 

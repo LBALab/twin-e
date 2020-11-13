@@ -29,16 +29,16 @@
 #include "sdlengine.h"
 #include "actor.h"
 
-int32 currMenuTextIndex;
-int32 currMenuTextBank;
-int8  currMenuTextBuffer[256];
+extern int32 currMenuTextIndex;
+extern int32 currMenuTextBank;
+extern int8  currMenuTextBuffer[256];
 
-int16 itemAngle[255]; // objectRotation
+extern int16 itemAngle[255]; // objectRotation
 
 extern int16 OptionsMenuSettings[];
 
 /** Behaviour menu move pointer */
-ActorMoveStruct moveMenu;
+extern ActorMoveStruct moveMenu;
 
 /** Plasma Effect pointer to file content: RESS.HQR:51 */
 extern uint8 *plasmaEffectPtr;

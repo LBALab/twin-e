@@ -29,7 +29,7 @@
 #include "sys.h"
 
 /** Track number of the current playing music */
-int32 currentMusic;
+extern int32 currentMusic;
 
 /** Music volume
 	@param current volume number */

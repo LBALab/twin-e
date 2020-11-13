@@ -50,11 +50,11 @@
 #include "holomap.h"
 
 
-uint8 *scriptPtr; // local script pointer
-uint8 *opcodePtr; // local opcode script pointer
+static uint8 *scriptPtr; // local script pointer
+static uint8 *opcodePtr; // local opcode script pointer
 
-int32 drawVar1;
-int8 textStr[256]; // string
+static int32 drawVar1;
+static int8 textStr[256]; // string
 
 /** Returns:
 	   -1 - Need implementation

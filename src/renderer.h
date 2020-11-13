@@ -28,30 +28,30 @@
 
 #include "sys.h"
 
-int32 isUsingOrhoProjection;
+extern int32 isUsingOrhoProjection;
+ 
+extern int16 projPosXScreen; // fullRedrawVar1
+extern int16 projPosYScreen; // fullRedrawVar2
+extern int16 projPosZScreen; // fullRedrawVar3
+extern int16 projPosX;
+extern int16 projPosY;
+extern int16 projPosZ;
+ 
+extern int32 orthoProjX; // setSomethingVar1
+extern int32 orthoProjY; // setSomethingVar2
+extern int32 orthoProjZ; // setSomethingVar2
 
-int16 projPosXScreen; // fullRedrawVar1
-int16 projPosYScreen; // fullRedrawVar2
-int16 projPosZScreen; // fullRedrawVar3
-int16 projPosX;
-int16 projPosY;
-int16 projPosZ;
+extern int32 destX;
+extern int32 destY;
+extern int32 destZ;
 
-int32 orthoProjX; // setSomethingVar1
-int32 orthoProjY; // setSomethingVar2
-int32 orthoProjZ; // setSomethingVar2
-
-int32 destX;
-int32 destY;
-int32 destZ;
-
-int16 *shadeAngleTab3; // tab3
+extern int16 *shadeAngleTab3; // tab3
 
 
-int16 polyRenderType; //FillVertic_AType;
-int32 numOfVertex;
-int16 vertexCoordinates[193];
-int16 *pRenderV1;
+extern int16 polyRenderType; //FillVertic_AType;
+extern int32 numOfVertex;
+extern int16 vertexCoordinates[193];
+extern int16 *pRenderV1;
 
 void setLightVector(int32 angleX, int32 angleY, int32 angleZ);
 

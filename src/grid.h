@@ -48,27 +48,27 @@ enum ShapeType {
 };
 
 /** New grid camera X coordinates */
-int32 newCameraX;
+extern int32 newCameraX;
 /** New grid camera Y coordinates */
-int32 newCameraY;
+extern int32 newCameraY;
 /** New grid camera Z coordinates */
-int32 newCameraZ;
+extern int32 newCameraZ;
 
 /** Current grid camera X coordinates */
-int32 cameraX;
+extern int32 cameraX;
 /** Current grid camera Y coordinates */
-int32 cameraY;
+extern int32 cameraY;
 /** Current grid camera Z coordinates */
-int32 cameraZ;
+extern int32 cameraZ;
 
 /** Celling grid brick block buffer */
-uint8 *blockBuffer;
+extern uint8 *blockBuffer;
 
 
 /** Flag to know if the engine is using celling grids */
-int16 useCellingGrid; // useAnotherGrm
+extern int16 useCellingGrid; // useAnotherGrm
 /** Current celling grid index */
-int16 cellingGridIdx; // currentGrid2
+extern int16 cellingGridIdx; // currentGrid2
 
 
 /** Draw 3D actor over bricks

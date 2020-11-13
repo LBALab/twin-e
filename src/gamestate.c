@@ -54,6 +54,34 @@ int32 magicLevelStrengthOfHit[] = {
 	0
 };
 
+uint8 gameFlags[256];
+
+int16 gameChapter;
+
+int16 magicBallIdx;
+int16 magicBallNumBounce;
+int16 magicBallAuxBounce; // magicBallParam
+int16 magicLevelIdx;
+
+int16 inventoryNumKeys;
+int16 inventoryNumKashes;
+int16 inventoryNumLeafsBox;
+int16 inventoryNumLeafs;
+int16 inventoryMagicPoints;
+int16 inventoryNumGas;
+
+int16 usingSabre;
+
+uint8 inventoryFlags[NUM_INVENTORY_ITEMS];
+uint8 holomapFlags[150]; // GV14
+
+int8 savePlayerName[30]; // playerName
+
+int32 gameChoices[10]; // inGameMenuData
+int32 numChoices;      // numOfOptionsInChoice
+int16 gameChoicesSettings[18]; // choiceTab -  same structure as menu settings
+int32 choiceAnswer; // inGameMenuAnswer
+
 /** Initialize engine 3D projections */
 void initEngineProjections() {
 	setOrthoProjection(311, 240, 512);

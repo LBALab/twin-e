@@ -42,27 +42,27 @@ enum ControlMode {
 };
 
 /** Hero moved */
-int16 heroMoved; // twinsenMove
+extern int16 heroMoved; // twinsenMove
 /** Hero Action */
-int16 heroAction; // action
+extern int16 heroAction; // action
 
 /** Process actor X coordinate */
-int16 processActorX;
+extern int16 processActorX;
 /** Process actor Y coordinate */
-int16 processActorY;
+extern int16 processActorY;
 /** Process actor Z coordinate */
-int16 processActorZ;
+extern int16 processActorZ;
 
-ActorStruct *processActorPtr; // processActorVar1
+extern ActorStruct *processActorPtr; // processActorVar1
 
 /** Previous process actor X coordinate */
-int16 previousActorX; // processActorVar2
+extern int16 previousActorX; // processActorVar2
 /** Previous process actor Y coordinate */
-int16 previousActorY; // processActorVar3
+extern int16 previousActorY; // processActorVar3
 /** Previous process actor Z coordinate */
-int16 previousActorZ; // processActorVar4
+extern int16 previousActorZ; // processActorVar4
 
-int32 targetActorDistance; // DoTrackVar1
+extern int32 targetActorDistance; // DoTrackVar1
 
 
 /** Get shadow position

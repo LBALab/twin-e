@@ -49,6 +49,9 @@ SDL_CD *cdrom;
 /** CD drive letter */
 const int8 *cdname;
 
+/** Track number of the current playing music */
+int32 currentMusic;
+
 /** SDL_Mixer track variable interface */
 Mix_Music *current_track;
 

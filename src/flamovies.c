@@ -74,6 +74,8 @@ FLAFrameDataStruct frameData;
 
 FileReader frFla;
 
+unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
+
 /** FLA movie draw key frame
 	@param ptr FLA frame buffer pointer
 	@param width FLA movie width

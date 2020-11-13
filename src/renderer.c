@@ -56,6 +56,31 @@
 
 
 
+int32 isUsingOrhoProjection;
+
+int16 projPosXScreen; // fullRedrawVar1
+int16 projPosYScreen; // fullRedrawVar2
+int16 projPosZScreen; // fullRedrawVar3
+int16 projPosX;
+int16 projPosY;
+int16 projPosZ;
+
+int32 orthoProjX; // setSomethingVar1
+int32 orthoProjY; // setSomethingVar2
+int32 orthoProjZ; // setSomethingVar2
+
+int32 destX;
+int32 destY;
+int32 destZ;
+
+int16 *shadeAngleTab3; // tab3
+
+
+int16 polyRenderType; //FillVertic_AType;
+int32 numOfVertex;
+int16 vertexCoordinates[193];
+int16 *pRenderV1;
+
 // --- structures ----
 
 typedef struct renderTabEntry {

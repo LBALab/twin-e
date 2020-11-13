@@ -38,14 +38,14 @@
 /** Screen bottom limit to display the texts */
 #define SCREEN_TEXTLIMIT_BOTTOM	SCREEN_HEIGHT-1
 
-int32 textWindowTop;
-int32 textWindowTopSave;
-int32 textWindowLeft;
-int32 textWindowLeftSave;
-int32 textWindowRight;
-int32 textWindowRightSave;
-int32 textWindowBottom;
-int32 textWindowBottomSave;
+extern int32 textWindowTop;
+extern int32 textWindowTopSave;
+extern int32 textWindowLeft;
+extern int32 textWindowLeftSave;
+extern int32 textWindowRight;
+extern int32 textWindowRightSave;
+extern int32 textWindowBottom;
+extern int32 textWindowBottomSave;
 
 /** Draw button line
 	@param startWidth width value where the line starts

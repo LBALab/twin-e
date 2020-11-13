@@ -30,21 +30,21 @@
 #include "extra.h"
 
 /** Actor collition X coordinate */
-int32 collisionX; // getPosVar1
+extern int32 collisionX; // getPosVar1
 /** Actor collition Y coordinate */
-int32 collisionY; // getPosVar2
+extern int32 collisionY; // getPosVar2
 /** Actor collition Z coordinate */
-int32 collisionZ; // getPosVar3
+extern int32 collisionZ; // getPosVar3
 
 /** Actor collition X coordinate */
-int32 processCollisionX; // processActorVar11
+extern int32 processCollisionX; // processActorVar11
 /** Actor collition Y coordinate */
-int32 processCollisionY; // processActorVar12
+extern int32 processCollisionY; // processActorVar12
 /** Actor collition Z coordinate */
-int32 processCollisionZ; // processActorVar13
+extern int32 processCollisionZ; // processActorVar13
 
 /** Cause damage in current processed actor */
-int32 causeActorDamage; //fieldCauseDamage
+extern int32 causeActorDamage; //fieldCauseDamage
 
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 

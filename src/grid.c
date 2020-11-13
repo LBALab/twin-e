@@ -68,6 +68,29 @@ uint8 *currentBll;
 /** Number of block libraries */
 int32 numberOfBll;
 
+/** New grid camera X coordinates */
+int32 newCameraX;
+/** New grid camera Y coordinates */
+int32 newCameraY;
+/** New grid camera Z coordinates */
+int32 newCameraZ;
+
+/** Current grid camera X coordinates */
+int32 cameraX;
+/** Current grid camera Y coordinates */
+int32 cameraY;
+/** Current grid camera Z coordinates */
+int32 cameraZ;
+
+/** Celling grid brick block buffer */
+uint8 *blockBuffer;
+
+
+/** Flag to know if the engine is using celling grids */
+int16 useCellingGrid; // useAnotherGrm
+/** Current celling grid index */
+int16 cellingGridIdx; // currentGrid2
+
 /** Block fragment entry */
 struct BlockEntry {
 	/** Block library index */

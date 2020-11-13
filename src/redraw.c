@@ -45,6 +45,29 @@
 #ifdef GAMEMOD
 #include "debug.scene.h"
 #endif
+/** Auxiliar object render left position on screen */
+int32 renderLeft;
+/** Auxiliar object render right position on screen */
+int32 renderRight;
+/** Auxiliar object render top position on screen */
+int32 renderTop;
+/** Auxiliar object render bottom position on screen */
+int32 renderBottom;
+
+int16 drawInGameTransBox;
+
+/** Request background redraw */
+int16 reqBgRedraw;
+
+/** Current number of redraw regions in the screen */
+int32 currNumOfRedrawBox; // fullRedrawVar8
+/** Number of redraw regions in the screen */
+int32 numOfRedrawBox;
+
+/** Save last actor that bubble dialog icon */
+int32 bubbleActor;
+int32 bubbleSpriteIndex;
+OverlayListStruct overlayList[OVERLAY_MAX_ENTRIES];
 
 typedef struct RedrawStruct {
 	uint16 left;

@@ -55,7 +55,7 @@ typedef struct ExtraListStruct
 	int16 info1; // field_20
 } ExtraListStruct;
 
-ExtraListStruct extraList[EXTRA_MAX_ENTRIES];
+extern ExtraListStruct extraList[EXTRA_MAX_ENTRIES];
 
 enum ExtraSpecialType {
 	kHitStars = 0,

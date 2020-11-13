@@ -45,65 +45,64 @@ enum ScenePositionType {
 	kReborn		= 3
 };
 
+extern int32 needChangeScene;
+extern int32 currentSceneIdx;
+extern int32 previousSceneIdx;
 
-int32 needChangeScene;
-int32 currentSceneIdx;
-int32 previousSceneIdx;
+extern uint8 *spriteShadowPtr;
+extern uint8 *spriteBoundingBoxPtr;
 
-uint8 *spriteShadowPtr;
-uint8 *spriteBoundingBoxPtr;
-
-int32 currentGameOverScene;
-int32 alphaLight;
-int32 betaLight;
+extern int32 currentGameOverScene;
+extern int32 alphaLight;
+extern int32 betaLight;
 
 /** Timer for the next sample ambience in scene */
-int32 sampleAmbienceTime;
+extern int32 sampleAmbienceTime;
 
-int16 sampleAmbiance[4];
-int16 sampleRepeat[4];
-int16 sampleRound[4];
-int16 sampleMinDelay;
-int16 sampleMinDelayRnd;
+extern int16 sampleAmbiance[4];
+extern int16 sampleRepeat[4];
+extern int16 sampleRound[4];
+extern int16 sampleMinDelay;
+extern int16 sampleMinDelayRnd;
 
-int16 samplePlayed;
+extern int16 samplePlayed;
 
-int16 sceneMusic;
+extern int16 sceneMusic;
 
-int16 sceneHeroX; // newTwinsenXByScene
-int16 sceneHeroY; // newTwinsenYByScene
-int16 sceneHeroZ; // newTwinsenZByScene
+extern int16 sceneHeroX; // newTwinsenXByScene
+extern int16 sceneHeroY; // newTwinsenYByScene
+extern int16 sceneHeroZ; // newTwinsenZByScene
 
-int16 newHeroX; // newTwinsenX
-int16 newHeroY; // newTwinsenY
-int16 newHeroZ; // newTwinsenZ
+extern int16 newHeroX; // newTwinsenX
+extern int16 newHeroY; // newTwinsenY
+extern int16 newHeroZ; // newTwinsenZ
 
-int16 zoneHeroX; // newTwinsenXByZone
-int16 zoneHeroY; // newTwinsenYByZone
-int16 zoneHeroZ; // newTwinsenZByZone
+extern int16 zoneHeroX; // newTwinsenXByZone
+extern int16 zoneHeroY; // newTwinsenYByZone
+extern int16 zoneHeroZ; // newTwinsenZByZone
 
 /** Hero Y coordinate before fall */
-int16 heroYBeforeFall;
+extern int16 heroYBeforeFall;
 
 /** Hero type of position in scene */
-int16 heroPositionType; // twinsenPositionModeInNewCube
+extern int16 heroPositionType; // twinsenPositionModeInNewCube
 
 // ACTORS
-int32 sceneNumActors;
-ActorStruct sceneActors[NUM_MAX_ACTORS];
-ActorStruct *sceneHero;
+extern int32 sceneNumActors;
+extern ActorStruct sceneActors[NUM_MAX_ACTORS];
+extern ActorStruct *sceneHero;
 
 /** Meca pinguin actor index */
-int16 mecaPinguinIdx; // currentPingouin
+extern int16 mecaPinguinIdx; // currentPingouin
 
 /** Current followed actor in scene */
-int16 currentlyFollowedActor;
+extern int16 currentlyFollowedActor;
 /** Current actor in zone */
-int16 currentActorInZone; // currentActorInZoneProcess
+extern int16 currentActorInZone; // currentActorInZoneProcess
 /** Current actor manipulated in scripts */
-int16 currentScriptValue; // manipActorResult
+extern int16 currentScriptValue; // manipActorResult
 
-int16 talkingActor;
+extern int16 talkingActor;
 
 // ZONES
 
@@ -150,8 +149,8 @@ typedef struct ZoneStruct {
 	int16 snap;
 } ZoneStruct;
 
-int32 sceneNumZones;
-ZoneStruct sceneZones[NUM_MAX_ZONES];
+extern int32 sceneNumZones;
+extern ZoneStruct sceneZones[NUM_MAX_ZONES];
 
 enum ZoneType {
 	kCube		= 0, // Change to another scene
@@ -166,14 +165,14 @@ enum ZoneType {
 
 // TRACKS
 
-int32 sceneNumTracks;
-ScenePoint sceneTracks[NUM_MAX_TRACKS];
+extern int32 sceneNumTracks;
+extern ScenePoint sceneTracks[NUM_MAX_TRACKS];
 
 // TODO: check what is this
-int16 changeRoomVar10;
-int16 changeRoomVar11;
+extern int16 changeRoomVar10;
+extern int16 changeRoomVar11;
 
-uint8 sceneFlags[80]; // cubeFlags
+extern uint8 sceneFlags[80]; // cubeFlags
 
 /** Change to another scene */
 void changeScene();

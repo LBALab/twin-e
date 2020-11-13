@@ -34,18 +34,18 @@ extern uint8 pressedKeyMap[29];
 extern uint16 pressedKeyCharMap[31];
 
 /** Skipped key - key1 */
-int16 skippedKey;
+extern int16 skippedKey;
 /** Pressed key - printTextVar12 */
-int16 pressedKey;
+extern int16 pressedKey;
 //int printTextVar13;
 /** Skip intro variable */
-int16 skipIntro;
+extern int16 skipIntro;
 /** Current key value */
-int16 currentKey;
+extern int16 currentKey;
 /** Auxiliar key value */
-int16 key;
+extern int16 key;
 
-int32 heroPressedKey;
-int32 heroPressedKey2;
+extern int32 heroPressedKey;
+extern int32 heroPressedKey2;
 
 #endif

@@ -41,7 +41,36 @@
 #include "sound.h"
 #include "extra.h"
 
-/** Actors 3D body table - size of NUM_BODIES */
+
+uint8* spriteTable[NUM_SPRITES];
+uint32   spriteSizeTable[NUM_SPRITES];
+int32 shadowX;
+int32 shadowY;
+int32 shadowZ;
+int8 shadowCollisionType; // shadowVar
+int16 heroBehaviour;
+int16 autoAgressive;
+int16 previousHeroBehaviour;
+int16 previousHeroAngle;
+int16 cropBottomScreen;
+uint8 *heroEntityNORMAL;	 // file3D0
+uint8 *heroEntityATHLETIC;	 // file3D1
+uint8 *heroEntityAGGRESSIVE; // file3D2
+uint8 *heroEntityDISCRETE;	 // file3D3
+uint8 *heroEntityPROTOPACK;  // file3D4
+int16 heroAnimIdxNORMAL;	 // TCos0Init
+int16 heroAnimIdxATHLETIC;	 // TCos1Init
+int16 heroAnimIdxAGGRESSIVE; // TCos2Init
+int16 heroAnimIdxDISCRETE;	 // TCos3Init
+int16 heroAnimIdxPROTOPACK;  // TCos4Init
+int16 heroAnimIdx[4]; // TCOS
+int32 currentPositionInBodyPtrTab;
+int16 bottomLeftX; // loadCostumeVar
+int16 bottomLeftY; // loadCostumeVar2
+int16 bottomLeftZ; // loadCostumeVar3
+int16 topRightX;   // loadCostumeVar4
+int16 topRightY;   // loadCostumeVar5
+int16 topRightZ;   // loadCostumeVar6
 uint8 *bodyTable[NUM_BODIES];
 
 /** Restart hero variables while opening new scenes */

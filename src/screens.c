@@ -35,6 +35,33 @@
 #include "hqrdepack.h"
 #include "lbaengine.h"
 
+/** In-game palette (should not be used, except in special case. otherwise use other images functions instead) */
+uint8 palette[NUMOFCOLORS * 3];
+
+/** SDL converted in-game palette */
+uint8 paletteRGBA[NUMOFCOLORS * 4];
+
+/** SDL converted custom palette */
+uint8 paletteRGBACustom[NUMOFCOLORS * 4];
+
+/** flag to check if a custom palette is in use */
+int16 palCustom;
+
+/** flag to check in the game palette was changed */
+int16 palReseted;
+
+/** flag to check if the main flag is locked */
+int16 lockPalette;
+
+/** flag to check if we are using a different palette than the main one */
+int16 useAlternatePalette;
+
+/** main game palette */
+uint8* mainPalette;
+
+/** SDL converted in-game palette */
+uint8 mainPaletteRGBA[NUMOFCOLORS * 4];
+
 
 /** Load and display Adeline Logo */
 void adelineLogo() {

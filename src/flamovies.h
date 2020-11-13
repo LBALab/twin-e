@@ -74,7 +74,7 @@ typedef struct FLASampleStruct {
 } FLASampleStruct;
 
 /** FLA movie file buffer */
-unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
+extern unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
 
 /** Play FLA movies
 	@param flaName FLA movie name */

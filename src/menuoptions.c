@@ -46,6 +46,12 @@
 
 int8 allowedCharIndex[] = " ABCDEFGHIJKLM.NOPQRSTUVWXYZ-abcdefghijklm?nopqrstuvwxyz!0123456789\040\b\r\0";
 
+int32 canShowCredits;
+
+int8 playerName[256];
+int8 enterPlayerNameVar1;
+int32 enterPlayerNameVar2;
+
 
 void newGame() {
 	int32 tmpFlagDisplayText;
