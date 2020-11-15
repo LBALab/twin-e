@@ -56,6 +56,15 @@ uint16 kMainMenuButtonWidth = 320;
 /** Used to calculate the spanning between button and screen */
 uint16 kMainMenuButtonSpan = 550;
 
+int32 currMenuTextIndex;
+int32 currMenuTextBank;
+int8  currMenuTextBuffer[256];
+
+int16 itemAngle[255]; // objectRotation
+
+/** Behaviour menu move pointer */
+ActorMoveStruct moveMenu;
+
 
 /** Main menu types */
 enum MainMenuType {

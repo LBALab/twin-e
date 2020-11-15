@@ -35,6 +35,14 @@
 #include "renderer.h"
 #include "extra.h"
 
+int32 collisionX; // getPosVar1
+int32 collisionY; // getPosVar2
+int32 collisionZ; // getPosVar3
+int32 processCollisionX; // processActorVar11
+int32 processCollisionY; // processActorVar12
+int32 processCollisionZ; // processActorVar13
+int32 causeActorDamage; //fieldCauseDamage
+
 /** Check if actor 1 is standing in actor2
 	@param actorIdx1 Actor 1 index 
 	@param actorIdx2 Actor 2 index */

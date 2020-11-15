@@ -34,15 +34,15 @@
 #define NUM_CHANNELS 32
 
 /** Table with all loaded samples */
-uint8* samplesTable[NUM_SAMPLES];
+extern uint8* samplesTable[NUM_SAMPLES];
 /** Table with all loaded samples sizes */
-uint32 samplesSizeTable[NUM_SAMPLES];
+extern uint32 samplesSizeTable[NUM_SAMPLES];
 
 /** Samples playing at the same time */
-int32 samplesPlaying[NUM_CHANNELS];
+extern int32 samplesPlaying[NUM_CHANNELS];
 
 /** Samples playing at a actors position */
-int32 samplesPlayingActors[NUM_CHANNELS];
+extern int32 samplesPlayingActors[NUM_CHANNELS];
 
 /** Sample volume
 	@param channel sample channel

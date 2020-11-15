@@ -64,6 +64,8 @@ const int8* CONFIG_FILENAME = (int8*) "lba.cfg";
 	used \a lba.cfg file \b Version tag. If this tag is set for original game
 	it will be used instead of \a setup.lst file. */
 const int8* SETUP_FILENAME = (int8*) "setup.lst";
+/** CD Game directory */
+int8 * cdDir;
 
 /** Configuration types at \a lba.cfg file
 

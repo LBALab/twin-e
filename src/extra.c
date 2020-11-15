@@ -104,6 +104,8 @@ int16 explodeCloudShapeTable [] = {
 	-12
 };
 
+ExtraListStruct extraList[EXTRA_MAX_ENTRIES];
+
 int32 addExtra(int32 actorIdx, int32 X, int32 Y, int32 Z, int32 info0, int32 targetActor, int32 maxSpeed, int32 strengthOfHit) {
 	int32 i;
 

@@ -115,9 +115,9 @@ extern int8 * HQR_ANIM_FILE;
 extern int8 * HQR_INVOBJ_FILE;
 
 /** Table with all loaded samples */
-uint8* inventoryTable[NUM_INVENTORY_ITEMS];
+extern uint8* inventoryTable[NUM_INVENTORY_ITEMS];
 /** Table with all loaded samples sizes */
-uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
+extern uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
 /** Initialize resource pointers */
 void initResources();

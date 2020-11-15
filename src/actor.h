@@ -44,9 +44,9 @@ enum HeroBehaviourType {
 
 
 /** Table with all loaded sprites */
-uint8* spriteTable[NUM_SPRITES];
+extern uint8* spriteTable[NUM_SPRITES];
 /** Table with all loaded sprite sizes */
-uint32   spriteSizeTable[NUM_SPRITES];
+extern uint32   spriteSizeTable[NUM_SPRITES];
 
 /** Actors move structure */
 typedef struct ActorMoveStruct {
@@ -184,68 +184,68 @@ typedef struct ActorStruct {
 } ActorStruct;
 
 /** Actor shadow X coordinate */
-int32 shadowX;
+extern int32 shadowX;
 /** Actor shadow Y coordinate */
-int32 shadowY;
+extern int32 shadowY;
 /** Actor shadow Z coordinate */
-int32 shadowZ;
+extern int32 shadowZ;
 /** Actor shadow collition type */
-int8 shadowCollisionType; // shadowVar
+extern int8 shadowCollisionType; // shadowVar
 
 /** Hero behaviour */
-int16 heroBehaviour;
+extern int16 heroBehaviour;
 /** Hero auto agressive mode */
-int16 autoAgressive;
+extern int16 autoAgressive;
 /** Previous Hero behaviour */
-int16 previousHeroBehaviour;
+extern int16 previousHeroBehaviour;
 /** Previous Hero angle */
-int16 previousHeroAngle;
+extern int16 previousHeroAngle;
 
-int16 cropBottomScreen;
+extern int16 cropBottomScreen;
 
 /** Hero 3D entity for normal behaviour */
-uint8 *heroEntityNORMAL;	 // file3D0
+extern uint8 *heroEntityNORMAL;	 // file3D0
 /** Hero 3D entity for athletic behaviour */
-uint8 *heroEntityATHLETIC;	 // file3D1
+extern uint8 *heroEntityATHLETIC;	 // file3D1
 /** Hero 3D entity for aggressive behaviour */
-uint8 *heroEntityAGGRESSIVE; // file3D2
+extern uint8 *heroEntityAGGRESSIVE; // file3D2
 /** Hero 3D entity for discrete behaviour */
-uint8 *heroEntityDISCRETE;	 // file3D3
+extern uint8 *heroEntityDISCRETE;	 // file3D3
 /** Hero 3D entity for protopack behaviour */
-uint8 *heroEntityPROTOPACK;  // file3D4
+extern uint8 *heroEntityPROTOPACK;  // file3D4
 
 /** Hero current anim for normal behaviour */
-int16 heroAnimIdxNORMAL;	 // TCos0Init
+extern int16 heroAnimIdxNORMAL;	 // TCos0Init
 /** Hero current anim for athletic behaviour */
-int16 heroAnimIdxATHLETIC;	 // TCos1Init
+extern int16 heroAnimIdxATHLETIC;	 // TCos1Init
 /** Hero current anim for aggressive behaviour */
-int16 heroAnimIdxAGGRESSIVE; // TCos2Init
+extern int16 heroAnimIdxAGGRESSIVE; // TCos2Init
 /** Hero current anim for discrete behaviour */
-int16 heroAnimIdxDISCRETE;	 // TCos3Init
+extern int16 heroAnimIdxDISCRETE;	 // TCos3Init
 /** Hero current anim for protopack behaviour */
-int16 heroAnimIdxPROTOPACK;  // TCos4Init
+extern int16 heroAnimIdxPROTOPACK;  // TCos4Init
 
 /** Hero anim for behaviour menu */
-int16 heroAnimIdx[4]; // TCOS
+extern int16 heroAnimIdx[4]; // TCOS
 
 /** Actors 3D body table - size of NUM_BODIES */
 extern uint8 *bodyTable[NUM_BODIES];
 
 /** Current position in body table */
-int32 currentPositionInBodyPtrTab;
+extern int32 currentPositionInBodyPtrTab;
 
 /** Actor bounding box bottom left X coordinate */
-int16 bottomLeftX; // loadCostumeVar
+extern int16 bottomLeftX; // loadCostumeVar
 /** Actor bounding box bottom left Y coordinate */
-int16 bottomLeftY; // loadCostumeVar2
+extern int16 bottomLeftY; // loadCostumeVar2
 /** Actor bounding box bottom left Z coordinate */
-int16 bottomLeftZ; // loadCostumeVar3
+extern int16 bottomLeftZ; // loadCostumeVar3
 /** Actor bounding box top left X coordinate */
-int16 topRightX;   // loadCostumeVar4
+extern int16 topRightX;   // loadCostumeVar4
 /** Actor bounding box top left Y coordinate */
-int16 topRightY;   // loadCostumeVar5
+extern int16 topRightY;   // loadCostumeVar5
 /** Actor bounding box top left Z coordinate */
-int16 topRightZ;   // loadCostumeVar6
+extern int16 topRightZ;   // loadCostumeVar6
 
 /** Restart hero variables while opening new scenes */
 void restartHeroScene();

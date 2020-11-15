@@ -48,6 +48,9 @@ int8 * HQR_FILE3D_FILE			= "file3d.hqr";
 int8 * HQR_BODY_FILE			= "body.hqr";
 int8 * HQR_ANIM_FILE			= "anim.hqr";
 int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
+uint8* inventoryTable[NUM_INVENTORY_ITEMS];
+/** Table with all loaded samples sizes */
+uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
 /** Init palettes */
 void initPalettes() {

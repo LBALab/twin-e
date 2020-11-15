@@ -96,3 +96,18 @@ uint16 pressedKeyCharMap[31] = {
 	0x0,
 	0x0,
 };
+
+/** Skipped key - key1 */
+int16 skippedKey;
+/** Pressed key - printTextVar12 */
+int16 pressedKey;
+//int printTextVar13;
+/** Skip intro variable */
+int16 skipIntro;
+/** Current key value */
+int16 currentKey;
+/** Auxiliar key value */
+int16 key;
+
+int32 heroPressedKey;
+int32 heroPressedKey2;

@@ -134,7 +134,7 @@ typedef struct ConfigFile {
 extern ConfigFile cfgfile;
 
 /** CD Game directory */
-int8 * cdDir;
+extern int8 * cdDir;
 
 void initMCGA();
 void initSVGA();

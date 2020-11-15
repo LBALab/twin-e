@@ -60,6 +60,22 @@ enum ActionType {
     ACTION_LAST
 };
 
+
+uint8* animTable[NUM_ANIMS];
+uint32 animSizeTable[NUM_ANIMS];
+int16 processRotationByAnim;    // processActorVar5
+int16 processLastRotationAngle; // processActorVar6
+int16 currentlyProcessedActorIdx;
+int16 currentStepX;
+int16 currentStepY;
+int16 currentStepZ;
+uint8 *currentActorAnimExtraPtr;
+uint8 *keyFramePtr;
+uint8 *lastKeyFramePtr;
+uint8 *animBuffer1;
+uint8 *animBuffer2;
+
+
 /** Set animation keyframe
 	@param keyframIdx Animation keyframe index
 	@param animPtr Pointer to animation
