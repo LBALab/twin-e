@@ -286,9 +286,9 @@ void saveGame() {
 	frwrite(&fr, &magicLevelIdx, 1, 1);
 	frwrite(&fr, &inventoryMagicPoints, 1, 1);
 	frwrite(&fr, &inventoryNumLeafsBox, 1, 1);
-	frwrite(&fr, &newHeroX, 2, 1);
-	frwrite(&fr, &newHeroY, 2, 1);
-	frwrite(&fr, &newHeroZ, 2, 1);
+	frwrite(&fr, &sceneHero->x, 2, 1);
+	frwrite(&fr, &sceneHero->y, 2, 1);
+	frwrite(&fr, &sceneHero->z, 2, 1);
 	frwrite(&fr, &sceneHero->angle, 2, 1);
 	frwrite(&fr, &sceneHero->body, 1, 1);
 
