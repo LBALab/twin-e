@@ -61,7 +61,7 @@ void initPalettes() {
 	memcpy(palette, mainPalette, NUMOFCOLORS * 3);
 
 	convertPalToRGBA(palette, paletteRGBA);
-	setPalette(paletteRGBA);
+	// setPalette(paletteRGBA);
 
 	// We use it now
 	palCustom = 0;
