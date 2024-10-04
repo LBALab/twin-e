@@ -38,7 +38,7 @@ OBJS=actor.o \
 	text.o
 
 LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
-VERSION=v0.2.2
+VERSION=v0.3.0
 TARGET=twin-e_$(VERSION)
 INSTALLDIR=../bin
 
