@@ -47,9 +47,7 @@
 #include "collision.h"
 #include "holomap.h"
 
-#ifdef GAMEMOD
 #include "debug.h"
-#endif
 
 int32 isTimeFreezed = 0;
 int32 saveFreezedTime = 0;
@@ -129,9 +127,7 @@ int32 runGameEngine() { // mainLoopInteration
 	loopPressedKey = skippedKey;
 	loopCurrentKey = skipIntro;
 
-#ifdef GAMEMOD
 	processDebug(loopCurrentKey);
-#endif
 
 	if(canShowCredits != 0) {
 		// TODO: if current music playing != 8, than play_track(8);

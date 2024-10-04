@@ -1,7 +1,7 @@
 CC=gcc
 SDL_CFLAGS = `sdl-config --cflags`
 SDL_LIBS = `sdl-config --libs`
-CFLAGS=-DMACOSX -DGAMEMOD -Wall $(SDL_CFLAGS)
+CFLAGS=-DMACOSX -Wall $(SDL_CFLAGS)
 OBJS=actor.o \
 	animations.o \
 	collision.o \

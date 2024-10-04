@@ -33,13 +33,10 @@
 #include <SDL_mixer/SDL_mixer.h>
 #endif
 
-#ifdef GAMEMOD
 #ifndef MACOSX
 #include <SDL/SDL_ttf.h>
 #else
 #include <SDL_ttf/SDL_ttf.h>
-#endif
-
 #endif
 
 #include "sdlengine.h"
@@ -68,9 +65,7 @@ SDL_Color screenColors[256];
 /** Auxiliar surface table  */
 SDL_Surface *surfaceTable[16];
 
-#ifdef GAMEMOD
 TTF_Font *font;
-#endif
 
 /** SDL exit callback */
 //static void atexit_callback(void) {
@@ -81,9 +76,7 @@ void sdlClose() {
 	stopTrackMusic();
 	stopMidiMusic();
 	Mix_CloseAudio();
-#ifdef GAMEMOD
 	TTF_Quit();
-#endif
 	SDL_Quit();
 	exit(0);
 }
@@ -118,7 +111,6 @@ int sdlInitialize() {
 		exit(1);
 	}
 	
-#ifdef GAMEMOD
 	if (TTF_Init() < 0) {
 		fprintf(stderr, "Couldn't initialize TTF: %s\n", SDL_GetError());
 		exit(1);
@@ -132,8 +124,6 @@ int sdlInitialize() {
 	}
 
 	TTF_SetFontStyle(font, 0);
-#endif
-
 
 	/*icon = SDL_LoadBMP("icon.bmp");
 	SDL_WM_SetIcon(icon, NULL);*/
@@ -432,7 +422,7 @@ void readKeys() {
 			case SDLK_F12:
 				toggleFullscreen();
 				break;
-#ifdef GAMEMOD
+
 			case SDLK_r:  // next room
 				localKey = 0x13;
 				break;
@@ -448,7 +438,7 @@ void readKeys() {
 			case SDLK_b:  // decrease celling grid index
 				localKey = 0x30;
 				break;
-#endif
+
 			default:
 				break;
 			}
@@ -506,7 +496,7 @@ void readKeys() {
 			case SDLK_F4:
 				localKey = 0x3E;
 				break;
-#ifdef GAMEMOD
+
 				// change grid camera
 			case SDLK_s:
 				localKey = 0x1F;
@@ -520,7 +510,7 @@ void readKeys() {
 			case SDLK_c:
 				localKey = 0x2E;
 				break;
-#endif
+
 			}
 		}
 
@@ -555,8 +545,6 @@ void readKeys() {
 		//}
 	}
 }
-
-#ifdef GAMEMOD
 
 /** Display SDL text in screen
 	@param X X coordinate in screen
@@ -595,5 +583,3 @@ void getMousePositions(MouseStatusStruct *mouseData) {
 	leftMouse = 0;
 	rightMouse = 0;
 }
-
-#endif

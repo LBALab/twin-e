@@ -40,9 +40,7 @@
 #include "collision.h"
 #include "sound.h"
 
-#ifdef GAMEMOD
 #include "debug.scene.h"
-#endif
 /** Auxiliar object render left position on screen */
 int32 renderLeft;
 /** Auxiliar object render right position on screen */
@@ -624,9 +622,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 		} while (pos < drawListPos);
 	}
 
-#ifdef GAMEMOD
 	displayZones(skipIntro);
-#endif
 
 	for (i = 0; i < OVERLAY_MAX_ENTRIES; i++) {
 		OverlayListStruct *overlay = &overlayList[i];

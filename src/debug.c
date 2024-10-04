@@ -23,7 +23,6 @@
 
 #include "debug.h"
 
-#ifdef GAMEMOD
 #include "debug.scene.h"
 #include "debug.grid.h"
 #include "scene.h"
@@ -549,6 +548,3 @@ void processDebug(int16 pKey) {
 	if (needChangeScene == 0);
 	applyCellingGrid(pKey);
 }
-
-#endif
-
