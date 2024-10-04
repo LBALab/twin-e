@@ -4,9 +4,7 @@
 
 	TwinEngine: a Little Big Adventure engine
 	
-	Copyright (C) 2013 The TwinEngine team
-	Copyright (C) 2008-2013 Prequengine team
-	Copyright (C) 2002-2007 The TwinEngine team
+	Copyright (C) 2002 The TwinEngine team
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -25,6 +23,8 @@
 
 #ifndef SHADEANGLETAB_H
 #define SHADEANGLETAB_H
+
+#include "sys.h"
 
 int16 shadeAngleTable[1024] = {
 	0,		// tab1

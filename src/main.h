@@ -5,9 +5,7 @@
 
 	TwinEngine: a Little Big Adventure engine
 	
-	Copyright (C) 2013 The TwinEngine team
-	Copyright (C) 2008-2013 Prequengine team
-	Copyright (C) 2002-2007 The TwinEngine team
+	Copyright (C) 2002 The TwinEngine team
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -51,7 +49,7 @@
 /** Original FLA screen height */
 #define FLASCREEN_HEIGHT		200
 /** Default frames per second */
-#define DEFAULT_FRAMES_PER_SECOND	19
+#define DEFAULT_FRAMES_PER_SECOND	20
 
 /** Number of colors used in the game */
 #define NUMOFCOLORS		256

@@ -5,9 +5,7 @@
 
 	TwinEngine: a Little Big Adventure engine
 	
-	Copyright (C) 2013 The TwinEngine team
-	Copyright (C) 2008-2013 Prequengine team
-	Copyright (C) 2002-2007 The TwinEngine team
+	Copyright (C) 2002 The TwinEngine team
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -117,11 +115,11 @@ int8 CFGList[][22] = {
 
 int8 LanguageTypes[][10] = {
 	"English",
-	"Français",
+	"Franï¿½ais",
 	"Deutsch",
-	"Español",
+	"Espaï¿½ol",
 	"Italiano",
-	"Português"
+	"Portuguï¿½s"
 };
 ConfigFile cfgfile;
 
@@ -475,10 +473,9 @@ int8* ITOA(int32 number) {
 
 	\section copy_sec Copyright
 
-	Copyright (c) Adeline Software International 1994, All Rights Reserved.\n
-	Copyright (c) 2002-2007 The TwinEngine team.\n
-	Copyright (c) 2008-2013 Prequengine team \n
-	Copyright (c) 2013 The TwinEngine team 
+	Copyright (c) Adeline Software International 1994, All Rights Reserved.
+	Copyright (c) [2.21], All Rights Reserved.
+	Copyright (c) 2002 The TwinEngine team.
 
 	\section licenc_sec License
 

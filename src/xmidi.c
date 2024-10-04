@@ -5,7 +5,7 @@
 
 	TwinEngine: a Little Big Adventure engine
 	
-	Copyright (C) 2013 The TwinEngine team
+	Copyright (C) 2002 The TwinEngine team
 	Copyright (C) 2013 The ScrummVM/ExultEngine team
 
 	This program is free software; you can redistribute it and/or
