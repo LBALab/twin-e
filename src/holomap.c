@@ -65,17 +65,17 @@ void clearHolomapPosition(int32 locationIdx) {
 }
 
 
-void loadGfxSub(uint8* modelPtr) { // TODO
+void patchObject(uint8* modelPtr) { // TODO
 
 }
 
 
-void loadGfxSub1() { // TODO
+void computeCoorMapping() { // TODO
 
 }
 
 
-void loadGfxSub2() { // TODO
+void computeCoorGlobe() { // TODO
 
 }
 
@@ -99,11 +99,11 @@ void loadHolomapGFX() { // TODO
 	videoPtr8 = videoPtr7 + hqrGetEntry(videoPtr7, HQR_RESS_FILE, RESSHQR_HOLOTWINARROWMDL);
 	videoPtr11 = videoPtr8 + hqrGetEntry(videoPtr8, HQR_RESS_FILE, RESSHQR_HOLOPOINTMDL);
 
-	loadGfxSub(videoPtr5);
-	loadGfxSub(videoPtr6);
-	loadGfxSub(videoPtr7);
+	patchObject(videoPtr5);
+	patchObject(videoPtr6);
+	patchObject(videoPtr7);
 
-	loadGfxSub(videoPtr8);
+	patchObject(videoPtr8);
 
 	videoPtr10 = videoPtr11 + 4488;
 	videoPtr12 = videoPtr10 + hqrGetEntry(videoPtr10, HQR_RESS_FILE, RESSHQR_HOLOARROWINFO);
@@ -125,15 +125,42 @@ void loadHolomapGFX() { // TODO
 		paletteHolomap[i + 2] = palette[j + 2];
 	}
 
-	loadGfxSub1();
-	loadGfxSub2();
+	computeCoorMapping();
+	computeCoorGlobe();
 
 	needToLoadHolomapGFX=0;
 }
 
 /** Draw Holomap Title */
-void drawHolomapTitle(int32 width, int32 height) {  // TODO
-	
+void drawHolomapTitle(int32 x, int32 y) {  // TODO
+	int16	x0,y0,x1,y1 ;
+	byte	string[256] ;
+
+	x0 = x - 630/2 ;
+	x1 = x + 630/2 ;
+
+	y0 = y - 40/2 ;
+	y1 = y + 40/2 ;
+
+	strcpy( (char*)string, "HoloMap" ) ;
+
+	x -= (int16)(getTextSize( string )/2) ;
+	y -= 18 ;
+
+	setFontColor( 12*16+10 ) ;
+	drawText( x-1, y-1, string ) ;
+	drawText( x  , y-1, string ) ;
+	drawText( x+1, y-1, string ) ;
+
+	drawText( x-1, y+1, string ) ;
+	drawText( x  , y+1, string ) ;
+	drawText( x+1, y+1, string ) ;
+
+	drawText( x-1, y , string ) ;
+	drawText( x+1, y , string ) ;
+
+	setFontColor( 15 ) ;
+	drawText( x  , y, string ) ;
 }
 
 /** Draw Holomap Trajectory */
