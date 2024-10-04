@@ -4,9 +4,7 @@
 
 	TwinEngine: a Little Big Adventure engine
 	
-	Copyright (C) 2013 The TwinEngine team \n
-	Copyright (C) 2008-2013 Prequengine team \n
-	Copyright (C) 2002-2007 The TwinEngine team \n
+	Copyright (C) 2002 The TwinEngine team \n
 
 	This program is free software; you can redistribute it and/or \n
 	modify it under the terms of the GNU General Public License \n
