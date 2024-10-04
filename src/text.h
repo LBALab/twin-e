@@ -96,20 +96,12 @@ extern int8 currentVoxBankFile[256];
 extern int32 showDialogueBubble;
 
 
-/** Initialize dialogue
-	@param bankIdx Text bank index*/
 void initTextBank(int32 bankIdx);
 
-/** Display a certain dialogue text in the screen
-	@param x X coordinate in screen
-	@param y Y coordinate in screen
-	@param dialogue ascii text to display */
 void drawText(int32 x, int32 y, int8 *dialogue);
 
 void drawTextFullscreen(int32 index);
 
-/** Gets dialogue text width size
-	@param dialogue ascii text to display */
 int32 getTextSize(int8 *dialogue);
 
 void initDialogueBox();
@@ -120,32 +112,20 @@ int printText10();
 
 void setFont(uint8 *font, int32 spaceBetween, int32 charSpace);
 
-/** Set font type parameters
-	@param spaceBetween number in pixels of space between characters
-	@param charSpace number in pixels of the character space */
 void setFontParameters(int32 spaceBetween, int32 charSpace);
 
-/** Set the font cross color
-	@param color color number to choose */
+
 void setFontCrossColor(int32 color);
 
-/** Set the font color
-	@param color color number to choose */
+
 void setFontColor(int32 color);
 
-/** Set font color parameters to precess cross color display
-	@param stopColor color number to stop
-	@param startColor color number to start
-	@param stepSize step size to change between those colors */
 void setTextCrossColor(int32 stopColor, int32 startColor, int32 stepSize);
 
-/** Get dialogue text into text buffer
-	@param index dialogue index */
+
 int32 getText(int32 index);
 
-/** Gets menu dialogue text
-	@param index text index to display
-	@param dialogue dialogue text buffer to display */
+
 void getMenuText(int32 index, int8 *text);
 
 void textClipFull();

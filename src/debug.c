@@ -545,6 +545,6 @@ void processDebug(int16 pKey) {
 
 	changeGrid(pKey);
 	changeGridCamera(pKey);
-	if (needChangeScene == 0);
-	applyCellingGrid(pKey);
+	if (needChangeScene == 0)
+		applyCellingGrid(pKey);
 }

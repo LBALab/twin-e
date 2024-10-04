@@ -982,7 +982,8 @@ void renderPolygons(int32 renderType, int32 color) {
 				}
 			  }
 			  else{
-				*(out2++) = (*(out2) & 0x0F) | color;
+				*(out2) = (*(out2) & 0x0F) | color;
+				out2++;
 			  }
 			}
 			out += 640;

@@ -220,8 +220,6 @@ void stopVox(int32 index) {
 
 
 
-/** Initialize dialogue
-	@param bankIdx Text bank index*/
 void initTextBank(int32 bankIdx) { // InitDial
 	int32 langIdx;
 	int32 hqrSize;
@@ -248,23 +246,14 @@ void initTextBank(int32 bankIdx) { // InitDial
 	}
 }
 
-/** Draw a certain character in the screen
-	@param x X coordinate in screen
-	@param y Y coordinate in screen
-	@param character ascii character to display */
 void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 	uint8 sizeX;
 	uint8 sizeY;
 	uint8 param1;
 	uint8 param2;
 	uint8 *data;
-	uint8 *screen;
-
-	// int temp=0;
-	int32 toNextLine;
 	uint8 index;
 
-	// char color;
 	uint8 usedColor;
 	uint8 number;
 	uint8 jump;
@@ -287,21 +276,15 @@ void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 
 	usedColor = dialTextColor;
 
-	screen = frontVideoBuffer + screenLookupTable[y] + x;
-
 	tempX = x;
 	tempY = y;
-
-	toNextLine = SCREEN_WIDTH - sizeX;
 
 	do {
 		index = *(data++);
 		do {
 			jump = *(data++);
-			screen += jump;
 			tempX += jump;
 			if (--index == 0) {
-				screen += toNextLine;
 				tempY++;
 				tempX = x;
 				sizeY--;
@@ -315,12 +298,10 @@ void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 					if (tempX >= SCREEN_TEXTLIMIT_LEFT && tempX < SCREEN_TEXTLIMIT_RIGHT && tempY >= SCREEN_TEXTLIMIT_TOP && tempY < SCREEN_TEXTLIMIT_BOTTOM)
 						frontVideoBuffer[SCREEN_WIDTH*tempY + tempX] = usedColor;
 
-					screen++;
 					tempX++;
 				}
 
 				if (--index == 0) {
-					screen += toNextLine;
 					tempY++;
 					tempX = x;
 
@@ -336,11 +317,6 @@ void drawCharacter(int32 x, int32 y, uint8 character) { // drawCharacter
 
 }
 
-/** Draw character with shadow
-	@param x X coordinate in screen
-	@param y Y coordinate in screen
-	@param character ascii character to display
-	@param color character color */
 void drawCharacterShadow(int32 x, int32 y, uint8 character, int32 color) { // drawDoubleLetter
 	int32 left, top, right, bottom;
 
@@ -364,10 +340,6 @@ void drawCharacterShadow(int32 x, int32 y, uint8 character, int32 color) { // dr
 	}
 }
 
-/** Display a certain dialogue text in the screen
-	@param x X coordinate in screen
-	@param y Y coordinate in screen
-	@param dialogue ascii text to display */
 void drawText(int32 x, int32 y, int8 *dialogue) { // Font
 	uint8 currChar;
 
@@ -393,8 +365,6 @@ void drawText(int32 x, int32 y, int8 *dialogue) { // Font
 	} while (1);
 }
 
-/** Gets dialogue text width size
-	@param dialogue ascii text to display */
 int32 getTextSize(int8 *dialogue) {  // SizeFont
 	uint8 currChar;
 	dialTextSize = 0;
@@ -847,16 +817,11 @@ void setFont(uint8 *font, int32 spaceBetween, int32 charSpace) {
 	dialSpaceBetween = spaceBetween;
 }
 
-/** Set font type parameters
-	@param spaceBetween number in pixels of space between characters
-	@param charSpace number in pixels of the character space */
 void setFontParameters(int32 spaceBetween, int32 charSpace) {
 	dialSpaceBetween = spaceBetween;
 	dialCharSpace = charSpace;
 }
 
-/** Set the font cross color
-	@param color color number to choose */
 void setFontCrossColor(int32 color) { // TestCoulDial
 	dialTextStepSize = -1;
 	dialTextBufferSize = 14;
@@ -864,16 +829,10 @@ void setFontCrossColor(int32 color) { // TestCoulDial
 	dialTextStopColor = (color << 4) + 12;
 }
 
-/** Set the font color
-	@param color color number to choose */
 void setFontColor(int32 color) {
 	dialTextColor = color;
 }
 
-/** Set font color parameters to process cross color display
-	@param stopColor color number to stop
-	@param startColor color number to start
-	@param stepSize step size to change between those colors */
 void setTextCrossColor(int32 stopColor, int32 startColor, int32 stepSize) {
 	dialTextStartColor = startColor;
 	dialTextStopColor = stopColor;
@@ -881,8 +840,6 @@ void setTextCrossColor(int32 stopColor, int32 startColor, int32 stepSize) {
 	dialTextBufferSize = ((startColor - stopColor) + 1) / stepSize;
 }
 
-/** Get dialogue text into text buffer
-	@param index dialogue index */
 int32 getText(int32 index) { // findString
 	int32 currIdx = 0;
 	int32 orderIdx = 0;
@@ -919,19 +876,12 @@ int32 getText(int32 index) { // findString
 	return 1;
 }
 
-/** Copy dialogue text
-	@param src source text buffer
-	@param dst destination text buffer
-	@param size text size */
 void copyText(int8 *src, int8 *dst, int32 size) { // copyStringToString
 	int32 i;
 	for (i = 0; i < size; i++)
 		*(dst++) = *(src++);
 }
 
-/** Gets menu dialogue text
-	@param index text index to display
-	@param dialogue dialogue text buffer to display */
 void getMenuText(int32 index, int8 *text) { // GetMultiText
 	if (index == currMenuTextIndex) {
 		if (currMenuTextBank == currentTextBank) {

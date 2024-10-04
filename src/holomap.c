@@ -51,14 +51,10 @@ uint8 *videoPtr12;
 uint8 *videoPtr13;
 
 
-/** Set Holomap location position
-	@location Scene where position must be set */
 void setHolomapPosition(int32 locationIdx) {
 	holomapFlags[locationIdx] = 0x81;
 }
 
-/** Clear Holomap location position
-	@location Scene where position must be cleared */
 void clearHolomapPosition(int32 locationIdx) {
 	holomapFlags[locationIdx] &= 0x7E; 
 	holomapFlags[locationIdx] |= 0x40;
@@ -79,7 +75,6 @@ void computeCoorGlobe() { // TODO
 
 }
 
-/** Load Holomap content */
 void loadHolomapGFX() { // TODO
 	int32 i;
 	int32 j;
@@ -131,16 +126,8 @@ void loadHolomapGFX() { // TODO
 	needToLoadHolomapGFX=0;
 }
 
-/** Draw Holomap Title */
-void drawHolomapTitle(int32 x, int32 y) {  // TODO
-	int16	x0,y0,x1,y1 ;
-	byte	string[256] ;
-
-	x0 = x - 630/2 ;
-	x1 = x + 630/2 ;
-
-	y0 = y - 40/2 ;
-	y1 = y + 40/2 ;
+void drawHolomapTitle(int32 x, int32 y) {
+	int8	string[256] ;
 
 	strcpy( (char*)string, "HoloMap" ) ;
 
@@ -163,16 +150,13 @@ void drawHolomapTitle(int32 x, int32 y) {  // TODO
 	drawText( x  , y, string ) ;
 }
 
-/** Draw Holomap Trajectory */
 void drawHolomapTrajectory(int32 trajectoryIndex) { // TODO
 	
 }
 
-/** Main holomap process loop */
 void processHolomap() { // TODO
 	int32 alphaLightTmp;
     int32 betaLightTmp;
-	int32 tmpLanguageCDId;
 
 	freezeTime();
 
@@ -192,7 +176,6 @@ void processHolomap() { // TODO
 	drawHolomapTitle(320, 25);
 	setCameraPosition(320, 190, 128, 1024, 1024);
 
-	tmpLanguageCDId = cfgfile.LanguageCDId;
 	cfgfile.LanguageCDId = 0;
 	initTextBank(2);
 	setFontCrossColor(9);

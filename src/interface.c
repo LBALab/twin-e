@@ -177,7 +177,6 @@ void blitBox(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int
 	int8 *s;
 	int8 *d;
 	int32 insideLine;
-	int32 temp3;
 	int32 i;
 	int32 j;
 
@@ -188,10 +187,8 @@ void blitBox(int32 left, int32 top, int32 right, int32 bottom, int8 *source, int
 	height = bottom - top + 1;
 
 	insideLine = SCREEN_WIDTH - width;
-	temp3 = left;
 
 	left >>= 2;
-	temp3 &= 3;
 
 	for (j = 0; j < height; j++) {
 		for (i = 0; i < width; i++) {

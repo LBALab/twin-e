@@ -115,11 +115,11 @@ int8 CFGList[][22] = {
 
 int8 LanguageTypes[][10] = {
 	"English",
-	"Fran�ais",
+	"Français",
 	"Deutsch",
-	"Espa�ol",
+	"Español",
 	"Italiano",
-	"Portugu�s"
+	"Português"
 };
 ConfigFile cfgfile;
 

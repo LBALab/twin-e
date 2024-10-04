@@ -24,7 +24,7 @@
 #include "sys.h"
 
 // Little endian
-
+/*
 FORCEINLINE uint16 READ_LE_UINT16(const void *ptr) {
 	const uint8 *b = (const uint8 *)ptr;
 	return (b[1] << 8) | b[0];
@@ -104,3 +104,4 @@ FORCEINLINE void WRITE_UINT32(void *ptr, uint32 value) {
 FORCEINLINE void WRITE_INT32(void *ptr, int32 value) {
 	WRITE_LE_INT32(ptr, value);
 }
+*/

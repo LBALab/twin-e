@@ -654,9 +654,6 @@ void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSp
 	int32 top;
 	int32 bottom;
 	int32 left;
-	int32 right;
-	uint8 *outPtr;
-	int32 offset;
 	int32 c1;
 	int32 c2;
 	int32 vc3;
@@ -673,7 +670,6 @@ void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSp
 
 	left = posX + *(ptr + 2);
 	top = posY + *(ptr + 3);
-	right = *ptr + left - 1;
 	bottom = *(ptr + 1) + top - 1;
 
 	ptr += 4;
@@ -683,12 +679,7 @@ void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSp
 
 	//if (left >= textWindowLeft-2 && top >= textWindowTop-2 && right <= textWindowRight-2 && bottom <= textWindowBottom-2) // crop
 	{
-		right++;
 		bottom++;
-
-		outPtr = frontVideoBuffer + screenLookupTable[top] + left;
-
-		offset = -((right - left) - SCREEN_WIDTH);
 
 		for (c1 = 0; c1 < bottom - top; c1++) {
 			vc3 = *(ptr++);
@@ -704,7 +695,6 @@ void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSp
 								frontVideoBuffer[y*SCREEN_WIDTH+x] = temp;
 
 							x++;
-							outPtr++;
 						}
 					} else {
 						for (i = 0; i < iteration; i++) {
@@ -713,15 +703,12 @@ void drawBrickSprite(int32 index, int32 posX, int32 posY, uint8 *ptr, int32 isSp
 
 							x++;
 							ptr++;
-							outPtr++;
 						}
 					}
 				} else {
-					outPtr += iteration + 1;
 					x += iteration + 1;
 				}
 			}
-			outPtr += offset;
 			x = left;
 			y++;
 		}
