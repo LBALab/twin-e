@@ -39,6 +39,8 @@ void sdlClose();
 	@return SDL init state */
 int sdlInitialize();
 
+uint32 tick();
+
 /** Frames per second sdl delay */
 void fpsCycles(int32 fps);
 

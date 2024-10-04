@@ -175,6 +175,10 @@ int sdlInitialize() {
 	return 0;
 }
 
+inline uint32 tick() {
+	return SDL_GetTicks();
+}
+
 /** Frames per second sdl delay
 	@param fps frames per second */
 void fpsCycles(int32 fps) {
