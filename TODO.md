@@ -1,30 +1,40 @@
-# TODO #
+# TODO
 
 This is the place to list every TODO we need to make for this project.
 
-## Menu ##
+## Issues
+* Text Interjections time lock (related with loops and delay)
 
-  1. Complete other menu options including volume settings;
-  1. Do Save/Load routines;
-  1. Show credits in the end of game or after some seconds in Main Menu;
+## Refactoring
 
+* Make the code more readable and organized;
+* Convert everything back to snake_case;
+* Convert everything to 4 Spaces indentation;
+* Build platform concept and separate SDL code from game code;
+* Comment and reorganize the code for renderer and text files
+* Extras file also need some constants
+* Build with SDL3
+* Update Build Tooling to CMake
 
-## In-Game ##
+## In-Game
 
-  1. Holomap: create holomap routines;
-  1. Renderer: implement missing rendering types and fix rendering issues;
+* Holomap: create holomap routines;
+* Renderer: implement missing rendering types and fix rendering issues;
 
+## Scripting
 
-## Scripting ##
+* Zoom feature; (lZOOM)
+* Holomap trajectories (lHOLOMAP\_TRAJ)
 
-  1. Zoom feature; (lZOOM)
-  1. Holomap trajectories (lHOLOMAP\_TRAJ)
+## Menu
 
+* Complete menu options including volume settings;
+* Do Save/Load routines;
+* Show credits in the end of game or after some seconds in Main Menu;
 
-## Refactoring ##
+## Improvements
 
-  1. Do endian for reading content from pointers for proper portability;
-  1. Comment and reorganize the code for renderer and text files; Extras file also need some constants
-  1. Do a proper resource system, changing each request resource when need it;
-  1. Do a proper sound system with cached resources.
-  1. Improve Keyboard routines. Its now based in original but can be tricky to port it;
+* Do a proper resource system, changing each request resource when need it;
+* Do a proper sound system with cached resources.
+* Improve Keyboard routines. Its now based in original but can be tricky to port it;
+* Do endian for reading content from pointers for proper portability;
