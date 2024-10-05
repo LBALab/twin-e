@@ -26,7 +26,7 @@
 #include "main.h"
 #include "screens.h"
 #include "resources.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "text.h"
 #include "gamestate.h"
 #include "music.h"
@@ -70,13 +70,13 @@ void newGame() {
 	setFontCrossColor(15);
 
 	drawTextFullscreen(150);
-	readKeys();
+	handle_input();
 
 	if (skipIntro != 1) {
 		// intro screen 1 - twinsun
 		loadImage(RESSHQR_INTROSCREEN2IMG, 1);
 		drawTextFullscreen(151);
-		readKeys();
+		handle_input();
 
 		if (skipIntro != 1) {
 			loadImage(RESSHQR_INTROSCREEN3IMG, 1);
@@ -99,7 +99,7 @@ void newGame() {
 	flip();
 
 	// set main palette back
-	setPalette(paletteRGBA);
+	set_palette(paletteRGBA);
 
 	config_file.flag_display_text = tmpFlagDisplayText;
 }
@@ -129,7 +129,7 @@ void showCredits() {
 
 	clearScreen();
 	flip();
-	setPalette(paletteRGBA);
+	set_palette(paletteRGBA);
 }
 
 void drawSelectableCharacter(int32 x, int32 y, int32 arg) {
@@ -160,7 +160,7 @@ void drawSelectableCharacter(int32 x, int32 y, int32 arg) {
 	setFontColor(15);
 	drawText(centerX - getTextSize(buffer) / 2, centerY - 18, buffer);
 
-	copyBlockPhys(left, top, right2, bottom);
+	copy_block_phys(left, top, right2, bottom);
 }
 
 void drawSelectableCharacters(void) {
@@ -201,7 +201,7 @@ void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
   CoulFont(0xFu);
   SizeFont(a3);
   Font(v4);
-  return CopyBlockPhys(v4);
+  return copy_block_phys(v4);
 	*/
 
 	// TODO: implement the other types (don't seam to be used)
@@ -215,7 +215,7 @@ void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
 	setFontColor(15);
 	drawText(centerX - getTextSize(playerName) / 2, top, playerName);
 
-	copyBlockPhys(x, y, x + 320, y + 25);*/
+	copy_block_phys(x, y, x + 320, y + 25);*/
 }
 
 int32 enterPlayerName(int32 textIdx) {
@@ -228,26 +228,26 @@ int32 enterPlayerName(int32 textIdx) {
 		getMenuText(textIdx, buffer);
 		setFontColor(15);
 		drawText(320 - (getTextSize(buffer) / 2), 20, buffer);
-		copyBlockPhys(0, 0, 639, 99);
+		copy_block_phys(0, 0, 639, 99);
 		playerName[0] = enterPlayerNameVar1;
 		drawPlayerName(320, 100, playerName, 1);
 		drawSelectableCharacters();
 
 		do {
-			readKeys();
+			handle_input();
 			do {
-				readKeys();
+				handle_input();
 			} while(skipIntro);
 		} while(skippedKey);
 
 		enterPlayerNameVar2 = 1;
 
 		do {
-			readKeys();
+			handle_input();
 		} while(pressedKey);
 
 		while (!skipIntro) {
-			readKeys();
+			handle_input();
 			// TODO
 			drawPlayerName(320, 100, playerName, 1);
 		}
@@ -279,9 +279,9 @@ void newGameMenu() {
 		copyScreen(frontVideoBuffer, workVideoBuffer);
 		// TODO: recheck this
 		do {
-			readKeys();
+			handle_input();
 			do {
-				readKeys();
+				handle_input();
 			} while(skippedKey != 0);
 		} while(skipIntro != 0);
 	}
@@ -308,9 +308,9 @@ void continueGameMenu() {
 		copyScreen(frontVideoBuffer, workVideoBuffer);
 		// TODO: recheck this
 		do {
-			readKeys();
+			handle_input();
 			do {
-				readKeys();
+				handle_input();
 			} while(skippedKey != 0);
 		} while(skipIntro != 0);
 	}

@@ -26,7 +26,7 @@
 #include "debug.scene.h"
 #include "debug.grid.h"
 #include "scene.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "menu.h"
 #include "interface.h"
 #include "text.h"
@@ -107,14 +107,14 @@ void debugFillButton(int32 X, int32 Y, int32 width, int32 height, int8 color) {
 void debugDrawButton(int32 left, int32 top, int32 right, int32 bottom, int8 *text, int32 textLeft, int32 textRight, int32 isActive, int8 color) {
 	debugFillButton(left + 1, top + 1, right - left - 1, bottom - top - 1, color);
 	drawBox(left, top, right, bottom);
-	ttfDrawText(textLeft, textRight, text, 0);
-	copyBlockPhys(left, top, right, bottom);
+	ttf_draw_text(textLeft, textRight, text, 0);
+	copy_block_phys(left, top, right, bottom);
 }
 
 void debugDrawWindowBox(int32 left, int32 top, int32 right, int32 bottom, int32 alpha) {
 	drawTransparentBox(left, top, right, bottom, alpha);
 	drawBox(left, top, right, bottom);
-	//copyBlockPhys(left,top,right,bottom);
+	//copy_block_phys(left,top,right,bottom);
 }
 
 void debugDrawWindowButtons(int32 w) {
@@ -150,11 +150,11 @@ void debugDrawWindow(int32 w) {
 		int32 l;
 
 		for (l = 0; l < debugWindows[w].numLines; l++) {
-			ttfDrawText(left + 10, top + l*20 + 5, debugWindows[w].text[l], 0);
+			ttf_draw_text(left + 10, top + l*20 + 5, debugWindows[w].text[l], 0);
 		}
 	}
 
-	copyBlockPhys(left, top, right, bottom);
+	copy_block_phys(left, top, right, bottom);
 
 	debugDrawWindowButtons(w);
 }
@@ -477,7 +477,7 @@ void debugPlasmaWindow(int8 *text, int32 color) {
 	textSize = getTextSize(text);
 	drawText((SCREEN_WIDTH / 2) - (textSize / 2), 10, text);
 	drawBox(5, 5, 634, 50);
-	copyBlockPhys(5, 5, 634, 50);
+	copy_block_phys(5, 5, 634, 50);
 }
 
 void debugProcessWindow() {
@@ -499,15 +499,15 @@ void debugProcessWindow() {
 		debugDrawWindows();
 
 		do {
-			readKeys();
-			getMousePositions(&mouseData);
+			handle_input();
+			get_mouse_positions(&mouseData);
 
 			if (mouseData.left) {
 				int type = 0;
 				if ((type = debugProcessButton(mouseData.X, mouseData.Y)) != NO_ACTION) { // process menu item
 					if (debugTypeUseMenu(type)) {
 						copyScreen(workVideoBuffer, frontVideoBuffer);
-						copyBlockPhys(205, 55, 634, 474);
+						copy_block_phys(205, 55, 634, 474);
 					}
 
 					debugRefreshButtons(type);
@@ -532,7 +532,7 @@ void debugProcessWindow() {
 			if (mouseData.right)
 				quit = 1;
 
-			fpsCycles(25); // rest
+			fps_cycles(25); // rest
 
 			count++;
 		} while (!quit);

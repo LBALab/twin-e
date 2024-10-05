@@ -31,7 +31,7 @@ OBJS=actor.o \
 	screens.o \
 	script.life.o \
 	script.move.o \
-	sdlengine.o \
+	platform_sdl.o \
 	sound.o \
 	sys.o \
 	xmidi.o \

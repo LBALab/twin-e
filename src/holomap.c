@@ -28,7 +28,7 @@
 #include "scene.h"
 #include "sound.h"
 #include "interface.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "renderer.h"
 #include "text.h"
 #include "resources.h"

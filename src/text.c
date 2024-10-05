@@ -28,7 +28,7 @@
 #include "main.h"
 #include "hqrdepack.h"
 #include "resources.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "menu.h"
 #include "interface.h"
 #include "lbaengine.h"
@@ -336,7 +336,7 @@ void drawCharacterShadow(int32 x, int32 y, uint8 character, int32 color) { // dr
         right = x + 32;
         bottom = y + 38;
 
-        copyBlockPhys(left, top, right, bottom);
+        copy_block_phys(left, top, right, bottom);
     }
 }
 
@@ -394,14 +394,14 @@ void initDialogueBox() { // InitDialWindow
         drawTransparentBox(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
     }
 
-    copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+    copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
     printText8Var3 = 0;
     blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)workVideoBuffer);
 }
 
 void initInventoryDialogueBox() { // SecondInitDialWindow
     blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
-    copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+    copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
     printText8Var3 = 0;
 }
 
@@ -583,7 +583,7 @@ void printText10Sub() { // printText10Sub()
         renderPolygons(polyRenderType, dialTextStopColor);
     }
 
-    copyBlockPhys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
+    copy_block_phys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
 }
 
 void printText10Sub2() { // printText10Sub2()
@@ -600,7 +600,7 @@ void printText10Sub2() { // printText10Sub2()
 
     ptr = pt8s4 + currentIndex;
 
-    sdldelay(15);
+    sdl_delay(15);
 
     counter = printText8Var3;
     counter2 = dialTextStartColor;
@@ -642,7 +642,7 @@ int printText10() { // printText10()
         }
         if (printText8Var6 != 0) {
             blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
-            copyBlockPhys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+            copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
             printText8Var3 = 0;
             printText8Var6 = 0;
             TEXT_CurrentLetterX = dialTextBoxLeft + 8;
@@ -724,24 +724,24 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         initDialogueBox();
 
         do {
-            readKeys();
+            handle_input();
             printedText = printText10();
             playVox(currDialTextEntry);
 
             if (printedText == 2) {
                 do {
-                    readKeys();
+                    handle_input();
                     if (skipIntro == 0 && skippedKey == 0 && pressedKey == 0) {
                         break;
                     }
                     playVox(currDialTextEntry);
-                    sdldelay(1);
+                    sdl_delay(1);
                 } while(1);
 
                 do {
-                    readKeys();
+                    handle_input();
                     playVox(currDialTextEntry);
-                    sdldelay(1);
+                    sdl_delay(1);
                 } while(skipIntro || skippedKey || pressedKey);
             }
 
@@ -753,7 +753,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 break;
             }
 
-            sdldelay(1);
+            sdl_delay(1);
         } while(!skipText);
 
         hasHiddenVox = 0;
@@ -777,14 +777,14 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         // RECHECK this later
         // wait displaying text
         do {
-            readKeys();
-            sdldelay(1);
+            handle_input();
+            sdl_delay(1);
         } while(skipIntro || skippedKey || pressedKey);
 
         // RECHECK this later
         // wait key to display next text
         do {
-            readKeys();
+            handle_input();
             if (skipIntro != 0) {
                 loadClip();
                 return;
@@ -793,7 +793,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 loadClip();
                 return;
             }
-            sdldelay(1);
+            sdl_delay(1);
         } while(!pressedKey);
     } else { // RECHECK THIS
         while (playVox(currDialTextEntry) && skipIntro != 1 );
@@ -936,26 +936,26 @@ void drawAskQuestion(int32 index) { // MyDial
 
     do {
         start = tick();
-        readKeys();
+        handle_input();
         textStatus = printText10();
         
         if (textStatus == 2) {
             do {
                 start = tick();
-                readKeys();
+                handle_input();
                 playVox(currDialTextEntry);
-                sdldelay(tick() - start + config_file.fps);
+                sdl_delay(tick() - start + config_file.fps);
             } while(skipIntro || skippedKey || pressedKey);
 
             do {
                 start = tick();
-                readKeys();
+                handle_input();
                 playVox(currDialTextEntry);
-                sdldelay(tick() - start + config_file.fps);
+                sdl_delay(tick() - start + config_file.fps);
             } while(!skipIntro && !skippedKey && !pressedKey);
         }
 
-        sdldelay(tick() - start + config_file.fps);
+        sdl_delay(tick() - start + config_file.fps);
     } while(textStatus);
 
     if (config_file.language_cd_id) {

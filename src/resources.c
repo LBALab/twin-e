@@ -26,7 +26,7 @@
 #include "scene.h"
 #include "animations.h"
 #include "screens.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "sound.h"
 
 int8 * HQR_RESS_FILE			= "ress.hqr";
@@ -59,7 +59,7 @@ void initPalettes() {
 	memcpy(palette, mainPalette, NUMOFCOLORS * 3);
 
 	convertPalToRGBA(palette, paletteRGBA);
-	// setPalette(paletteRGBA);
+	// set_palette(paletteRGBA);
 
 	// We use it now
 	palCustom = 0;

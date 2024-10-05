@@ -23,7 +23,7 @@
 
 #include "lbaengine.h"
 #include "main.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "screens.h"
 #include "grid.h"
 #include "debug.grid.h"
@@ -116,7 +116,7 @@ void processActorSamplePosition(int32 actorIdx) {
     @return true if we want to show credit sequence */
 int32 runGameEngine() { // mainLoopInteration
     int32 a;
-    readKeys();
+    handle_input();
 
     if (needChangeScene > -1) {
         changeScene();
@@ -224,7 +224,7 @@ int32 runGameEngine() { // mainLoopInteration
                 fadeToBlack(paletteRGBACustom);
                 clearScreen();
                 flip();
-                setPalette(paletteRGBA);
+                set_palette(paletteRGBA);
                 lockPalette = 1;
             }							 
                 break;
@@ -346,9 +346,9 @@ int32 runGameEngine() { // mainLoopInteration
             freezeTime();
             setFontColor(15);
             drawText(5, 446, (int8*)"Pause"); // no key for pause in Text Bank
-            copyBlockPhys(5, 446, 100, 479);
+            copy_block_phys(5, 446, 100, 479);
             do {
-                readKeys();
+                handle_input();
                 SDL_Delay(10);
             } while (skipIntro != 0x19 && !pressedKey);
             unfreezeTime();
@@ -566,7 +566,7 @@ int32 gameEngineLoop() { // mainLoop
             return 1;
         lbaTime++;
         if (tick() - start < config_file.fps)
-            sdldelay(tick() - start + config_file.fps);
+            sdl_delay(tick() - start + config_file.fps);
     }
     return 0;
 }

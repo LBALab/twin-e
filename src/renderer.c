@@ -28,7 +28,7 @@
 
 #include "renderer.h"
 #include "main.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "shadeangletab.h"
 #include "lbaengine.h"
 #include "redraw.h"

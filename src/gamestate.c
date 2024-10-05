@@ -41,6 +41,7 @@
 #include "menuoptions.h"
 #include "collision.h"
 
+
 #define SAVE_DIR "save/"
 
 int32 magicLevelStrengthOfHit[] = {
@@ -423,12 +424,12 @@ void processFoundItem(int32 item) {
 		}
 
 		if (textState == 0 || textState == 2) {
-			sdldelay(15);
+			sdl_delay(15);
 		}
 
 		flipRedrawAreas();
 		
-		readKeys();
+		handle_input();
 		if (skippedKey) {
 			if (!textState) {
 				quitItem = 1;
@@ -443,19 +444,19 @@ void processFoundItem(int32 item) {
 	}
 	
 	while (playVoxSimple(currDialTextEntry)) {
-		readKeys();
+		handle_input();
 		if (skipIntro == 1) {
 			break;
 		}
-		delaySkip(1);
+		sdl_delay_skip(1);
 	}
 
 	initEngineProjections();
 	initTextBank(currentTextBank + 3);
 
 	/*do {
-		readKeys();
-		delaySkip(1);
+		handle_input();
+		sdl_delay_skip(1);
 	} while (!skipIntro);*/
 	
 	if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
@@ -509,7 +510,7 @@ void processGameoverAnimation() { // makeGameOver
 	sceneHero->staticFlags.bIsHidden = 0;
 
 	// TODO: drawInGameTransBox
-	setPalette(paletteRGBA);
+	set_palette(paletteRGBA);
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 	gameOverPtr = malloc(hqrEntrySize(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
 	hqrGetEntry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
@@ -525,26 +526,26 @@ void processGameoverAnimation() { // makeGameOver
 		setClip(120, 120, 519, 359);
 		
 		while(skipIntro != 1 && (lbaTime - startLbaTime) <= 0x1F4) {
-			readKeys();
+			handle_input();
 			
 			avg = getAverageValue(40000, 3200, 500, lbaTime - startLbaTime);
 			cdot = crossDot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
 			blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 			setCameraAngle(0, 0, 0, 0, -cdot, 0, avg);
 			renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
-			copyBlockPhys(120, 120, 519, 359);
+			copy_block_phys(120, 120, 519, 359);
 
 			lbaTime++;
-			sdldelay(15);
+			sdl_delay(15);
 		}
 
 		playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80, -1);
 		blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
 		setCameraAngle(0, 0, 0, 0, 0, 0, 3200);
 		renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
-		copyBlockPhys(120, 120, 519, 359);
+		copy_block_phys(120, 120, 519, 359);
 
-		delaySkip(2000);
+		sdl_delay_skip(2000);
 
 		resetClip();
 		free(gameOverPtr);

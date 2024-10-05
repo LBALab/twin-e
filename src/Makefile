@@ -1,7 +1,7 @@
 CC=gcc
 SDL_CFLAGS = `sdl-config --cflags`
 SDL_LIBS = `sdl-config --libs`
-CFLAGS=-DUNIX -Wall $(SDL_CFLAGS)
+CFLAGS=-DMACOSX -Wall $(SDL_CFLAGS)
 OBJS=actor.o \
 	animations.o \
 	collision.o \
@@ -31,13 +31,13 @@ OBJS=actor.o \
 	screens.o \
 	script.life.o \
 	script.move.o \
-	sdlengine.o \
+	platform_sdl.o \
 	sound.o \
 	sys.o \
 	xmidi.o \
 	text.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lm
+LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
 VERSION=v0.3.0
 TARGET=twin-e_$(VERSION)
 INSTALLDIR=../bin

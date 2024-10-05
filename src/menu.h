@@ -24,7 +24,7 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "actor.h"
 
 extern int32 currMenuTextIndex;

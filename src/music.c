@@ -34,7 +34,7 @@
 
 #include "music.h"
 #include "main.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "hqrdepack.h"
 #include "resources.h"
 #include "xmidi.h"

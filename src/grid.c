@@ -29,7 +29,7 @@
 #include "resources.h"
 #include "lbaengine.h"
 #include "scene.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "interface.h"
 #include "screens.h"
 #include "actor.h"
@@ -246,16 +246,16 @@ void copyGridMask(int32 index, int32 x, int32 y, uint8 *buffer) {
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
 void drawOverModelActor(int32 X, int32 Y, int32 Z) {
-	int32 CopyBlockPhysLeft;
-	int32 CopyBlockPhysRight;
+	int32 copy_block_physLeft;
+	int32 copy_block_physRight;
 	int32 i;
 	int32 j;
 	BrickEntry *currBrickEntry;
 
-	CopyBlockPhysLeft = ((textWindowLeft + 24) / 24) - 1;
-	CopyBlockPhysRight = ((textWindowRight + 24) / 24);
+	copy_block_physLeft = ((textWindowLeft + 24) / 24) - 1;
+	copy_block_physRight = ((textWindowRight + 24) / 24);
 
-	for (j = CopyBlockPhysLeft; j <= CopyBlockPhysRight; j++) {
+	for (j = copy_block_physLeft; j <= copy_block_physRight; j++) {
 		for (i = 0; i < brickInfoBuffer[j]; i++) {
 			currBrickEntry = &bricksDataBuffer[j][i];
 
@@ -273,16 +273,16 @@ void drawOverModelActor(int32 X, int32 Y, int32 Z) {
 	@param Y actor Y coordinate
 	@param Z actor Z coordinate */
 void drawOverSpriteActor(int32 X, int32 Y, int32 Z) {
-	int32 CopyBlockPhysLeft;
-	int32 CopyBlockPhysRight;
+	int32 copy_block_physLeft;
+	int32 copy_block_physRight;
 	int32 i;
 	int32 j;
 	BrickEntry *currBrickEntry;
 
-	CopyBlockPhysLeft = ((textWindowLeft + 24) / 24) - 1;
-	CopyBlockPhysRight = (textWindowRight + 24) / 24;
+	copy_block_physLeft = ((textWindowLeft + 24) / 24) - 1;
+	copy_block_physRight = (textWindowRight + 24) / 24;
 
-	for (j = CopyBlockPhysLeft; j <= CopyBlockPhysRight; j++) {
+	for (j = copy_block_physLeft; j <= copy_block_physRight; j++) {
 		for (i = 0; i < brickInfoBuffer[j]; i++) {
 			currBrickEntry = &bricksDataBuffer[j][i];
 

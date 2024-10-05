@@ -29,7 +29,7 @@
 
 #include "main.h"
 #include "resources.h"
-#include "sdlengine.h"
+#include "platform_sdl.h"
 #include "screens.h"
 #include "music.h"
 #include "menu.h"
@@ -87,7 +87,7 @@ int8 CFGList[][22] = {
     "UseCD:",
     "Sound:",
     "Movie:",
-    "CrossFade:", // 30
+    "cross_fade:", // 30
     "Fps:",
     "Debug:",
     "UseAutoSaving:",
@@ -115,7 +115,7 @@ void alloc_video_memory() {
 
     workVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint8));
     frontVideoBuffer = frontVideoBufferbis = (uint8 *) malloc(sizeof(uint8) * SCREEN_WIDTH * SCREEN_HEIGHT);
-    initScreenBuffer(frontVideoBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    init_screen_buffer(frontVideoBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     j = 0;
     k = 0;
@@ -262,7 +262,7 @@ void init_configurations() {
                 sscanf(buffer, "Movie: %d", &config_file.movie);
                 break;
             case 30:
-                sscanf(buffer, "CrossFade: %d", &config_file.cross_fade);
+                sscanf(buffer, "cross_fade: %d", &config_file.cross_fade);
                 break;
             case 31:
                 sscanf(buffer, "Fps: %d", &config_file.fps);
@@ -314,7 +314,7 @@ void init_engine() {
     if (config_file.debug)
         printf("Compiled the %s at %s\n", __DATE__, __TIME__);
 
-    sdlInitialize();
+    sdl_initialize();
 
     srand(tick()); // always get a different seed while starting the game
 
@@ -322,7 +322,7 @@ void init_engine() {
     clearScreen();
 
     // Toggle fullscreen if Fullscreen flag is set
-    toggleFullscreen();
+    toggle_fullscreen();
 
     // Check if LBA CD-Rom is on drive
     initCdrom();
@@ -397,7 +397,7 @@ void init_all() {
 int main(int argc, char *argv[]) {
     init_all();
     init_engine();
-    sdlClose();
+    sdl_close();
     printf("\n\nLBA/Relentless < %s / %s >\n\nOK.\n\n", __DATE__, __TIME__);
     printf("TwinEngine v%s closed\n", ENGINE_VERSION);
     if (config_file.debug) {
