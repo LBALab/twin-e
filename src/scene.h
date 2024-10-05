@@ -1,24 +1,24 @@
 /** @file scene.h
-	@brief
-	This file contains main scenario routines
+    @brief
+    This file contains main scenario routines
 
-	TwinEngine: a Little Big Adventure engine
-	
-	Copyright (C) 2002 The TwinEngine team
+    TwinEngine: a Little Big Adventure engine
+    
+    Copyright (C) 2002 The TwinEngine team
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #ifndef SCENE_H
@@ -37,10 +37,10 @@
 #define NUM_MAX_TRACKS		200
 
 enum ScenePositionType {
-	kNoPosition	= 0,
-	kZone		= 1,
-	kScene		= 2,
-	kReborn		= 3
+    kNoPosition	= 0,
+    kZone		= 1,
+    kScene		= 2,
+    kReborn		= 3
 };
 
 extern int32 needChangeScene;
@@ -105,59 +105,59 @@ extern int16 talkingActor;
 // ZONES
 
 typedef struct ScenePoint {
-	int16 X;
-	int16 Y;
-	int16 Z;
+    int16 X;
+    int16 Y;
+    int16 Z;
 } ScenePoint;
 
 typedef struct ZoneStruct {
-	ScenePoint bottomLeft;
-	ScenePoint topRight;
-	int16 type;
-	union {
-		struct {
-			int16 newSceneIdx;
-			int16 X;
-			int16 Y;
-			int16 Z;
-		} ChangeScene;
-		struct {
-			int16 dummy;
-			int16 X;
-			int16 Y;
-			int16 Z;
-		} CameraView;
-		struct {
-			int16 zoneIdx;
-		} Sceneric;
-		struct {
-			int16 newGrid;
-		} CeillingGrid;
-		struct {
-			int16 textIdx;
-			int16 textColor;
-		} DisplayText;
-		struct {
-			int16 info0;
-			int16 info1;
-			int16 info2;
-			int16 info3;
-		} generic;
-	} infoData;
-	int16 snap;
+    ScenePoint bottomLeft;
+    ScenePoint topRight;
+    int16 type;
+    union {
+        struct {
+            int16 newSceneIdx;
+            int16 X;
+            int16 Y;
+            int16 Z;
+        } ChangeScene;
+        struct {
+            int16 dummy;
+            int16 X;
+            int16 Y;
+            int16 Z;
+        } CameraView;
+        struct {
+            int16 zoneIdx;
+        } Sceneric;
+        struct {
+            int16 newGrid;
+        } CeillingGrid;
+        struct {
+            int16 textIdx;
+            int16 textColor;
+        } DisplayText;
+        struct {
+            int16 info0;
+            int16 info1;
+            int16 info2;
+            int16 info3;
+        } generic;
+    } infoData;
+    int16 snap;
 } ZoneStruct;
 
 extern int32 sceneNumZones;
 extern ZoneStruct sceneZones[NUM_MAX_ZONES];
 
 enum ZoneType {
-	kCube		= 0, // Change to another scene
-	kCamera		= 1, // Binds camera view
-	kSceneric	= 2, // For use in Life Script
-	kGrid		= 3, // Set disappearing Grid fragment
-	kObject		= 4, // Give bonus
-	kText		= 5, // Displays text message
-	kLadder		= 6  // Hero can climb on it
+    kCube		= 0, // Change to another scene
+    kCamera		= 1, // Binds camera view
+    kSceneric	= 2, // For use in Life Script
+    kGrid		= 3, // Set disappearing Grid fragment
+    kObject		= 4, // Give bonus
+    kText		= 5, // Displays text message
+    kLadder		= 6  // Hero can climb on it
 };
 
 
@@ -179,7 +179,7 @@ void changeScene();
 void processEnvironmentSound();
 
 /** Process actor zones
-	@param actorIdx Process actor index */
+    @param actorIdx Process actor index */
 void processActorZones(int32 actorIdx);
 
 #endif

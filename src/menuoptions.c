@@ -1,24 +1,24 @@
 /** @file menuoptions.c
-	@brief
-	This file contains menu routines
+    @brief
+    This file contains menu routines
 
-	TwinEngine: a Little Big Adventure engine
-	
-	Copyright (C) 2002 The TwinEngine team
+    TwinEngine: a Little Big Adventure engine
+    
+    Copyright (C) 2002 The TwinEngine team
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License
+    as published by the Free Software Foundation; either version 2
+    of the License, or (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include "menuoptions.h"
@@ -52,131 +52,131 @@ int32 enterPlayerNameVar2;
 
 
 void newGame() {
-	int32 tmpFlagDisplayText;
+    int32 tmpFlagDisplayText;
 
-	stopMusic();
+    stopMusic();
 
-	tmpFlagDisplayText = config_file.flag_display_text;
-	config_file.flag_display_text = 1;
+    tmpFlagDisplayText = config_file.flag_display_text;
+    config_file.flag_display_text = 1;
 
-	// intro screen 1 - twinsun
-	loadImage(RESSHQR_INTROSCREEN1IMG, 1);
+    // intro screen 1 - twinsun
+    loadImage(RESSHQR_INTROSCREEN1IMG, 1);
 
-	newGameVar4 = 0;
-	newGameVar5 = 1;
+    newGameVar4 = 0;
+    newGameVar5 = 1;
 
-	initTextBank(2);
-	textClipFull();
-	setFontCrossColor(15);
+    initTextBank(2);
+    textClipFull();
+    setFontCrossColor(15);
 
-	drawTextFullscreen(150);
-	handle_input();
+    drawTextFullscreen(150);
+    handle_input();
 
-	if (skipIntro != 1) {
-		// intro screen 1 - twinsun
-		loadImage(RESSHQR_INTROSCREEN2IMG, 1);
-		drawTextFullscreen(151);
-		handle_input();
+    if (skipIntro != 1) {
+        // intro screen 1 - twinsun
+        loadImage(RESSHQR_INTROSCREEN2IMG, 1);
+        drawTextFullscreen(151);
+        handle_input();
 
-		if (skipIntro != 1) {
-			loadImage(RESSHQR_INTROSCREEN3IMG, 1);
-			drawTextFullscreen(152);
-		}
-	}
+        if (skipIntro != 1) {
+            loadImage(RESSHQR_INTROSCREEN3IMG, 1);
+            drawTextFullscreen(152);
+        }
+    }
 
-	newGameVar5 = 0;
-	textClipSmall();
-	newGameVar4 = 1;
+    newGameVar5 = 0;
+    textClipSmall();
+    newGameVar4 = 1;
 
-	fadeToBlack(paletteRGBACustom);
-	clearScreen();
-	flip();
-	
-	playMidiMusic(1, 0);
-	playFlaMovie(FLA_INTROD);
+    fadeToBlack(paletteRGBACustom);
+    clearScreen();
+    flip();
+    
+    playMidiMusic(1, 0);
+    playFlaMovie(FLA_INTROD);
 
-	clearScreen();
-	flip();
+    clearScreen();
+    flip();
 
-	// set main palette back
-	set_palette(paletteRGBA);
+    // set main palette back
+    set_palette(paletteRGBA);
 
-	config_file.flag_display_text = tmpFlagDisplayText;
+    config_file.flag_display_text = tmpFlagDisplayText;
 }
 
 void showCredits() {
-	int32 tmpShadowMode, tmpLanguageCDIdx;
-	
-	canShowCredits = 1;
-	tmpShadowMode = config_file.shadow_mode;
-	tmpLanguageCDIdx = config_file.language_cd_id;
-	config_file.shadow_mode = 0;
-	config_file.language_cd_id = 0;
-	initEngineVars(1);
-	currentSceneIdx = 119;
-	needChangeScene = 119;
-	
-	gameEngineLoop();
+    int32 tmpShadowMode, tmpLanguageCDIdx;
+    
+    canShowCredits = 1;
+    tmpShadowMode = config_file.shadow_mode;
+    tmpLanguageCDIdx = config_file.language_cd_id;
+    config_file.shadow_mode = 0;
+    config_file.language_cd_id = 0;
+    initEngineVars(1);
+    currentSceneIdx = 119;
+    needChangeScene = 119;
+    
+    gameEngineLoop();
 
-	canShowCredits = 0;
-	config_file.shadow_mode = tmpShadowMode;
-	config_file.language_cd_id = tmpLanguageCDIdx;
-	
-	clearScreen();
-	flip();
+    canShowCredits = 0;
+    config_file.shadow_mode = tmpShadowMode;
+    config_file.language_cd_id = tmpLanguageCDIdx;
+    
+    clearScreen();
+    flip();
 
-	playFlaMovie(FLA_THEEND);
+    playFlaMovie(FLA_THEEND);
 
-	clearScreen();
-	flip();
-	set_palette(paletteRGBA);
+    clearScreen();
+    flip();
+    set_palette(paletteRGBA);
 }
 
 void drawSelectableCharacter(int32 x, int32 y, int32 arg) {
-	int8 buffer[256];
-	int32 centerX, left, top, centerY, bottom, right, right2;
+    int8 buffer[256];
+    int32 centerX, left, top, centerY, bottom, right, right2;
 
-	buffer[0] = allowedCharIndex[y + x * 14];
+    buffer[0] = allowedCharIndex[y + x * 14];
 
-	centerX = y * 45 + 25;
-	left = centerX - 20;
-	right = centerX + 20;
-	top = x * 56 + 200 - 25;
-	buffer[1] = 0;
-	centerY = x * 56 + 200;
-	bottom = x * 56 + 200 + 25;
+    centerX = y * 45 + 25;
+    left = centerX - 20;
+    right = centerX + 20;
+    top = x * 56 + 200 - 25;
+    buffer[1] = 0;
+    centerY = x * 56 + 200;
+    bottom = x * 56 + 200 + 25;
 
-	if (arg != 0) {
-		drawSplittedBox(left, top, right, bottom, 91);
-	} else {
-		blitBox(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *)frontVideoBuffer);
-		right2 = right;
-		drawTransparentBox(left, top, right2, bottom, 4);
-	}
+    if (arg != 0) {
+        drawSplittedBox(left, top, right, bottom, 91);
+    } else {
+        blitBox(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *)frontVideoBuffer);
+        right2 = right;
+        drawTransparentBox(left, top, right2, bottom, 4);
+    }
 
-	drawBox(left, top, right, bottom);
-	right2 = right;
+    drawBox(left, top, right, bottom);
+    right2 = right;
 
-	setFontColor(15);
-	drawText(centerX - getTextSize(buffer) / 2, centerY - 18, buffer);
+    setFontColor(15);
+    drawText(centerX - getTextSize(buffer) / 2, centerY - 18, buffer);
 
-	copy_block_phys(left, top, right2, bottom);
+    copy_block_phys(left, top, right2, bottom);
 }
 
 void drawSelectableCharacters(void) {
-	int8 x, y;
+    int8 x, y;
 
-	for (x = 0; x < 5; x++) {
-		for (y = 0; y < 14; y++) {
-			drawSelectableCharacter(x, y, 0);
-		}
-	}
+    for (x = 0; x < 5; x++) {
+        for (y = 0; y < 14; y++) {
+            drawSelectableCharacter(x, y, 0);
+        }
+    }
 }
 
 // 0001F18C
 void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
 /*
-	int v4; // ebp@0
+    int v4; // ebp@0
   int v6; // [sp+0h] [bp-14h]@0
   int v7; // [sp+0h] [bp-14h]@4
   int v8; // [sp+4h] [bp-10h]@0
@@ -202,116 +202,116 @@ void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
   SizeFont(a3);
   Font(v4);
   return copy_block_phys(v4);
-	*/
+    */
 
-	// TODO: implement the other types (don't seam to be used)
-	/*if (type == 1) {
-		processPlasmaEffect(top, 1);
-	}
-	
-	drawBox(x, top, dialTextBoxRight, dialTextBoxBottom);
-	drawTransparentBox(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
+    // TODO: implement the other types (don't seam to be used)
+    /*if (type == 1) {
+        processPlasmaEffect(top, 1);
+    }
+    
+    drawBox(x, top, dialTextBoxRight, dialTextBoxBottom);
+    drawTransparentBox(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
 
-	setFontColor(15);
-	drawText(centerX - getTextSize(playerName) / 2, top, playerName);
+    setFontColor(15);
+    drawText(centerX - getTextSize(playerName) / 2, top, playerName);
 
-	copy_block_phys(x, y, x + 320, y + 25);*/
+    copy_block_phys(x, y, x + 320, y + 25);*/
 }
 
 int32 enterPlayerName(int32 textIdx) {
-	int8 buffer[256];
+    int8 buffer[256];
 
-	while(1) {
-		copyScreen(workVideoBuffer, frontVideoBuffer);
-		flip(); //frontVideoBuffer
-		initTextBank(0);
-		getMenuText(textIdx, buffer);
-		setFontColor(15);
-		drawText(320 - (getTextSize(buffer) / 2), 20, buffer);
-		copy_block_phys(0, 0, 639, 99);
-		playerName[0] = enterPlayerNameVar1;
-		drawPlayerName(320, 100, playerName, 1);
-		drawSelectableCharacters();
+    while(1) {
+        copyScreen(workVideoBuffer, frontVideoBuffer);
+        flip(); //frontVideoBuffer
+        initTextBank(0);
+        getMenuText(textIdx, buffer);
+        setFontColor(15);
+        drawText(320 - (getTextSize(buffer) / 2), 20, buffer);
+        copy_block_phys(0, 0, 639, 99);
+        playerName[0] = enterPlayerNameVar1;
+        drawPlayerName(320, 100, playerName, 1);
+        drawSelectableCharacters();
 
-		do {
-			handle_input();
-			do {
-				handle_input();
-			} while(skipIntro);
-		} while(skippedKey);
+        do {
+            handle_input();
+            do {
+                handle_input();
+            } while(skipIntro);
+        } while(skippedKey);
 
-		enterPlayerNameVar2 = 1;
+        enterPlayerNameVar2 = 1;
 
-		do {
-			handle_input();
-		} while(pressedKey);
+        do {
+            handle_input();
+        } while(pressedKey);
 
-		while (!skipIntro) {
-			handle_input();
-			// TODO
-			drawPlayerName(320, 100, playerName, 1);
-		}
+        while (!skipIntro) {
+            handle_input();
+            // TODO
+            drawPlayerName(320, 100, playerName, 1);
+        }
 
-		// FIXME: remove this lines after implementing everything
-		if (skipIntro)
-			break;
-	}
+        // FIXME: remove this lines after implementing everything
+        if (skipIntro)
+            break;
+    }
 
-	enterPlayerNameVar2 = 0;
-	copyScreen(workVideoBuffer, frontVideoBuffer);
-	flip(); // frontVideoBuffer
+    enterPlayerNameVar2 = 0;
+    copyScreen(workVideoBuffer, frontVideoBuffer);
+    flip(); // frontVideoBuffer
 
-	return 1;
+    return 1;
 }
 
 /** Main menu new game options */
 void newGameMenu() {
-	//TODO: process players name
-	if(enterPlayerName(MAINMENU_ENTERPLAYERNAME))
-	{
-		initEngineVars(1);
-		newGame();
+    //TODO: process players name
+    if(enterPlayerName(MAINMENU_ENTERPLAYERNAME))
+    {
+        initEngineVars(1);
+        newGame();
 
-		if (gameEngineLoop()) {
-			showCredits();
-		}
-		
-		copyScreen(frontVideoBuffer, workVideoBuffer);
-		// TODO: recheck this
-		do {
-			handle_input();
-			do {
-				handle_input();
-			} while(skippedKey != 0);
-		} while(skipIntro != 0);
-	}
+        if (gameEngineLoop()) {
+            showCredits();
+        }
+        
+        copyScreen(frontVideoBuffer, workVideoBuffer);
+        // TODO: recheck this
+        do {
+            handle_input();
+            do {
+                handle_input();
+            } while(skippedKey != 0);
+        } while(skipIntro != 0);
+    }
 }
 
 /** Main menu continue game options */
 void continueGameMenu() {
-	//TODO: get list of saved games
-	//if(chooseSave(MAINMENU_CONTINUEGAME))
-	{
-		initEngineVars(-1); // will load game
-		if (gameChapter == 0 && currentSceneIdx == 0) {
-			newGame();
-		} else {
-			newGameVar5 = 0;
-			textClipSmall();
-			newGameVar4 = 1;
-		}
+    //TODO: get list of saved games
+    //if(chooseSave(MAINMENU_CONTINUEGAME))
+    {
+        initEngineVars(-1); // will load game
+        if (gameChapter == 0 && currentSceneIdx == 0) {
+            newGame();
+        } else {
+            newGameVar5 = 0;
+            textClipSmall();
+            newGameVar4 = 1;
+        }
 
-		if (gameEngineLoop()) {
-			showCredits();
-		}
+        if (gameEngineLoop()) {
+            showCredits();
+        }
 
-		copyScreen(frontVideoBuffer, workVideoBuffer);
-		// TODO: recheck this
-		do {
-			handle_input();
-			do {
-				handle_input();
-			} while(skippedKey != 0);
-		} while(skipIntro != 0);
-	}
+        copyScreen(frontVideoBuffer, workVideoBuffer);
+        // TODO: recheck this
+        do {
+            handle_input();
+            do {
+                handle_input();
+            } while(skippedKey != 0);
+        } while(skipIntro != 0);
+    }
 }
