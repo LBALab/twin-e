@@ -565,7 +565,8 @@ int32 gameEngineLoop() { // mainLoop
         if (runGameEngine())
             return 1;
         lbaTime++;
-        sdldelay(tick() - start + cfgfile.Fps);
+        if (tick() - start < cfgfile.Fps)
+            sdldelay(tick() - start + cfgfile.Fps);
     }
     return 0;
 }

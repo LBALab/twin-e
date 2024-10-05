@@ -708,7 +708,6 @@ int printText10() { // printText10()
 void drawTextFullscreen(int32 index) { // printTextFullScreen
     int32 printedText;
     int32 skipText = 0;
-    uint32 start = tick();
 
     saveClip();
     resetClip();
@@ -725,27 +724,24 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         initDialogueBox();
 
         do {
-            start = tick();
             readKeys();
             printedText = printText10();
             playVox(currDialTextEntry);
 
             if (printedText == 2) {
                 do {
-                    start = tick();
                     readKeys();
                     if (skipIntro == 0 && skippedKey == 0 && pressedKey == 0) {
                         break;
                     }
                     playVox(currDialTextEntry);
-                    sdldelay(tick() - start + cfgfile.Fps);
+                    sdldelay(1);
                 } while(1);
 
                 do {
-                    start = tick();
                     readKeys();
                     playVox(currDialTextEntry);
-                    sdldelay(tick() - start + cfgfile.Fps);
+                    sdldelay(1);
                 } while(skipIntro || skippedKey || pressedKey);
             }
 
@@ -757,7 +753,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 break;
             }
 
-            sdldelay(tick() - start + cfgfile.Fps);
+            sdldelay(1);
         } while(!skipText);
 
         hasHiddenVox = 0;
@@ -781,15 +777,13 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         // RECHECK this later
         // wait displaying text
         do {
-            start = tick();
             readKeys();
-            sdldelay(tick() - start + cfgfile.Fps);
+            sdldelay(1);
         } while(skipIntro || skippedKey || pressedKey);
 
         // RECHECK this later
         // wait key to display next text
         do {
-            start = tick();
             readKeys();
             if (skipIntro != 0) {
                 loadClip();
@@ -799,7 +793,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 loadClip();
                 return;
             }
-            sdldelay(tick() - start + cfgfile.Fps);
+            sdldelay(1);
         } while(!pressedKey);
     } else { // RECHECK THIS
         while (playVox(currDialTextEntry) && skipIntro != 1 );
