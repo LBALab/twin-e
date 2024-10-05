@@ -4,20 +4,19 @@
 
     Martin Gerhardy     mgerhardy       Developer
     Felipe Sanches      jucablues       Developer
-    Nikita Tereshin                     Developer
+    Nikita Tereshin     rumkex          Developer
     Patrik Dahlström    risca           Developer
     Arthur Blot         arthur.blot78   Developer
     Kyuubu              wett            Developer
     Toël Hartmann       toel__          Developer
 
-# Bug reporters:
-    Darkflame
-    Graxer
-    Zink
-    jools1
-    bernard.godard
-    hsdnmail
-    lucianoshl
+    Darkflame                           Bug Report
+    Graxer                              Bug Report
+    Zink                                Bug Report
+    jools1                              Bug Report
+    bernard.godard                      Bug Report
+    hsdnmail                            Bug Report
+    lucianoshl                          Bug Report
 
 # Special Thanks:
     Sebástien Viannay for some specific infomation about scene format and actors static/dynamic flags
