@@ -22,7 +22,7 @@
 */
 
 #include "redraw.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "lbaengine.h"
 #include "renderer.h"
 #include "interface.h"
@@ -199,7 +199,7 @@ void flipRedrawAreas() {
     int32 i;
 
     for (i = 0; i < numOfRedrawBox; i++) { // redraw areas on screen
-        copy_block_phys(currentRedrawList[i].left, currentRedrawList[i].top, currentRedrawList[i].right, currentRedrawList[i].bottom);
+        platform_copy_block_phys(currentRedrawList[i].left, currentRedrawList[i].top, currentRedrawList[i].right, currentRedrawList[i].bottom);
     }
 
     numOfRedrawBox = 0;
@@ -305,7 +305,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 
         if (needChangeScene != -1 && needChangeScene != -2) {
             fadeIn(paletteRGBA);
-            set_palette(paletteRGBA);
+            platform_set_palette(paletteRGBA);
         }
     } else {
         blitBackgroundAreas();
@@ -800,12 +800,12 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
     // make celling grid fade
     // need to be here to fade after drawing all actors in scene
     if (needChangeScene == -2) {
-        cross_fade(frontVideoBuffer, paletteRGBA);
+        platform_cross_fade(frontVideoBuffer, paletteRGBA);
         needChangeScene = -1;
     }
 
     if (bgRedraw) {
-        flip();
+        platform_flip();
         moveNextAreas();
         unfreezeTime();
     } else {
@@ -856,7 +856,7 @@ void drawBubble(int32 actorIdx) {
     
     drawSprite(0, renderLeft, renderTop, spritePtr);
     if (textWindowLeft <= textWindowRight && textWindowTop <= textWindowBottom) {
-        copy_block_phys(renderLeft, renderTop, renderRight, renderBottom);
+        platform_copy_block_phys(renderLeft, renderTop, renderRight, renderBottom);
     }
     
     resetClip();

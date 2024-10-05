@@ -26,7 +26,7 @@
 #include "main.h"
 #include "screens.h"
 #include "resources.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "text.h"
 #include "gamestate.h"
 #include "music.h"
@@ -70,13 +70,13 @@ void newGame() {
     setFontCrossColor(15);
 
     drawTextFullscreen(150);
-    handle_input();
+    platform_handle_input();
 
     if (skipIntro != 1) {
         // intro screen 1 - twinsun
         loadImage(RESSHQR_INTROSCREEN2IMG, 1);
         drawTextFullscreen(151);
-        handle_input();
+        platform_handle_input();
 
         if (skipIntro != 1) {
             loadImage(RESSHQR_INTROSCREEN3IMG, 1);
@@ -90,16 +90,16 @@ void newGame() {
 
     fadeToBlack(paletteRGBACustom);
     clearScreen();
-    flip();
+    platform_flip();
     
     playMidiMusic(1, 0);
     playFlaMovie(FLA_INTROD);
 
     clearScreen();
-    flip();
+    platform_flip();
 
     // set main palette back
-    set_palette(paletteRGBA);
+    platform_set_palette(paletteRGBA);
 
     config_file.flag_display_text = tmpFlagDisplayText;
 }
@@ -123,13 +123,13 @@ void showCredits() {
     config_file.language_cd_id = tmpLanguageCDIdx;
     
     clearScreen();
-    flip();
+    platform_flip();
 
     playFlaMovie(FLA_THEEND);
 
     clearScreen();
-    flip();
-    set_palette(paletteRGBA);
+    platform_flip();
+    platform_set_palette(paletteRGBA);
 }
 
 void drawSelectableCharacter(int32 x, int32 y, int32 arg) {
@@ -160,7 +160,7 @@ void drawSelectableCharacter(int32 x, int32 y, int32 arg) {
     setFontColor(15);
     drawText(centerX - getTextSize(buffer) / 2, centerY - 18, buffer);
 
-    copy_block_phys(left, top, right2, bottom);
+    platform_copy_block_phys(left, top, right2, bottom);
 }
 
 void drawSelectableCharacters(void) {
@@ -201,7 +201,7 @@ void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
   CoulFont(0xFu);
   SizeFont(a3);
   Font(v4);
-  return copy_block_phys(v4);
+  return platform_copy_block_phys(v4);
     */
 
     // TODO: implement the other types (don't seam to be used)
@@ -215,7 +215,7 @@ void drawPlayerName(int32 centerx, int32 top, int8* playerName, int32 type) {
     setFontColor(15);
     drawText(centerX - getTextSize(playerName) / 2, top, playerName);
 
-    copy_block_phys(x, y, x + 320, y + 25);*/
+    platform_copy_block_phys(x, y, x + 320, y + 25);*/
 }
 
 int32 enterPlayerName(int32 textIdx) {
@@ -223,31 +223,31 @@ int32 enterPlayerName(int32 textIdx) {
 
     while(1) {
         copyScreen(workVideoBuffer, frontVideoBuffer);
-        flip(); //frontVideoBuffer
+        platform_flip(); //frontVideoBuffer
         initTextBank(0);
         getMenuText(textIdx, buffer);
         setFontColor(15);
         drawText(320 - (getTextSize(buffer) / 2), 20, buffer);
-        copy_block_phys(0, 0, 639, 99);
+        platform_copy_block_phys(0, 0, 639, 99);
         playerName[0] = enterPlayerNameVar1;
         drawPlayerName(320, 100, playerName, 1);
         drawSelectableCharacters();
 
         do {
-            handle_input();
+            platform_handle_input();
             do {
-                handle_input();
+                platform_handle_input();
             } while(skipIntro);
         } while(skippedKey);
 
         enterPlayerNameVar2 = 1;
 
         do {
-            handle_input();
+            platform_handle_input();
         } while(pressedKey);
 
         while (!skipIntro) {
-            handle_input();
+            platform_handle_input();
             // TODO
             drawPlayerName(320, 100, playerName, 1);
         }
@@ -259,7 +259,7 @@ int32 enterPlayerName(int32 textIdx) {
 
     enterPlayerNameVar2 = 0;
     copyScreen(workVideoBuffer, frontVideoBuffer);
-    flip(); // frontVideoBuffer
+    platform_flip(); // frontVideoBuffer
 
     return 1;
 }
@@ -279,9 +279,9 @@ void newGameMenu() {
         copyScreen(frontVideoBuffer, workVideoBuffer);
         // TODO: recheck this
         do {
-            handle_input();
+            platform_handle_input();
             do {
-                handle_input();
+                platform_handle_input();
             } while(skippedKey != 0);
         } while(skipIntro != 0);
     }
@@ -308,9 +308,9 @@ void continueGameMenu() {
         copyScreen(frontVideoBuffer, workVideoBuffer);
         // TODO: recheck this
         do {
-            handle_input();
+            platform_handle_input();
             do {
-                handle_input();
+                platform_handle_input();
             } while(skippedKey != 0);
         } while(skipIntro != 0);
     }

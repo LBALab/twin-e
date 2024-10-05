@@ -42,7 +42,7 @@
 #include "collision.h"
 #include "text.h"
 #include "screens.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "keyboard.h"
 #include "interface.h"
 #include "holomap.h"
@@ -1048,9 +1048,9 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
     scriptPtr += nameSize + 1;
 
     playFlaMovie(movie);
-    set_palette(paletteRGBA);
+    platform_set_palette(paletteRGBA);
     clearScreen();
-    flip();
+    platform_flip();
     
     return 0;
 }
@@ -1345,7 +1345,7 @@ int32 lSET_DARK_PAL(int32 actorIdx, ActorStruct *actor) {
     hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_DARKPAL);
     if (!lockPalette) {
         convertPalToRGBA(palette, paletteRGBA);
-        set_palette(paletteRGBA);
+        platform_set_palette(paletteRGBA);
     }
     useAlternatePalette = 1;
     unfreezeTime();
@@ -1356,7 +1356,7 @@ int32 lSET_DARK_PAL(int32 actorIdx, ActorStruct *actor) {
 int32 lSET_NORMAL_PAL(int32 actorIdx, ActorStruct *actor) {
     useAlternatePalette = 0;
     if (!lockPalette) {
-        set_palette(mainPaletteRGBA);
+        platform_set_palette(mainPaletteRGBA);
     }
     return 0;
 }
@@ -1378,11 +1378,11 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
     textClipSmall();
     fadeToBlack(paletteRGBACustom);
     clearScreen();
-    set_palette(paletteRGBA);
+    platform_set_palette(paletteRGBA);
     config_file.flag_display_text = tmpFlagDisplayText;
 
     do {
-        handle_input();
+        platform_handle_input();
     } while (skipIntro || skippedKey);
 
     unfreezeTime();
@@ -1454,7 +1454,7 @@ int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
 /*0x66*/
 int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
     copyScreen(frontVideoBuffer, workVideoBuffer);
-    flip();
+    platform_flip();
     changeRoomVar10 = 0;
 
     setCameraPosition(320, 240, 128, 1024, 1024);
@@ -1488,7 +1488,7 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
         }
         
         drawVar1 += 40;
-        copy_block_phys(0, drawVar1, textBoxRight, drawVar1);
+        platform_copy_block_phys(0, drawVar1, textBoxRight, drawVar1);
     }
 
     return 0;
@@ -1498,7 +1498,7 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
 int32 lCLEAR_TEXT(int32 actorIdx, ActorStruct *actor) {
     drawVar1 = 0;
     drawSplittedBox(0, 0, 639, 240, 0);
-    copy_block_phys(0, 0, 639, 240);
+    platform_copy_block_phys(0, 0, 639, 240);
     return 0;
 }
 

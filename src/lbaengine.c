@@ -23,7 +23,7 @@
 
 #include "lbaengine.h"
 #include "main.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "screens.h"
 #include "grid.h"
 #include "debug.grid.h"
@@ -116,7 +116,7 @@ void processActorSamplePosition(int32 actorIdx) {
     @return true if we want to show credit sequence */
 int32 runGameEngine() { // mainLoopInteration
     int32 a;
-    handle_input();
+    platform_handle_input();
 
     if (needChangeScene > -1) {
         changeScene();
@@ -223,8 +223,8 @@ int32 runGameEngine() { // mainLoopInteration
                 initTextBank(currentTextBank + 3);
                 fadeToBlack(paletteRGBACustom);
                 clearScreen();
-                flip();
-                set_palette(paletteRGBA);
+                platform_flip();
+                platform_set_palette(paletteRGBA);
                 lockPalette = 1;
             }							 
                 break;
@@ -346,10 +346,10 @@ int32 runGameEngine() { // mainLoopInteration
             freezeTime();
             setFontColor(15);
             drawText(5, 446, (int8*)"Pause"); // no key for pause in Text Bank
-            copy_block_phys(5, 446, 100, 479);
+            platform_copy_block_phys(5, 446, 100, 479);
             do {
-                handle_input();
-                SDL_Delay(10);
+                platform_handle_input();
+                platform_delay(10);
             } while (skipIntro != 0x19 && !pressedKey);
             unfreezeTime();
             redrawEngineActions(1);
@@ -561,12 +561,12 @@ int32 gameEngineLoop() { // mainLoop
     setActorAngle(0, -256, 5, &loopMovePtr);
 
     while (quitGame == -1) {
-        start = tick();
+        start = platform_tick();
         if (runGameEngine())
             return 1;
         lbaTime++;
-        if (tick() - start < config_file.fps)
-            sdl_delay(tick() - start + config_file.fps);
+        if (platform_tick() - start < config_file.fps)
+            platform_delay(platform_tick() - start + config_file.fps);
     }
     return 0;
 }

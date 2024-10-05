@@ -86,7 +86,7 @@ void addOverlay(int16 type, int16 info0, int16 X, int16 Y, int16 info1, int16 po
     @param bottom end height to redraw the region */
 void addRedrawArea(int32 left, int32 top, int32 right, int32 bottom);
 
-/** Flip currentRedrawList regions in the screen
+/** platform_flip currentRedrawList regions in the screen
 
     This only updates small areas in the screen so few CPU processor is used */
 void flipRedrawAreas();

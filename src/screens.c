@@ -28,7 +28,7 @@
 #include "screens.h"
 #include "resources.h"
 #include "main.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "music.h"
 #include "hqrdepack.h"
 #include "lbaengine.h"
@@ -66,7 +66,7 @@ void adelineLogo() {
     playMidiMusic(31, 0);
 
     loadImage(RESSHQR_ADELINEIMG, 1);
-    sdl_delay_skip(7000);
+    platform_delay_skip(7000);
     fadeOut(paletteRGBACustom);
     palCustom = 1;
 }
@@ -78,7 +78,7 @@ void loadMenuImage(int16 fade_in) {
     if (fade_in) {
         fadeToPal(paletteRGBA);
     } else {
-        set_palette(paletteRGBA);
+        platform_set_palette(paletteRGBA);
     }
 
     palCustom = 0;
@@ -99,18 +99,18 @@ void loadImage(int32 index, int16 fade_in) {
     if (fade_in) {
         fadeToPal(paletteRGBACustom);
     } else {
-        set_palette(paletteRGBACustom);
+        platform_set_palette(paletteRGBACustom);
     }
 
     palCustom = 1;
 }
 
-/** Load and display a particulary image on \a RESS.HQR file with cross fade effect and delay
+/** Load and display a particulary image on \a RESS.HQR file with cross fade effect and platform_delay
     @param index \a RESS.HQR entry index (starting from 0)
-    @param time number of seconds to delay */
+    @param time number of seconds to platform_delay */
 void loadImageDelay(int32 index, int32 time) {
     loadImage(index, 1);
-    sdl_delay_skip(1000*time);
+    platform_delay_skip(1000*time);
     fadeOut(paletteRGBACustom);
 }
 
@@ -133,18 +133,18 @@ void convertPalToRGBA(uint8 * palSource, uint8 * palDest) {
     @param palette current palette to fade in */
 void fadeIn(uint8 * palette) {
     if (config_file.cross_fade)
-        cross_fade(frontVideoBuffer, palette);
+        platform_cross_fade(frontVideoBuffer, palette);
     else
         fadeToPal(palette);
 
-    set_palette(palette);
+    platform_set_palette(palette);
 }
 
 /** Fade image out
     @param palette current palette to fade out */
 void fadeOut(uint8 * palette) {
     /*if(config_file.cross_fade)
-        cross_fade(frontVideoBuffer, palette);
+        platform_cross_fade(frontVideoBuffer, palette);
     else
         fadeToBlack(palette);*/
     if (!config_file.cross_fade)
@@ -201,7 +201,7 @@ void adjustPalette(uint8 R, uint8 G, uint8 B, uint8 * palette, int32 intensity) 
         counter += 4;
     }
 
-    set_palette(localPalette);
+    platform_set_palette(localPalette);
 }
 
 /** Adjust between two palettes
@@ -242,8 +242,8 @@ void adjustCrossPalette(uint8 * pal1, uint8 * pal2) {
             counter += 4;
         }
 
-        set_palette(localPalette);
-        fps_cycles(50);
+        platform_set_palette(localPalette);
+        platform_fps_cycles(50);
 
         intensity++;
     } while(intensity <= 100);
@@ -257,7 +257,7 @@ void fadeToBlack(uint8 *palette) {
     if (palReseted == 0) {
         for (i = 100; i >= 0; i -= 3) {
             adjustPalette(0, 0, 0, (uint8 *) palette, i);
-            fps_cycles(50);
+            platform_fps_cycles(50);
         }
     }
 
@@ -271,10 +271,10 @@ void fadeToPal(uint8 *palette) {
 
     for (i = 0; i <= 100; i += 3) {
         adjustPalette(0, 0, 0, (uint8 *) palette, i);
-        fps_cycles(50);
+        platform_fps_cycles(50);
     }
 
-    set_palette((uint8*)palette);
+    platform_set_palette((uint8*)palette);
 
     palReseted = 0;
 }
@@ -288,7 +288,7 @@ void blackToWhite() {
     for (i = 0; i < NUMOFCOLORS; i += 3) {
         memset(palette, i, 1024);
 
-        set_palette(palette);
+        platform_set_palette(palette);
     }
 }
 
@@ -297,7 +297,7 @@ void setBackPal() {
     memset(palette, 0, NUMOFCOLORS*3);
     memset(paletteRGBA, 0, NUMOFCOLORS*4);
 
-    set_palette(paletteRGBA);
+    platform_set_palette(paletteRGBA);
 
     palReseted = 1;
 }
@@ -309,7 +309,7 @@ void fadePalRed(uint8 *palette) {
 
     for (i = 100; i >= 0; i -= 2) {
         adjustPalette(0xFF, 0, 0, (uint8 *) palette, i);
-        fps_cycles(50);
+        platform_fps_cycles(50);
     }
 }
 
@@ -321,7 +321,7 @@ void fadeRedPal(uint8 *palette) {
 
     for (i = 0; i <= 100; i += 2) {
         adjustPalette(0xFF, 0, 0, (uint8 *) palette, i);
-        fps_cycles(50);
+        platform_fps_cycles(50);
     }
 }
 

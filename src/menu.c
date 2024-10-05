@@ -29,7 +29,7 @@
 #include "music.h"
 #include "sound.h"
 #include "screens.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "hqrdepack.h"
 #include "lbaengine.h"
 #include "text.h"
@@ -276,7 +276,7 @@ void plasmaEffectRenderFrame() {
         }
     }
 
-    // flip the double-buffer while scrolling the effect vertically:
+    // platform_flip the double-buffer while scrolling the effect vertically:
     dest = plasmaEffectPtr;
     src = plasmaEffectPtr + (PLASMA_HEIGHT+1) * PLASMA_WIDTH;
     for (i = 0; i < PLASMA_HEIGHT * PLASMA_WIDTH; i++)
@@ -432,7 +432,7 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
 
     // TODO: make volume buttons
 
-    copy_block_phys(left, top, right, bottom);
+    platform_copy_block_phys(left, top, right, bottom);
 }
 
 /** Process the menu button draw
@@ -488,7 +488,7 @@ void drawButton(int16 *menuSettings, int32 mode) {
         topHeight += 56; // increase button top height
 
         // slow down the CPU
-        sdl_delay(1);
+        platform_delay(1);
     } while (currentButton < maxButton);
 }
 
@@ -515,7 +515,7 @@ int32 processMenu(int16 * menuSettings) {
     localTime = lbaTime;
     maxButton = numEntry - 1;
 
-    handle_input();
+    platform_handle_input();
 
     do {
         // if its on main menu
@@ -618,7 +618,7 @@ int32 processMenu(int16 * menuSettings) {
 
             drawButton(localData, 0); // current button
             do {
-                handle_input();
+                platform_handle_input();
                 drawButton(localData, 1);
             } while (pressedKey == 0 && skippedKey == 0 && skipIntro == 0);
             buttonNeedRedraw = 0;
@@ -630,7 +630,7 @@ int32 processMenu(int16 * menuSettings) {
 
             buttonNeedRedraw = 0;
             drawButton(localData, 1);
-            handle_input();
+            platform_handle_input();
             // WARNING: this is here to prevent a fade bug while quit the menu
             copyScreen(workVideoBuffer, frontVideoBuffer);
         }
@@ -638,7 +638,7 @@ int32 processMenu(int16 * menuSettings) {
 
     currentButton = *(localData + 5 + currentButton * 2); // get current browsed button
 
-    handle_input();
+    platform_handle_input();
 
     return currentButton;
 }
@@ -662,7 +662,7 @@ int32 advoptionsMenu() {
     } while (ret != 1);
 
     copyScreen(workVideoBuffer, frontVideoBuffer);
-    flip();
+    platform_flip();
 
     return 0;
 }
@@ -686,7 +686,7 @@ int32 savemanageMenu() {
     } while (ret != 1);
 
     copyScreen(workVideoBuffer, frontVideoBuffer);
-    flip();
+    platform_flip();
 
     return 0;
 }
@@ -710,7 +710,7 @@ int32 volumeMenu() {
     } while (ret != 1);
 
     copyScreen(workVideoBuffer, frontVideoBuffer);
-    flip();
+    platform_flip();
 
     return 0;
 }
@@ -733,19 +733,19 @@ int32 optionsMenu() {
         }
         case kVolume: {
             copyScreen(workVideoBuffer, frontVideoBuffer);
-            flip();
+            platform_flip();
             volumeMenu();
             break;
         }
         case kSaveManage: {
             copyScreen(workVideoBuffer, frontVideoBuffer);
-            flip();
+            platform_flip();
             savemanageMenu();
             break;
         }
         case kAdvanced: {
             copyScreen(workVideoBuffer, frontVideoBuffer);
-            flip();
+            platform_flip();
             advoptionsMenu();
             break;
         }
@@ -755,7 +755,7 @@ int32 optionsMenu() {
     } while (ret != 1);
 
     copyScreen(workVideoBuffer, frontVideoBuffer);
-    flip();
+    platform_flip();
 
     return 0;
 }
@@ -789,7 +789,7 @@ void mainMenu() {
         }
         case kOptions: {
             copyScreen(workVideoBuffer, frontVideoBuffer);
-            flip();
+            platform_flip();
             OptionsMenuSettings[5] = kReturnMenu;
             optionsMenu();
             break;
@@ -802,7 +802,7 @@ void mainMenu() {
             loadMenuImage(1);
         }
         }
-        fps_cycles(config_file.fps);
+        platform_fps_cycles(config_file.fps);
     }
 }
 
@@ -831,7 +831,7 @@ int32 giveupMenu() {
 
         initTextBank(currentTextBank + 3);
 
-        fps_cycles(config_file.fps);
+        platform_fps_cycles(config_file.fps);
     } while (menuId != kGiveUp && menuId != kContinue);
 
     if (menuId == kGiveUp)
@@ -903,7 +903,7 @@ void drawInfoMenu(int16 left, int16 top)
         drawSprite(0, crossDot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITEHQR_CLOVERLEAF]);
     }
 
-    copy_block_phys(left, top, left + 450, top + 135);
+    platform_copy_block_phys(left, top, left + 450, top + 135);
 }
 
 void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
@@ -956,8 +956,8 @@ void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
 
     renderBehaviourModel(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
 
-    copy_block_phys(boxLeft, boxTop, boxRight, boxBottom);
-    copy_block_phys(110, 239, 540, 279);
+    platform_copy_block_phys(boxLeft, boxTop, boxRight, boxBottom);
+    platform_copy_block_phys(110, 239, 540, 279);
 
     loadClip();
 }
@@ -980,7 +980,7 @@ void drawBehaviourMenu(int32 angle) {
 
     drawInfoMenu(100, 300);
 
-    copy_block_phys(100, 100, 550, 290);
+    platform_copy_block_phys(100, 100, 550, 290);
 }
 
 /** Process hero behaviour menu */
@@ -1020,12 +1020,12 @@ void processBehaviourMenu() {
 
     setAnimAtKeyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
 
-    handle_input();
+    platform_handle_input();
     
     tmpTime = lbaTime;
 
     while (skippedKey & 4 || (skipIntro >= 59 && skipIntro <= 62)) {
-        handle_input();
+        platform_handle_input();
         key = pressedKey;
 
         if (key & 8) {
@@ -1051,14 +1051,14 @@ void processBehaviourMenu() {
             setAnimAtKeyframe(behaviourAnimState[heroBehaviour], animTable[heroAnimIdx[heroBehaviour]], behaviourEntity, &behaviourAnimData[heroBehaviour]);
 
             while (pressedKey) {
-                handle_input();
+                platform_handle_input();
                 drawBehaviour(heroBehaviour, -1, 1);
             }
         }
         
         drawBehaviour(heroBehaviour, -1, 1);
 
-        fps_cycles(50);
+        platform_fps_cycles(50);
         lbaTime++;
     }
 
@@ -1109,7 +1109,7 @@ void drawItem(int32 item) {
     }
 
     drawBox(left, top, right, bottom);
-    copy_block_phys(left, top, right, bottom);
+    platform_copy_block_phys(left, top, right, bottom);
 }
 
 void drawInventoryItems() {
@@ -1118,7 +1118,7 @@ void drawInventoryItems() {
     drawTransparentBox(17, 10, 622, 320, 4);
     drawBox(17, 10, 622, 320);
     drawMagicItemsBox(110, 18, 188, 311, 75);
-    copy_block_phys(17, 10, 622, 320);
+    platform_copy_block_phys(17, 10, 622, 320);
 
     for (item = 0; item < NUM_INVENTORY_ITEMS; item++) {
         drawItem(item);
@@ -1156,7 +1156,7 @@ void processInventoryMenu() {
     initDialogueBox();
 
     while (skipIntro != 1) {
-        handle_input();
+        platform_handle_input();
         prevSelectedItem = inventorySelectedItem;
 
         if (!di) {
@@ -1230,9 +1230,9 @@ void processInventoryMenu() {
             bx = printText10();
         }
 
-        // TRICKY: 3D model rotation delay - only apply when no text is drawing
+        // TRICKY: 3D model rotation platform_delay - only apply when no text is drawing
         if (bx == 0 || bx == 2) {
-            sdl_delay(15);
+            platform_delay(15);
         }
 
         if (loopPressedKey & 1) {
@@ -1269,7 +1269,7 @@ void processInventoryMenu() {
     initTextBank(currentTextBank + 3);
 
     while (skipIntro != 0 && skippedKey != 0) {
-        handle_input();
-        sdl_delay(1);
+        platform_handle_input();
+        platform_delay(1);
     }
 }

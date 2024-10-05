@@ -27,7 +27,7 @@
 
 #include "flamovies.h"
 #include "screens.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "main.h"
 #include "sound.h"
 #include "music.h"
@@ -356,12 +356,12 @@ void playFlaMovie(int8 *flaName) {
                         if (!currentFrame) // fade in the first frame
                             fadeIn(paletteRGBACustom);
                         else
-                            set_palette(paletteRGBACustom);
+                            platform_set_palette(paletteRGBACustom);
                     }
 
                     // TRICKY: fade in tricky
                     if (fadeOutFrames >= 2) {
-                        flip();
+                        platform_flip();
                         convertPalToRGBA(palette, paletteRGBACustom);
                         fadeToPal(paletteRGBACustom);
                         _fadeOut = -1;
@@ -370,9 +370,9 @@ void playFlaMovie(int8 *flaName) {
 
                     currentFrame++;
 
-                    fps_cycles(flaHeaderData.speed + 1);
+                    platform_fps_cycles(flaHeaderData.speed + 1);
 
-                    handle_input();
+                    platform_handle_input();
 
                     if (skipIntro)
                         break;
@@ -382,7 +382,7 @@ void playFlaMovie(int8 *flaName) {
     }
     
     if (config_file.cross_fade) {
-        cross_fade(frontVideoBuffer, paletteRGBACustom);
+        platform_cross_fade(frontVideoBuffer, paletteRGBACustom);
     } else {
         fadeToBlack(paletteRGBACustom);
     }
@@ -491,5 +491,5 @@ void prepareFlaPCX(int index)
         printf("Can't load FLA PCX: %s\n", IMG_GetError());
     }
 
-    osystem_FlaPCXcross_fade(image);
+    osystem_FlaPCXplatform_cross_fade(image);
 }*/

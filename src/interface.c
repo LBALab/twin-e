@@ -22,7 +22,7 @@
 */
 
 #include "interface.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "main.h"
 #include "lbaengine.h"
 const int32 INSIDE = 0; // 0000

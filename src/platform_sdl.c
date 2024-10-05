@@ -39,7 +39,7 @@
 #include <SDL_ttf/SDL_ttf.h>
 #endif
 
-#include "platform_sdl.h"
+#include "platform.h"
 #include "main.h"
 #include "screens.h"
 #include "music.h"
@@ -68,7 +68,7 @@ SDL_Surface *surfaceTable[16];
 TTF_Font *font;
 
 
-void sdl_close() {
+void platform_close() {
     stopTrackMusic();
     stopMidiMusic();
     Mix_CloseAudio();
@@ -78,7 +78,7 @@ void sdl_close() {
 }
 
 
-int sdl_initialize() {
+int platform_initialize() {
     uint8 *keyboard;
     int32 size;
     int32 i;
@@ -169,24 +169,24 @@ int sdl_initialize() {
     return 0;
 }
 
-inline uint32 tick() {
+inline uint32 platform_tick() {
     return SDL_GetTicks();
 }
 
-void fps_cycles(int32 fps) {
+void platform_fps_cycles(int32 fps) {
     SDL_Delay(1000 / (fps));
 }
 
-void sdl_delay(uint32 time) {
+void platform_delay(uint32 time) {
     SDL_Delay(time);
 }
 
-void sdl_delay_skip(uint32 time) {
+void platform_delay_skip(uint32 time) {
     uint32 startTicks = SDL_GetTicks();
     uint32 stopTicks = 0;
     skipIntro = 0;
     do {
-        handle_input();
+        platform_handle_input();
         if (skipIntro == 1)
             break;
         stopTicks = SDL_GetTicks() - startTicks;
@@ -195,7 +195,7 @@ void sdl_delay_skip(uint32 time) {
     } while (stopTicks <= time);
 }
 
-void set_palette(uint8 * palette) {
+void platform_set_palette(uint8 * palette) {
     SDL_Color *screenColorsTemp = (SDL_Color *) palette;
 
     SDL_SetColors(screenBuffer, screenColorsTemp, 0, 256);
@@ -203,7 +203,7 @@ void set_palette(uint8 * palette) {
     SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
 
-void fade_black_to_white() {
+void platform_fade_black_to_white() {
     int32 i;
 
     SDL_Color colorPtr[256];
@@ -216,12 +216,12 @@ void fade_black_to_white() {
     }
 }
 
-void flip() {
+void platform_flip() {
     SDL_BlitSurface(screenBuffer, NULL, screen, NULL);
     SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
 
-void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom) {
+void platform_copy_block_phys(int32 left, int32 top, int32 right, int32 bottom) {
     SDL_Rect rectangle;
 
     rectangle.x = left;
@@ -233,11 +233,11 @@ void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom) {
     SDL_UpdateRect(screen, left, top, right - left + 1, bottom - top + 1);
 }
 
-void init_screen_buffer(uint8 *buffer, int32 width, int32 height) {
+void platform_init_screen_buffer(uint8 *buffer, int32 width, int32 height) {
     screenBuffer = SDL_CreateRGBSurfaceFrom(buffer, width, height, 8, SCREEN_WIDTH, 0, 0, 0, 0);
 }
 
-void cross_fade(uint8 *buffer, uint8 *palette) {
+void platform_cross_fade(uint8 *buffer, uint8 *palette) {
     int32 i;
     SDL_Surface *backupSurface;
     SDL_Surface *newSurface;
@@ -270,7 +270,7 @@ void cross_fade(uint8 *buffer, uint8 *palette) {
         SDL_BlitSurface(newSurface, NULL, surfaceTable[i], NULL);
         SDL_BlitSurface(surfaceTable[i], NULL, screen, NULL);
         SDL_UpdateRect(screen, 0, 0, 0, 0);
-        sdl_delay_skip(50);
+        platform_delay_skip(50);
     }
 
     SDL_BlitSurface(newSurface, NULL, screen, NULL);
@@ -281,7 +281,7 @@ void cross_fade(uint8 *buffer, uint8 *palette) {
     SDL_FreeSurface(tempSurface);
 }
 
-void toggle_fullscreen() {
+void platform_toggle_fullscreen() {
     config_file.full_screen = 1 - config_file.full_screen;
     SDL_FreeSurface(screen);
 
@@ -303,7 +303,7 @@ void toggle_fullscreen() {
     }
 }
 
-void handle_input() {
+void platform_handle_input() {
     SDL_Event event;
     int32 localKey;
     int32 i, j, size;
@@ -324,7 +324,7 @@ void handle_input() {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
         case SDL_QUIT:
-            sdl_close();
+            platform_close();
             break;
         case SDL_MOUSEBUTTONDOWN:
             switch (event.button.button) {
@@ -394,7 +394,7 @@ void handle_input() {
                 localKey = 0x40;
                 break;
             case SDLK_F12:
-                toggle_fullscreen();
+                platform_toggle_fullscreen();
                 break;
 
             case SDLK_r:  // next room
@@ -520,7 +520,7 @@ void handle_input() {
     }
 }
 
-void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
+void platform_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
     SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
     SDL_Color *forecol = &white;
     SDL_Rect rectangle;
@@ -541,7 +541,7 @@ void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
     SDL_FreeSurface(text);
 }
 
-void get_mouse_positions(MouseStatusStruct *mouseData) {
+void platform_get_mouse_positions(MouseStatusStruct *mouseData) {
     SDL_GetMouseState(&mouseData->X, &mouseData->Y);
 
     mouseData->left = leftMouse;

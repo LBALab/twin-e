@@ -341,7 +341,7 @@ void processFoundItem(int32 item) {
     itemZ = (sceneHero->Z + 0x100) >> 9;
 
     drawOverModelActor(itemX, itemY, itemZ);
-    flip();
+    platform_flip();
 
     projectPositionOnScreen(sceneHero->X - itemCameraX, sceneHero->Y - itemCameraY, sceneHero->Z - itemCameraZ);
     projPosY -= 150;
@@ -424,12 +424,12 @@ void processFoundItem(int32 item) {
         }
 
         if (textState == 0 || textState == 2) {
-            sdl_delay(15);
+            platform_delay(15);
         }
 
         flipRedrawAreas();
         
-        handle_input();
+        platform_handle_input();
         if (skippedKey) {
             if (!textState) {
                 quitItem = 1;
@@ -444,19 +444,19 @@ void processFoundItem(int32 item) {
     }
     
     while (playVoxSimple(currDialTextEntry)) {
-        handle_input();
+        platform_handle_input();
         if (skipIntro == 1) {
             break;
         }
-        sdl_delay_skip(1);
+        platform_delay_skip(1);
     }
 
     initEngineProjections();
     initTextBank(currentTextBank + 3);
 
     /*do {
-        handle_input();
-        sdl_delay_skip(1);
+        platform_handle_input();
+        platform_delay_skip(1);
     } while (!skipIntro);*/
     
     if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
@@ -510,7 +510,7 @@ void processGameoverAnimation() { // makeGameOver
     sceneHero->staticFlags.bIsHidden = 0;
 
     // TODO: drawInGameTransBox
-    set_palette(paletteRGBA);
+    platform_set_palette(paletteRGBA);
     copyScreen(frontVideoBuffer, workVideoBuffer);
     gameOverPtr = malloc(hqrEntrySize(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
     hqrGetEntry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
@@ -526,31 +526,31 @@ void processGameoverAnimation() { // makeGameOver
         setClip(120, 120, 519, 359);
         
         while(skipIntro != 1 && (lbaTime - startLbaTime) <= 0x1F4) {
-            handle_input();
+            platform_handle_input();
             
             avg = getAverageValue(40000, 3200, 500, lbaTime - startLbaTime);
             cdot = crossDot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
             blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
             setCameraAngle(0, 0, 0, 0, -cdot, 0, avg);
             renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
-            copy_block_phys(120, 120, 519, 359);
+            platform_copy_block_phys(120, 120, 519, 359);
 
             lbaTime++;
-            sdl_delay(15);
+            platform_delay(15);
         }
 
         playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80, -1);
         blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
         setCameraAngle(0, 0, 0, 0, 0, 0, 3200);
         renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
-        copy_block_phys(120, 120, 519, 359);
+        platform_copy_block_phys(120, 120, 519, 359);
 
-        sdl_delay_skip(2000);
+        platform_delay_skip(2000);
 
         resetClip();
         free(gameOverPtr);
         copyScreen(workVideoBuffer, frontVideoBuffer);
-        flip();
+        platform_flip();
         initEngineProjections();
 
         lbaTime = tmpLbaTime;

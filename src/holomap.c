@@ -28,7 +28,7 @@
 #include "scene.h"
 #include "sound.h"
 #include "interface.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "renderer.h"
 #include "text.h"
 #include "resources.h"
@@ -169,7 +169,7 @@ void processHolomap() { // TODO
     stopSamples();
     resetClip();
     clearScreen();
-    flip();
+    platform_flip();
     copyScreen(frontVideoBuffer, workVideoBuffer);
 
     loadHolomapGFX();

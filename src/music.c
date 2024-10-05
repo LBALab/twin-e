@@ -34,7 +34,7 @@
 
 #include "music.h"
 #include "main.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "hqrdepack.h"
 #include "resources.h"
 #include "xmidi.h"
@@ -79,7 +79,7 @@ void musicFadeIn(int32 loops, int32 ms) {
     @param ms number of miliseconds to fade*/
 void musicFadeOut(int32 ms) {
     while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
-        SDL_Delay(100);
+        platform_delay(100);
     }
     Mix_HaltMusic();
     Mix_RewindMusic();

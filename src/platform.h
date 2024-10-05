@@ -1,4 +1,4 @@
-/** @file sdlengine.h
+/** @file platform.h
     @brief
     This file contains SDL engine routines
 
@@ -21,37 +21,35 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef PLATFORM_SDL_H
-#define PLATFORM_SDL_H
+#ifndef PLATFORM_H
+#define PLATFORM_H
 
 #include <SDL/SDL.h>
 
 #include "sys.h"
 #include "debug.h"
 
-extern SDL_Surface *screen;
 
+int platform_initialize();
+void platform_close();
 
-int sdl_initialize();
-void sdl_close();
+uint32 platform_tick();
+void platform_fps_cycles(int32 fps);
+void platform_delay(uint32 time);
+void platform_delay_skip(uint32 time);
 
-uint32 tick();
-void fps_cycles(int32 fps);
-void sdl_delay(uint32 time);
-void sdl_delay_skip(uint32 time);
+void platform_set_palette(uint8 * palette);
+void platform_fade_black_to_white();
 
-void set_palette(uint8 * palette);
-void fade_black_to_white();
+void platform_flip();
+void platform_copy_block_phys(int32 left, int32 top, int32 right, int32 bottom);
+void platform_init_screen_buffer(uint8 *buffer, int32 width, int32 height);
+void platform_cross_fade(uint8 *buffer, uint8 *palette);
+void platform_toggle_fullscreen();
 
-void flip();
-void copy_block_phys(int32 left, int32 top, int32 right, int32 bottom);
-void init_screen_buffer(uint8 *buffer, int32 width, int32 height);
-void cross_fade(uint8 *buffer, uint8 *palette);
-void toggle_fullscreen();
+void platform_handle_input();
 
-void handle_input();
-
-void get_mouse_positions(MouseStatusStruct *mouseData);
-void ttf_draw_text(int32 X, int32 Y, int8 *string, int32 center);
+void platform_get_mouse_positions(MouseStatusStruct *mouseData);
+void platform_draw_text(int32 X, int32 Y, int8 *string, int32 center);
 
 #endif

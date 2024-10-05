@@ -28,7 +28,7 @@
 #include "main.h"
 #include "hqrdepack.h"
 #include "resources.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "menu.h"
 #include "interface.h"
 #include "lbaengine.h"
@@ -336,7 +336,7 @@ void drawCharacterShadow(int32 x, int32 y, uint8 character, int32 color) { // dr
         right = x + 32;
         bottom = y + 38;
 
-        copy_block_phys(left, top, right, bottom);
+        platform_copy_block_phys(left, top, right, bottom);
     }
 }
 
@@ -394,14 +394,14 @@ void initDialogueBox() { // InitDialWindow
         drawTransparentBox(dialTextBoxLeft + 1, dialTextBoxTop + 1, dialTextBoxRight - 1, dialTextBoxBottom - 1, 3);
     }
 
-    copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+    platform_copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
     printText8Var3 = 0;
     blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)frontVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)workVideoBuffer);
 }
 
 void initInventoryDialogueBox() { // SecondInitDialWindow
     blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
-    copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+    platform_copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
     printText8Var3 = 0;
 }
 
@@ -583,7 +583,7 @@ void printText10Sub() { // printText10Sub()
         renderPolygons(polyRenderType, dialTextStopColor);
     }
 
-    copy_block_phys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
+    platform_copy_block_phys(dialTextBoxRight - 24, dialTextBoxBottom - 24, dialTextBoxRight - 3, dialTextBoxBottom - 3);
 }
 
 void printText10Sub2() { // printText10Sub2()
@@ -599,8 +599,8 @@ void printText10Sub2() { // printText10Sub2()
     currentIndex = currentLetter * 3;
 
     ptr = pt8s4 + currentIndex;
-
-    sdl_delay(15);
+    
+    platform_delay(15);
 
     counter = printText8Var3;
     counter2 = dialTextStartColor;
@@ -642,7 +642,7 @@ int printText10() { // printText10()
         }
         if (printText8Var6 != 0) {
             blitBox(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom, (int8*)workVideoBuffer, dialTextBoxLeft, dialTextBoxTop, (int8*)frontVideoBuffer);
-            copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
+            platform_copy_block_phys(dialTextBoxLeft, dialTextBoxTop, dialTextBoxRight, dialTextBoxBottom);
             printText8Var3 = 0;
             printText8Var6 = 0;
             TEXT_CurrentLetterX = dialTextBoxLeft + 8;
@@ -724,24 +724,24 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         initDialogueBox();
 
         do {
-            handle_input();
+            platform_handle_input();
             printedText = printText10();
             playVox(currDialTextEntry);
 
             if (printedText == 2) {
                 do {
-                    handle_input();
+                    platform_handle_input();
                     if (skipIntro == 0 && skippedKey == 0 && pressedKey == 0) {
                         break;
                     }
                     playVox(currDialTextEntry);
-                    sdl_delay(1);
+                    platform_delay(1);
                 } while(1);
 
                 do {
-                    handle_input();
+                    platform_handle_input();
                     playVox(currDialTextEntry);
-                    sdl_delay(1);
+                    platform_delay(1);
                 } while(skipIntro || skippedKey || pressedKey);
             }
 
@@ -753,7 +753,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 break;
             }
 
-            sdl_delay(1);
+            platform_delay(1);
         } while(!skipText);
 
         hasHiddenVox = 0;
@@ -777,14 +777,14 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         // RECHECK this later
         // wait displaying text
         do {
-            handle_input();
-            sdl_delay(1);
+            platform_handle_input();
+            platform_delay(1);
         } while(skipIntro || skippedKey || pressedKey);
 
         // RECHECK this later
         // wait key to display next text
         do {
-            handle_input();
+            platform_handle_input();
             if (skipIntro != 0) {
                 loadClip();
                 return;
@@ -793,7 +793,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 loadClip();
                 return;
             }
-            sdl_delay(1);
+            platform_delay(1);
         } while(!pressedKey);
     } else { // RECHECK THIS
         while (playVox(currDialTextEntry) && skipIntro != 1 );
@@ -924,7 +924,6 @@ void textClipSmall() { // newGame4
 
 void drawAskQuestion(int32 index) { // MyDial
     int32 textStatus = 1;
-    uint32 start = tick();
 
     // get right VOX entry index
     if (config_file.language_cd_id) {
@@ -935,27 +934,24 @@ void drawAskQuestion(int32 index) { // MyDial
     initDialogueBox();
 
     do {
-        start = tick();
-        handle_input();
+        platform_handle_input();
         textStatus = printText10();
         
         if (textStatus == 2) {
             do {
-                start = tick();
-                handle_input();
+                platform_handle_input();
                 playVox(currDialTextEntry);
-                sdl_delay(tick() - start + config_file.fps);
+                platform_delay(1);
             } while(skipIntro || skippedKey || pressedKey);
 
             do {
-                start = tick();
-                handle_input();
+                platform_handle_input();
                 playVox(currDialTextEntry);
-                sdl_delay(tick() - start + config_file.fps);
+                platform_delay(1);
             } while(!skipIntro && !skippedKey && !pressedKey);
         }
 
-        sdl_delay(tick() - start + config_file.fps);
+        platform_delay(1);
     } while(textStatus);
 
     if (config_file.language_cd_id) {

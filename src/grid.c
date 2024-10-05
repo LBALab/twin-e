@@ -29,7 +29,7 @@
 #include "resources.h"
 #include "lbaengine.h"
 #include "scene.h"
-#include "platform_sdl.h"
+#include "platform.h"
 #include "interface.h"
 #include "screens.h"
 #include "actor.h"
