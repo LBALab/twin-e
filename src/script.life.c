@@ -1248,7 +1248,7 @@ int32 lFADE_PAL_RED(int32 actorIdx, ActorStruct *actor) {
 /*0x53*/
 int32 lFADE_ALARM_RED(int32 actorIdx, ActorStruct *actor) {
     freezeTime();
-    hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+    hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
     convertPalToRGBA(palette, paletteRGBA);
     fadePalRed(paletteRGBA);
     useAlternatePalette = 1;
@@ -1259,7 +1259,7 @@ int32 lFADE_ALARM_RED(int32 actorIdx, ActorStruct *actor) {
 /*0x54*/
 int32 lFADE_ALARM_PAL(int32 actorIdx, ActorStruct *actor) {
     freezeTime();
-    hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+    hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
     convertPalToRGBA(palette, paletteRGBA);
     adjustCrossPalette(paletteRGBA, mainPaletteRGBA);
     useAlternatePalette = 0;
@@ -1279,7 +1279,7 @@ int32 lFADE_RED_PAL(int32 actorIdx, ActorStruct *actor) {
 /*0x56*/
 int32 lFADE_RED_ALARM(int32 actorIdx, ActorStruct *actor) {
     freezeTime();
-    hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+    hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
     convertPalToRGBA(palette, paletteRGBA);
     fadeRedPal(paletteRGBA);
     useAlternatePalette = 1;
@@ -1290,7 +1290,7 @@ int32 lFADE_RED_ALARM(int32 actorIdx, ActorStruct *actor) {
 /*0x57*/
 int32 lFADE_PAL_ALARM(int32 actorIdx, ActorStruct *actor) {
     freezeTime();
-    hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
+    hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_ALARMREDPAL);
     convertPalToRGBA(palette, paletteRGBA);
     adjustCrossPalette(mainPaletteRGBA, paletteRGBA);
     useAlternatePalette = 1;
@@ -1342,7 +1342,7 @@ int32 lASK_CHOICE_OBJ(int32 actorIdx, ActorStruct *actor) {
 /*0x5C*/
 int32 lSET_DARK_PAL(int32 actorIdx, ActorStruct *actor) {
     freezeTime();
-    hqrGetEntry(palette, HQR_RESS_FILE, RESSHQR_DARKPAL);
+    hqr_get_entry(palette, HQR_RESS_FILE, RESSHQR_DARKPAL);
     if (!lockPalette) {
         convertPalToRGBA(palette, paletteRGBA);
         platform_set_palette(paletteRGBA);

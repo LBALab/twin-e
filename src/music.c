@@ -35,7 +35,7 @@
 #include "music.h"
 #include "main.h"
 #include "platform.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "resources.h"
 #include "xmidi.h"
 
@@ -165,7 +165,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
         stopMidiMusic();
     }
 
-    midiSize = hqrGetallocEntry(&midiPtr, filename, midiIdx);
+    midiSize = hqr_get_entry_alloc(&midiPtr, filename, midiIdx);
 
     if (config_file.sound == 1 && config_file.midi_type == 0) {
         midiSize = convert_to_midi(midiPtr, midiSize, &dos_midi_ptr);

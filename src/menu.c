@@ -30,7 +30,7 @@
 #include "sample.h"
 #include "screens.h"
 #include "platform.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "lbaengine.h"
 #include "text.h"
 #include "interface.h"
@@ -770,7 +770,7 @@ void mainMenu() {
     // load menu effect file only once
     plasmaEffectPtr = (uint8 *)malloc(kPlasmaEffectFilesize);
     memset(plasmaEffectPtr, 0, kPlasmaEffectFilesize);
-    hqrGetEntry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
+    hqr_get_entry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
     while (!config_file.quit) {
         initTextBank(0);

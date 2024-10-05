@@ -28,7 +28,7 @@
 #include "actor.h"
 #include "lbaengine.h"
 #include "scene.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "resources.h"
 #include "renderer.h"
 #include "grid.h"
@@ -98,23 +98,23 @@ void restartHeroScene() {
 
 /** Load hero 3D body and animations */
 void loadHeroEntities() {
-    hqrGetallocEntry(&heroEntityATHLETIC, HQR_FILE3D_FILE, FILE3DHQR_HEROATHLETIC);
+    hqr_get_entry_alloc(&heroEntityATHLETIC, HQR_FILE3D_FILE, FILE3DHQR_HEROATHLETIC);
     sceneHero->entityDataPtr = heroEntityATHLETIC;
     heroAnimIdxATHLETIC = getBodyAnimIndex(0, 0);
 
-    hqrGetallocEntry(&heroEntityAGGRESSIVE, HQR_FILE3D_FILE, FILE3DHQR_HEROAGGRESSIVE);
+    hqr_get_entry_alloc(&heroEntityAGGRESSIVE, HQR_FILE3D_FILE, FILE3DHQR_HEROAGGRESSIVE);
     sceneHero->entityDataPtr = heroEntityAGGRESSIVE;
     heroAnimIdxAGGRESSIVE = getBodyAnimIndex(0, 0);
 
-    hqrGetallocEntry(&heroEntityDISCRETE, HQR_FILE3D_FILE, FILE3DHQR_HERODISCRETE);
+    hqr_get_entry_alloc(&heroEntityDISCRETE, HQR_FILE3D_FILE, FILE3DHQR_HERODISCRETE);
     sceneHero->entityDataPtr = heroEntityDISCRETE;
     heroAnimIdxDISCRETE = getBodyAnimIndex(0, 0);
 
-    hqrGetallocEntry(&heroEntityPROTOPACK, HQR_FILE3D_FILE, FILE3DHQR_HEROPROTOPACK);
+    hqr_get_entry_alloc(&heroEntityPROTOPACK, HQR_FILE3D_FILE, FILE3DHQR_HEROPROTOPACK);
     sceneHero->entityDataPtr = heroEntityPROTOPACK;
     heroAnimIdxPROTOPACK = getBodyAnimIndex(0, 0);
 
-    hqrGetallocEntry(&heroEntityNORMAL, HQR_FILE3D_FILE, FILE3DHQR_HERONORMAL);
+    hqr_get_entry_alloc(&heroEntityNORMAL, HQR_FILE3D_FILE, FILE3DHQR_HERONORMAL);
     sceneHero->entityDataPtr = heroEntityNORMAL;
     heroAnimIdxNORMAL = getBodyAnimIndex(0, 0);
 
@@ -214,7 +214,7 @@ int32 initBody(int32 bodyIdx, int32 actorIdx) {
                 flag = *((uint16*)bodyPtr3);
 
                 if (!(flag & 0x8000)) {
-                    hqrGetallocEntry(&bodyTable[currentPositionInBodyPtrTab], HQR_BODY_FILE, flag & 0xFFFF);
+                    hqr_get_entry_alloc(&bodyTable[currentPositionInBodyPtrTab], HQR_BODY_FILE, flag & 0xFFFF);
 
                     if (!bodyTable[currentPositionInBodyPtrTab]) {
                         printf("HQR ERROR: Loading body entities\n");

@@ -15,7 +15,7 @@ OBJS=src/actor.o \
 	src/gamestate.o \
 	src/grid.o \
 	src/holomap.o \
-	src/hqrdepack.o \
+	src/hqr.o \
 	src/interface.o \
 	src/keyboard.o \
 	src/lbaengine.o \

@@ -25,7 +25,7 @@
 #define RESOURCES_H
 
 #include "sys.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "gamestate.h"
 
 /** RESS.HQR FILE */

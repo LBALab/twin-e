@@ -35,7 +35,7 @@
 #include "menu.h"
 #include "interface.h"
 #include "flamovies.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "scene.h"
 #include "grid.h"
 #include "lbaengine.h"

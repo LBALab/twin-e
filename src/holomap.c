@@ -86,13 +86,13 @@ void loadHolomapGFX() { // TODO
 
     videoPtr5 = workVideoBuffer + 73934;
 
-    hqrGetEntry(videoPtr3, HQR_RESS_FILE, RESSHQR_HOLOSURFACE);
-    hqrGetEntry(videoPtr4, HQR_RESS_FILE, RESSHQR_HOLOIMG);
+    hqr_get_entry(videoPtr3, HQR_RESS_FILE, RESSHQR_HOLOSURFACE);
+    hqr_get_entry(videoPtr4, HQR_RESS_FILE, RESSHQR_HOLOIMG);
 
-    videoPtr6 = videoPtr5 + hqrGetEntry(videoPtr5, HQR_RESS_FILE, RESSHQR_HOLOTWINMDL);
-    videoPtr7 = videoPtr6 + hqrGetEntry(videoPtr6, HQR_RESS_FILE, RESSHQR_HOLOARROWMDL);
-    videoPtr8 = videoPtr7 + hqrGetEntry(videoPtr7, HQR_RESS_FILE, RESSHQR_HOLOTWINARROWMDL);
-    videoPtr11 = videoPtr8 + hqrGetEntry(videoPtr8, HQR_RESS_FILE, RESSHQR_HOLOPOINTMDL);
+    videoPtr6 = videoPtr5 + hqr_get_entry(videoPtr5, HQR_RESS_FILE, RESSHQR_HOLOTWINMDL);
+    videoPtr7 = videoPtr6 + hqr_get_entry(videoPtr6, HQR_RESS_FILE, RESSHQR_HOLOARROWMDL);
+    videoPtr8 = videoPtr7 + hqr_get_entry(videoPtr7, HQR_RESS_FILE, RESSHQR_HOLOTWINARROWMDL);
+    videoPtr11 = videoPtr8 + hqr_get_entry(videoPtr8, HQR_RESS_FILE, RESSHQR_HOLOPOINTMDL);
 
     patchObject(videoPtr5);
     patchObject(videoPtr6);
@@ -101,8 +101,8 @@ void loadHolomapGFX() { // TODO
     patchObject(videoPtr8);
 
     videoPtr10 = videoPtr11 + 4488;
-    videoPtr12 = videoPtr10 + hqrGetEntry(videoPtr10, HQR_RESS_FILE, RESSHQR_HOLOARROWINFO);
-    videoPtr13 = videoPtr12 + hqrGetEntry(videoPtr12, HQR_RESS_FILE, RESSHQR_HOLOPOINTANIM);
+    videoPtr12 = videoPtr10 + hqr_get_entry(videoPtr10, HQR_RESS_FILE, RESSHQR_HOLOARROWINFO);
+    videoPtr13 = videoPtr12 + hqr_get_entry(videoPtr12, HQR_RESS_FILE, RESSHQR_HOLOPOINTANIM);
 
     loadCustomPalette(RESSHQR_HOLOPAL);
 

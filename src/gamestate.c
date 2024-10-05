@@ -512,8 +512,8 @@ void processGameoverAnimation() { // makeGameOver
     // TODO: drawInGameTransBox
     platform_set_palette(paletteRGBA);
     copyScreen(frontVideoBuffer, workVideoBuffer);
-    gameOverPtr = malloc(hqrEntrySize(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
-    hqrGetEntry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
+    gameOverPtr = malloc(hqr_get_entry_size(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
+    hqr_get_entry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
 
     if (gameOverPtr) {
         int32 avg, cdot;

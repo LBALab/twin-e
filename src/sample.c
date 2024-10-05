@@ -29,7 +29,7 @@
 #include "flamovies.h"
 #include "main.h"
 #include "resources.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "movements.h"
 #include "grid.h"
 #include "collision.h"
@@ -67,7 +67,7 @@ void sample_play(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
         int32 channel_index = -1;
         uint8* sampPtr;
 
-        sampSize = hqrGetallocEntry(&sampPtr, HQR_SAMPLES_FILE, index);
+        sampSize = hqr_get_entry_alloc(&sampPtr, HQR_SAMPLES_FILE, index);
 
         // Fix incorrect sample files first byte
         if (*sampPtr != 'C')
@@ -191,7 +191,7 @@ void sample_play_fla(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 
         sprintf(sampfile, FLA_DIR "%s",HQR_FLASAMP_FILE);
 
-        sampSize = hqrGetallocEntry(&sampPtr, sampfile, index);
+        sampSize = hqr_get_entry_alloc(&sampPtr, sampfile, index);
 
         // Fix incorrect sample files first byte
         if (*sampPtr != 'C')
@@ -217,7 +217,7 @@ void sample_play_vox(int32 index) {
         int32 channel_index = -1;
         uint8* sampPtr = 0;
 
-        sampSize = hqrGetallocVoxEntry(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
+        sampSize = hqr_get_entry_alloc_vox(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
         
         // Fix incorrect sample files first byte
         if (*sampPtr != 'C') {

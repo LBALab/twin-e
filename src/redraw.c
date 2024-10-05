@@ -30,7 +30,7 @@
 #include "grid.h"
 #include "scene.h"
 #include "actor.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "resources.h"
 #include "menu.h"
 #include "animations.h"

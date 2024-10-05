@@ -54,7 +54,7 @@ uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
 void initPalettes() {
     // Init standard palette
-    hqrGetallocEntry(&mainPalette, HQR_RESS_FILE, RESSHQR_MAINPAL);
+    hqr_get_entry_alloc(&mainPalette, HQR_RESS_FILE, RESSHQR_MAINPAL);
     convertPalToRGBA(mainPalette, mainPaletteRGBA);
     
     memcpy(palette, mainPalette, NUMOFCOLORS * 3);
@@ -68,25 +68,25 @@ void initPalettes() {
 
 void preloadSprites() {
     int32 i;
-    int32 numEntries = hqrNumEntries(HQR_SPRITES_FILE) - 1;
+    int32 numEntries = hqr_get_num_entries(HQR_SPRITES_FILE) - 1;
 
     for (i = 0; i < numEntries; i++) {
-        spriteSizeTable[i] = hqrGetallocEntry(&spriteTable[i], HQR_SPRITES_FILE, i);
+        spriteSizeTable[i] = hqr_get_entry_alloc(&spriteTable[i], HQR_SPRITES_FILE, i);
     }
 }
 
 void preloadAnimations() {
     int32 i;
-    int32 numEntries = hqrNumEntries(HQR_ANIM_FILE) - 1;
+    int32 numEntries = hqr_get_num_entries(HQR_ANIM_FILE) - 1;
 
     for (i = 0; i < numEntries; i++) {
-        animSizeTable[i] = hqrGetallocEntry(&animTable[i], HQR_ANIM_FILE, i);
+        animSizeTable[i] = hqr_get_entry_alloc(&animTable[i], HQR_ANIM_FILE, i);
     }
 }
 
 // void preloadSamples() {
 //     int32 i;
-//     int32 numEntries = hqrNumEntries(HQR_SAMPLES_FILE) - 1;
+//     int32 numEntries = hqr_get_num_entries(HQR_SAMPLES_FILE) - 1;
 
 //     for (i = 0; i < numEntries; i++) {
 //         samplesSizeTable[i] = hqrGetallocEntry(&samplesTable[i], HQR_SAMPLES_FILE, i);
@@ -95,10 +95,10 @@ void preloadAnimations() {
 
 void preloadInventoryItems() {
     int32 i;
-    int32 numEntries = hqrNumEntries(HQR_INVOBJ_FILE) - 1;
+    int32 numEntries = hqr_get_num_entries(HQR_INVOBJ_FILE) - 1;
 
     for (i = 0; i < numEntries; i++) {
-        inventorySizeTable[i] = hqrGetallocEntry(&inventoryTable[i], HQR_INVOBJ_FILE, i);
+        inventorySizeTable[i] = hqr_get_entry_alloc(&inventoryTable[i], HQR_INVOBJ_FILE, i);
     }
 }
 
@@ -108,16 +108,16 @@ void initResources() {
     initPalettes();
 
     // load LBA font
-    hqrGetallocEntry(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
+    hqr_get_entry_alloc(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
 
     setFontParameters(2, 8);
     setFontColor(14);
     setTextCrossColor(136, 143, 2);
 
-    hqrGetallocEntry(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
+    hqr_get_entry_alloc(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
 
     // load sprite actors bounding box data
-    hqrGetallocEntry(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
+    hqr_get_entry_alloc(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
 
     preloadSprites();
     preloadAnimations();

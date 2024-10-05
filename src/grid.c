@@ -455,7 +455,7 @@ int32 loadGridBricks(int32 gridSize) {
 
     for (i = firstBrick; i <= lastBrick; i++) {
         if (brickUsageTable[i]) {
-            brickSizeTable[i] = hqrGetallocEntry(&brickTable[i], HQR_LBA_BRK_FILE, i);
+            brickSizeTable[i] = hqr_get_entry_alloc(&brickTable[i], HQR_LBA_BRK_FILE, i);
         }
     }
 
@@ -591,10 +591,10 @@ void createCellingGridMap(uint8* gridPtr) {
 int32 initGrid(int32 index) {
 
     // load grids from file
-    int32 gridSize = hqrGetallocEntry(&currentGrid, HQR_LBA_GRI_FILE, index);
+    int32 gridSize = hqr_get_entry_alloc(&currentGrid, HQR_LBA_GRI_FILE, index);
 
     // load layouts from file
-    hqrGetallocEntry(&currentBll, HQR_LBA_BLL_FILE, index);
+    hqr_get_entry_alloc(&currentBll, HQR_LBA_BLL_FILE, index);
 
     loadGridBricks(gridSize);
 
@@ -613,7 +613,7 @@ int32 initCellingGrid(int32 index) {
     uint8* gridPtr;
 
     // load grids from file
-    hqrGetallocEntry(&gridPtr, HQR_LBA_GRI_FILE, index + CELLING_GRIDS_START_INDEX);
+    hqr_get_entry_alloc(&gridPtr, HQR_LBA_GRI_FILE, index + CELLING_GRIDS_START_INDEX);
 
     createCellingGridMap(gridPtr);
 

@@ -26,7 +26,7 @@
 
 #include "text.h"
 #include "main.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "resources.h"
 #include "platform.h"
 #include "menu.h"
@@ -235,11 +235,11 @@ void initTextBank(int32 bankIdx) { // InitDial
     // get index according with language
     langIdx = (config_file.language_id * 14) * 2  + bankIdx * 2;
 
-    hqrSize = hqrGetallocEntry(&dialOrderPtr, HQR_TEXT_FILE, langIdx);
+    hqrSize = hqr_get_entry_alloc(&dialOrderPtr, HQR_TEXT_FILE, langIdx);
 
     numDialTextEntries = hqrSize / 2;
 
-    hqrSize = hqrGetallocEntry(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
+    hqrSize = hqr_get_entry_alloc(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
 
     if (config_file.language_cd_id) {
         initVoxBank(bankIdx);

@@ -32,7 +32,7 @@
 #include "interface.h"
 #include "text.h"
 #include "redraw.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "resources.h"
 #include "renderer.h"
 #include "animations.h"

@@ -30,7 +30,7 @@
 #include "main.h"
 #include "platform.h"
 #include "music.h"
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "lbaengine.h"
 
 /** In-game palette (should not be used, except in special case. otherwise use other images functions instead) */
@@ -73,7 +73,7 @@ void adelineLogo() {
 
 /** Load and display Main Menu image */
 void loadMenuImage(int16 fade_in) {
-    hqrGetEntry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
+    hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
     copyScreen(workVideoBuffer, frontVideoBuffer);
     if (fade_in) {
         fadeToPal(paletteRGBA);
@@ -86,14 +86,14 @@ void loadMenuImage(int16 fade_in) {
 
 /** Load a custom palette */
 void loadCustomPalette(int32 index) {
-    hqrGetEntry(palette, HQR_RESS_FILE, index);
+    hqr_get_entry(palette, HQR_RESS_FILE, index);
     convertPalToRGBA(palette, paletteRGBACustom);
 }
 
 /** Load and display a particulary image on \a RESS.HQR file with cross fade effect
     @param index \a RESS.HQR entry index (starting from 0) */
 void loadImage(int32 index, int16 fade_in) {
-    hqrGetEntry(workVideoBuffer, HQR_RESS_FILE, index);
+    hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, index);
     copyScreen(workVideoBuffer, frontVideoBuffer);
     loadCustomPalette(index + 1);
     if (fade_in) {

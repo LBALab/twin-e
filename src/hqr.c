@@ -25,17 +25,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "hqrdepack.h"
+#include "hqr.h"
 #include "filereader.h"
+
 
 FileReader fr;
 
-/** Decompress entry based in Yaz0r and Zink decompression code
-    @param dst destination pointer where will be the decompressed entry
-    @param src compressed data pointer
-    @decompsize real file size after decompression
-    @mode compression mode used */
-void hqrDecompressEntry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
+
+void hqr_entry_decompress(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
     uint8 b;
     int32 lenght, d, i;
     uint16 offset;
@@ -62,12 +59,7 @@ void hqrDecompressEntry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) 
     } while (decompsize);
 }
 
-/** Decompress entry based in the original expand lzss lba code
-    @param dst destination pointer where will be the decompressed entry
-    @param src compressed data pointer
-    @decompsize real file size after decompression
-    @mode compression mode used */
-void hqrDecompressLZEntry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
+void hqr_entry_decompress_lz(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {
     uint16 offset;
     int32 lenght;
     uint8 *ptr;
@@ -105,12 +97,7 @@ void hqrDecompressLZEntry(uint8 * dst, uint8 * src, int32 decompsize, int32 mode
     }
 }
 
-/** Get a HQR entry pointer
-    @param ptr pointer to save the entry
-    @param filename HQR file name
-    @param index entry index to extract
-    @return entry real size*/
-int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index) {
+int32 hqr_get_entry(uint8 * ptr, int8 *filename, int32 index) {
     uint32 headerSize;
     uint32 offsetToData;
     uint32 realSize;
@@ -157,7 +144,7 @@ int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index) {
         uint8* compDataPtr = 0;
         compDataPtr = (uint8*)malloc(compSize);
         frread(&fr, compDataPtr, compSize);
-        hqrDecompressEntry(ptr, compDataPtr, realSize, mode);
+        hqr_entry_decompress(ptr, compDataPtr, realSize, mode);
         free(compDataPtr);
     }
 
@@ -166,11 +153,7 @@ int32 hqrGetEntry(uint8 * ptr, int8 *filename, int32 index) {
     return realSize;
 }
 
-/** Get a HQR entry pointer
-    @param filename HQR file name
-    @param index entry index to extract
-    @return entry real size */
-int hqrEntrySize(int8 *filename, int32 index) {
+int hqr_get_entry_size(int8 *filename, int32 index) {
     uint32 headerSize;
     uint32 offsetToData;
     uint32 realSize;
@@ -202,10 +185,7 @@ int hqrEntrySize(int8 *filename, int32 index) {
     return realSize;
 }
 
-/** Get a HQR total number of entries
-    @param filename HQR file name
-    @return total number of entries */
-int hqrNumEntries(int8 *filename) {
+int hqr_get_num_entries(int8 *filename) {
     uint32 headerSize;
 
     if (!filename)
@@ -221,31 +201,21 @@ int hqrNumEntries(int8 *filename) {
     return headerSize / 4;
 }
 
-/** Get a HQR entry pointer with memory allocation
-    @param ptr pointer to save the entry
-    @param filename HQR file name
-    @param index entry index to extract
-    @return entry real size */
-int32 hqrGetallocEntry(uint8 ** ptr, int8 *filename, int32 index) {
+int32 hqr_get_entry_alloc(uint8 ** ptr, int8 *filename, int32 index) {
     int32 size;
-    size = hqrEntrySize(filename, index);
+    size = hqr_get_entry_size(filename, index);
 
     *ptr = (uint8*)malloc(size * sizeof(uint8));
     if (!*ptr) {
         printf("HQR WARNING: unable to allocate entry memory!!\n");
         return 0;
     }
-    hqrGetEntry(*ptr, filename, index);
+    hqr_get_entry(*ptr, filename, index);
 
     return size;
 }
 
-/** Get a HQR entry pointer
-    @param ptr pointer to save the entry
-    @param filename HQR file name
-    @param index entry index to extract
-    @return entry real size*/
-int32 hqrGetVoxEntry(uint8 * ptr, int8 *filename, int32 index, int32 hiddenIndex) {
+int32 hqr_get_entry_vox(uint8 * ptr, int8 *filename, int32 index, int32 hiddenIndex) {
     uint32 headerSize;
     uint32 offsetToData;
     uint32 realSize;
@@ -305,7 +275,7 @@ int32 hqrGetVoxEntry(uint8 * ptr, int8 *filename, int32 index, int32 hiddenIndex
         uint8* compDataPtr = 0;
         compDataPtr = (uint8*)malloc(compSize);
         frread(&fr, compDataPtr, compSize);
-        hqrDecompressEntry(ptr, compDataPtr, realSize, mode);
+        hqr_entry_decompress(ptr, compDataPtr, realSize, mode);
         free(compDataPtr);
     }
 
@@ -314,11 +284,7 @@ int32 hqrGetVoxEntry(uint8 * ptr, int8 *filename, int32 index, int32 hiddenIndex
     return realSize;
 }
 
-/** Get a HQR entry pointer
-    @param filename HQR file name
-    @param index entry index to extract
-    @return entry real size */
-int hqrVoxEntrySize(int8 *filename, int32 index, int32 hiddenIndex) {
+int hqr_get_entry_size_vox(int8 *filename, int32 index, int32 hiddenIndex) {
     uint32 headerSize;
     uint32 offsetToData;
     uint32 realSize;
@@ -364,21 +330,16 @@ int hqrVoxEntrySize(int8 *filename, int32 index, int32 hiddenIndex) {
     return realSize;
 }
 
-/** Get a HQR entry pointer with memory allocation
-    @param ptr pointer to save the entry
-    @param filename HQR file name
-    @param index entry index to extract
-    @return entry real size */
-int32 hqrGetallocVoxEntry(uint8 ** ptr, int8 *filename, int32 index, int32 hiddenIndex) {
+int32 hqr_get_entry_alloc_vox(uint8 ** ptr, int8 *filename, int32 index, int32 hiddenIndex) {
     int32 size;
-    size = hqrVoxEntrySize(filename, index, hiddenIndex);
+    size = hqr_get_entry_size_vox(filename, index, hiddenIndex);
 
     *ptr = (uint8*)malloc(size * sizeof(uint8));
     if (!*ptr) {
         printf("HQR WARNING: unable to allocate entry memory!!\n");
         return 0;
     }
-    hqrGetVoxEntry(*ptr, filename, index, hiddenIndex);
+    hqr_get_entry_vox(*ptr, filename, index, hiddenIndex);
 
     return size;
 }

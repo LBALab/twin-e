@@ -255,7 +255,7 @@ void loadScene() {
         localScene += 2;
 
         if (!sceneActors[i].staticFlags.bIsSpriteActor) {
-            hqrGetallocEntry(&sceneActors[i].entityDataPtr, HQR_FILE3D_FILE, sceneActors[i].entity);
+            hqr_get_entry_alloc(&sceneActors[i].entityDataPtr, HQR_FILE3D_FILE, sceneActors[i].entity);
         }
 
         sceneActors[i].body = *(localScene++);
@@ -356,7 +356,7 @@ void loadScene() {
 /** Initialize new scene */
 int32 initScene(int32 index) {
     // load scene from file
-    hqrGetallocEntry(&currentScene, HQR_SCENE_FILE, index);
+    hqr_get_entry_alloc(&currentScene, HQR_SCENE_FILE, index);
 
     loadScene();
 
