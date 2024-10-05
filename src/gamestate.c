@@ -204,7 +204,7 @@ void initEngineVars(int32 save) {
 }
 
 void loadGame() {
-    FileReader fr;
+    file_reader_t fr;
     uint8 data;
     int8* namePtr;
 
@@ -259,7 +259,7 @@ void loadGame() {
 }
 
 void saveGame() {
-    FileReader fr;
+    file_reader_t fr;
     int8 data;
 
     if (!fropen2(&fr, SAVE_DIR "S9999.LBA", "wb+")) {

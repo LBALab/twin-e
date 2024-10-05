@@ -29,7 +29,7 @@
 #include "filereader.h"
 
 
-FileReader fr;
+file_reader_t fr;
 
 
 void hqr_entry_decompress(uint8 * dst, uint8 * src, int32 decompsize, int32 mode) {

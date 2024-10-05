@@ -1,4 +1,4 @@
-/** @file xmidi.h
+/** @file utils/xmidi.h
     @brief
     This file contains MIDI-related routines.
     These routines were adapted from ScrummVM/Exult engine source code.
@@ -26,7 +26,7 @@
 #ifndef XMIDI_H
 #define XMIDI_H
 
-#include "sys.h"
+#include "../sys.h"
 
 /**
  * Credit where credit is due:

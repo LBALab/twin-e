@@ -47,7 +47,7 @@
 #include "keyboard.h"
 #include "actor.h"
 #include "sample.h"
-#include "fcaseopen.h"
+#include "utils/fcaseopen.h"
 
 
 const int8* ENGINE_VERSION = (int8*) "0.3.0";

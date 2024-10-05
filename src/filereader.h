@@ -30,52 +30,24 @@
 
 #include "sys.h"
 
-/** Number of sector in the buffer */
+
 #define SECTORS_IN_BUFFER (3)
-/** Buffer size */
 #define BUFFER_SIZE (2048*SECTORS_IN_BUFFER)
 
-/** File reader structure */
-typedef struct FileReader {
-    /** File descriptor */
+
+typedef struct file_reader_s {
     FILE* fd;
-    /** Content buffer */
     uint8 buffer[BUFFER_SIZE];
-    /** Current position in the buffer */
     uint32 bufferPos;
-    /** Current sector in the buffer */
     uint32 currSector;
-} FileReader;
+} file_reader_t;
 
-/** Feed buffer from file
-    @param fr FileReader pointer */
-void frfeed(FileReader* fr);
 
-/** Read file
-    @param fr FileReader pointer
-    @param destPtr content destination pointer
-    @param size size of read characters */
-void frread(FileReader* fr, void* destPtr, uint32 size);
-
-/** Seek file
-    @param fr FileReader pointer
-    @param seekPosition position to seek */
-void frseek(FileReader* fr, uint32 seekPosition);
-
-/** Open file
-    @param fr FileReader pointer
-    @param filename file path
-    @return true if file open and false if error occurred */
-int32 fropen2(FileReader* fr, char* filename, const char* mode);
-
-/** Write file
-    @param fr FileReader pointer
-    @param destPtr content destination pointer
-    @param size size of read characters */
-void frwrite(FileReader* fr, void* destPtr, uint32 size, uint32 count);
-
-/** Close file
-    @param fr FileReader pointer */
-void frclose(FileReader* fr);
+void frfeed(file_reader_t* fr);
+void frread(file_reader_t* fr, void* destPtr, uint32 size);
+void frseek(file_reader_t* fr, uint32 seekPosition);
+int32 fropen2(file_reader_t* fr, char* filename, const char* mode);
+void frwrite(file_reader_t* fr, void* destPtr, uint32 size, uint32 count);
+void frclose(file_reader_t* fr);
 
 #endif

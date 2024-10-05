@@ -70,7 +70,7 @@ FLAHeaderStruct flaHeaderData;
 /** FLA movie header data */
 FLAFrameDataStruct frameData;
 
-FileReader frFla;
+file_reader_t frFla;
 
 unsigned char flaBuffer[FLASCREEN_WIDTH*FLASCREEN_HEIGHT];
 

@@ -37,7 +37,7 @@
 #include "platform.h"
 #include "hqr.h"
 #include "resources.h"
-#include "xmidi.h"
+#include "utils/xmidi.h"
 
 /** MP3 music folder */
 #define MUSIC_FOLDER	"music"

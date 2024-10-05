@@ -21,22 +21,18 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "filereader.h"
-#include "fcaseopen.h"
 #include <ctype.h>
 
-/** Feed buffer from file
-    @param fr FileReader pointer */
-void frfeed(FileReader* fr) {
+#include "filereader.h"
+#include "utils/fcaseopen.h"
+
+
+inline void frfeed(file_reader_t* fr) {
     fread(fr->buffer, BUFFER_SIZE, 1, fr->fd);
     fr->bufferPos = 0;
 }
 
-/** Read file
-    @param fr FileReader pointer
-    @param destPtr content destination pointer
-    @param size size of read characters */
-void frread(FileReader* fr, void* destPtr, uint32 size) {
+void frread(file_reader_t* fr, void* destPtr, uint32 size) {
     if (BUFFER_SIZE - fr->bufferPos >= size) {
         memcpy(destPtr, &fr->buffer[fr->bufferPos], size);
         fr->bufferPos += size;
@@ -64,10 +60,7 @@ void frread(FileReader* fr, void* destPtr, uint32 size) {
     }
 }
 
-/** Seek file
-    @param fr FileReader pointer
-    @param seekPosition position to seek */
-void frseek(FileReader* fr, uint32 seekPosition) {
+void frseek(file_reader_t* fr, uint32 seekPosition) {
     uint32 sectorToSeek;
 
     sectorToSeek = seekPosition / 2048;
@@ -79,11 +72,7 @@ void frseek(FileReader* fr, uint32 seekPosition) {
     fr->bufferPos = (seekPosition - (sectorToSeek * 2048));
 }
 
-/** Open file
-    @param fr FileReader pointer
-    @param filename file path
-    @return true if file open and false if error occurred */
-int32 fropen2(FileReader* fr, char* filename, const char* mode) {
+int32 fropen2(file_reader_t* fr, char* filename, const char* mode) {
     fr->fd = fcaseopen(filename, mode);
 
     if (fr->fd) {
@@ -95,16 +84,10 @@ int32 fropen2(FileReader* fr, char* filename, const char* mode) {
     return 0;
 }
 
-/** Write file
-    @param fr FileReader pointer
-    @param destPtr content destination pointer
-    @param size size of read characters */
-void frwrite(FileReader* fr, void* destPtr, uint32 size, uint32 count) {
+inline void frwrite(file_reader_t* fr, void* destPtr, uint32 size, uint32 count) {
     fwrite(destPtr, size, count, fr->fd);
 }
 
-/** Close file
-    @param fr FileReader pointer */
-void frclose(FileReader* fr) {
+inline void frclose(file_reader_t* fr) {
     fclose(fr->fd);
 }

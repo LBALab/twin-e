@@ -9,7 +9,6 @@ OBJS=src/actor.o \
 	src/debug.grid.o \
 	src/debug.scene.o \
 	src/extra.o \
-	src/fcaseopen.o \
 	src/filereader.o \
 	src/flamovies.o \
 	src/gamestate.o \
@@ -33,8 +32,9 @@ OBJS=src/actor.o \
 	src/script.life.o \
 	src/script.move.o \
 	src/sys.o \
-	src/xmidi.o \
 	src/text.o \
+	src/utils/fcaseopen.o \
+	src/utils/xmidi.o \
 	src/platform_sdl.o \
 	src/platform_sdl_mixer.o
 
