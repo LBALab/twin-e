@@ -247,7 +247,7 @@ typedef enum {
     SDL_GL_SWAP_CONTROL
 } SDL_GLattr;
 
-/** @name flags for SDL_SetPalette() */
+/** @name flags for SDL_set_palette() */
 /*@{*/
 #define SDL_LOGPAL 0x01
 #define SDL_PHYSPAL 0x02
@@ -482,7 +482,7 @@ extern DECLSPEC int SDLCALL SDL_SetColors(SDL_Surface *surface,
  * SDL_SetColors() is equivalent to calling this function with
  *     flags = (SDL_LOGPAL|SDL_PHYSPAL).
  */
-extern DECLSPEC int SDLCALL SDL_SetPalette(SDL_Surface *surface, int flags,
+extern DECLSPEC int SDLCALL SDL_set_palette(SDL_Surface *surface, int flags,
 				   SDL_Color *colors, int firstcolor,
 				   int ncolors);
 
@@ -918,7 +918,7 @@ extern DECLSPEC int SDLCALL SDL_WM_IconifyWindow(void);
  *
  * This is currently only implemented in the X11 video driver.
  */
-extern DECLSPEC int SDLCALL SDL_WM_ToggleFullScreen(SDL_Surface *surface);
+extern DECLSPEC int SDLCALL SDL_WM_toggle_fullscreen(SDL_Surface *surface);
 
 typedef enum {
 	SDL_GRAB_QUERY = -1,
