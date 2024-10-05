@@ -363,7 +363,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
                         drawListPos++;
 
                         // if use shadows
-                        if (cfgfile.ShadowMode != 0 && !(actor->staticFlags.bDoesntCastShadow)) {
+                        if (config_file.shadow_mode != 0 && !(actor->staticFlags.bDoesntCastShadow)) {
                             if (actor->standOn != -1) {
                                 shadowX = actor->X;
                                 shadowY = actor->Y - 1;
@@ -412,7 +412,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
                         drawList[drawListPos].index = 0x1800 + i;
                         drawListPos++;
 
-                        if (cfgfile.ShadowMode == 2 && !(extra->info0 & 0x8000)) {
+                        if (config_file.shadow_mode == 2 && !(extra->info0 & 0x8000)) {
                             getShadowPosition(extra->X, extra->Y, extra->Z);
             
                             drawList[drawListPos].posValue = extra->X - cameraX + extra->Z - cameraZ - 1;

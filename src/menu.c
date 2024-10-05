@@ -361,43 +361,43 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
 
 			switch (id) {
 			case 1: {
-				if (cfgfile.MusicVolume > 255)
-					cfgfile.MusicVolume = 255;
-				if (cfgfile.MusicVolume < 0)
-					cfgfile.MusicVolume = 0;
-				newWidth = crossDot(left, right, 255, cfgfile.MusicVolume);
+				if (config_file.music_volume > 255)
+					config_file.music_volume = 255;
+				if (config_file.music_volume < 0)
+					config_file.music_volume = 0;
+				newWidth = crossDot(left, right, 255, config_file.music_volume);
 				break;
 			}
 			case 2: {
-				if (cfgfile.WaveVolume > 255)
-					cfgfile.WaveVolume = 255;
-				if (cfgfile.WaveVolume < 0)
-					cfgfile.WaveVolume = 0;
-				newWidth = crossDot(left, right, 255, cfgfile.WaveVolume);
+				if (config_file.wave_volume > 255)
+					config_file.wave_volume = 255;
+				if (config_file.wave_volume < 0)
+					config_file.wave_volume = 0;
+				newWidth = crossDot(left, right, 255, config_file.wave_volume);
 				break;
 			}
 			case 3: {
-				if (cfgfile.CDVolume > 255)
-					cfgfile.CDVolume = 255;
-				if (cfgfile.CDVolume < 0)
-					cfgfile.CDVolume = 0;
-				newWidth = crossDot(left, right, 255, cfgfile.CDVolume);
+				if (config_file.cd_volume > 255)
+					config_file.cd_volume = 255;
+				if (config_file.cd_volume < 0)
+					config_file.cd_volume = 0;
+				newWidth = crossDot(left, right, 255, config_file.cd_volume);
 				break;
 			}
 			case 4: {
-				if (cfgfile.LineVolume > 255)
-					cfgfile.LineVolume = 255;
-				if (cfgfile.LineVolume < 0)
-					cfgfile.LineVolume = 0;
-				newWidth = crossDot(left, right, 255, cfgfile.LineVolume);
+				if (config_file.line_volume > 255)
+					config_file.line_volume = 255;
+				if (config_file.line_volume < 0)
+					config_file.line_volume = 0;
+				newWidth = crossDot(left, right, 255, config_file.line_volume);
 				break;
 			}
 			case 5: {
-				if (cfgfile.MasterVolume > 255)
-					cfgfile.MasterVolume = 255;
-				if (cfgfile.MasterVolume < 0)
-					cfgfile.MasterVolume = 0;
-				newWidth = crossDot(left, right, 255, cfgfile.MasterVolume);
+				if (config_file.master_volume > 255)
+					config_file.master_volume = 255;
+				if (config_file.master_volume < 0)
+					config_file.master_volume = 0;
+				newWidth = crossDot(left, right, 255, config_file.master_volume);
 				break;
 			}
 			};
@@ -560,51 +560,51 @@ int32 processMenu(int16 * menuSettings) {
 				switch (id) {
 				case kMusicVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
-						cfgfile.MusicVolume -= 4;
+						config_file.music_volume -= 4;
 					}
 					if (((uint8) key & 8)) { // on arrow key right
-						cfgfile.MusicVolume += 4;
+						config_file.music_volume += 4;
 					}
-					musicVolume(cfgfile.MusicVolume);
+					musicVolume(config_file.music_volume);
 					break;
 				}
 				case kSoundVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
-						cfgfile.WaveVolume -= 4;
+						config_file.wave_volume -= 4;
 					}
 					if (((uint8) key & 8)) { // on arrow key right
-						cfgfile.WaveVolume += 4;
+						config_file.wave_volume += 4;
 					}
-					sampleVolume(-1, cfgfile.WaveVolume);
+					sampleVolume(-1, config_file.wave_volume);
 					break;
 				}
 				case kCDVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
-						cfgfile.CDVolume -= 4;
+						config_file.cd_volume -= 4;
 					}
 					if (((uint8) key & 8)) { // on arrow key right
-						cfgfile.CDVolume += 4;
+						config_file.cd_volume += 4;
 					}
 					break;
 				}
 				case kLineVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
-						cfgfile.LineVolume -= 4;
+						config_file.line_volume -= 4;
 					}
 					if (((uint8) key & 8)) { // on arrow key right
-						cfgfile.LineVolume += 4;
+						config_file.line_volume += 4;
 					}
 					break;
 				}
 				case kMasterVolume: {
 					if (((uint8) key & 4)) { // on arrow key left
-						cfgfile.MasterVolume -= 4;
+						config_file.master_volume -= 4;
 					}
 					if (((uint8) key & 8)) { // on arrow key right
-						cfgfile.MasterVolume += 4;
+						config_file.master_volume += 4;
 					}
-					musicVolume(cfgfile.MusicVolume);
-					sampleVolume(-1, cfgfile.WaveVolume);
+					musicVolume(config_file.music_volume);
+					sampleVolume(-1, config_file.wave_volume);
 					break;
 				}
 				default:
@@ -772,7 +772,7 @@ void mainMenu() {
 	memset(plasmaEffectPtr, 0, kPlasmaEffectFilesize);
 	hqrGetEntry(plasmaEffectPtr, HQR_RESS_FILE, RESSHQR_PLASMAEFFECT);
 
-	while (!cfgfile.Quit) {
+	while (!config_file.quit) {
 		initTextBank(0);
 
 		playTrackMusic(9); // LBA's Theme
@@ -795,14 +795,14 @@ void mainMenu() {
 			break;
 		}
 		case kQuit: {
-			cfgfile.Quit = 1;
+			config_file.quit = 1;
 			break;
 		}
 		case kBackground: {
 			loadMenuImage(1);
 		}
 		}
-		fpsCycles(cfgfile.Fps);
+		fpsCycles(config_file.fps);
 	}
 }
 
@@ -815,7 +815,7 @@ int32 giveupMenu() {
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 	pauseSamples();
 
-	if (cfgfile.UseAutoSaving == 1)
+	if (config_file.use_auto_saving == 1)
 		localMenu = GiveUpMenuSettings;
 	else
 		localMenu = GiveUpMenuSettingsWithSave;
@@ -831,7 +831,7 @@ int32 giveupMenu() {
 
 		initTextBank(currentTextBank + 3);
 
-		fpsCycles(cfgfile.Fps);
+		fpsCycles(config_file.fps);
 	} while (menuId != kGiveUp && menuId != kContinue);
 
 	if (menuId == kGiveUp)
@@ -1006,8 +1006,8 @@ void processBehaviourMenu() {
 
 	copyScreen(frontVideoBuffer, workVideoBuffer);
 
-	tmpLanguageCD = cfgfile.LanguageCDId;
-	cfgfile.LanguageCDId = 0;
+	tmpLanguageCD = config_file.language_cd_id;
+	config_file.language_cd_id = 0;
 
 	tmpTextBank = currentTextBank;
 	currentTextBank = -1;
@@ -1070,7 +1070,7 @@ void processBehaviourMenu() {
 	currentTextBank = tmpTextBank;
 	initTextBank(currentTextBank + 3);
 
-	cfgfile.LanguageCDId = tmpLanguageCD;
+	config_file.language_cd_id = tmpLanguageCD;
 }
 
 /** Draw the entire button box
@@ -1145,8 +1145,8 @@ void processInventoryMenu() {
 
 	drawInventoryItems();
 
-	tmpLanguageCD = cfgfile.LanguageCDId;
-	cfgfile.LanguageCDId = 0;
+	tmpLanguageCD = config_file.language_cd_id;
+	config_file.language_cd_id = 0;
 
 	initTextBank(2);
 
@@ -1264,7 +1264,7 @@ void processInventoryMenu() {
 
 	initEngineProjections();
 
-	cfgfile.LanguageCDId = tmpLanguageCD;
+	config_file.language_cd_id = tmpLanguageCD;
 
 	initTextBank(currentTextBank + 3);
 

@@ -30,8 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define warning(...) if (cfgfile.Debug) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); }
-//#define info(...) if (cfgfile.Debug) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); }
+//#define warning(...) if (config_file.debug) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); }
+//#define info(...) if (config_file.debug) { fprintf(stderr, __VA_ARGS__); fprintf(stderr, "\n"); }
 #define ARRAYSIZE(x) ((int)(sizeof(x) / sizeof(x[0])))
 
 /**

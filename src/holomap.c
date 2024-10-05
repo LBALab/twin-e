@@ -176,7 +176,7 @@ void processHolomap() { // TODO
 	drawHolomapTitle(320, 25);
 	setCameraPosition(320, 190, 128, 1024, 1024);
 
-	cfgfile.LanguageCDId = 0;
+	config_file.language_cd_id = 0;
 	initTextBank(2);
 	setFontCrossColor(9);
 

@@ -357,10 +357,10 @@ void processFoundItem(int32 item) {
 	{
 		int32 tmpLanguageCDId;
 		stopMusic();
-		tmpLanguageCDId = cfgfile.LanguageCDId;
-		//cfgfile.LanguageCDId = 0; // comented so we can init vox bank
+		tmpLanguageCDId = config_file.language_cd_id;
+		//config_file.language_cd_id = 0; // comented so we can init vox bank
 		initTextBank(2);
-		cfgfile.LanguageCDId = tmpLanguageCDId;
+		config_file.language_cd_id = tmpLanguageCDId;
 	}
 
 	resetClip();
@@ -370,7 +370,7 @@ void processFoundItem(int32 item) {
 	textState = 1;
 	quitItem = 0;
 
-	if (cfgfile.LanguageCDId) {
+	if (config_file.language_cd_id) {
 		initVoxToPlay(item);
 	}
 
@@ -458,7 +458,7 @@ void processFoundItem(int32 item) {
 		delaySkip(1);
 	} while (!skipIntro);*/
 	
-	if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
+	if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
 		stopVox(currDialTextEntry);
 	}
 
@@ -487,7 +487,7 @@ void processGameChoices(int32 choiceIdx) {
 	choiceAnswer = gameChoices[gameChoicesSettings[0]];
 
 	// get right VOX entry index
-	if (cfgfile.LanguageCDId) {
+	if (config_file.language_cd_id) {
 		initVoxToPlay(choiceAnswer);
 		while(playVoxSimple(currDialTextEntry));
 		stopVox(currDialTextEntry);

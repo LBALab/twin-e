@@ -962,14 +962,14 @@ int32 lINVISIBLE(int32 actorIdx, ActorStruct *actor) {
 int32 lZOOM(int32 actorIdx, ActorStruct *actor) {
 	zoomScreen = *(scriptPtr++);
 	
-    if (zoomScreen && !drawInGameTransBox && cfgfile.SceZoom) {
+    if (zoomScreen && !drawInGameTransBox && config_file.sce_zoom) {
         fadeToBlack(mainPaletteRGBA);
-        initMCGA();
+        init_mcga();
         setBackPal();
         lockPalette = 1;
     } else if (!zoomScreen && drawInGameTransBox) {
         fadeToBlack(mainPaletteRGBA);
-        initSVGA();
+        init_svga();
         setBackPal();
         lockPalette = 1;
         reqBgRedraw = 1;
@@ -1371,15 +1371,15 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
 	textClipFull();
 	setFontCrossColor(15);
 	newGameVar4 = 0;
-	tmpFlagDisplayText = cfgfile.FlagDisplayText;
-	cfgfile.FlagDisplayText = 1;
+	tmpFlagDisplayText = config_file.flag_display_text;
+	config_file.flag_display_text = 1;
 	drawTextFullscreen(6);
 	newGameVar4 = 1;
 	textClipSmall();
 	fadeToBlack(paletteRGBACustom);
 	clearScreen();
 	setPalette(paletteRGBA);
-	cfgfile.FlagDisplayText = tmpFlagDisplayText;
+	config_file.flag_display_text = tmpFlagDisplayText;
 
 	do {
 		readKeys();
@@ -1473,7 +1473,7 @@ int32 lTEXT(int32 actorIdx, ActorStruct *actor) {
 	scriptPtr += 2;
 
 	if (drawVar1 < 440) {
-		if (cfgfile.Version == USA_VERSION) {
+		if (config_file.version == USA_VERSION) {
 			if (!textIdx) {
 				textIdx = 16;
 			}

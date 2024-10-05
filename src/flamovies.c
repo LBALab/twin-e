@@ -167,7 +167,7 @@ void scaleFla2x() {
     uint8* source = (uint8*)flaBuffer;
     uint8* dest = (uint8*)workVideoBuffer;
 
-    if (cfgfile.Movie == CONF_MOVIE_FLAWIDE) {
+    if (config_file.movie == CONF_MOVIE_FLAWIDE) {
         for (i = 0; i < SCREEN_WIDTH / SCALE*40; i++) {
             *(dest++) = 0x00;
         }
@@ -178,7 +178,7 @@ void scaleFla2x() {
             *(dest++) = *(source);
             *(dest++) = *(source++);
         }
-        if (cfgfile.Movie == CONF_MOVIE_FLAWIDE) { // include wide bars
+        if (config_file.movie == CONF_MOVIE_FLAWIDE) { // include wide bars
             memcpy(dest, dest - SCREEN_WIDTH / SCALE, FLASCREEN_WIDTH*2);
             dest += FLASCREEN_WIDTH * 2;
         } else { // stretch the movie like original game.
@@ -193,7 +193,7 @@ void scaleFla2x() {
         }
     }
 
-    if (cfgfile.Movie == CONF_MOVIE_FLAWIDE) {
+    if (config_file.movie == CONF_MOVIE_FLAWIDE) {
         for (i = 0; i < SCREEN_WIDTH / SCALE*40; i++) {
             *(dest++) = 0x00;
         }
@@ -288,13 +288,13 @@ void playFlaMovie(int8 *flaName) {
     int16 tmpValue;
     int8 fileNamePath[256];
 
-    if (!cfgfile.Movie)
+    if (!config_file.movie)
         return;
 
     stopSamples();
 
     // Play FLA PCX instead of movies
-    if (cfgfile.Movie == CONF_MOVIE_FLAPCX) {
+    if (config_file.movie == CONF_MOVIE_FLAPCX) {
         fla_pcxList(flaName);
         return;
     }
@@ -381,7 +381,7 @@ void playFlaMovie(int8 *flaName) {
         }
     }
     
-    if (cfgfile.CrossFade) {
+    if (config_file.cross_fade) {
         crossFade(frontVideoBuffer, paletteRGBACustom);
     } else {
         fadeToBlack(paletteRGBACustom);

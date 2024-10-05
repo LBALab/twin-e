@@ -56,8 +56,8 @@ void newGame() {
 
 	stopMusic();
 
-	tmpFlagDisplayText = cfgfile.FlagDisplayText;
-	cfgfile.FlagDisplayText = 1;
+	tmpFlagDisplayText = config_file.flag_display_text;
+	config_file.flag_display_text = 1;
 
 	// intro screen 1 - twinsun
 	loadImage(RESSHQR_INTROSCREEN1IMG, 1);
@@ -101,17 +101,17 @@ void newGame() {
 	// set main palette back
 	setPalette(paletteRGBA);
 
-	cfgfile.FlagDisplayText = tmpFlagDisplayText;
+	config_file.flag_display_text = tmpFlagDisplayText;
 }
 
 void showCredits() {
 	int32 tmpShadowMode, tmpLanguageCDIdx;
 	
 	canShowCredits = 1;
-	tmpShadowMode = cfgfile.ShadowMode;
-	tmpLanguageCDIdx = cfgfile.LanguageCDId;
-	cfgfile.ShadowMode = 0;
-	cfgfile.LanguageCDId = 0;
+	tmpShadowMode = config_file.shadow_mode;
+	tmpLanguageCDIdx = config_file.language_cd_id;
+	config_file.shadow_mode = 0;
+	config_file.language_cd_id = 0;
 	initEngineVars(1);
 	currentSceneIdx = 119;
 	needChangeScene = 119;
@@ -119,8 +119,8 @@ void showCredits() {
 	gameEngineLoop();
 
 	canShowCredits = 0;
-	cfgfile.ShadowMode = tmpShadowMode;
-	cfgfile.LanguageCDId = tmpLanguageCDIdx;
+	config_file.shadow_mode = tmpShadowMode;
+	config_file.language_cd_id = tmpLanguageCDIdx;
 	
 	clearScreen();
 	flip();

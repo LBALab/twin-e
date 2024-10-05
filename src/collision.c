@@ -182,7 +182,7 @@ void reajustActorPosition(int32 brickShape) {
 			}
 			break;
 		default:
-			if (cfgfile.Debug == 1) {
+			if (config_file.debug == 1) {
 				printf("Brick Shape %d unsupported\n", brickShape);
 			}
 			break;

@@ -1174,7 +1174,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 			destZ += processActorZ;
 
 			if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
-				if (getBrickShape(destX, processActorY + 0x100, destZ) && cfgfile.WallCollision == 1) { // avoid wall hit damage
+				if (getBrickShape(destX, processActorY + 0x100, destZ) && config_file.wall_collision == 1) { // avoid wall hit damage
 					addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
 					initAnim(kBigHit, 2, 0, currentlyProcessedActorIdx);
 
@@ -1196,7 +1196,7 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 					stopFalling();
 					processActorY = (collisionY << 8) + 0x100;
 				} else {
-					if (!actorIdx && heroBehaviour == kAthletic && actor->anim == brickShape && cfgfile.WallCollision == 1) { // avoid wall hit damage
+					if (!actorIdx && heroBehaviour == kAthletic && actor->anim == brickShape && config_file.wall_collision == 1) { // avoid wall hit damage
 						addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
 						initAnim(kBigHit, 2, 0, currentlyProcessedActorIdx);	
 

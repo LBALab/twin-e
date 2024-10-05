@@ -156,7 +156,7 @@ void initVoxBank(int32 bankIdx) {
     // get the correct vox hqr file
     memset(currentVoxBankFile, 0, sizeof(int8));
     sprintf(currentVoxBankFile, VOX_DIR);
-    strcat(currentVoxBankFile, LanguagePrefixTypes[cfgfile.LanguageId]);
+    strcat(currentVoxBankFile, LanguagePrefixTypes[config_file.language_id]);
     strcat(currentVoxBankFile, LanguageSufixTypes[bankIdx]);
     strcat(currentVoxBankFile, VOX_EXT);
 
@@ -191,7 +191,7 @@ int32 initVoxToPlay(int32 index) { // setVoxFileAtDigit
 }
 
 int32 playVox(int32 index) {
-    if (cfgfile.LanguageCDId && index) {
+    if (config_file.language_cd_id && index) {
         if (hasHiddenVox && !isSamplePlaying(index)) {
             playVoxSample(index);
             return 1;
@@ -202,7 +202,7 @@ int32 playVox(int32 index) {
 }
 
 int32 playVoxSimple(int32 index) {
-    if (cfgfile.LanguageCDId && index) {
+    if (config_file.language_cd_id && index) {
         playVox(index);
 
         if (isSamplePlaying(index)) {
@@ -233,7 +233,7 @@ void initTextBank(int32 bankIdx) { // InitDial
     textVar2[0] = textVar3;
 
     // get index according with language
-    langIdx = (cfgfile.LanguageId * 14) * 2  + bankIdx * 2;
+    langIdx = (config_file.language_id * 14) * 2  + bankIdx * 2;
 
     hqrSize = hqrGetallocEntry(&dialOrderPtr, HQR_TEXT_FILE, langIdx);
 
@@ -241,7 +241,7 @@ void initTextBank(int32 bankIdx) { // InitDial
 
     hqrSize = hqrGetallocEntry(&dialTextPtr, HQR_TEXT_FILE, ++langIdx);
 
-    if (cfgfile.LanguageCDId) {
+    if (config_file.language_cd_id) {
         initVoxBank(bankIdx);
     }
 }
@@ -714,12 +714,12 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
     copyScreen(frontVideoBuffer, workVideoBuffer);
 
     // get right VOX entry index
-    if (cfgfile.LanguageCDId) {
+    if (config_file.language_cd_id) {
         initVoxToPlay(index);
     }
     
     // if we don't display text, than still plays vox file
-    if (cfgfile.FlagDisplayText) {
+    if (config_file.flag_display_text) {
         initText(index);
         initDialogueBox();
 
@@ -758,7 +758,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 
         hasHiddenVox = 0;
 
-        if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
+        if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
             stopVox(currDialTextEntry);
         }
 
@@ -801,7 +801,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         voxHiddenIndex = 0;
     }
 
-    if (cfgfile.LanguageCDId && isSamplePlaying(currDialTextEntry)) {
+    if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
         stopVox(currDialTextEntry);
     }
 
@@ -927,7 +927,7 @@ void drawAskQuestion(int32 index) { // MyDial
     uint32 start = tick();
 
     // get right VOX entry index
-    if (cfgfile.LanguageCDId) {
+    if (config_file.language_cd_id) {
         initVoxToPlay(index);
     }
 
@@ -944,21 +944,21 @@ void drawAskQuestion(int32 index) { // MyDial
                 start = tick();
                 readKeys();
                 playVox(currDialTextEntry);
-                sdldelay(tick() - start + cfgfile.Fps);
+                sdldelay(tick() - start + config_file.fps);
             } while(skipIntro || skippedKey || pressedKey);
 
             do {
                 start = tick();
                 readKeys();
                 playVox(currDialTextEntry);
-                sdldelay(tick() - start + cfgfile.Fps);
+                sdldelay(tick() - start + config_file.fps);
             } while(!skipIntro && !skippedKey && !pressedKey);
         }
 
-        sdldelay(tick() - start + cfgfile.Fps);
+        sdldelay(tick() - start + config_file.fps);
     } while(textStatus);
 
-    if (cfgfile.LanguageCDId) {
+    if (config_file.language_cd_id) {
         while(playVoxSimple(currDialTextEntry));
 
         hasHiddenVox = 0;

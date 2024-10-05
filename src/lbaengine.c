@@ -150,7 +150,7 @@ int32 runGameEngine() { // mainLoopInteration
                 freezeTime();
                 saveGame(); // auto save game
                 quitGame = 0;
-                cfgfile.Quit = 0;
+                config_file.quit = 0;
                 unfreezeTime();
                 return 0;
             } else {
@@ -161,14 +161,14 @@ int32 runGameEngine() { // mainLoopInteration
 
         // Process options menu - Press F6
         if (loopCurrentKey == 0x40) {
-            int tmpLangCD = cfgfile.LanguageCDId;
+            int tmpLangCD = config_file.language_cd_id;
             freezeTime();
             pauseSamples();
             OptionsMenuSettings[5] = 15;
-            cfgfile.LanguageCDId = 0;
+            config_file.language_cd_id = 0;
             initTextBank(0);
             optionsMenu();
-            cfgfile.LanguageCDId = tmpLangCD;
+            config_file.language_cd_id = tmpLangCD;
             initTextBank(currentTextBank + 3);
             //TODO: play music
             resumeSamples();
@@ -214,10 +214,10 @@ int32 runGameEngine() { // mainLoopInteration
                 newGameVar4 = 0;
                 textClipFull();
                 setFontCrossColor(15);
-                tmpFlagDisplayText = cfgfile.FlagDisplayText;
-                cfgfile.FlagDisplayText = 1;
+                tmpFlagDisplayText = config_file.flag_display_text;
+                config_file.flag_display_text = 1;
                 drawTextFullscreen(161);
-                cfgfile.FlagDisplayText = tmpFlagDisplayText;
+                config_file.flag_display_text = tmpFlagDisplayText;
                 textClipSmall();
                 newGameVar4 = 1;
                 initTextBank(currentTextBank + 3);
@@ -265,17 +265,17 @@ int32 runGameEngine() { // mainLoopInteration
                 break;
             case kiBonusList: {
                 int32 tmpLanguageCDIdx;
-                tmpLanguageCDIdx = cfgfile.LanguageCDId;
+                tmpLanguageCDIdx = config_file.language_cd_id;
                 unfreezeTime();
                 redrawEngineActions(1);
                 freezeTime();
-                cfgfile.LanguageCDId = 0;
+                config_file.language_cd_id = 0;
                 initTextBank(2);
                 textClipFull();
                 setFontCrossColor(15);
                 drawTextFullscreen(162);
                 textClipSmall();
-                cfgfile.LanguageCDId = tmpLanguageCDIdx;
+                config_file.language_cd_id = tmpLanguageCDIdx;
                 initTextBank(currentTextBank + 3);
             }
                 break;
@@ -565,8 +565,8 @@ int32 gameEngineLoop() { // mainLoop
         if (runGameEngine())
             return 1;
         lbaTime++;
-        if (tick() - start < cfgfile.Fps)
-            sdldelay(tick() - start + cfgfile.Fps);
+        if (tick() - start < config_file.fps)
+            sdldelay(tick() - start + config_file.fps);
     }
     return 0;
 }

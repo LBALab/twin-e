@@ -132,7 +132,7 @@ void convertPalToRGBA(uint8 * palSource, uint8 * palDest) {
 /** Fade image in
 	@param palette current palette to fade in */
 void fadeIn(uint8 * palette) {
-	if (cfgfile.CrossFade)
+	if (config_file.cross_fade)
 		crossFade(frontVideoBuffer, palette);
 	else
 		fadeToPal(palette);
@@ -143,11 +143,11 @@ void fadeIn(uint8 * palette) {
 /** Fade image out
 	@param palette current palette to fade out */
 void fadeOut(uint8 * palette) {
-	/*if(cfgfile.CrossFade)
+	/*if(config_file.cross_fade)
 		crossFade(frontVideoBuffer, palette);
 	else
 		fadeToBlack(palette);*/
-	if (!cfgfile.CrossFade)
+	if (!config_file.cross_fade)
 		fadeToBlack(palette);
 }
 

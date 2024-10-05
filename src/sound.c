@@ -70,7 +70,7 @@ void sampleVolume(int32 channel, int32 volume) {
 	@param x unknown x variable
 	@param y unknown y variable */
 void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y) {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		int32 sampSize = 0;
 		int8 sampfile[256];
 		SDL_RWops *rw;
@@ -92,12 +92,12 @@ void playFlaSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y)
 			samplesPlaying[channelIdx] = index;
 		}
 
-		sampleVolume(channelIdx, cfgfile.WaveVolume);
+		sampleVolume(channelIdx, config_file.wave_volume);
 
 		if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
 			printf("Error while playing VOC: Sample %d \n", index);
 
-		/*if (cfgfile.Debug)
+		/*if (config_file.debug)
 			printf("Playing VOC: Sample %d\n", index);*/
 
 		free(sampPtr);
@@ -123,7 +123,7 @@ void setSamplePosition(int32 channelIdx, int32 x, int32 y, int32 z) {
 	@param y unknown y variable
 	@param z unknown z variable */
 void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, int32 z, int32 actorIdx) {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		int32 sampSize = 0;
 		SDL_RWops *rw;
 		uint8* sampPtr;
@@ -142,7 +142,7 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 		// only play if we have a free channel, otherwise we won't be able to control the sample
 		if (channelIdx != -1) {
 			samplesPlaying[channelIdx] = index;
-			sampleVolume(channelIdx, cfgfile.WaveVolume);
+			sampleVolume(channelIdx, config_file.wave_volume);
 
 			if (actorIdx != -1) {
 				setSamplePosition(channelIdx, x, y, z);
@@ -154,7 +154,7 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 			if (Mix_PlayChannel(channelIdx, sample, repeat - 1) == -1)
 				printf("Error while playing VOC: Sample %d \n", index);
 
-			/*if (cfgfile.Debug)
+			/*if (config_file.debug)
 				printf("Playing VOC: Sample %d\n", index);*/
 		}
 
@@ -164,31 +164,31 @@ void playSample(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, in
 
 /** Resume samples */
 void resumeSamples() {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		Mix_Resume(-1);
-		/*if (cfgfile.Debug)
+		/*if (config_file.debug)
 			printf("Resume VOC samples\n");*/
 	}
 }
 
 /** Pause samples */
 void pauseSamples() {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		Mix_HaltChannel(-1);
-		/*if (cfgfile.Debug)
+		/*if (config_file.debug)
 			printf("Pause VOC samples\n");*/
 	}
 }
 
 /** Stop samples */
 void stopSamples() {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
 		Mix_HaltChannel(-1);
 		//clean up
 		Mix_FreeChunk(sample);
 		sample = NULL; //make sure we free it
-		/*if (cfgfile.Debug)
+		/*if (config_file.debug)
 			printf("Stop VOC samples\n");*/
 	}
 }
@@ -220,7 +220,7 @@ void removeSampleChannel(int32 c) {
 
 /** Stop samples */
 void stopSample(int32 index) {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		int32 stopChannel = getSampleChannel(index);
 		if (stopChannel != -1) {
 			removeSampleChannel(stopChannel);
@@ -228,7 +228,7 @@ void stopSample(int32 index) {
 			//clean up
 			Mix_FreeChunk(sample);
 			sample = NULL; //make sure we free it
-			/*if (cfgfile.Debug)
+			/*if (config_file.debug)
 				printf("Stop VOC samples\n");*/
 		}
 	}
@@ -267,7 +267,7 @@ int32 getFreeSampleChannelIndex() {
 }
 
 void playVoxSample(int32 index) {
-	if (cfgfile.Sound) {
+	if (config_file.sound) {
 		int32 sampSize = 0;
 		SDL_RWops *rw;
 		uint8* sampPtr = 0;
@@ -290,12 +290,12 @@ void playVoxSample(int32 index) {
 		if (channelIdx != -1) {
 			samplesPlaying[channelIdx] = index;
 		
-			sampleVolume(channelIdx, cfgfile.VoiceVolume - 1);
+			sampleVolume(channelIdx, config_file.voice_volume - 1);
 
 			if (Mix_PlayChannel(channelIdx, sample, 0) == -1)
 				printf("Error while playing VOC: Sample %d \n", index);
 
-			/*if (cfgfile.Debug)
+			/*if (config_file.debug)
 				printf("Playing VOC: Sample %d\n", index);*/
 		}
 

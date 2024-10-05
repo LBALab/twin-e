@@ -85,7 +85,7 @@ void changeGrid(int16 pKey) {
 			reqBgRedraw = 1;
 		}
 
-		if (cfgfile.Debug && (pKey == 'f' || pKey == 'r'))
+		if (config_file.debug && (pKey == 'f' || pKey == 'r'))
 			printf("\nGrid index changed: %d\n", needChangeScene);
 	}
 }
@@ -110,14 +110,14 @@ void applyCellingGrid(int16 pKey) {
 		useCellingGrid = 1;
 		//createGridMap();
 		initCellingGrid(cellingGridIdx);
-		if (cfgfile.Debug && pKey == 0x14)
+		if (config_file.debug && pKey == 0x14)
 			printf("\nEnable Celling Grid index: %d\n", cellingGridIdx);
 		needChangeScene = -2; // tricky to make the fade
 	} else if (pKey == 0x14 && useCellingGrid == 1) {
 		useCellingGrid = -1;
 		createGridMap();
 		reqBgRedraw = 1;
-		if (cfgfile.Debug && pKey == 0x14)
+		if (config_file.debug && pKey == 0x14)
 			printf("\nDisable Celling Grid index: %d\n", cellingGridIdx);
 		needChangeScene = -2; // tricky to make the fade
 	}

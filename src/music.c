@@ -72,7 +72,7 @@ void musicVolume(int32 volume) {
 	@param loops number of*/
 void musicFadeIn(int32 loops, int32 ms) {
 	Mix_FadeInMusic(current_track, loops, ms);
-	musicVolume(cfgfile.MusicVolume);
+	musicVolume(config_file.music_volume);
 }
 
 /** Fade music out
@@ -83,14 +83,14 @@ void musicFadeOut(int32 ms) {
 	}
 	Mix_HaltMusic();
 	Mix_RewindMusic();
-	musicVolume(cfgfile.MusicVolume);
+	musicVolume(config_file.music_volume);
 }
 
 
 /** Play CD music
 	@param track track number to play */
 void playTrackMusicCd(int32 track) {
-	if (!cfgfile.UseCD) {
+	if (!config_file.use_cd) {
 		return;
 	}
 
@@ -102,7 +102,7 @@ void playTrackMusicCd(int32 track) {
 
 /** Stop CD music */
 void stopTrackMusicCd() {
-	if (!cfgfile.UseCD) {
+	if (!config_file.use_cd) {
 		return;
 	}
 
@@ -114,7 +114,7 @@ void stopTrackMusicCd() {
 /** Generic play music, according with settings it plays CD or MP3 instead
 	@param track track number to play */
 void playTrackMusic(int32 track) {
-	if (!cfgfile.Sound) {
+	if (!config_file.sound) {
 		return;
 	}
 	
@@ -128,7 +128,7 @@ void playTrackMusic(int32 track) {
 
 /** Generic stop music according with settings */
 void stopTrackMusic() {
-	if (!cfgfile.Sound) {
+	if (!config_file.sound) {
 		return;
 	}
 	
@@ -144,7 +144,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 	int8 filename[256];
 	SDL_RWops *rw;
 
-	if (!cfgfile.Sound) {
+	if (!config_file.sound) {
 		return;
 	}
 
@@ -155,7 +155,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 	stopMusic();
 	currentMusic = midiIdx;
 
-	if (cfgfile.MidiType == 0)
+	if (config_file.midi_type == 0)
 		sprintf(filename, "%s", HQR_MIDI_MI_DOS_FILE);
 	else
 		sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
@@ -167,7 +167,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 
 	midiSize = hqrGetallocEntry(&midiPtr, filename, midiIdx);
 
-	if (cfgfile.Sound == 1 && cfgfile.MidiType == 0) {
+	if (config_file.sound == 1 && config_file.midi_type == 0) {
 		midiSize = convert_to_midi(midiPtr, midiSize, &dos_midi_ptr);
 		free(midiPtr);
 		midiPtr = dos_midi_ptr;
@@ -179,7 +179,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 
 	musicFadeIn(1, FADE_MS);
 
-	musicVolume(cfgfile.MusicVolume);
+	musicVolume(config_file.music_volume);
 
 	if (Mix_PlayMusic(current_track, loop) == -1)
 		printf("Error while playing music: %d \n", midiIdx);
@@ -187,7 +187,7 @@ void playMidiMusic(int32 midiIdx, int32 loop) {
 
 /** Stop MIDI music */
 void stopMidiMusic() {
-	if (!cfgfile.Sound) {
+	if (!config_file.sound) {
 		return;
 	}
 	
@@ -204,13 +204,13 @@ int initCdrom() {
 	int32 numOfCDROM;
 	int32 cdNum;
 
-	if (!cfgfile.Sound) {
+	if (!config_file.sound) {
 		return 0;
 	}
 
 	numOfCDROM = SDL_CDNumDrives();
 	
-	if (cfgfile.Debug)
+	if (config_file.debug)
 		printf("Found %d CDROM devices\n", numOfCDROM);
 
 	if (!numOfCDROM) {
@@ -220,23 +220,23 @@ int initCdrom() {
 
 	for (cdNum = 0; cdNum < numOfCDROM; cdNum++) {
 		cdname = SDL_CDName(cdNum);
-		if (cfgfile.Debug)
+		if (config_file.debug)
 			printf("Testing drive %s\n", cdname);
 		cdrom = SDL_CDOpen(cdNum);
 		if (!cdrom) {
-			if (cfgfile.Debug)
+			if (config_file.debug)
 				fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError());
 		} else {
 			SDL_CDStatus(cdrom);
 			if (cdrom->numtracks == NUM_CD_TRACKS) {
 				printf("Assuming that it is LBA cd... %s\n\n", cdname);
-				cdDir = "LBA";
-				cfgfile.UseCD = 1;
+				cd_directory = "LBA";
+				config_file.use_cd = 1;
 				return 1;
 			}
 		}
 		// not found the right CD
-		cfgfile.UseCD = 0;
+		config_file.use_cd = 0;
 		SDL_CDClose(cdrom);
 	}
 

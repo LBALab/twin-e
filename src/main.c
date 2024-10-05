@@ -49,27 +49,13 @@
 #include "sound.h"
 #include "fcaseopen.h"
 
-/** Engine current version */
+
 const int8* ENGINE_VERSION = (int8*) "0.3.0";
-
-/** Engine configuration filename */
 const int8* CONFIG_FILENAME = (int8*) "lba.cfg";
-
-/** Engine install setup filename
-
-    This file contains informations about the game version.
-    This is only used for original games. For mod games project you can
-    used \a lba.cfg file \b Version tag. If this tag is set for original game
-    it will be used instead of \a setup.lst file. */
 const int8* SETUP_FILENAME = (int8*) "setup.lst";
-/** CD Game directory */
-int8 * cdDir;
 
-/** Configuration types at \a lba.cfg file
+int8 * cd_directory;
 
-    Fill this with all needed configurations at \a lba.cfg file.
-    This engine version allows new type of configurations.
-    Check new config lines at \a lba.cfg file after the first game execution */
 int8 CFGList[][22] = {
     "Language:",
     "LanguageCD:",
@@ -121,10 +107,10 @@ int8 LanguageTypes[][10] = {
     "Italiano",
     "Português"
 };
-ConfigFile cfgfile;
+config_file_t config_file;
 
-/** Allocate video memory, both front and back buffers */
-void allocVideoMemory() {
+
+void alloc_video_memory() {
     int32 i, j, k;
 
     workVideoBuffer = (uint8 *) malloc((SCREEN_WIDTH * SCREEN_HEIGHT) * sizeof(uint8));
@@ -142,10 +128,8 @@ void allocVideoMemory() {
     // initVideoVar1 = -1;
 }
 
-/** Gets configuration type index from lba.cfg config file
-    @param lineBuffer buffer with config line
-    @return config type index */
-int getConfigTypeIndex(int8* lineBuffer) {
+
+int get_config_type_index(int8* lineBuffer) {
     int32 i;
     char buffer[256];
     char* ptr;
@@ -169,10 +153,7 @@ int getConfigTypeIndex(int8* lineBuffer) {
     return -1;
 }
 
-/** Gets configuration type index from lba.cfg config file
-    @param lineBuffer buffer with config line
-    @return config type index */
-int getLanguageTypeIndex(int8* language) {
+int get_language_type_index(int8* language) {
     int32 i;
     char buffer[256];
     char* ptr;
@@ -196,8 +177,7 @@ int getLanguageTypeIndex(int8* language) {
     return 0; // English
 }
 
-/** Init configuration file \a lba.cfg */
-void initConfigurations() {
+void init_configurations() {
     FILE *fd, *fd_test;
     int8 buffer[256], tmp[16];
     int32 cfgtype = -1;
@@ -209,27 +189,27 @@ void initConfigurations() {
     // make sure it quit when it reaches the end of file
     while (fgets(buffer, 256, fd) != NULL) {
         *strchr(buffer, 0x0D0A) = 0;
-        cfgtype = getConfigTypeIndex(buffer);
+        cfgtype = get_config_type_index(buffer);
         if (cfgtype != -1) {
             switch (cfgtype) {
             case 0:
-                sscanf(buffer, "Language: %s", cfgfile.Language);
-                cfgfile.LanguageId = getLanguageTypeIndex(cfgfile.Language);
+                sscanf(buffer, "Language: %s", config_file.language);
+                config_file.language_id = get_language_type_index(config_file.language);
                 break;
             case 1:
-                sscanf(buffer, "LanguageCD: %s", cfgfile.LanguageCD);
-                cfgfile.LanguageCDId = getLanguageTypeIndex(cfgfile.Language) + 1;
+                sscanf(buffer, "LanguageCD: %s", config_file.language_cd);
+                config_file.language_cd_id = get_language_type_index(config_file.language) + 1;
                 break;
             case 2:
-                sscanf(buffer, "FlagDisplayText: %s", cfgfile.FlagDisplayTextStr);
-                if (!strcmp(cfgfile.FlagDisplayTextStr,"ON")) {
-                    cfgfile.FlagDisplayText = 1;
+                sscanf(buffer, "FlagDisplayText: %s", config_file.flag_display_text_str);
+                if (!strcmp(config_file.flag_display_text_str,"ON")) {
+                    config_file.flag_display_text = 1;
                 } else {
-                    cfgfile.FlagDisplayText = 0;
+                    config_file.flag_display_text = 0;
                 }
                 break;
             case 3:
-                sscanf(buffer, "FlagKeepVoice: %s", cfgfile.FlagKeepVoiceStr);
+                sscanf(buffer, "FlagKeepVoice: %s", config_file.flag_keep_voice_str);
                 break;
             case 8:
                 sscanf(buffer, "MidiType: %s", tmp);
@@ -237,109 +217,108 @@ void initConfigurations() {
                     fd_test = fcaseopen(HQR_MIDI_MI_WIN_FILE, "rb");
                     if (fd_test) {
                         fclose(fd_test);
-                        cfgfile.MidiType = 1;
+                        config_file.midi_type = 1;
                     }
                     else
-                        cfgfile.MidiType = 0;
+                        config_file.midi_type = 0;
                 }
                 else if (strcmp(tmp, "midi") == 0)
-                    cfgfile.MidiType = 1;
+                    config_file.midi_type = 1;
                 else 
-                    cfgfile.MidiType = 0;
+                    config_file.midi_type = 0;
                 break;
             case 19:
-                sscanf(buffer, "WaveVolume: %d", &cfgfile.WaveVolume);
-                cfgfile.VoiceVolume = cfgfile.WaveVolume;
+                sscanf(buffer, "WaveVolume: %d", &config_file.wave_volume);
+                config_file.voice_volume = config_file.wave_volume;
                 break;
             case 20:
-                sscanf(buffer, "VoiceVolume: %d", &cfgfile.VoiceVolume);
+                sscanf(buffer, "VoiceVolume: %d", &config_file.voice_volume);
                 break;
             case 21:
-                sscanf(buffer, "MusicVolume: %d", &cfgfile.MusicVolume);
+                sscanf(buffer, "MusicVolume: %d", &config_file.music_volume);
                 break;
             case 22:
-                sscanf(buffer, "CDVolume: %d", &cfgfile.CDVolume);
+                sscanf(buffer, "CDVolume: %d", &config_file.cd_volume);
                 break;
             case 23:
-                sscanf(buffer, "LineVolume: %d", &cfgfile.LineVolume);
+                sscanf(buffer, "LineVolume: %d", &config_file.line_volume);
                 break;
             case 24:
-                sscanf(buffer, "MasterVolume: %d", &cfgfile.MasterVolume);
+                sscanf(buffer, "MasterVolume: %d", &config_file.master_volume);
                 break;
             case 25:
-                sscanf(buffer, "Version: %d", &cfgfile.Version);
+                sscanf(buffer, "Version: %d", &config_file.version);
                 break;
             case 26:
-                sscanf(buffer, "FullScreen: %d", &cfgfile.FullScreen);
+                sscanf(buffer, "FullScreen: %d", &config_file.full_screen);
                 break;
             case 27:
-                sscanf(buffer, "UseCD: %d", &cfgfile.UseCD);
+                sscanf(buffer, "UseCD: %d", &config_file.use_cd);
                 break;
             case 28:
-                sscanf(buffer, "Sound: %d", &cfgfile.Sound);
+                sscanf(buffer, "Sound: %d", &config_file.sound);
                 break;
             case 29:
-                sscanf(buffer, "Movie: %d", &cfgfile.Movie);
+                sscanf(buffer, "Movie: %d", &config_file.movie);
                 break;
             case 30:
-                sscanf(buffer, "CrossFade: %d", &cfgfile.CrossFade);
+                sscanf(buffer, "CrossFade: %d", &config_file.cross_fade);
                 break;
             case 31:
-                sscanf(buffer, "Fps: %d", &cfgfile.Fps);
+                sscanf(buffer, "Fps: %d", &config_file.fps);
                 break;
             case 32:
-                sscanf(buffer, "Debug: %d", &cfgfile.Debug);
+                sscanf(buffer, "Debug: %d", &config_file.debug);
                 break;
             case 33:
-                sscanf(buffer, "UseAutoSaving: %d", &cfgfile.UseAutoSaving);
+                sscanf(buffer, "UseAutoSaving: %d", &config_file.use_auto_saving);
                 break;
             case 34:
-                sscanf(buffer, "CombatAuto: %d", &cfgfile.AutoAgressive);
+                sscanf(buffer, "CombatAuto: %d", &config_file.auto_aggressive);
                 break;
             case 35:
-                sscanf(buffer, "Shadow: %d", &cfgfile.ShadowMode);
+                sscanf(buffer, "Shadow: %d", &config_file.shadow_mode);
                 break;
             case 36:
-                sscanf(buffer, "SceZoom: %d", &cfgfile.SceZoom);
+                sscanf(buffer, "SceZoom: %d", &config_file.sce_zoom);
                 break;
             case 37:
-                sscanf(buffer, "FillDetails: %d", &cfgfile.FillDetails);
+                sscanf(buffer, "FillDetails: %d", &config_file.fill_details);
                 break;
             case 38:
-                sscanf(buffer, "InterfaceStyle: %d", &cfgfile.InterfaceStyle);
+                sscanf(buffer, "InterfaceStyle: %d", &config_file.interface_style);
                 break;
             case 39:
-                sscanf(buffer, "WallCollision: %d", &cfgfile.WallCollision);
+                sscanf(buffer, "WallCollision: %d", &config_file.wall_collision);
                 break;
             }
         }
     }
 
-    if (!cfgfile.Fps)
-        cfgfile.Fps = DEFAULT_FRAMES_PER_SECOND;
+    if (!config_file.fps)
+        config_file.fps = DEFAULT_FRAMES_PER_SECOND;
 
     fclose(fd);
 }
 
-/** Initialize LBA engine */
-void initEngine() {
-    // getting configuration file
-    initConfigurations();
+void init_engine() {
+    init_configurations();
 
     // Show engine information
     printf("TwinEngine v%s\n\n", ENGINE_VERSION);
     printf("(c)2002 The TwinEngine team. Refer to AUTHORS file for further details.\n");
     printf("Released under the terms of the GNU GPL license version 2 (or, at your opinion, any later). See COPYING file.\n\n");
-    printf("The original Little Big Adventure game is:\n\t(c)1994 by Adeline Software International, All Rights Reserved.\n\n");
+    printf("The intellectual property is currently owned by [2.21].\n");
+    printf("Originaly developed by Adeline Software International in 1994.\n\n");
 
-    if (cfgfile.Debug)
+    if (config_file.debug)
         printf("Compiled the %s at %s\n", __DATE__, __TIME__);
 
     sdlInitialize();
 
-    srand(SDL_GetTicks()); // always get a different seed while starting the game
+    srand(tick()); // always get a different seed while starting the game
 
-    allocVideoMemory();
+    alloc_video_memory();
     clearScreen();
 
     // Toggle fullscreen if Fullscreen flag is set
@@ -347,22 +326,22 @@ void initEngine() {
 
     // Check if LBA CD-Rom is on drive
     initCdrom();
-    if (cfgfile.Movie > 0) {
+    if (config_file.movie > 0) {
         // Display company logo
         adelineLogo();
 
         // verify game version screens
-        if (cfgfile.Version == EUROPE_VERSION) {
+        if (config_file.version == EUROPE_VERSION) {
             // Little Big Adventure screen
             loadImageDelay(RESSHQR_LBAIMG, 3);
             // Electronic Arts Logo
             loadImageDelay(RESSHQR_EAIMG, 2);
-        } else if (cfgfile.Version == USA_VERSION) {
+        } else if (config_file.version == USA_VERSION) {
             // Relentless screen
             loadImageDelay(RESSHQR_RELLENTIMG, 3);
             // Electronic Arts Logo
             loadImageDelay(RESSHQR_EAIMG, 2);
-        } else if (cfgfile.Version == MODIFICATION_VERSION) {
+        } else if (config_file.version == MODIFICATION_VERSION) {
             // Modification screen
             loadImageDelay(RESSHQR_RELLENTIMG, 2);
         }
@@ -375,16 +354,15 @@ void initEngine() {
     mainMenu();
 }
 
-void initMCGA() {
+void init_mcga() {
     drawInGameTransBox = 1;
 }
 
-void initSVGA() {
+void init_svga() {
     drawInGameTransBox = 0;
 }
 
-/** Initialize all needed stuffs at first time running engine */
-void initAll() {
+void init_all() {
     blockBuffer = (uint8 *) malloc(64*64*25*2 * sizeof(uint8));
     animBuffer1 = animBuffer2 = (uint8 *) malloc(5000 * sizeof(uint8));
     memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
@@ -413,26 +391,21 @@ void initAll() {
 
     initResources();
 
-    initSVGA();
+    init_svga();
 }
 
-/** Main engine function
-    @param argc numner of arguments
-    @param argv array with all arguments strings */
 int main(int argc, char *argv[]) {
-    initAll();
-    initEngine();
+    init_all();
+    init_engine();
     sdlClose();
     printf("\n\nLBA/Relentless < %s / %s >\n\nOK.\n\n", __DATE__, __TIME__);
     printf("TwinEngine v%s closed\n", ENGINE_VERSION);
-    if (cfgfile.Debug) {
+    if (config_file.debug) {
         printf("\nPress <ENTER> to quit debug mode\n");
         getchar();
     }
     return 0;
 }
-
-// AUX FUNC
 
 int8* ITOA(int32 number) {
     int32 numDigits = 1;

@@ -128,7 +128,7 @@ int sdlInitialize() {
 	/*icon = SDL_LoadBMP("icon.bmp");
 	SDL_WM_SetIcon(icon, NULL);*/
 
-	if (cfgfile.Debug) {
+	if (config_file.debug) {
 		SDL_version compile_version;
 		const SDL_version *link_version;
 		SDL_VERSION(&compile_version);
@@ -140,7 +140,7 @@ int sdlInitialize() {
 	printf("Initialising Sound device. Please wait...\n\n");
 
 	// Verify if we want to use high quality sounds
-	if (cfgfile.Sound > 1)
+	if (config_file.sound > 1)
 		freq = HIGH_QUALITY_FREQUENCY;
 	else
 		freq = ORIGINAL_GAME_FREQUENCY;
@@ -311,12 +311,12 @@ void crossFade(uint8 *buffer, uint8 *palette) {
 
 /** Switch between window and fullscreen modes */
 void toggleFullscreen() {
-	cfgfile.FullScreen = 1 - cfgfile.FullScreen;
+	config_file.full_screen = 1 - config_file.full_screen;
 	SDL_FreeSurface(screen);
 
 	reqBgRedraw = 1;
 
-	if (cfgfile.FullScreen) {
+	if (config_file.full_screen) {
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE);
 		copyScreen(workVideoBuffer, frontVideoBuffer);
 		SDL_ShowCursor(1);
