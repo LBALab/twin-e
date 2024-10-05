@@ -1098,9 +1098,9 @@ void drawItem(int32 item) {
                     inventorySelectedItem == item ? inventorySelectedColor : 0);
 
     if (gameFlags[item] && !gameFlags[GAMEFLAG_INVENTORY_DISABLED] && item < NUM_INVENTORY_ITEMS) {
-        prepareIsoModel(inventoryTable[item]);
+        prepareIsoModel(inventory_item_list[item]);
         itemAngle[item] += 8;
-        renderInventoryItem(itemX, itemY, inventoryTable[item], itemAngle[item], 15000);
+        renderInventoryItem(itemX, itemY, inventory_item_list[item], itemAngle[item], 15000);
 
         if (item == 15) { // has GAS
             setFontColor(15);

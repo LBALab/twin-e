@@ -48,12 +48,11 @@ int8 * HQR_BODY_FILE			= "body.hqr";
 int8 * HQR_ANIM_FILE			= "anim.hqr";
 int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
 
-uint8* inventoryTable[NUM_INVENTORY_ITEMS];
-uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
+uint8* inventory_item_list[NUM_INVENTORY_ITEMS];
+uint32 inventory_item_size_list[NUM_INVENTORY_ITEMS];
 
 
-void initPalettes() {
-    // Init standard palette
+void resources_init_palettes() {
     hqr_get_entry_alloc(&mainPalette, HQR_RESS_FILE, RESSHQR_MAINPAL);
     convertPalToRGBA(mainPalette, mainPaletteRGBA);
     
@@ -66,7 +65,7 @@ void initPalettes() {
     palCustom = 0;
 }
 
-void preloadSprites() {
+void resources_preload_sprites() {
     int32 i;
     int32 numEntries = hqr_get_num_entries(HQR_SPRITES_FILE) - 1;
 
@@ -75,7 +74,7 @@ void preloadSprites() {
     }
 }
 
-void preloadAnimations() {
+void resources_preload_animations() {
     int32 i;
     int32 numEntries = hqr_get_num_entries(HQR_ANIM_FILE) - 1;
 
@@ -84,7 +83,7 @@ void preloadAnimations() {
     }
 }
 
-// void preloadSamples() {
+// void reesource_preload_samples() {
 //     int32 i;
 //     int32 numEntries = hqr_get_num_entries(HQR_SAMPLES_FILE) - 1;
 
@@ -93,34 +92,28 @@ void preloadAnimations() {
 //     }
 // }
 
-void preloadInventoryItems() {
+void resources_preload_inventory_items() {
     int32 i;
     int32 numEntries = hqr_get_num_entries(HQR_INVOBJ_FILE) - 1;
 
     for (i = 0; i < numEntries; i++) {
-        inventorySizeTable[i] = hqr_get_entry_alloc(&inventoryTable[i], HQR_INVOBJ_FILE, i);
+        inventory_item_size_list[i] = hqr_get_entry_alloc(&inventory_item_list[i], HQR_INVOBJ_FILE, i);
     }
 }
 
-/** Initialize resource pointers */
-void initResources() {
-    // Menu and in-game palette
-    initPalettes();
+void resources_init() {
+    resources_init_palettes();
 
-    // load LBA font
     hqr_get_entry_alloc(&fontPtr, HQR_RESS_FILE, RESSHQR_LBAFONT);
-
     setFontParameters(2, 8);
     setFontColor(14);
     setTextCrossColor(136, 143, 2);
 
     hqr_get_entry_alloc(&spriteShadowPtr, HQR_RESS_FILE, RESSHQR_SPRITESHADOW);
-
-    // load sprite actors bounding box data
     hqr_get_entry_alloc(&spriteBoundingBoxPtr, HQR_RESS_FILE, RESSHQR_SPRITEBOXDATA);
 
-    preloadSprites();
-    preloadAnimations();
-    // preloadSamples();
-    preloadInventoryItems();
+    resources_preload_sprites();
+    resources_preload_animations();
+    // reesource_preload_samples();
+    resources_preload_inventory_items();
 }

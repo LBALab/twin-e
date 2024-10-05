@@ -389,7 +389,7 @@ void init_all() {
     rightMouse = 0;
     leftMouse = 0;
 
-    initResources();
+    resources_init();
 
     init_svga();
 }

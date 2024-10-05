@@ -28,54 +28,54 @@
 #include "hqr.h"
 #include "gamestate.h"
 
-/** RESS.HQR FILE */
-#define RESSHQR_MAINPAL 0
-#define RESSHQR_LBAFONT 1
-#define RESSHQR_BLANK 2
-#define RESSHQR_SPRITEBOXDATA 3
-#define RESSHQR_SPRITESHADOW 4
-#define RESSHQR_HOLOPAL 5
-#define RESSHQR_HOLOSURFACE 6
-#define RESSHQR_HOLOIMG 7
-#define RESSHQR_HOLOARROWINFO 8
-#define RESSHQR_HOLOTWINMDL 9
-#define RESSHQR_HOLOARROWMDL 10
-#define RESSHQR_HOLOTWINARROWMDL 11
-#define RESSHQR_RELLENTIMG 12
-#define RESSHQR_RELLENTPAL 13
-#define RESSHQR_MENUIMG 14
-#define RESSHQR_INTROSCREEN1IMG 15
-#define RESSHQR_INTROSCREEN1PAL 16
-#define RESSHQR_INTROSCREEN2IMG 17
-#define RESSHQR_INTROSCREEN2PAL 18
-#define RESSHQR_INTROSCREEN3IMG 19
-#define RESSHQR_INTROSCREEN3PAL 20
-#define RESSHQR_GAMEOVERMDL 21
 
-#define RESSHQR_ALARMREDPAL 22
-#define RESSHQR_DARKPAL		24
+#define RESSHQR_MAINPAL             0
+#define RESSHQR_LBAFONT             1
+#define RESSHQR_BLANK               2
+#define RESSHQR_SPRITEBOXDATA       3
+#define RESSHQR_SPRITESHADOW        4
+#define RESSHQR_HOLOPAL             5
+#define RESSHQR_HOLOSURFACE         6
+#define RESSHQR_HOLOIMG             7
+#define RESSHQR_HOLOARROWINFO       8
+#define RESSHQR_HOLOTWINMDL         9
+#define RESSHQR_HOLOARROWMDL        10
+#define RESSHQR_HOLOTWINARROWMDL    11
+#define RESSHQR_RELLENTIMG          12
+#define RESSHQR_RELLENTPAL          13
+#define RESSHQR_MENUIMG             14
+#define RESSHQR_INTROSCREEN1IMG     15
+#define RESSHQR_INTROSCREEN1PAL     16
+#define RESSHQR_INTROSCREEN2IMG     17
+#define RESSHQR_INTROSCREEN2PAL     18
+#define RESSHQR_INTROSCREEN3IMG     19
+#define RESSHQR_INTROSCREEN3PAL     20
+#define RESSHQR_GAMEOVERMDL         21
 
-#define RESSHQR_ADELINEIMG 27
-#define RESSHQR_ADELINEPAL 28
+#define RESSHQR_ALARMREDPAL         22
+#define RESSHQR_DARKPAL		        24
 
-#define RESSHQR_HOLOPOINTMDL 29
-#define RESSHQR_HOLOPOINTANIM 30
+#define RESSHQR_ADELINEIMG          27
+#define RESSHQR_ADELINEPAL          28
 
-#define RESSHQR_LBAIMG 49
-#define RESSHQR_LBAPAL 50
-#define RESSHQR_PLASMAEFFECT 51
-#define RESSHQR_EAIMG 52
-#define RESSHQR_EAPAL 53
+#define RESSHQR_HOLOPOINTMDL        29
+#define RESSHQR_HOLOPOINTANIM       30
 
-#define FLA_DRAGON3 "dragon3"
-#define FLA_INTROD  "introd"
-#define FLA_THEEND  "the_end"
+#define RESSHQR_LBAIMG              49
+#define RESSHQR_LBAPAL              50
+#define RESSHQR_PLASMAEFFECT        51
+#define RESSHQR_EAIMG               52
+#define RESSHQR_EAPAL               53
 
-#define FILE3DHQR_HERONORMAL 0
-#define FILE3DHQR_HEROATHLETIC 1
-#define FILE3DHQR_HEROAGGRESSIVE 2
-#define FILE3DHQR_HERODISCRETE 3
-#define FILE3DHQR_HEROPROTOPACK 4
+#define FLA_DRAGON3                 "dragon3"
+#define FLA_INTROD                  "introd"
+#define FLA_THEEND                  "the_end"
+
+#define FILE3DHQR_HERONORMAL        0
+#define FILE3DHQR_HEROATHLETIC      1
+#define FILE3DHQR_HEROAGGRESSIVE    2
+#define FILE3DHQR_HERODISCRETE      3
+#define FILE3DHQR_HEROPROTOPACK     4
 
 /** Behaviour menu sprite values */
 #define SPRITEHQR_KASHES			3
@@ -91,8 +91,9 @@
 #define SPRITEHQR_MAGICBALL_GREEN_TRANS		109 
 #define SPRITEHQR_MAGICBALL_RED_TRANS		110 
 
-#define SPRITEHQR_DIAG_BUBBLE_RIGHT		90
-#define SPRITEHQR_DIAG_BUBBLE_LEFT		91
+#define SPRITEHQR_DIAG_BUBBLE_RIGHT		    90
+#define SPRITEHQR_DIAG_BUBBLE_LEFT		    91
+
 
 extern int8 * HQR_RESS_FILE;
 extern int8 * HQR_TEXT_FILE;
@@ -112,12 +113,12 @@ extern int8 * HQR_BODY_FILE;
 extern int8 * HQR_ANIM_FILE;
 extern int8 * HQR_INVOBJ_FILE;
 
-/** Table with all loaded samples */
-extern uint8* inventoryTable[NUM_INVENTORY_ITEMS];
-/** Table with all loaded samples sizes */
-extern uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
-/** Initialize resource pointers */
-void initResources();
+extern uint8* inventory_item_list[NUM_INVENTORY_ITEMS];
+extern uint32 inventory_item_size_list[NUM_INVENTORY_ITEMS];
+
+
+void resources_init();
+
 
 #endif

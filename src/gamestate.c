@@ -386,7 +386,7 @@ void processFoundItem(int32 item) {
 
     currentAnimState = 0;
 
-    prepareIsoModel(inventoryTable[item]);
+    prepareIsoModel(inventory_item_list[item]);
     numOfRedrawBox = 0;
 
     while (!quitItem) {
@@ -399,7 +399,7 @@ void processFoundItem(int32 item) {
 
         itemAngle[item] += 8;
 
-        renderInventoryItem(projPosX, projPosY, inventoryTable[item], itemAngle[item], 10000);
+        renderInventoryItem(projPosX, projPosY, inventory_item_list[item], itemAngle[item], 10000);
 
         drawBox(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);
         addRedrawArea(boxTopLeftX, boxTopLeftY, boxBottomRightX, boxBottomRightY);

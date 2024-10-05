@@ -139,6 +139,6 @@ void copyScreen(uint8 * source, uint8 * destination);
 void clearScreen();
 
 /** Init palettes */
-void initPalettes();
+void resources_init_palettes();
 
 #endif

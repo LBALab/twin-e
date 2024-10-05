@@ -261,7 +261,7 @@ void setBehaviour(int32 behaviour);
 int32 initBody(int32 bodyIdx, int32 actorIdx);
 
 /** Preload all sprites */
-void preloadSprites();
+void resources_preload_sprites();
 
 /** Initialize 3D actor
     @param bodyIdx 3D actor body index
