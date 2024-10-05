@@ -37,7 +37,7 @@
 #include "gamestate.h"
 #include "redraw.h"
 #include "movements.h"
-#include "sound.h"
+#include "sample.h"
 #include "animations.h"
 #include "extra.h"
 #include "screens.h"
@@ -394,7 +394,7 @@ void changeScene() {
     previousSceneIdx = currentSceneIdx;
     currentSceneIdx = needChangeScene;
 
-    stopSamples();
+    sample_stop_all();
 
     resetScene();
     loadHeroEntities();
@@ -493,7 +493,7 @@ void processEnvironmentSound() {
                     decal = sampleRound[currentAmb];
                     repeat = sampleRepeat[currentAmb];
 
-                    playSample(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110, -1);
+                    sample_play(sampleIdx, (0x1000+Rnd(decal)-(decal/2)), repeat, 110, -1, 110, -1);
                     break ;
                 }
             }

@@ -35,7 +35,7 @@
 #include "keyboard.h"
 #include "screens.h"
 #include "renderer.h"
-#include "sound.h"
+#include "sample.h"
 
 // RECHECK THIS LATER
 int32 currentBankIdx = -1; // textVar1
@@ -185,15 +185,15 @@ int32 initVoxToPlay(int32 index) { // setVoxFileAtDigit
 
     currDialTextEntry = currIdx;
 
-    playVoxSample(currDialTextEntry);
+    sample_play_vox(currDialTextEntry);
 
     return 1;
 }
 
 int32 playVox(int32 index) {
     if (config_file.language_cd_id && index) {
-        if (hasHiddenVox && !isSamplePlaying(index)) {
-            playVoxSample(index);
+        if (hasHiddenVox && !sample_is_playing(index)) {
+            sample_play_vox(index);
             return 1;
         }
     }
@@ -205,7 +205,7 @@ int32 playVoxSimple(int32 index) {
     if (config_file.language_cd_id && index) {
         playVox(index);
 
-        if (isSamplePlaying(index)) {
+        if (sample_is_playing(index)) {
             return 1;
         }
     }
@@ -215,7 +215,7 @@ int32 playVoxSimple(int32 index) {
 
 void stopVox(int32 index) {
     hasHiddenVox = 0;
-    stopSample(index);
+    sample_stop(index);
 }
 
 
@@ -749,7 +749,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
                 skipText = 1;
             }
             
-            if (!printedText && !isSamplePlaying(currDialTextEntry)) {
+            if (!printedText && !sample_is_playing(currDialTextEntry)) {
                 break;
             }
 
@@ -758,7 +758,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
 
         hasHiddenVox = 0;
 
-        if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
+        if (config_file.language_cd_id && sample_is_playing(currDialTextEntry)) {
             stopVox(currDialTextEntry);
         }
 
@@ -801,7 +801,7 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
         voxHiddenIndex = 0;
     }
 
-    if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
+    if (config_file.language_cd_id && sample_is_playing(currDialTextEntry)) {
         stopVox(currDialTextEntry);
     }
 
@@ -960,7 +960,7 @@ void drawAskQuestion(int32 index) { // MyDial
         hasHiddenVox = 0;
         voxHiddenIndex = 0;
 
-        if(isSamplePlaying(currDialTextEntry)) {
+        if(sample_is_playing(currDialTextEntry)) {
             stopVox(currDialTextEntry);
         }
     }

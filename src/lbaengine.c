@@ -39,7 +39,7 @@
 #include "movements.h"
 #include "keyboard.h"
 #include "gamestate.h"
-#include "sound.h"
+#include "sample.h"
 #include "script.life.h"
 #include "script.move.h"
 #include "extra.h"
@@ -108,8 +108,8 @@ void unfreezeTime() {
 void processActorSamplePosition(int32 actorIdx) {
     int32 channelIdx;
     ActorStruct *actor = &sceneActors[actorIdx];
-    channelIdx = getActorChannel(actorIdx);
-    setSamplePosition(channelIdx, actor->X, actor->Y, actor->Z);
+    channelIdx = sample_get_channel_actor(actorIdx);
+    sample_set_position(channelIdx, actor->X, actor->Y, actor->Z);
 }
 
 /** Game engine main loop
@@ -163,7 +163,7 @@ int32 runGameEngine() { // mainLoopInteration
         if (loopCurrentKey == 0x40) {
             int tmpLangCD = config_file.language_cd_id;
             freezeTime();
-            pauseSamples();
+            sample_pause();
             OptionsMenuSettings[5] = 15;
             config_file.language_cd_id = 0;
             initTextBank(0);
@@ -171,7 +171,7 @@ int32 runGameEngine() { // mainLoopInteration
             config_file.language_cd_id = tmpLangCD;
             initTextBank(currentTextBank + 3);
             //TODO: play music
-            resumeSamples();
+            sample_resume();
             unfreezeTime();
             redrawEngineActions(1);
         }
@@ -383,7 +383,7 @@ int32 runGameEngine() { // mainLoopInteration
                     initAnim(kLandDeath, 4, 0, 0);
                     actor->controlMode = 0;
                 } else {
-                    playSample(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z, a);
+                    sample_play(37, Rnd(2000) + 3096, 1, actor->X, actor->Y, actor->Z, a);
 
                     if (a == mecaPinguinIdx) {
                         addExtraExplode(actor->X, actor->Y, actor->Z);
@@ -430,7 +430,7 @@ int32 runGameEngine() { // mainLoopInteration
                     if ((brickSound & 0xF) == 1) {
                         if (a) { // all other actors
                             int32 rnd = Rnd(2000) + 3096;
-                            playSample(0x25, rnd, 1, actor->X, actor->Y, actor->Z, a);
+                            sample_play(0x25, rnd, 1, actor->X, actor->Y, actor->Z, a);
                             if (actor->bonusParameter & 0x1F0) {
                                 if (!(actor->bonusParameter & 1)) {
                                     processActorExtraBonus(a);

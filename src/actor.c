@@ -36,7 +36,7 @@
 #include "renderer.h"
 #include "movements.h"
 #include "gamestate.h"
-#include "sound.h"
+#include "sample.h"
 #include "extra.h"
 
 
@@ -556,12 +556,12 @@ void processActorExtraBonus(int32 actorIdx) { // GiveExtraBonus
         if (actor->dynamicFlags.bIsDead) {
             addExtraBonus(actor->X, actor->Y, actor->Z, 0x100, 0, currentBonus, actor->bonusAmount);
             // FIXME add constant for sample index
-            playSample(11, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
+            sample_play(11, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
         } else {
             int32 angle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, sceneHero->X, sceneHero->Z);
             addExtraBonus(actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z, 200, angle, currentBonus, actor->bonusAmount);
             // FIXME add constant for sample index
-            playSample(11, 0x1000, 1, actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z, actorIdx);
+            sample_play(11, 0x1000, 1, actor->X, actor->Y + actor->boudingBox.Y.topRight, actor->Z, actorIdx);
         }
     }
 }

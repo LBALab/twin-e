@@ -29,7 +29,7 @@
 #include "screens.h"
 #include "platform.h"
 #include "main.h"
-#include "sound.h"
+#include "sample.h"
 #include "music.h"
 #include "filereader.h"
 #include "lbaengine.h"
@@ -244,11 +244,11 @@ void processFrame() {
         }
         case kPlaySample: {
             memcpy(&sample, ptr, sizeof(FLASampleStruct));
-            playFlaSample(sample.sampleNum, sample.freq, sample.repeat, sample.x, sample.y);
+            sample_play_fla(sample.sampleNum, sample.freq, sample.repeat, sample.x, sample.y);
             break;
         }
         case kStopSample: {
-            stopSample(sample.sampleNum);
+            sample_stop(sample.sampleNum);
             break;
         }
         case kDeltaFrame: {
@@ -291,7 +291,7 @@ void playFlaMovie(int8 *flaName) {
     if (!config_file.movie)
         return;
 
-    stopSamples();
+    sample_stop_all();
 
     // Play FLA PCX instead of movies
     if (config_file.movie == CONF_MOVIE_FLAPCX) {
@@ -387,7 +387,7 @@ void playFlaMovie(int8 *flaName) {
         fadeToBlack(paletteRGBACustom);
     }
 
-    stopSamples();
+    sample_stop_all();
 }
 
 /*

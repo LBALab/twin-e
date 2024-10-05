@@ -26,7 +26,7 @@
 #include "lbaengine.h"
 #include "screens.h"
 #include "scene.h"
-#include "sound.h"
+#include "sample.h"
 #include "interface.h"
 #include "platform.h"
 #include "renderer.h"
@@ -166,7 +166,7 @@ void processHolomap() { // TODO
     betaLightTmp = betaLight;
 
     fadeToBlack(paletteRGBA);
-    stopSamples();
+    sample_stop_all();
     resetClip();
     clearScreen();
     platform_flip();

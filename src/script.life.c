@@ -31,7 +31,7 @@
 #include "animations.h"
 #include "scene.h"
 #include "renderer.h"
-#include "sound.h"
+#include "sample.h"
 #include "redraw.h"
 #include "lbaengine.h"
 #include "gamestate.h"

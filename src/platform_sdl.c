@@ -1,4 +1,4 @@
-/** @file sdlengine.c
+/** @file platform_sdl.c
     @brief
     This file contains SDL engine routines
 
@@ -27,11 +27,6 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
-#ifndef MACOSX
-#include <SDL/SDL_mixer.h>
-#else
-#include <SDL_mixer/SDL_mixer.h>
-#endif
 
 #ifndef MACOSX
 #include <SDL/SDL_ttf.h>
@@ -40,6 +35,7 @@
 #endif
 
 #include "platform.h"
+#include "platform_mixer.h"
 #include "main.h"
 #include "screens.h"
 #include "music.h"
@@ -50,11 +46,6 @@
 
 /** SDL exit callback */
 //static void atexit_callback(void);
-
-/** Original audio frequency */
-#define ORIGINAL_GAME_FREQUENCY		11025
-/** High quality audio frequency */
-#define HIGH_QUALITY_FREQUENCY		44100
 
 /** Main SDL screen surface buffer */
 SDL_Surface *screen = NULL;
@@ -71,7 +62,7 @@ TTF_Font *font;
 void platform_close() {
     stopTrackMusic();
     stopMidiMusic();
-    Mix_CloseAudio();
+    platform_mixer_close();
     TTF_Quit();
     SDL_Quit();
     exit(0);
@@ -82,7 +73,6 @@ int platform_initialize() {
     uint8 *keyboard;
     int32 size;
     int32 i;
-    int32 freq;
     //SDL_Surface* icon;
 
     Uint32 rmask, gmask, bmask;
@@ -133,18 +123,7 @@ int platform_initialize() {
 
     printf("Initialising Sound device. Please wait...\n\n");
 
-    // Verify if we want to use high quality sounds
-    if (config_file.sound > 1)
-        freq = HIGH_QUALITY_FREQUENCY;
-    else
-        freq = ORIGINAL_GAME_FREQUENCY;
-
-    if (Mix_OpenAudio(freq, AUDIO_S16, 2, 256) < 0) {
-        printf("Mix_OpenAudio: %s\n", Mix_GetError());
-        exit(1);
-    }
-
-    Mix_AllocateChannels(32);
+    platform_mixer_init(config_file.sound);
 
     SDL_WM_SetCaption("Little Big Adventure: TwinEngine", "twin-e");
     SDL_PumpEvents();

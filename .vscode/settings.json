@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "gamestate.h": "c"
+        "gamestate.h": "c",
+        "cstring": "c"
     }
 }

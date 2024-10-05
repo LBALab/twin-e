@@ -27,15 +27,16 @@ OBJS=src/actor.o \
 	src/redraw.o \
 	src/renderer.o \
 	src/resources.o \
+	src/sample.o \
 	src/scene.o \
 	src/screens.o \
 	src/script.life.o \
 	src/script.move.o \
-	src/platform_sdl.o \
-	src/sound.o \
 	src/sys.o \
 	src/xmidi.o \
-	src/text.o
+	src/text.o \
+	src/platform_sdl.o \
+	src/platform_sdl_mixer.o
 
 LIBS=$(LDFLAGS)
 

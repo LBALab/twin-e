@@ -34,7 +34,7 @@
 #include "keyboard.h"
 #include "resources.h"
 #include "extra.h"
-#include "sound.h"
+#include "sample.h"
 #include "screens.h"
 #include "music.h"
 #include "filereader.h"
@@ -352,7 +352,7 @@ void processFoundItem(int32 item) {
     boxBottomRightX = projPosX + 65;
     boxBottomRightY = projPosY + 65;
 
-    playSample(41, 0x1000, 1, 0x80, 0x80, 0x80, -1);
+    sample_play(41, 0x1000, 1, 0x80, 0x80, 0x80, -1);
 
     // process vox play
     {
@@ -459,7 +459,7 @@ void processFoundItem(int32 item) {
         platform_delay_skip(1);
     } while (!skipIntro);*/
     
-    if (config_file.language_cd_id && isSamplePlaying(currDialTextEntry)) {
+    if (config_file.language_cd_id && sample_is_playing(currDialTextEntry)) {
         stopVox(currDialTextEntry);
     }
 
@@ -519,7 +519,7 @@ void processGameoverAnimation() { // makeGameOver
         int32 avg, cdot;
 
         prepareIsoModel(gameOverPtr);
-        stopSamples();
+        sample_stop_all();
         stopMidiMusic(); // stop fade music
         setCameraPosition(320, 240, 128, 200, 200);
         startLbaTime = lbaTime;
@@ -539,7 +539,7 @@ void processGameoverAnimation() { // makeGameOver
             platform_delay(15);
         }
 
-        playSample(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80, -1);
+        sample_play(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80, -1);
         blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
         setCameraAngle(0, 0, 0, 0, 0, 0, 3200);
         renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);

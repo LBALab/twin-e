@@ -38,7 +38,7 @@
 #include "movements.h"
 #include "text.h"
 #include "collision.h"
-#include "sound.h"
+#include "sample.h"
 
 #include "debug.scene.h"
 /** Auxiliar object render left position on screen */
@@ -401,7 +401,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
                     extra->lifeTime = lbaTime;
                     extra->type &= 0xFBFF;
                     // FIXME make constant for sample index
-                    playSample(11, 0x1000, 1, extra->X, extra->Y, extra->Z, -1);
+                    sample_play(11, 0x1000, 1, extra->X, extra->Y, extra->Z, -1);
                 }
             } else {
                 if ((extra->type & 1) || (extra->type & 0x40) || (extra->actorIdx + extra->lifeTime - 150 < lbaTime) || (!((lbaTime + extra->lifeTime) & 8))) {

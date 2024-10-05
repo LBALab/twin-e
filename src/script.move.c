@@ -28,7 +28,7 @@
 #include "animations.h"
 #include "scene.h"
 #include "renderer.h"
-#include "sound.h"
+#include "sample.h"
 #include "redraw.h"
 #include "lbaengine.h"
 
@@ -244,7 +244,7 @@ int32 mWAIT_NUM_ANIM(int32 actorIdx, ActorStruct *actor) {
 /*0x0E*/
 int32 mSAMPLE(int32 actorIdx, ActorStruct *actor) {
     int32 sampleIdx = *((int16 *)scriptPtr);
-    playSample(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
+    sample_play(sampleIdx, 0x1000, 1, actor->X, actor->Y, actor->Z, actorIdx);
     actor->positionInMoveScript += 2;
     return 0;
 }
@@ -434,7 +434,7 @@ int32 mWAIT_DOOR(int32 actorIdx, ActorStruct *actor) {
 int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor) {
     int32 freq = Rnd(2048) + 2048;
     int32 sampleIdx = *((int16 *)scriptPtr);
-    playSample(sampleIdx, freq, 1, actor->X, actor->Y, actor->Z, actorIdx);
+    sample_play(sampleIdx, freq, 1, actor->X, actor->Y, actor->Z, actorIdx);
     actor->positionInMoveScript += 2;
     return 0;
 }
@@ -442,8 +442,8 @@ int32 mSAMPLE_RND(int32 actorIdx, ActorStruct *actor) {
 /*0x1C*/
 int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor) {
     int32 sampleIdx = *((int16 *)scriptPtr);
-    if (getSampleChannel(sampleIdx) == -1) { // if its not playing
-        playSample(sampleIdx, 0x1000, -1, actor->X, actor->Y, actor->Z, actorIdx);
+    if (sample_get_channel(sampleIdx) == -1) { // if its not playing
+        sample_play(sampleIdx, 0x1000, -1, actor->X, actor->Y, actor->Z, actorIdx);
     }
     actor->positionInMoveScript += 2;
     return 0;
@@ -452,7 +452,7 @@ int32 mSAMPLE_ALWAYS(int32 actorIdx, ActorStruct *actor) {
 /*0x1D*/
 int32 mSAMPLE_STOP(int32 actorIdx, ActorStruct *actor) {
     int32 sampleIdx = *((int16 *)scriptPtr);
-    stopSample(sampleIdx);
+    sample_stop(sampleIdx);
     actor->positionInMoveScript += 2;
     return 0;
 }
@@ -473,7 +473,7 @@ int32 mREPEAT_SAMPLE(int32 actorIdx, ActorStruct *actor) {
 /*0x20*/
 int32 mSIMPLE_SAMPLE(int32 actorIdx, ActorStruct *actor) {
     int32 sampleIdx = *((int16 *)scriptPtr);
-    playSample(sampleIdx, 0x1000, numRepeatSample, actor->X, actor->Y, actor->Z, actorIdx);
+    sample_play(sampleIdx, 0x1000, numRepeatSample, actor->X, actor->Y, actor->Z, actorIdx);
     numRepeatSample = 1;
     actor->positionInMoveScript += 2;
     return 0;

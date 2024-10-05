@@ -27,7 +27,7 @@
 #include "menuoptions.h"
 #include "resources.h"
 #include "music.h"
-#include "sound.h"
+#include "sample.h"
 #include "screens.h"
 #include "platform.h"
 #include "hqrdepack.h"
@@ -575,7 +575,7 @@ int32 processMenu(int16 * menuSettings) {
                     if (((uint8) key & 8)) { // on arrow key right
                         config_file.wave_volume += 4;
                     }
-                    sampleVolume(-1, config_file.wave_volume);
+                    sample_volume(-1, config_file.wave_volume);
                     break;
                 }
                 case kCDVolume: {
@@ -604,7 +604,7 @@ int32 processMenu(int16 * menuSettings) {
                         config_file.master_volume += 4;
                     }
                     musicVolume(config_file.music_volume);
-                    sampleVolume(-1, config_file.wave_volume);
+                    sample_volume(-1, config_file.wave_volume);
                     break;
                 }
                 default:
@@ -721,7 +721,7 @@ int32 optionsMenu() {
 
     copyScreen(workVideoBuffer, frontVideoBuffer);
 
-    stopSamples();
+    sample_stop_all();
     //playCDtrack(9);
 
     do {
@@ -763,7 +763,7 @@ int32 optionsMenu() {
 
 /** Used to run the main menu */
 void mainMenu() {
-    stopSamples();
+    sample_stop_all();
 
     copyScreen(frontVideoBuffer, workVideoBuffer);
 
@@ -776,7 +776,7 @@ void mainMenu() {
         initTextBank(0);
 
         playTrackMusic(9); // LBA's Theme
-        stopSamples();
+        sample_stop_all();
 
         switch (processMenu(MainMenuSettings)) {
         case kNewGame: {
@@ -813,7 +813,7 @@ int32 giveupMenu() {
     int16 * localMenu;
 
     copyScreen(frontVideoBuffer, workVideoBuffer);
-    pauseSamples();
+    sample_pause();
 
     if (config_file.use_auto_saving == 1)
         localMenu = GiveUpMenuSettings;
@@ -836,11 +836,11 @@ int32 giveupMenu() {
 
     if (menuId == kGiveUp)
     {
-        stopSamples();
+        sample_stop_all();
         return 1;
     }
 
-    resumeSamples();
+    sample_resume();
     return 0;
 }
 
@@ -991,7 +991,7 @@ void processBehaviourMenu() {
     int32 tmpTime;
 
     if (heroBehaviour == kProtoPack) {
-        stopSamples();
+        sample_stop_all();
         setBehaviour(kNormal);
     }
 

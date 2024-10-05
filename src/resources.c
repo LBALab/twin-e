@@ -27,7 +27,8 @@
 #include "animations.h"
 #include "screens.h"
 #include "platform.h"
-#include "sound.h"
+#include "sample.h"
+
 
 int8 * HQR_RESS_FILE			= "ress.hqr";
 int8 * HQR_TEXT_FILE			= "text.hqr";
@@ -46,11 +47,11 @@ int8 * HQR_FILE3D_FILE			= "file3d.hqr";
 int8 * HQR_BODY_FILE			= "body.hqr";
 int8 * HQR_ANIM_FILE			= "anim.hqr";
 int8 * HQR_INVOBJ_FILE			= "invobj.hqr";
+
 uint8* inventoryTable[NUM_INVENTORY_ITEMS];
-/** Table with all loaded samples sizes */
 uint32 inventorySizeTable[NUM_INVENTORY_ITEMS];
 
-/** Init palettes */
+
 void initPalettes() {
     // Init standard palette
     hqrGetallocEntry(&mainPalette, HQR_RESS_FILE, RESSHQR_MAINPAL);
@@ -65,7 +66,6 @@ void initPalettes() {
     palCustom = 0;
 }
 
-/** Preload all sprites */
 void preloadSprites() {
     int32 i;
     int32 numEntries = hqrNumEntries(HQR_SPRITES_FILE) - 1;
@@ -75,7 +75,6 @@ void preloadSprites() {
     }
 }
 
-/** Preload all animations */
 void preloadAnimations() {
     int32 i;
     int32 numEntries = hqrNumEntries(HQR_ANIM_FILE) - 1;
@@ -85,17 +84,15 @@ void preloadAnimations() {
     }
 }
 
-/** Preload all animations */
-void preloadSamples() {
-    int32 i;
-    int32 numEntries = hqrNumEntries(HQR_SAMPLES_FILE) - 1;
+// void preloadSamples() {
+//     int32 i;
+//     int32 numEntries = hqrNumEntries(HQR_SAMPLES_FILE) - 1;
 
-    for (i = 0; i < numEntries; i++) {
-        samplesSizeTable[i] = hqrGetallocEntry(&samplesTable[i], HQR_SAMPLES_FILE, i);
-    }
-}
+//     for (i = 0; i < numEntries; i++) {
+//         samplesSizeTable[i] = hqrGetallocEntry(&samplesTable[i], HQR_SAMPLES_FILE, i);
+//     }
+// }
 
-/** Preload all animations */
 void preloadInventoryItems() {
     int32 i;
     int32 numEntries = hqrNumEntries(HQR_INVOBJ_FILE) - 1;
@@ -124,6 +121,6 @@ void initResources() {
 
     preloadSprites();
     preloadAnimations();
-    //preloadSamples();
+    // preloadSamples();
     preloadInventoryItems();
 }

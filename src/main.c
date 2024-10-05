@@ -46,7 +46,7 @@
 #include "gamestate.h"
 #include "keyboard.h"
 #include "actor.h"
-#include "sound.h"
+#include "sample.h"
 #include "fcaseopen.h"
 
 
@@ -365,7 +365,7 @@ void init_svga() {
 void init_all() {
     blockBuffer = (uint8 *) malloc(64*64*25*2 * sizeof(uint8));
     animBuffer1 = animBuffer2 = (uint8 *) malloc(5000 * sizeof(uint8));
-    memset(samplesPlaying, -1, sizeof(int32) * NUM_CHANNELS);
+    sample_init();
     memset(itemAngle, 256, sizeof(itemAngle)); // reset inventory items angles
 
     bubbleSpriteIndex = SPRITEHQR_DIAG_BUBBLE_LEFT;
