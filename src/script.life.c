@@ -982,13 +982,13 @@ int32 lZOOM(int32 actorIdx, ActorStruct *actor) {
 int32 lPOS_POINT(int32 actorIdx, ActorStruct *actor) {
     int32 trackIdx = *(scriptPtr++);
 
-    destX = sceneTracks[trackIdx].X;
-    destY = sceneTracks[trackIdx].Y;
-    destZ = sceneTracks[trackIdx].Z;
+    X0 = sceneTracks[trackIdx].X;
+    Y0 = sceneTracks[trackIdx].Y;
+    Z0 = sceneTracks[trackIdx].Z;
 
-    actor->X = destX;
-    actor->Y = destY;
-    actor->Z = destZ;
+    actor->X = X0;
+    actor->Y = Y0;
+    actor->Z = Z0;
 
     return 0;
 }
@@ -1446,7 +1446,7 @@ int32 lPLAY_CD_TRACK(int32 actorIdx, ActorStruct *actor) {
 int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
     setOrthoProjection(311, 240, 512);
     setBaseTranslation(0, 0, 0);
-    setBaseRotation(0, 0, 0);
+    camera_set_angle(0, 0, 0);
     setLightVector(alphaLight, betaLight, 0);
     return 0;
 }
@@ -1458,7 +1458,7 @@ int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
     changeRoomVar10 = 0;
 
     setCameraPosition(320, 240, 128, 1024, 1024);
-    setCameraAngle(0, 1500, 0, 25, -128, 0, 13000);
+    camera_set_follow(0, 1500, 0, 25, -128, 0, 13000);
     setLightVector(896, 950, 0);
 
     initTextBank(1);

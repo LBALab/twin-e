@@ -172,14 +172,14 @@ void throwExtra(ExtraListStruct *extra, int32 var1, int32 var2, int32 var3, int3
     extra->lastY = extra->Y;
     extra->lastZ = extra->Z;
 
-    rotateActor(var3, 0, var1);
+    trigo_rotate(var3, 0, var1);
 
-    extra->destY = -destZ;
+    extra->destY = -Z0;
 
-    rotateActor(0, destX, var2);
+    trigo_rotate(0, X0, var2);
 
-    extra->destX = destX;
-    extra->destZ = destZ;
+    extra->destX = X0;
+    extra->destZ = Z0;
 
     extra->angle = var4;
     extra->lifeTime = lbaTime;
@@ -434,10 +434,10 @@ void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 an
     renderTop    = 0x7D00;
     renderBottom = -0x7D00;
 
-    rotateActor(var_8, temp1, angle);
+    trigo_rotate(var_8, temp1, angle);
 
-    computedX = destX + X;
-    computedY = destZ + Y;
+    computedX = X0 + X;
+    computedY = Z0 + Y;
 
     if (computedX < renderLeft)
         renderLeft = computedX;
@@ -466,10 +466,10 @@ void drawSpecialShape(int16 *shapeTable, int32 X, int32 Y, int32 color, int32 an
         projPosX = currentX;
         projPosY = currentY;
 
-        rotateActor(var_8, temp1, angle);
+        trigo_rotate(var_8, temp1, angle);
 
-        currentX = destX + X;
-        currentY = destZ + Y;
+        currentX = X0 + X;
+        currentY = Z0 + Y;
 
         if (currentX < renderLeft)
           renderLeft = currentX;
@@ -658,12 +658,12 @@ void processExtras() {
                         pos = 1;
                     }
 
-                    rotateActor(pos, 0, angle);
-                    extra->Y -= destZ;
+                    trigo_rotate(pos, 0, angle);
+                    extra->Y -= Z0;
 
-                    rotateActor(0, destX, tmpAngle);
-                    extra->X += destX;
-                    extra->Z += destZ;
+                    trigo_rotate(0, X0, tmpAngle);
+                    extra->X += X0;
+                    extra->Z += Z0;
 
                     setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
 
@@ -713,12 +713,12 @@ void processExtras() {
                         pos = 1;
                     }
 
-                    rotateActor(pos, 0, angle);
-                    extra->Y -= destZ;
+                    trigo_rotate(pos, 0, angle);
+                    extra->Y -= Z0;
 
-                    rotateActor(0, destX, tmpAngle);
-                    extra->X += destX;
-                    extra->Z += destZ;
+                    trigo_rotate(0, X0, tmpAngle);
+                    extra->X += X0;
+                    extra->Z += Z0;
 
                     setActorAngle(0, extra->destZ, 50, &extra->trackActorMove);
 

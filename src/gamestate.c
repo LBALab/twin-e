@@ -72,7 +72,7 @@ int16 inventoryNumGas;
 int16 usingSabre;
 
 uint8 inventoryFlags[NUM_INVENTORY_ITEMS];
-uint8 holomapFlags[150]; // GV14
+uint8 holomap_flags[150]; // GV14
 
 int8 savePlayerName[30]; // playerName
 
@@ -85,7 +85,7 @@ int32 choiceAnswer; // inGameMenuAnswer
 void initEngineProjections() {
     setOrthoProjection(311, 240, 512);
     setBaseTranslation(0, 0, 0);
-    setBaseRotation(0, 0, 0);
+    camera_set_angle(0, 0, 0);
     setLightVector(alphaLight, betaLight, 0);
 }
 
@@ -127,7 +127,7 @@ void initSceneVars() {
     sampleRound[3] = 0;
 
     for (i = 0; i < 150; i++) {
-        holomapFlags[i] = 0;
+        holomap_flags[i] = 0;
     }
 
     sceneNumActors = 0;
@@ -242,7 +242,7 @@ void loadGame() {
     frread(&fr, &sceneHero->body, 1);
 
     frread(&fr, &data, 1); // number of holomap locations, always 0x96
-    frread(&fr, holomapFlags, data);
+    frread(&fr, holomap_flags, data);
 
     frread(&fr, &inventoryNumGas, 1);
 
@@ -293,7 +293,7 @@ void saveGame() {
 
     data = 0x96; // number of holomap locations
     frwrite(&fr, &data, 1, 1);
-    frwrite(&fr, holomapFlags, 150, 1);
+    frwrite(&fr, holomap_flags, 150, 1);
 
     frwrite(&fr, &inventoryNumGas, 1, 1);
 
@@ -531,7 +531,7 @@ void processGameoverAnimation() { // makeGameOver
             avg = getAverageValue(40000, 3200, 500, lbaTime - startLbaTime);
             cdot = crossDot(1, 1024, 100, (lbaTime - startLbaTime) % 0x64);
             blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
-            setCameraAngle(0, 0, 0, 0, -cdot, 0, avg);
+            camera_set_follow(0, 0, 0, 0, -cdot, 0, avg);
             renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
             platform_copy_block_phys(120, 120, 519, 359);
 
@@ -541,7 +541,7 @@ void processGameoverAnimation() { // makeGameOver
 
         sample_play(37, Rnd(2000) + 3096, 1, 0x80, 0x80, 0x80, -1);
         blitBox(120, 120, 519, 359, (int8*) workVideoBuffer, 120, 120, (int8*) frontVideoBuffer);
-        setCameraAngle(0, 0, 0, 0, 0, 0, 3200);
+        camera_set_follow(0, 0, 0, 0, 0, 0, 3200);
         renderIsoModel(0, 0, 0, 0, 0, 0, gameOverPtr);
         platform_copy_block_phys(120, 120, 519, 359);
 

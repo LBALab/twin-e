@@ -83,7 +83,7 @@ extern int16 usingSabre;
 extern uint8 inventoryFlags[NUM_INVENTORY_ITEMS];
 
 /** Inventory used flags */
-extern uint8 holomapFlags[150]; // GV14
+extern uint8 holomap_flags[150]; // GV14
 
 extern int8 savePlayerName[30]; // playerName
 

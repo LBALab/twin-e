@@ -87,11 +87,11 @@ int32 mGOTO_POINT(int32 actorIdx, ActorStruct *actor) {
     actor->positionInMoveScript++;
     currentScriptValue = *(scriptPtr);
 
-    destX = sceneTracks[currentScriptValue].X;
-    destY = sceneTracks[currentScriptValue].Y;
-    destZ = sceneTracks[currentScriptValue].Z;
+    X0 = sceneTracks[currentScriptValue].X;
+    Y0 = sceneTracks[currentScriptValue].Y;
+    Z0 = sceneTracks[currentScriptValue].Z;
 
-    newAngle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, destX, destZ);
+    newAngle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, X0, Z0);
 
     if (actor->staticFlags.bIsSpriteActor) {
         actor->angle = newAngle;
@@ -148,17 +148,17 @@ int32 mPOS_POINT(int32 actorIdx, ActorStruct *actor) {
     actor->positionInMoveScript++;
     currentScriptValue = *(scriptPtr);
 
-    destX = sceneTracks[currentScriptValue].X;
-    destY = sceneTracks[currentScriptValue].Y;
-    destZ = sceneTracks[currentScriptValue].Z;
+    X0 = sceneTracks[currentScriptValue].X;
+    Y0 = sceneTracks[currentScriptValue].Y;
+    Z0 = sceneTracks[currentScriptValue].Z;
 
     if (actor->staticFlags.bIsSpriteActor) {
         actor->speed = 0;
     }
 
-    actor->X = destX;
-    actor->Y = destY;
-    actor->Z = destZ;
+    actor->X = X0;
+    actor->Y = Y0;
+    actor->Z = Z0;
 
     return 0;
 }
@@ -191,11 +191,11 @@ int32 mGOTO_SYM_POINT(int32 actorIdx, ActorStruct *actor) {
     actor->positionInMoveScript++;
     currentScriptValue = *(scriptPtr);
 
-    destX = sceneTracks[currentScriptValue].X;
-    destY = sceneTracks[currentScriptValue].Y;
-    destZ = sceneTracks[currentScriptValue].Z;
+    X0 = sceneTracks[currentScriptValue].X;
+    Y0 = sceneTracks[currentScriptValue].Y;
+    Z0 = sceneTracks[currentScriptValue].Z;
 
-    newAngle = 0x200 + getAngleAndSetTargetActorDistance(actor->X, actor->Z, destX, destZ);
+    newAngle = 0x200 + getAngleAndSetTargetActorDistance(actor->X, actor->Z, X0, Z0);
 
     if (actor->staticFlags.bIsSpriteActor) {
         actor->angle = newAngle;
@@ -256,20 +256,20 @@ int32 mGOTO_POINT_3D(int32 actorIdx, ActorStruct *actor) {
     if (actor->staticFlags.bIsSpriteActor) {
         currentScriptValue = *(scriptPtr);
 
-        destX = sceneTracks[currentScriptValue].X;
-        destY = sceneTracks[currentScriptValue].Y;
-        destZ = sceneTracks[currentScriptValue].Z;
+        X0 = sceneTracks[currentScriptValue].X;
+        Y0 = sceneTracks[currentScriptValue].Y;
+        Z0 = sceneTracks[currentScriptValue].Z;
 
-        actor->angle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, destX, destZ);
-        actor->animType = getAngleAndSetTargetActorDistance(actor->Y, 0, destY, targetActorDistance);
+        actor->angle = getAngleAndSetTargetActorDistance(actor->X, actor->Z, X0, Z0);
+        actor->animType = getAngleAndSetTargetActorDistance(actor->Y, 0, Y0, targetActorDistance);
 
         if (targetActorDistance > 100) {
             continueMove = 0;
             actor->positionInMoveScript -= 2;
         } else {
-            actor->X = destX;
-            actor->Y = destY;
-            actor->Z = destZ;
+            actor->X = X0;
+            actor->Y = Y0;
+            actor->Z = Z0;
         }
     }
 

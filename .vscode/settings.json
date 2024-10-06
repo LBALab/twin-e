@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "gamestate.h": "c",
-        "cstring": "c"
+        "cstring": "c",
+        "__bit_reference": "c",
+        "algorithm": "c",
+        "bit": "c",
+        "vector": "c",
+        "mutex": "c"
     }
 }

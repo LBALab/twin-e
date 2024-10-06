@@ -740,7 +740,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 
                 prepareIsoModel(inventory_item_list[item]);
                 setCameraPosition(40, 40, 128, 200, 200);
-                setCameraAngle(0, 0, 0, 60, 0, 0, 16000);
+                camera_set_follow(0, 0, 0, 60, 0, 0, 16000);
 
                 overlayRotation += 1; // overlayRotation += 8;
 

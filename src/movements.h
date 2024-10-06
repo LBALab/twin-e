@@ -106,7 +106,7 @@ int32 getRealValue(ActorMoveStruct * movePtr);
     @param X Actor current X coordinate
     @param Z Actor current Z coordinate
     @param angle Actor angle to rotate */
-void rotateActor(int32 X, int32 Z, int32 angle);
+void trigo_rotate(int32 X, int32 Z, int32 angle);
 
 /** Get distance value in 2D
     @param x1 Actor 1 X coordinate

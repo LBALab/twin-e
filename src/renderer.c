@@ -67,9 +67,9 @@ int32 orthoProjX; // setSomethingVar1
 int32 orthoProjY; // setSomethingVar2
 int32 orthoProjZ; // setSomethingVar2
 
-int32 destX;
-int32 destY;
-int32 destZ;
+int32 X0;
+int32 Y0;
+int32 Z0;
 
 int16 *shadeAngleTab3; // tab3
 
@@ -200,7 +200,7 @@ int32 renderZ; // _Z
 
 // ---
 
-int32 baseMatrix[3*3];
+int32 base_matrix[3*3];
 
 int32 numOfPrimitives;
 
@@ -216,7 +216,7 @@ int32 matricesTable[271];
 uint8 *currentMatrixTableEntry;
 
 int32 *shadePtr;
-int32 shadeMatrix[9];
+int32 world_matrix[9];
 int32 lightX;
 int32 lightY;
 int32 lightZ;
@@ -314,13 +314,19 @@ void setOrthoProjection(int32 X, int32 Y, int32 Z) {
 }
 
 void getBaseRotationPosition(int32 X, int32 Y, int32 Z) {
-    destX = (baseMatrix[0] * X + baseMatrix[1] * Y + baseMatrix[2] * Z) >> 14;
-    destY = (baseMatrix[3] * X + baseMatrix[4] * Y + baseMatrix[5] * Z) >> 14;
-    destZ = (baseMatrix[6] * X + baseMatrix[7] * Y + baseMatrix[8] * Z) >> 14;
+    X0 = (base_matrix[0] * X + base_matrix[1] * Y + base_matrix[2] * Z) >> 14;
+    Y0 = (base_matrix[3] * X + base_matrix[4] * Y + base_matrix[5] * Z) >> 14;
+    Z0 = (base_matrix[6] * X + base_matrix[7] * Y + base_matrix[8] * Z) >> 14;
+}
+
+void trigo_world_rotate_point(int32 X, int32 Y, int32 Z) {
+    X0 = (world_matrix[0] * X + world_matrix[1] * Y + world_matrix[2] * Z) >> 14;
+    Y0 = (world_matrix[3] * X + world_matrix[4] * Y + world_matrix[5] * Z) >> 14;
+    Z0 = (world_matrix[6] * X + world_matrix[7] * Y + world_matrix[8] * Z) >> 14;
 }
 
 #define PI 3.1415
-void setBaseRotation(int32 X, int32 Y, int32 Z) {
+void camera_set_angle(int32 X, int32 Y, int32 Z) {
     int32 matrixElem;
     double Xradians, Yradians, Zradians;
 
@@ -336,54 +342,58 @@ void setBaseRotation(int32 X, int32 Y, int32 Z) {
     Zradians = (double)((256-Z) % 1024) * 2*PI / 1024;
     
 
-    baseMatrix[0] = (int32)(sin(Zradians) * sin(Yradians) * 16384);
-    baseMatrix[1] = (int32)(-cos(Zradians) * 16384);
-    baseMatrix[2] = (int32)(sin(Zradians) * cos(Yradians) * 16384);
-    baseMatrix[3] = (int32)(cos(Zradians) * sin(Xradians) * 16384);
-    baseMatrix[4] = (int32)(sin(Zradians) * sin(Xradians) * 16384);
-    baseMatrix[6] = (int32)(cos(Zradians) * cos(Xradians) * 16384);
-    baseMatrix[7] = (int32)(sin(Zradians) * cos(Xradians) * 16384);
+    base_matrix[0] = (int32)(sin(Zradians) * sin(Yradians) * 16384);
+    base_matrix[1] = (int32)(-cos(Zradians) * 16384);
+    base_matrix[2] = (int32)(sin(Zradians) * cos(Yradians) * 16384);
+    base_matrix[3] = (int32)(cos(Zradians) * sin(Xradians) * 16384);
+    base_matrix[4] = (int32)(sin(Zradians) * sin(Xradians) * 16384);
+    base_matrix[6] = (int32)(cos(Zradians) * cos(Xradians) * 16384);
+    base_matrix[7] = (int32)(sin(Zradians) * cos(Xradians) * 16384);
 
-    matrixElem = baseMatrix[3];
+    matrixElem = base_matrix[3];
 
-    baseMatrix[3] = (int32)(sin(Yradians) * matrixElem + 16384 * cos(Yradians) * cos(Xradians));
-    baseMatrix[5] = (int32)(cos(Yradians) * matrixElem - 16384 * sin(Yradians) * cos(Xradians));
+    base_matrix[3] = (int32)(sin(Yradians) * matrixElem + 16384 * cos(Yradians) * cos(Xradians));
+    base_matrix[5] = (int32)(cos(Yradians) * matrixElem - 16384 * sin(Yradians) * cos(Xradians));
 
-    matrixElem = baseMatrix[6];
+    matrixElem = base_matrix[6];
 
-    baseMatrix[6] = (int32)(sin(Yradians) * matrixElem - 16384 * sin(Xradians) * cos(Yradians));
-    baseMatrix[8] = (int32)(cos(Yradians) * matrixElem + 16384 * sin(Xradians) * sin(Yradians));
+    base_matrix[6] = (int32)(sin(Yradians) * matrixElem - 16384 * sin(Xradians) * cos(Yradians));
+    base_matrix[8] = (int32)(cos(Yradians) * matrixElem + 16384 * sin(Xradians) * sin(Yradians));
 
     getBaseRotationPosition(baseTransPosX, baseTransPosY, baseTransPosZ);
 
-    baseRotPosX = destX;
-    baseRotPosY = destY;
-    baseRotPosZ = destZ;
+    baseRotPosX = X0;
+    baseRotPosY = Y0;
+    baseRotPosZ = Z0;
 }
 
 void getCameraAnglePositions(int32 X, int32 Y, int32 Z) {
-    destX = (baseMatrix[0] * X + baseMatrix[3] * Y + baseMatrix[6] * Z) >> 14;
-    destY = (baseMatrix[1] * X + baseMatrix[4] * Y + baseMatrix[7] * Z) >> 14;
-    destZ = (baseMatrix[2] * X + baseMatrix[5] * Y + baseMatrix[8] * Z) >> 14;
+    X0 = (base_matrix[0] * X + base_matrix[3] * Y + base_matrix[6] * Z) >> 14;
+    Y0 = (base_matrix[1] * X + base_matrix[4] * Y + base_matrix[7] * Z) >> 14;
+    Z0 = (base_matrix[2] * X + base_matrix[5] * Y + base_matrix[8] * Z) >> 14;
 }
 
-void setCameraAngle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6) {
+void camera_set_follow(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6) {
     baseTransPosX = transPosX;
     baseTransPosY = transPosY;
     baseTransPosZ = transPosZ;
 
-    setBaseRotation(rotPosX, rotPosY, rotPosZ);
+    camera_set_angle(rotPosX, rotPosY, rotPosZ);
 
     baseRotPosZ += param6;
 
     getCameraAnglePositions(baseRotPosX, baseRotPosY, baseRotPosZ);
 
-    baseTransPosX = destX;
-    baseTransPosY = destY;
-    baseTransPosZ = destZ;
+    baseTransPosX = X0;
+    baseTransPosY = Y0;
+    baseTransPosZ = Z0;
 }
 
-// ------------------------------------------------------------------------------------------------------
+void trigo_rotate(int32 X, int32 Z, int32 angle) {
+    double radians = 2*PI*angle/0x400;
+    X0 = (int32)(X*cos(radians) + Z*sin(radians));
+    Z0 = (int32)(-X*sin(radians) + Z*cos(radians));
+}
 
 void applyRotation(int32 *tempMatrix, int32 *currentMatrix) {
     int32 i;
@@ -477,9 +487,9 @@ void applyPointsRotation(uint8 *firstPointsPtr, int32 numPoints, pointTab * dest
         tmpY = tempPtr[1];
         tmpZ = tempPtr[2];
 
-        destPoints->X = ((rotationMatrix[0] * tmpX + rotationMatrix[1] * tmpY + rotationMatrix[2] * tmpZ) >> 14) + destX;
-        destPoints->Y = ((rotationMatrix[3] * tmpX + rotationMatrix[4] * tmpY + rotationMatrix[5] * tmpZ) >> 14) + destY;
-        destPoints->Z = ((rotationMatrix[6] * tmpX + rotationMatrix[7] * tmpY + rotationMatrix[8] * tmpZ) >> 14) + destZ;
+        destPoints->X = ((rotationMatrix[0] * tmpX + rotationMatrix[1] * tmpY + rotationMatrix[2] * tmpZ) >> 14) + X0;
+        destPoints->Y = ((rotationMatrix[3] * tmpX + rotationMatrix[4] * tmpY + rotationMatrix[5] * tmpZ) >> 14) + Y0;
+        destPoints->Z = ((rotationMatrix[6] * tmpX + rotationMatrix[7] * tmpY + rotationMatrix[8] * tmpZ) >> 14) + Z0;
 
         destPoints++;
         firstPointsPtr = pointsPtr + 6;
@@ -507,18 +517,18 @@ void processRotatedElement(int32 rotZ, int32 rotY, int32 rotX, elementEntry *ele
 
     // if its the first point
     if (baseElement == -1) {
-        currentMatrix = baseMatrix;
+        currentMatrix = base_matrix;
 
-        destX = 0;
-        destY = 0;
-        destZ = 0;
+        X0 = 0;
+        Y0 = 0;
+        Z0 = 0;
     } else {
         int32 pointIdx = (elemPtr->basePoint) / 6;
         currentMatrix = (int32 *)((uint8 *)matricesTable + baseElement);
 
-        destX = computedPoints[pointIdx].X;
-        destY = computedPoints[pointIdx].Y;
-        destZ = computedPoints[pointIdx].Z;
+        X0 = computedPoints[pointIdx].X;
+        Y0 = computedPoints[pointIdx].Y;
+        Z0 = computedPoints[pointIdx].Z;
     }
 
     applyRotation((int32 *) currentMatrixTableEntry, currentMatrix);
@@ -548,9 +558,9 @@ void applyPointsTranslation(uint8 *firstPointsPtr, int32 numPoints, pointTab * d
         tmpY = tempPtr[1] + renderAngleY;
         tmpZ = tempPtr[2] + renderAngleX;
 
-        destPoints->X = ((translationMatrix[0] * tmpX + translationMatrix[1] * tmpY + translationMatrix[2] * tmpZ) >> 14) + destX;
-        destPoints->Y = ((translationMatrix[3] * tmpX + translationMatrix[4] * tmpY + translationMatrix[5] * tmpZ) >> 14) + destY;
-        destPoints->Z = ((translationMatrix[6] * tmpX + translationMatrix[7] * tmpY + translationMatrix[8] * tmpZ) >> 14) + destZ;
+        destPoints->X = ((translationMatrix[0] * tmpX + translationMatrix[1] * tmpY + translationMatrix[2] * tmpZ) >> 14) + X0;
+        destPoints->Y = ((translationMatrix[3] * tmpX + translationMatrix[4] * tmpY + translationMatrix[5] * tmpZ) >> 14) + Y0;
+        destPoints->Z = ((translationMatrix[6] * tmpX + translationMatrix[7] * tmpY + translationMatrix[8] * tmpZ) >> 14) + Z0;
 
         destPoints++;
         firstPointsPtr = pointsPtr + 6;
@@ -568,20 +578,20 @@ void processTranslatedElement(int32 rotX, int32 rotY, int32 rotZ, elementEntry *
     if (elemPtr->baseElement == -1) { // base point
         int32 i;
 
-        destX = 0;
-        destY = 0;
-        destZ = 0;
+        X0 = 0;
+        Y0 = 0;
+        Z0 = 0;
 
         dest = (int32 *) currentMatrixTableEntry;
 
         for (i = 0; i < 9; i++)
-            dest[i] = baseMatrix[i];
+            dest[i] = base_matrix[i];
     } else {   // dependent
         int32 i;
 
-        destX = computedPoints[(elemPtr->basePoint) / 6].X;
-        destY = computedPoints[(elemPtr->basePoint) / 6].Y;
-        destZ = computedPoints[(elemPtr->basePoint) / 6].Z;
+        X0 = computedPoints[(elemPtr->basePoint) / 6].X;
+        Y0 = computedPoints[(elemPtr->basePoint) / 6].Y;
+        Z0 = computedPoints[(elemPtr->basePoint) / 6].Z;
 
         source = (int32 *)((uint8 *)matricesTable + elemPtr->baseElement);
         dest = (int32 *) currentMatrixTableEntry;
@@ -604,36 +614,36 @@ void translateGroup(int16 ax, int16 bx, int16 cx) {
     ebx = bx;
     ecx = cx;
 
-    edi = shadeMatrix[0];
-    eax = shadeMatrix[1];
+    edi = world_matrix[0];
+    eax = world_matrix[1];
     edi *= ebp;
     eax *= ebx;
     edi += eax;
-    eax = shadeMatrix[2];
+    eax = world_matrix[2];
     eax *= ecx;
     eax += edi;
     eax >>= 14;
 
-    destX = eax;
+    X0 = eax;
 
-    edi = shadeMatrix[3];
-    eax = shadeMatrix[4];
+    edi = world_matrix[3];
+    eax = world_matrix[4];
     edi *= ebp;
     eax *= ebx;
     edi += eax;
-    eax = shadeMatrix[5];
+    eax = world_matrix[5];
     eax *= ecx;
     eax += edi;
     eax >>= 14;
-    destY = eax;
+    Y0 = eax;
 
-    ebp *= shadeMatrix[6];
-    ebx *= shadeMatrix[7];
-    ecx *= shadeMatrix[8];
+    ebp *= world_matrix[6];
+    ebx *= world_matrix[7];
+    ecx *= world_matrix[8];
     ebx += ebp;
     ebx += ecx;
     ebx >>= 14;
-    destZ = eax;
+    Z0 = eax;
 }
 
 void setLightVector(int32 angleX, int32 angleY, int32 angleZ) {
@@ -646,12 +656,12 @@ void setLightVector(int32 angleX, int32 angleY, int32 angleZ) {
     renderAngleY = angleY;
     renderAngleZ = angleZ;
 
-    applyRotation(shadeMatrix, baseMatrix);
+    applyRotation(world_matrix, base_matrix);
     translateGroup(0, 0, 59);
 
-    lightX = destX;
-    lightY = destY;
-    lightZ = destZ;
+    lightX = X0;
+    lightY = Y0;
+    lightZ = Z0;
 }
 
 // ------------------------------------------------------------------------------------------------------
@@ -1821,17 +1831,17 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
             if (numOfShades) {
                 int32 numShades = numOfShades;
 
-                shadeMatrix[0] = (*lightMatrix) * lightX;
-                shadeMatrix[1] = (*(lightMatrix + 1)) * lightX;
-                shadeMatrix[2] = (*(lightMatrix + 2)) * lightX;
+                world_matrix[0] = (*lightMatrix) * lightX;
+                world_matrix[1] = (*(lightMatrix + 1)) * lightX;
+                world_matrix[2] = (*(lightMatrix + 2)) * lightX;
 
-                shadeMatrix[3] = (*(lightMatrix + 3)) * lightY;
-                shadeMatrix[4] = (*(lightMatrix + 4)) * lightY;
-                shadeMatrix[5] = (*(lightMatrix + 5)) * lightY;
+                world_matrix[3] = (*(lightMatrix + 3)) * lightY;
+                world_matrix[4] = (*(lightMatrix + 4)) * lightY;
+                world_matrix[5] = (*(lightMatrix + 5)) * lightY;
 
-                shadeMatrix[6] = (*(lightMatrix + 6)) * lightZ;
-                shadeMatrix[7] = (*(lightMatrix + 7)) * lightZ;
-                shadeMatrix[8] = (*(lightMatrix + 8)) * lightZ;
+                world_matrix[6] = (*(lightMatrix + 6)) * lightZ;
+                world_matrix[7] = (*(lightMatrix + 7)) * lightZ;
+                world_matrix[8] = (*(lightMatrix + 8)) * lightZ;
 
                 do { // for each normal
                     int16 col1;
@@ -1846,9 +1856,9 @@ int32 renderAnimatedModel(uint8 *bodyPtr) {
                     col2 = *((int16*)colPtr++);
                     col3 = *((int16*)colPtr++);
 
-                    color =  shadeMatrix[0] * col1 + shadeMatrix[1] * col2 + shadeMatrix[2] * col3;
-                    color += shadeMatrix[3] * col1 + shadeMatrix[4] * col2 + shadeMatrix[5] * col3;
-                    color += shadeMatrix[6] * col1 + shadeMatrix[7] * col2 + shadeMatrix[8] * col3;
+                    color =  world_matrix[0] * col1 + world_matrix[1] * col2 + world_matrix[2] * col3;
+                    color += world_matrix[3] * col1 + world_matrix[4] * col2 + world_matrix[5] * col3;
+                    color += world_matrix[6] * col1 + world_matrix[7] * col2 + world_matrix[8] * col3;
 
                     shade = 0;
 
@@ -1936,9 +1946,9 @@ int renderIsoModel(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 
     if (isUsingOrhoProjection == 0) {
         getBaseRotationPosition(X, Y, Z);
 
-        renderX = destX - baseRotPosX;
-        renderY = destY - baseRotPosY; // RECHECK
-        renderZ = destZ - baseRotPosZ;
+        renderX = X0 - baseRotPosX;
+        renderY = Y0 - baseRotPosY; // RECHECK
+        renderZ = Z0 - baseRotPosZ;
     } else {
         renderX = X;
         renderY = Y;
@@ -2040,7 +2050,7 @@ void renderBehaviourModel(int32 boxLeft, int32 boxTop, int32 boxRight, int32 box
 
 void renderInventoryItem(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param) { // Draw3DObject
     setCameraPosition(X, Y, 128, 200, 200);
-    setCameraAngle(0, 0, 0, 60, 0, 0, param);
+    camera_set_follow(0, 0, 0, 60, 0, 0, param);
 
     renderIsoModel(0, 0, 0, 0, angle, 0, itemBodyPtr);
 }

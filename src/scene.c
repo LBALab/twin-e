@@ -627,12 +627,12 @@ void processActorZones(int32 actorIdx) {
                 break;
             case kLadder:
                 if (!actorIdx && heroBehaviour != kProtoPack && (actor->anim == kForward || actor->anim == kTopLadder || actor->anim == kClimbLadder)) {
-                    rotateActor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
-                    destX += processActorX;
-                    destZ += processActorZ;
+                    trigo_rotate(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
+                    X0 += processActorX;
+                    Z0 += processActorZ;
 
-                    if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
-                        if (getBrickShape(destX, actor->Y + 0x100, destZ)) {
+                    if (X0 >= 0 && Z0 >= 0 && X0 <= 0x7E00 && Z0 <= 0x7E00) {
+                        if (getBrickShape(X0, actor->Y + 0x100, Z0)) {
                             currentActorInZone = 1;
                             if (actor->Y >= Abs(zone->bottomLeft.Y + zone->topRight.Y) / 2) {
                                 initAnim(kTopLadder, 2, 0, actorIdx); // reached end of ladder

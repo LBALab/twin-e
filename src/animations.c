@@ -757,11 +757,11 @@ void processAnimActions(int32 actorIdx) {
                     strength = readByte(data);
 
                     if (animPos == actor->animPosition) {
-                        rotateActor(distanceX, distanceZ, actor->angle);
+                        trigo_rotate(distanceX, distanceZ, actor->angle);
 
-                        throwX = destX + actor->X;
+                        throwX = X0 + actor->X;
                         throwY = distanceY + actor->Y;
-                        throwZ = destZ + actor->Z;
+                        throwZ = Z0 + actor->Z;
 
                         addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx,
                                       param1, param2 + actor->angle, param3, param4, strength);
@@ -792,11 +792,11 @@ void processAnimActions(int32 actorIdx) {
                     if (animPos == actor->animPosition) {
                         newAngle = getAngleAndSetTargetActorDistance(actor->Y, 0, sceneHero->Y, getDistance2D(actor->X, actor->Z, sceneHero->X, sceneHero->Z));
 
-                        rotateActor(distanceX, distanceZ, actor->angle);
+                        trigo_rotate(distanceX, distanceZ, actor->angle);
 
-                        throwX = destX + actor->X;
+                        throwX = X0 + actor->X;
                         throwY = distanceY + actor->Y;
-                        throwZ = destZ + actor->Z;
+                        throwZ = Z0 + actor->Z;
 
                         addExtraThrow(actorIdx, throwX, throwY, throwZ, spriteIdx,
                                       param1 + newAngle, param2 + actor->angle, param3, param4, strength);
@@ -818,8 +818,8 @@ void processAnimActions(int32 actorIdx) {
                     param4 = readByte(data);
 
                     if (animPos == actor->animPosition) {
-                        rotateActor( distanceX, distanceZ, actor->angle);
-                        addExtraAiming(actorIdx, actor->X + destX, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx,
+                        trigo_rotate( distanceX, distanceZ, actor->angle);
+                        addExtraAiming(actorIdx, actor->X + X0, actor->Y + distanceY, actor->Z + distanceZ, spriteIdx,
                                        targetActor, param3, param4);
                     }
                 }
@@ -948,14 +948,14 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
                     }
                 }
                 
-                rotateActor(angle, 0, actor->animType);
+                trigo_rotate(angle, 0, actor->animType);
 
-                processActorY = actor->Y - destZ;
+                processActorY = actor->Y - Z0;
 
-                rotateActor(0, destX, actor->angle);
+                trigo_rotate(0, X0, actor->angle);
 
-                processActorX = actor->X + destX;
-                processActorZ = actor->Z + destZ;
+                processActorX = actor->X + X0;
+                processActorZ = actor->Z + Z0;
 
                 setActorAngle(0, actor->speed, 50, &actor->move);
 
@@ -1039,10 +1039,10 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
             actor->angle = (actor->angle + processLastRotationAngle - actor->lastRotationAngle) & 0x3FF;
             actor->lastRotationAngle = processLastRotationAngle;
 
-            rotateActor(currentStepX, currentStepZ, actor->angle);
+            trigo_rotate(currentStepX, currentStepZ, actor->angle);
 
-            currentStepX = destX;
-            currentStepZ = destZ;
+            currentStepX = X0;
+            currentStepZ = Z0;
 
             processActorX = actor->X + currentStepX - actor->lastX;
             processActorY = actor->Y + currentStepY - actor->lastY;
@@ -1168,13 +1168,13 @@ void processActorAnimations(int32 actorIdx) { // DoAnim
 
         // process wall hit while running
         if (causeActorDamage && !actor->dynamicFlags.bIsFalling && !currentlyProcessedActorIdx && heroBehaviour == kAthletic && actor->anim == kForward) {
-            rotateActor(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
+            trigo_rotate(actor->boudingBox.X.bottomLeft, actor->boudingBox.Z.bottomLeft, actor->angle + 0x580);
 
-            destX += processActorX;
-            destZ += processActorZ;
+            X0 += processActorX;
+            Z0 += processActorZ;
 
-            if (destX >= 0 && destZ >= 0 && destX <= 0x7E00 && destZ <= 0x7E00) {
-                if (getBrickShape(destX, processActorY + 0x100, destZ) && config_file.wall_collision == 1) { // avoid wall hit damage
+            if (X0 >= 0 && Z0 >= 0 && X0 <= 0x7E00 && Z0 <= 0x7E00) {
+                if (getBrickShape(X0, processActorY + 0x100, Z0) && config_file.wall_collision == 1) { // avoid wall hit damage
                     addExtraSpecial(actor->X, actor->Y + 1000, actor->Z, kHitStars);
                     initAnim(kBigHit, 2, 0, currentlyProcessedActorIdx);
 

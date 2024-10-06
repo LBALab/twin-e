@@ -22,13 +22,13 @@
 */
 
 #include "holomap.h"
+#include "platform.h"
 #include "gamestate.h"
 #include "lbaengine.h"
 #include "screens.h"
 #include "scene.h"
 #include "sample.h"
 #include "interface.h"
-#include "platform.h"
 #include "renderer.h"
 #include "text.h"
 #include "resources.h"
@@ -47,7 +47,8 @@
 #define X_CENTRE_TRAJ_HOLO 320 + 80
 #define Y_CENTRE_TRAJ_HOLO 240
 
-typedef struct holomap_pos_s {
+typedef struct holomap_pos_s
+{
     int16 alpha;
     int16 beta;
     int16 size;
@@ -71,15 +72,15 @@ uint16 *holomap_tri_ptr;
 uint8 *holomap_trajectory_ptr;
 uint8 *holomap_last_ptr;
 
-void setHolomapPosition(int32 locationIdx)
+void setHolomapPosition(int32 location_index)
 {
-    holomapFlags[locationIdx] = 0x81;
+    holomap_flags[location_index] = 0x81;
 }
 
-void clearHolomapPosition(int32 locationIdx)
+void clearHolomapPosition(int32 location_index)
 {
-    holomapFlags[locationIdx] &= 0x7E;
-    holomapFlags[locationIdx] |= 0x40;
+    holomap_flags[location_index] &= 0x7E;
+    holomap_flags[location_index] |= 0x40;
 }
 
 void holomap_patch_object(uint8 *body_ptr)
@@ -161,7 +162,41 @@ int32 z_sort(const void *a, const void *b)
 }
 
 void holomap_compute_coor_planet()
-{ // TODO
+{
+    int16 alpha, beta;
+    uint16 *ptrc;
+    uint8 *mptrv, *ptrv;
+    int16 x, y;
+    int16 normal;
+
+    ptrc = holomap_planet_coord_ptr;
+    ptrv = holomap_surface_ptr;
+
+    camera_set_angle(0, 0, 0);
+
+    for (alpha = -256; alpha <= 256; alpha += STEP_ANGLE) {
+        mptrv = ptrv;
+        for (beta = 0; beta < 1024; beta += STEP_ANGLE) {
+            normal = 1000 + *ptrv++ * 2;
+            trigo_rotate(normal, 0, alpha);
+            x = X0;
+            y = Y0;
+            trigo_rotate(x, 0, beta);
+            trigo_world_rotate_point(X0, y, Y0);
+            *ptrc++ = X0;
+            *ptrc++ = Y0;
+            *ptrc++ = Z0;
+        }
+        trigo_rotate(1000 + *mptrv * 2, 0, alpha);
+        x = X0;
+        y = Y0;
+        trigo_rotate(x, 0, 0); //...
+        trigo_world_rotate_point(X0, y, Y0);
+
+        *ptrc++ = X0;
+        *ptrc++ = Y0;
+        *ptrc++ = Z0;
+    }
 }
 
 void loadHolomapGFX()
@@ -196,14 +231,16 @@ void loadHolomapGFX()
     loadCustomPalette(RESSHQR_HOLOPAL);
 
     j = 576;
-    for (i = 0; i < 96; i += 3, j += 3) {
+    for (i = 0; i < 96; i += 3, j += 3)
+    {
         paletteHolomap[i] = palette[j];
         paletteHolomap[i + 1] = palette[j + 1];
         paletteHolomap[i + 2] = palette[j + 2];
     }
 
     j = 576;
-    for (i = 96; i < 189; i += 3, j += 3) {
+    for (i = 96; i < 189; i += 3, j += 3)
+    {
         paletteHolomap[i] = palette[j];
         paletteHolomap[i + 1] = palette[j + 1];
         paletteHolomap[i + 2] = palette[j + 2];

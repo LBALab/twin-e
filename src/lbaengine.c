@@ -244,12 +244,12 @@ int32 runGameEngine() { // mainLoopInteration
             case kiPinguin: {
                 ActorStruct *pinguin = &sceneActors[mecaPinguinIdx];
                 
-                pinguin->X = destX + sceneHero->X;
+                pinguin->X = X0 + sceneHero->X;
                 pinguin->Y = sceneHero->Y;
-                pinguin->Z = destZ + sceneHero->Z;
+                pinguin->Z = Z0 + sceneHero->Z;
                 pinguin->angle = sceneHero->angle;
 
-                rotateActor(0, 800, pinguin->angle);
+                trigo_rotate(0, 800, pinguin->angle);
 
                 if (!checkCollisionWithActors(mecaPinguinIdx)) {
                     pinguin->life = 50;

@@ -39,9 +39,9 @@ extern int32 orthoProjX; // setSomethingVar1
 extern int32 orthoProjY; // setSomethingVar2
 extern int32 orthoProjZ; // setSomethingVar2
 
-extern int32 destX;
-extern int32 destY;
-extern int32 destZ;
+extern int32 X0;
+extern int32 Y0;
+extern int32 Z0;
 
 extern int16 *shadeAngleTab3; // tab3
 
@@ -60,10 +60,13 @@ void prepareIsoModel(uint8 *bodyPtr); // loadGfxSub
 
 int32 projectPositionOnScreen(int32 cX, int32 cY, int32 cZ);
 void setCameraPosition(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
-void setCameraAngle(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6);
+void camera_set_follow(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6);
 void setBaseTranslation(int32 X, int32 Y, int32 Z);
-void setBaseRotation(int32 X, int32 Y, int32 Z);
+void camera_set_angle(int32 X, int32 Y, int32 Z);
 void setOrthoProjection(int32 X, int32 Y, int32 Z);
+
+void trigo_rotate(int32 X, int32 Z, int32 angle);
+void trigo_world_rotate_point(int32 X, int32 Y, int32 Z);
 
 int32 renderIsoModel(int32 X, int32 Y, int32 Z, int32 angleX, int32 angleY, int32 angleZ, uint8 *bodyPtr);
 
