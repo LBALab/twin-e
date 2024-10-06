@@ -40,14 +40,8 @@
 #define HIGH_QUALITY_FREQUENCY		44100
 
 
-struct sample_s {
-    int32 channel;
-    int32 channelIdx;
-    SDL_RWops *rw;
-    Mix_Chunk *chunk;
-} sample;
+Mix_Chunk *chunk;
 
-// struct samples_s sample;
 
 void platform_mixer_init(int32 sound_config) {
     int32 freq = ORIGINAL_GAME_FREQUENCY;
@@ -81,17 +75,17 @@ inline void platform_mixer_set_distance(int32 channel_index, int32 distance) {
 
 inline void platform_mixer_load(uint8 *sample_ptr, int32 samples_size) {
     SDL_RWops *rw = SDL_RWFromMem(sample_ptr, samples_size);
-    sample.chunk = Mix_LoadWAV_RW(rw, 1);
+    chunk = Mix_LoadWAV_RW(rw, 1);
 }
 
 inline void platform_mixer_free() {
-    Mix_FreeChunk(sample.chunk);
-    sample.chunk = NULL;
+    Mix_FreeChunk(chunk);
+    chunk = NULL;
 }
 
 int32 platform_mixer_play(uint8 *sample_ptr, int32 samples_size, int32 channel_index, int32 repeat) {
     platform_mixer_load(sample_ptr, samples_size);
-    return Mix_PlayChannel(channel_index, sample.chunk, 0);
+    return Mix_PlayChannel(channel_index, chunk, 0);
 }
 
 inline void platform_mixer_resume() {
