@@ -45,7 +45,7 @@ void loadGfxSub1();
 void loadGfxSub2();
 
 /** Load Holomap content */
-void loadHolomapGFX();
+void holomap_init();
 
 /** Main holomap process loop */
 void holomap_run();

@@ -59,7 +59,7 @@ void renderPolygons(int32 ecx, int32 edi);
 void prepareIsoModel(uint8 *bodyPtr); // loadGfxSub
 
 int32 projectPositionOnScreen(int32 cX, int32 cY, int32 cZ);
-void setCameraPosition(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
+void camera_set_projection(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ);
 void camera_set_follow(int32 transPosX, int32 transPosY, int32 transPosZ, int32 rotPosX, int32 rotPosY, int32 rotPosZ, int32 param6);
 void setBaseTranslation(int32 X, int32 Y, int32 Z);
 void camera_set_angle(int32 X, int32 Y, int32 Z);

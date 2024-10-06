@@ -521,7 +521,7 @@ void processGameoverAnimation() { // makeGameOver
         prepareIsoModel(gameOverPtr);
         sample_stop_all();
         music_stop_midi(); // stop fade music
-        setCameraPosition(320, 240, 128, 200, 200);
+        camera_set_projection(320, 240, 128, 200, 200);
         startLbaTime = lbaTime;
         setClip(120, 120, 519, 359);
         

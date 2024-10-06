@@ -52,7 +52,7 @@ typedef struct holomap_pos_s
     int16 alpha;
     int16 beta;
     int16 size;
-    int16 mess;
+    int16 text_index;
 } holomap_pos_t;
 
 int32 needToLoadHolomapGFX = 0;
@@ -174,9 +174,11 @@ void holomap_compute_coor_planet()
 
     camera_set_angle(0, 0, 0);
 
-    for (alpha = -256; alpha <= 256; alpha += STEP_ANGLE) {
+    for (alpha = -256; alpha <= 256; alpha += STEP_ANGLE)
+    {
         mptrv = ptrv;
-        for (beta = 0; beta < 1024; beta += STEP_ANGLE) {
+        for (beta = 0; beta < 1024; beta += STEP_ANGLE)
+        {
             normal = 1000 + *ptrv++ * 2;
             trigo_rotate(normal, 0, alpha);
             x = X0;
@@ -199,7 +201,7 @@ void holomap_compute_coor_planet()
     }
 }
 
-void loadHolomapGFX()
+void holomap_init()
 {
     int32 i;
     int32 j;
@@ -278,47 +280,83 @@ void holomap_draw_title(int32 x, int32 y)
 }
 
 void holomap_draw_trajectory(int32 trajectoryIndex)
-{ // TODO
+{
+    // TODO
 }
 
 void holomap_run()
-{ // TODO
+{
+    int16 c, n;
+    int32 y, x = 15;
+    int16 zoom = 22000;
+    int16 calpha = -256, cbeta = 0, cgamma = 0;
     int32 alphaLightTmp;
     int32 betaLightTmp;
+    uint8 save_palette[NUMOFCOLORS * 4];
+    uint16 *ptr, *ptrc;
+    uint8 *mptrv, *ptrv;
+    int16 flagredraw;
+    int16 flagpal = 1;
+    int16 dialstat = 3;
+    int16 menumode = 0;
+    int16 flagrebond = 0;
+    int16 redrawmenu = 1;
+    int32 automove = 0;
+    int32 otimer;
+    int16 oalpha, obeta;
+    int16 dalpha, dbeta;
+    int32 current = -1;
+    int32 text_index = -1;
+    int32 memoflagspeak;
 
     freezeTime();
 
-    // TODO memcopy palette
+    for (n = 0; n < NUMOFCOLORS * 4; n++) {
+        save_palette[n] = paletteRGBACustom[n];
+    }
 
     alphaLightTmp = alphaLight;
     betaLightTmp = betaLight;
 
     fadeToBlack(paletteRGBA);
     sample_stop_all();
+
     resetClip();
     clearScreen();
     platform_flip();
     copyScreen(frontVideoBuffer, workVideoBuffer);
 
-    loadHolomapGFX();
+    holomap_init();
     holomap_draw_title(320, 25);
-    setCameraPosition(320, 190, 128, 1024, 1024);
+    camera_set_projection(320, 190, 128, 1024, 1024);
 
     config_file.language_cd_id = 0;
     initTextBank(2);
     setFontCrossColor(9);
 
-    // TODO
+    text_index = holomap_position_ptr[currentSceneIdx].text_index;
 
     newGameVar4 = 1;
     fadeToBlack(paletteRGBA);
+
+    dalpha = holomap_position_ptr[currentSceneIdx].alpha;
+    dbeta = holomap_position_ptr[currentSceneIdx].beta;
+    calpha = oalpha = dalpha;
+	cbeta = obeta = dbeta;
+	automove = 0;
+
+    //TODO
+
+
     alphaLight = alphaLightTmp;
     betaLight = betaLightTmp;
     initEngineVars(0);
 
     initTextBank(currentTextBank + 3);
 
-    // TODO memcopy reset palette
+    for (n = 0; n < NUMOFCOLORS * 4; n++) {
+        paletteRGBACustom[n] = save_palette[n];
+    }
 
     unfreezeTime();
 }

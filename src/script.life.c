@@ -1457,7 +1457,7 @@ int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
     platform_flip();
     changeRoomVar10 = 0;
 
-    setCameraPosition(320, 240, 128, 1024, 1024);
+    camera_set_projection(320, 240, 128, 1024, 1024);
     camera_set_follow(0, 1500, 0, 25, -128, 0, 13000);
     setLightVector(896, 950, 0);
 

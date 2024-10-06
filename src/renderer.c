@@ -288,7 +288,7 @@ int32 projectPositionOnScreen(int32 cX, int32 cY, int32 cZ) {
     return 1;
 }
 
-void setCameraPosition(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ) {
+void camera_set_projection(int32 X, int32 Y, int32 cX, int32 cY, int32 cZ) {
     orthoProjX = X;
     orthoProjY = Y;
 
@@ -2049,7 +2049,7 @@ void renderBehaviourModel(int32 boxLeft, int32 boxTop, int32 boxRight, int32 box
 }
 
 void renderInventoryItem(int32 X, int32 Y, uint8* itemBodyPtr, int32 angle, int32 param) { // Draw3DObject
-    setCameraPosition(X, Y, 128, 200, 200);
+    camera_set_projection(X, Y, 128, 200, 200);
     camera_set_follow(0, 0, 0, 60, 0, 0, param);
 
     renderIsoModel(0, 0, 0, 0, angle, 0, itemBodyPtr);
