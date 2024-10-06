@@ -184,7 +184,7 @@ int32 runGameEngine() { // mainLoopInteration
             
             switch (loopInventoryItem) {
             case kiHolomap:
-                processHolomap();
+                holomap_run();
                 lockPalette = 1;
                 printf("TODO: Use Inventory [kiHolomap] not implemented!\n");
                 break;
@@ -335,7 +335,7 @@ int32 runGameEngine() { // mainLoopInteration
         {
           freezeTime();
           //TestRestoreModeSVGA(1);
-          processHolomap();
+          holomap_run();
           lockPalette = 1;
           unfreezeTime();
           redrawEngineActions(1);

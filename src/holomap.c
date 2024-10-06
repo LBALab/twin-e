@@ -3,7 +3,7 @@
     This file contains holomap routines
 
     TwinEngine: a Little Big Adventure engine
-    
+
     Copyright (C) 2002 The TwinEngine team
 
     This program is free software; you can redistribute it and/or
@@ -33,76 +33,165 @@
 #include "text.h"
 #include "resources.h"
 
+#define STEP_ANGLE 32
+#define SLIG (((1024 / STEP_ANGLE) + 1) * 4)
+#define SIZE_TEXT_PLANET (((1024 / STEP_ANGLE) + 1) * ((512 / STEP_ANGLE) + 1) * 4 * 2)
+#define SIZE_COOR_PLANET (((1024 / STEP_ANGLE) + 1) * ((512 / STEP_ANGLE) + 1) * 3 * 2)
+#define SIZE_MAP_SURFACE ((1024 / STEP_ANGLE) * ((512 / STEP_ANGLE) + 1))
+
+#define X_CENTRE_BIG_HOLO 320
+#define Y_CENTRE_BIG_HOLO 190
+#define WIDTH_BIG_HOLO 300
+#define HEIGHT_BIG_HOLO 280
+#define ZOOM_BIG_HOLO 9500
+#define X_CENTRE_TRAJ_HOLO 320 + 80
+#define Y_CENTRE_TRAJ_HOLO 240
+
+typedef struct holomap_pos_s {
+    int16 alpha;
+    int16 beta;
+    int16 size;
+    int16 mess;
+} holomap_pos_t;
+
 int32 needToLoadHolomapGFX = 0;
 uint8 paletteHolomap[NUMOFCOLORS * 3];
 
-uint8 *videoPtr1;
-uint8 *videoPtr2;
-uint8 *videoPtr3;
-uint8 *videoPtr4;
-uint8 *videoPtr5;
-uint8 *videoPtr6;
-uint8 *videoPtr7;
-uint8 *videoPtr8;
+uint16 *holomap_planet_ptr;
+uint16 *holomap_planet_coord_ptr;
+uint8 *holomap_surface_ptr;
+uint8 *holomap_map_ptr;
+uint8 *holomap_planet_body_ptr;
+uint8 *holomap_arrow_ptr;
+uint8 *holomap_arrow_body_ptr;
+uint8 *holomap_cone_ptr;
 uint8 *videoPtr9;
-uint8 *videoPtr10;
-uint8 *videoPtr11;
-uint8 *videoPtr12;
-uint8 *videoPtr13;
+holomap_pos_t *holomap_position_ptr;
+uint16 *holomap_tri_ptr;
+uint8 *holomap_trajectory_ptr;
+uint8 *holomap_last_ptr;
 
-
-void setHolomapPosition(int32 locationIdx) {
+void setHolomapPosition(int32 locationIdx)
+{
     holomapFlags[locationIdx] = 0x81;
 }
 
-void clearHolomapPosition(int32 locationIdx) {
-    holomapFlags[locationIdx] &= 0x7E; 
+void clearHolomapPosition(int32 locationIdx)
+{
+    holomapFlags[locationIdx] &= 0x7E;
     holomapFlags[locationIdx] |= 0x40;
 }
 
+void holomap_patch_object(uint8 *body_ptr)
+{
+    int16 flags;
+    flags = *(int16 *)(body_ptr);
 
-void patchObject(uint8* modelPtr) { // TODO
+    if (flags & 2)
+    { // only patch animated models
+        uint8 *ptr = (uint8 *)body_ptr;
+        int16 data_offset = *(int16 *)(ptr + 14);
+        int16 num_groups;
+        int16 num_points;
 
+        ptr += data_offset + 16;
+
+        num_points = *(int16 *)(ptr);
+        ptr += 2 + (num_points * 6);
+
+        num_groups = *(int16 *)(ptr);
+        ptr += 2;
+
+        for (; num_groups > 0; --num_groups)
+        {
+            ptr += 38;
+            *(int16 *)(ptr + 6) = (*(int16 *)(ptr + 6) * 36) / 38;
+        }
+    }
 }
 
-
-void computeCoorMapping() { // TODO
-
+int32 rule_of_three(int32 val1, int32 val2, int32 nbstep, int32 step)
+{
+    if (nbstep < 0)
+    {
+        return val2;
+    }
+    return (((val2 - val1) * step) / nbstep) + val1;
 }
 
+void holomap_compute_coor_mapping()
+{
+    int16 alpha, beta;
+    uint16 *ptr;
 
-void computeCoorGlobe() { // TODO
+    ptr = holomap_planet_ptr;
 
+    for (alpha = -256; alpha <= 256; alpha += STEP_ANGLE)
+    {
+        for (beta = 0; beta < 1024; beta += STEP_ANGLE)
+        {
+            ptr += 2;
+            *ptr++ = (uint16)rule_of_three(0, 255 * 256 + 255, 1023, beta);
+            if (alpha == 256)
+            {
+                *ptr++ = 256 * 255 + 255;
+            }
+            else
+            {
+                *ptr++ = (uint16)(((alpha + 256) * 256) / 2);
+            }
+        }
+
+        ptr += 2;
+        *ptr++ = 255 * 256 + 255;
+        if (alpha == 256)
+        {
+            *ptr++ = 256 * 255 + 255;
+        }
+        else
+        {
+            *ptr++ = (uint16)(((alpha + 256) * 256) / 2);
+        }
+    }
 }
 
-void loadHolomapGFX() { // TODO
+int32 z_sort(const void *a, const void *b)
+{
+    return (*(int16 *)a - *(int16 *)b);
+}
+
+void holomap_compute_coor_planet()
+{ // TODO
+}
+
+void loadHolomapGFX()
+{
     int32 i;
     int32 j;
 
-    videoPtr1 = workVideoBuffer;
-    videoPtr2 = workVideoBuffer + 4488;
-    videoPtr3 = workVideoBuffer + 7854;
-    videoPtr4 = workVideoBuffer + 8398;
+    holomap_planet_ptr = (uint16 *)workVideoBuffer;
+    holomap_planet_coord_ptr = (uint16 *)workVideoBuffer + SIZE_TEXT_PLANET;
+    holomap_surface_ptr = workVideoBuffer + SIZE_TEXT_PLANET + SIZE_COOR_PLANET;
+    holomap_map_ptr = workVideoBuffer + SIZE_TEXT_PLANET + SIZE_COOR_PLANET + SIZE_MAP_SURFACE;
 
-    videoPtr5 = workVideoBuffer + 73934;
+    holomap_planet_body_ptr = workVideoBuffer + SIZE_TEXT_PLANET + SIZE_COOR_PLANET + SIZE_MAP_SURFACE + 65536;
 
-    hqr_get_entry(videoPtr3, HQR_RESS_FILE, RESSHQR_HOLOSURFACE);
-    hqr_get_entry(videoPtr4, HQR_RESS_FILE, RESSHQR_HOLOIMG);
+    hqr_get_entry(holomap_surface_ptr, HQR_RESS_FILE, RESSHQR_HOLOSURFACE);
+    hqr_get_entry(holomap_map_ptr, HQR_RESS_FILE, RESSHQR_HOLOIMG);
 
-    videoPtr6 = videoPtr5 + hqr_get_entry(videoPtr5, HQR_RESS_FILE, RESSHQR_HOLOTWINMDL);
-    videoPtr7 = videoPtr6 + hqr_get_entry(videoPtr6, HQR_RESS_FILE, RESSHQR_HOLOARROWMDL);
-    videoPtr8 = videoPtr7 + hqr_get_entry(videoPtr7, HQR_RESS_FILE, RESSHQR_HOLOTWINARROWMDL);
-    videoPtr11 = videoPtr8 + hqr_get_entry(videoPtr8, HQR_RESS_FILE, RESSHQR_HOLOPOINTMDL);
+    holomap_arrow_ptr = holomap_planet_body_ptr + hqr_get_entry(holomap_planet_body_ptr, HQR_RESS_FILE, RESSHQR_HOLOTWINMDL);
+    holomap_arrow_body_ptr = holomap_arrow_ptr + hqr_get_entry(holomap_arrow_ptr, HQR_RESS_FILE, RESSHQR_HOLOARROWMDL);
+    holomap_cone_ptr = holomap_arrow_body_ptr + hqr_get_entry(holomap_arrow_body_ptr, HQR_RESS_FILE, RESSHQR_HOLOTWINARROWMDL);
+    holomap_tri_ptr = (uint16 *)holomap_cone_ptr + hqr_get_entry(holomap_cone_ptr, HQR_RESS_FILE, RESSHQR_HOLOPOINTMDL);
 
-    patchObject(videoPtr5);
-    patchObject(videoPtr6);
-    patchObject(videoPtr7);
+    holomap_patch_object(holomap_planet_body_ptr);
+    holomap_patch_object(holomap_arrow_ptr);
+    holomap_patch_object(holomap_arrow_body_ptr);
+    holomap_patch_object(holomap_cone_ptr);
 
-    patchObject(videoPtr8);
-
-    videoPtr10 = videoPtr11 + 4488;
-    videoPtr12 = videoPtr10 + hqr_get_entry(videoPtr10, HQR_RESS_FILE, RESSHQR_HOLOARROWINFO);
-    videoPtr13 = videoPtr12 + hqr_get_entry(videoPtr12, HQR_RESS_FILE, RESSHQR_HOLOPOINTANIM);
+    holomap_position_ptr = (holomap_pos_t *)holomap_tri_ptr + 4488;
+    holomap_trajectory_ptr = (uint8 *)holomap_position_ptr + hqr_get_entry((uint8 *)holomap_position_ptr, HQR_RESS_FILE, RESSHQR_HOLOARROWINFO);
+    holomap_last_ptr = holomap_trajectory_ptr + hqr_get_entry(holomap_trajectory_ptr, HQR_RESS_FILE, RESSHQR_HOLOPOINTANIM);
 
     loadCustomPalette(RESSHQR_HOLOPAL);
 
@@ -120,41 +209,43 @@ void loadHolomapGFX() { // TODO
         paletteHolomap[i + 2] = palette[j + 2];
     }
 
-    computeCoorMapping();
-    computeCoorGlobe();
+    holomap_compute_coor_mapping();
+    holomap_compute_coor_planet();
 
-    needToLoadHolomapGFX=0;
+    needToLoadHolomapGFX = 0;
 }
 
-void drawHolomapTitle(int32 x, int32 y) {
-    int8	string[256] ;
+void holomap_draw_title(int32 x, int32 y)
+{
+    int8 string[256];
 
-    strcpy( (char*)string, "HoloMap" ) ;
+    strcpy((char *)string, "HoloMap");
 
-    x -= (int16)(getTextSize( string )/2) ;
-    y -= 18 ;
+    x -= (int16)(getTextSize(string) / 2);
+    y -= 18;
 
-    setFontColor( 12*16+10 ) ;
-    drawText( x-1, y-1, string ) ;
-    drawText( x  , y-1, string ) ;
-    drawText( x+1, y-1, string ) ;
+    setFontColor(12 * 16 + 10);
+    drawText(x - 1, y - 1, string);
+    drawText(x, y - 1, string);
+    drawText(x + 1, y - 1, string);
 
-    drawText( x-1, y+1, string ) ;
-    drawText( x  , y+1, string ) ;
-    drawText( x+1, y+1, string ) ;
+    drawText(x - 1, y + 1, string);
+    drawText(x, y + 1, string);
+    drawText(x + 1, y + 1, string);
 
-    drawText( x-1, y , string ) ;
-    drawText( x+1, y , string ) ;
+    drawText(x - 1, y, string);
+    drawText(x + 1, y, string);
 
-    setFontColor( 15 ) ;
-    drawText( x  , y, string ) ;
+    setFontColor(15);
+    drawText(x, y, string);
 }
 
-void drawHolomapTrajectory(int32 trajectoryIndex) { // TODO
-    
+void holomap_draw_trajectory(int32 trajectoryIndex)
+{ // TODO
 }
 
-void processHolomap() { // TODO
+void holomap_run()
+{ // TODO
     int32 alphaLightTmp;
     int32 betaLightTmp;
 
@@ -173,7 +264,7 @@ void processHolomap() { // TODO
     copyScreen(frontVideoBuffer, workVideoBuffer);
 
     loadHolomapGFX();
-    drawHolomapTitle(320, 25);
+    holomap_draw_title(320, 25);
     setCameraPosition(320, 190, 128, 1024, 1024);
 
     config_file.language_cd_id = 0;
