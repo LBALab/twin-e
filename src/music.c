@@ -25,230 +25,133 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <SDL/SDL.h>
-#ifndef MACOSX
-#include <SDL/SDL_mixer.h>
-#else
-#include <SDL_mixer/SDL_mixer.h>
-#endif
-
 #include "music.h"
-#include "main.h"
+#include "platform_mixer.h"
 #include "platform.h"
+#include "utils/xmidi.h"
 #include "hqr.h"
 #include "resources.h"
-#include "utils/xmidi.h"
+#include "main.h"
 
-/** MP3 music folder */
+
 #define MUSIC_FOLDER	"music"
-/** LBA1 default number of tracks */
-#define NUM_CD_TRACKS	10
-/** Number of miliseconds to fade music */
 #define FADE_MS			500
 
-/** SDL CD variable interface */
-SDL_CD *cdrom;
-/** CD drive letter */
-const int8 *cdname;
 
-/** Track number of the current playing music */
-int32 currentMusic;
-
-/** SDL_Mixer track variable interface */
-Mix_Music *current_track;
-
-/** Auxiliar midi pointer to  */
-uint8 * midiPtr;
+int32 music_index;
+uint8 * midi_ptr;
 
 
-/** Music volume
-    @param current volume number */
-void musicVolume(int32 volume) {
-    // div 2 because LBA use 255 range and SDL_mixer use 128 range
-    Mix_VolumeMusic(volume / 2);
+void music_volume(int32 volume) {
+    platform_mixer_music_volume(volume);
 }
 
-/** Fade music in
-    @param loops number of*/
-void musicFadeIn(int32 loops, int32 ms) {
-    Mix_FadeInMusic(current_track, loops, ms);
-    musicVolume(config_file.music_volume);
+void music_fade_in(int32 loops, int32 ms) {
+    platform_mixer_music_fade_in(loops, ms);
+    music_volume(config_file.music_volume);
 }
 
-/** Fade music out
-    @param ms number of miliseconds to fade*/
-void musicFadeOut(int32 ms) {
-    while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
-        platform_delay(100);
-    }
-    Mix_HaltMusic();
-    Mix_RewindMusic();
-    musicVolume(config_file.music_volume);
+void music_fade_out(int32 ms) {
+    platform_mixer_music_fade_out(ms);
+    music_volume(config_file.music_volume);
 }
 
-
-/** Play CD music
-    @param track track number to play */
-void playTrackMusicCd(int32 track) {
+void music_play_cd_track(int32 track) {
     if (!config_file.use_cd) {
         return;
     }
-
-    if (cdrom->numtracks == 10) {
-        if (CD_INDRIVE(SDL_CDStatus(cdrom)))
-            SDL_CDPlayTracks(cdrom, track, 0, 1, 0);
-    }
+    platform_mixer_play_cd_track(track);
 }
 
-/** Stop CD music */
-void stopTrackMusicCd() {
+void music_play_track(int32 track) {
+    if (!config_file.sound) {
+        return;
+    }
+    if (track == music_index) {
+        return;
+    }
+    music_index = track;
+    music_stop();
+    music_play_cd_track(track);
+}
+
+void music_stop_cd_track() {
     if (!config_file.use_cd) {
         return;
     }
-
-    if (cdrom != NULL) {
-        SDL_CDStop(cdrom);
-    }
+    platform_mixer_stop_cd_track();
 }
 
-/** Generic play music, according with settings it plays CD or MP3 instead
-    @param track track number to play */
-void playTrackMusic(int32 track) {
+void music_stop_track() {
     if (!config_file.sound) {
         return;
     }
-    
-    if (track == currentMusic)
-        return;
-    currentMusic = track;
-
-    stopMusic();
-    playTrackMusicCd(track);
+    music_fade_out(FADE_MS);
+    music_stop_cd_track();
 }
 
-/** Generic stop music according with settings */
-void stopTrackMusic() {
-    if (!config_file.sound) {
-        return;
-    }
-    
-    musicFadeOut(FADE_MS);
-    stopTrackMusicCd();
-}
-
-/** Play MIDI music
-    @param midiIdx music index under mini_mi_win.hqr*/
-void playMidiMusic(int32 midiIdx, int32 loop) {
+void music_play_midi(int32 midi_index, int32 loop) {
     uint8* dos_midi_ptr;
-    int32 midiSize;
+    int32 midi_size;
     int8 filename[256];
-    SDL_RWops *rw;
 
     if (!config_file.sound) {
         return;
     }
-
-    if (midiIdx == currentMusic) {
+    if (midi_index == music_index) {
         return;
     }
 
-    stopMusic();
-    currentMusic = midiIdx;
+    music_stop();
+    music_index = midi_index;
 
-    if (config_file.midi_type == 0)
+    if (config_file.midi_type == 0) {
         sprintf(filename, "%s", HQR_MIDI_MI_DOS_FILE);
-    else
+    } else {
         sprintf(filename, "%s", HQR_MIDI_MI_WIN_FILE);
-
-    if (midiPtr) {
-        musicFadeOut(FADE_MS / 2);
-        stopMidiMusic();
     }
 
-    midiSize = hqr_get_entry_alloc(&midiPtr, filename, midiIdx);
+    if (midi_ptr) {
+        music_fade_out(FADE_MS / 2);
+        music_stop_midi();
+    }
+
+    midi_size = hqr_get_entry_alloc(&midi_ptr, filename, midi_index);
 
     if (config_file.sound == 1 && config_file.midi_type == 0) {
-        midiSize = convert_to_midi(midiPtr, midiSize, &dos_midi_ptr);
-        free(midiPtr);
-        midiPtr = dos_midi_ptr;
+        midi_size = convert_to_midi(midi_ptr, midi_size, &dos_midi_ptr);
+        free(midi_ptr);
+        midi_ptr = dos_midi_ptr;
     }
 
-    rw = SDL_RWFromMem(midiPtr, midiSize);
+    music_fade_in(1, FADE_MS);
+    music_volume(config_file.music_volume);
 
-    current_track = Mix_LoadMUS_RW(rw);
-
-    musicFadeIn(1, FADE_MS);
-
-    musicVolume(config_file.music_volume);
-
-    if (Mix_PlayMusic(current_track, loop) == -1)
-        printf("Error while playing music: %d \n", midiIdx);
+    if (platform_mixer_play_music(midi_ptr, midi_size, loop) == -1) {
+        printf("Error while playing music: %d \n", midi_index);
+    }
 }
 
-/** Stop MIDI music */
-void stopMidiMusic() {
+void music_stop_midi() {
     if (!config_file.sound) {
         return;
     }
-    
-    if (current_track != NULL) {
-        Mix_FreeMusic(current_track);
-        current_track = NULL;
-        if (midiPtr != NULL)
-            free(midiPtr);
+    if(platform_mixer_free_music()) {
+        if (midi_ptr != NULL) {
+            free(midi_ptr);
+        }
     }
 }
 
-/** Initialize CD-Rom */
-int initCdrom() {
-    int32 numOfCDROM;
-    int32 cdNum;
-
+int32 music_init_cdrom() {
     if (!config_file.sound) {
         return 0;
     }
-
-    numOfCDROM = SDL_CDNumDrives();
-    
-    if (config_file.debug)
-        printf("Found %d CDROM devices\n", numOfCDROM);
-
-    if (!numOfCDROM) {
-        fprintf(stderr, "No CDROM devices available\n");
-        return 0;
-    }
-
-    for (cdNum = 0; cdNum < numOfCDROM; cdNum++) {
-        cdname = SDL_CDName(cdNum);
-        if (config_file.debug)
-            printf("Testing drive %s\n", cdname);
-        cdrom = SDL_CDOpen(cdNum);
-        if (!cdrom) {
-            if (config_file.debug)
-                fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError());
-        } else {
-            SDL_CDStatus(cdrom);
-            if (cdrom->numtracks == NUM_CD_TRACKS) {
-                printf("Assuming that it is LBA cd... %s\n\n", cdname);
-                cd_directory = "LBA";
-                config_file.use_cd = 1;
-                return 1;
-            }
-        }
-        // not found the right CD
-        config_file.use_cd = 0;
-        SDL_CDClose(cdrom);
-    }
-
-    cdrom = NULL;
-
-    printf("Can't find LBA CD!\n\n");
-
-    return 0;
+    config_file.use_cd = platform_mixer_init_cdrom(config_file.debug);
+    return config_file.use_cd;
 }
 
-/** Stop MIDI and Track music */
-void stopMusic() {
-    stopTrackMusic();
-    stopMidiMusic();
+void music_stop() {
+    music_stop_track();
+    music_stop_midi();
 }

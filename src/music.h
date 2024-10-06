@@ -26,37 +26,23 @@
 
 #include "sys.h"
 
-/** Track number of the current playing music */
-extern int32 currentMusic;
 
-/** Music volume
-    @param current volume number */
-void musicVolume(int32 volume);
-/** Play CD music
-    @param track track number to play */
-void playTrackMusicCd(int32 track);
-/** Stop CD music */
-void stopTrackMusicCd();
-/** Play MP3 music
-    @param track track number to play */
+extern int32 music_index;
+
+
+void music_volume(int32 volume);
+void music_play_cd_track(int32 track);
+void music_stop_cd_track();
+
 void playTrackMusicMp3(int32 track);
-/** Stop MP3 music */
 void stopTrackMusicMp3();
-/** Generic play music, according with settings it plays CD or high quality sounds instead
-    @param track track number to play*/
-void playTrackMusic(int32 track);
-/** Generic stop music according with settings */
-void stopTrackMusic();
-/** Play MIDI music
-    @param midiIdx music index under mini_mi_win.hqr*/
-void playMidiMusic(int32 midiIdx, int32 loop);
-/** Stop MIDI music */
-void stopMidiMusic();
 
-/** Initialize CD-Rom */
-int32 initCdrom();
+void music_play_midi(int32 midiIdx, int32 loop);
+void music_stop_midi();
+void music_stop();
 
-/** Stop MIDI and Track music */
-void stopMusic();
+void music_play_track(int32 track);
+void music_stop_track();
+int32 music_init_cdrom();
 
 #endif

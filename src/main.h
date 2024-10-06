@@ -131,8 +131,6 @@ typedef struct config_file_s {
     A detailled information of all types are in \a main.h header file. */
 extern config_file_t config_file;
 
-/** CD Game directory */
-extern int8 * cd_directory;
 
 void init_mcga();
 void init_svga();

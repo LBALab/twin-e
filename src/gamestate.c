@@ -357,7 +357,7 @@ void processFoundItem(int32 item) {
     // process vox play
     {
         int32 tmpLanguageCDId;
-        stopMusic();
+        music_stop();
         tmpLanguageCDId = config_file.language_cd_id;
         //config_file.language_cd_id = 0; // comented so we can init vox bank
         initTextBank(2);
@@ -520,7 +520,7 @@ void processGameoverAnimation() { // makeGameOver
 
         prepareIsoModel(gameOverPtr);
         sample_stop_all();
-        stopMidiMusic(); // stop fade music
+        music_stop_midi(); // stop fade music
         setCameraPosition(320, 240, 128, 200, 200);
         startLbaTime = lbaTime;
         setClip(120, 120, 519, 359);

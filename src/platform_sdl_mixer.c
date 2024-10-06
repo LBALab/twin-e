@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
 #ifndef MACOSX
 #include <SDL/SDL_mixer.h>
 #else
@@ -38,9 +37,15 @@
 
 #define ORIGINAL_GAME_FREQUENCY		11025
 #define HIGH_QUALITY_FREQUENCY		44100
+#define NUM_CD_TRACKS	10
 
 
+// samples
 Mix_Chunk *chunk;
+// music
+SDL_CD *cdrom;
+Mix_Music *current_track;
+const int8 *cd_name;
 
 
 void platform_mixer_init(int32 sound_config) {
@@ -83,7 +88,7 @@ inline void platform_mixer_free() {
     chunk = NULL;
 }
 
-int32 platform_mixer_play(uint8 *sample_ptr, int32 samples_size, int32 channel_index, int32 repeat) {
+int32 platform_mixer_play(uint8 *sample_ptr, int32 samples_size, int32 channel_index, int32 loop) {
     platform_mixer_load(sample_ptr, samples_size);
     return Mix_PlayChannel(channel_index, chunk, 0);
 }
@@ -100,3 +105,93 @@ inline void platform_mixer_pause_channel(int32 channel) {
     Mix_HaltChannel(channel);
 }
 
+void platform_mixer_music_fade_in(int32 loop, int32 ms) {
+    Mix_FadeInMusic(current_track, loop, ms);
+}
+
+void platform_mixer_music_volume(int32 volume) {
+    // div 2 because LBA use 255 range and SDL_mixer use 128 range
+    Mix_VolumeMusic(volume / 2);
+}
+
+void platform_mixer_music_fade_out(int32 ms) {
+    while (!Mix_FadeOutMusic(ms) && Mix_PlayingMusic()) {
+        SDL_Delay(100);
+    }
+    Mix_HaltMusic();
+    Mix_RewindMusic();
+}
+
+inline void platform_mixer_load_music(uint8 *music_ptr, int32 music_size) {
+    SDL_RWops *rw = SDL_RWFromMem(music_ptr, music_size);
+    current_track = Mix_LoadMUS_RW(rw);
+}
+
+int32 platform_mixer_free_music() {
+    if (current_track != NULL) {
+        Mix_FreeMusic(current_track);
+        current_track = NULL;
+        return 1;
+    }
+    return 0;
+}
+
+int32 platform_mixer_play_music(uint8 *music_ptr, int32 music_size, int32 loop) {
+    platform_mixer_load_music(music_ptr, music_size);
+    return Mix_PlayMusic(current_track, loop);
+}
+
+void platform_mixer_play_cd_track(int32 track) {
+    if (cdrom->numtracks == 10) {
+        if (CD_INDRIVE(SDL_CDStatus(cdrom)))
+            SDL_CDPlayTracks(cdrom, track, 0, 1, 0);
+    }
+}
+
+void platform_mixer_stop_cd_track() {
+    if (cdrom != NULL) {
+        SDL_CDStop(cdrom);
+    }
+}
+
+int32 platform_mixer_init_cdrom(int32 config_debug) {
+    int32 num_drives;
+    int32 num_cd;
+
+    num_drives = SDL_CDNumDrives();
+    
+    if (config_debug) {
+        printf("Found %d CDROM devices\n", num_drives);
+    }
+
+    if (!num_drives) {
+        fprintf(stderr, "No CDROM devices available\n");
+        return 0;
+    }
+
+    for (num_cd = 0; num_cd < num_drives; num_cd++) {
+        cd_name = SDL_CDName(num_cd);
+        if (config_debug) {
+            printf("Testing drive %s\n", cd_name);
+        }
+        cdrom = SDL_CDOpen(num_cd);
+        if (!cdrom) {
+            if (config_debug) {
+                fprintf(stderr, "Couldn't open CD drive: %s\n\n", SDL_GetError());
+            }
+        } else {
+            SDL_CDStatus(cdrom);
+            if (cdrom->numtracks == NUM_CD_TRACKS) {
+                printf("Assuming that it is LBA cd... %s\n\n", cd_name);
+                return 1;
+            }
+        }
+        // adeline cd not found
+        SDL_CDClose(cdrom);
+    }
+
+    cdrom = NULL;
+    printf("Can't find LBA CD!\n\n");
+
+    return 0;
+}

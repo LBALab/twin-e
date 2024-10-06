@@ -63,7 +63,7 @@ uint8 mainPaletteRGBA[NUMOFCOLORS * 4];
 
 /** Load and display Adeline Logo */
 void adelineLogo() {
-    playMidiMusic(31, 0);
+    music_play_midi(31, 0);
 
     loadImage(RESSHQR_ADELINEIMG, 1);
     platform_delay_skip(7000);

@@ -565,7 +565,7 @@ int32 processMenu(int16 * menuSettings) {
                     if (((uint8) key & 8)) { // on arrow key right
                         config_file.music_volume += 4;
                     }
-                    musicVolume(config_file.music_volume);
+                    music_volume(config_file.music_volume);
                     break;
                 }
                 case kSoundVolume: {
@@ -603,7 +603,7 @@ int32 processMenu(int16 * menuSettings) {
                     if (((uint8) key & 8)) { // on arrow key right
                         config_file.master_volume += 4;
                     }
-                    musicVolume(config_file.music_volume);
+                    music_volume(config_file.music_volume);
                     sample_volume(-1, config_file.wave_volume);
                     break;
                 }
@@ -775,7 +775,7 @@ void mainMenu() {
     while (!config_file.quit) {
         initTextBank(0);
 
-        playTrackMusic(9); // LBA's Theme
+        music_play_track(9); // LBA's Theme
         sample_stop_all();
 
         switch (processMenu(MainMenuSettings)) {

@@ -299,7 +299,7 @@ void playFlaMovie(int8 *flaName) {
         return;
     }
 
-    stopMusic();
+    music_stop();
 
     // take extension if movie name has it
     for (i = 0; i < (int32)strlen(flaName); i++) {

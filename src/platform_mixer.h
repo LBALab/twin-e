@@ -37,11 +37,23 @@ void platform_mixer_set_distance(int32 channel_index, int32 distance);
 
 void platform_mixer_load(uint8 *sample_ptr, int32 samples_size);
 void platform_mixer_free();
-int32 platform_mixer_play(uint8 *sample_ptr, int32 samples_size, int32 channel_index, int32 repeat);
+int32 platform_mixer_play(uint8 *sample_ptr, int32 samples_size, int32 channel_index, int32 loop);
 
 void platform_mixer_resume();
 void platform_mixer_pause();
 void platform_mixer_pause_channel(int32 channel_index);
+
+void platform_mixer_music_fade_in(int32 loop, int32 ms);
+void platform_mixer_music_volume(int32 volume);
+void platform_mixer_music_fade_out(int32 ms);
+
+void platform_mixer_load_music(uint8 *music_ptr, int32 music_size);
+int32 platform_mixer_free_music();
+int32 platform_mixer_play_music(uint8 *music_ptr, int32 music_size, int32 loop);
+
+void platform_mixer_play_cd_track(int32 track);
+void platform_mixer_stop_cd_track();
+int32 platform_mixer_init_cdrom(int32 config_debug);
 
 
 #endif

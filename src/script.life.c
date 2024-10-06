@@ -1058,7 +1058,7 @@ int32 lPLAY_FLA(int32 actorIdx, ActorStruct *actor) {
 /*0x41*/
 int32 lPLAY_MIDI(int32 actorIdx, ActorStruct *actor) {
     int32 midiIdx = *(scriptPtr++);
-    playMidiMusic(midiIdx, 0); // TODO: improve this
+    music_play_midi(midiIdx, 0); // TODO: improve this
     return 0;
 }
 
@@ -1431,14 +1431,14 @@ int32 lTHE_END(int32 actorIdx, ActorStruct *actor) {
 
 /*0x63*/
 int32 lMIDI_OFF(int32 actorIdx, ActorStruct *actor) {
-    stopMidiMusic();
+    music_stop_midi();
     return 0;
 }
 
 /*0x64*/
 int32 lPLAY_CD_TRACK(int32 actorIdx, ActorStruct *actor) {
     int32 track = *(scriptPtr++);
-    playTrackMusic(track);
+    music_play_track(track);
     return 0;
 }
 

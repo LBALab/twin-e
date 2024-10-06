@@ -24,12 +24,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "platform_mixer.h"
 #include "sample.h"
+#include "platform_mixer.h"
 #include "flamovies.h"
 #include "main.h"
-#include "resources.h"
 #include "hqr.h"
+#include "resources.h"
 #include "movements.h"
 #include "grid.h"
 #include "collision.h"
@@ -65,13 +65,13 @@ void sample_play(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
     if (config_file.sound) {
         int32 sampSize = 0;
         int32 channel_index = -1;
-        uint8* sampPtr;
+        uint8* sample_ptr;
 
-        sampSize = hqr_get_entry_alloc(&sampPtr, HQR_SAMPLES_FILE, index);
+        sampSize = hqr_get_entry_alloc(&sample_ptr, HQR_SAMPLES_FILE, index);
 
         // Fix incorrect sample files first byte
-        if (*sampPtr != 'C')
-            *sampPtr = 'C';
+        if (*sample_ptr != 'C')
+            *sample_ptr = 'C';
 
         channel_index = sample_free_channel_index();
 
@@ -86,11 +86,11 @@ void sample_play(int32 index, int32 frequency, int32 repeat, int32 x, int32 y, i
                 samplesPlayingActors[channel_index] = actorIdx;
             }
 
-            if (platform_mixer_play(sampPtr, sampSize, channel_index, repeat) == -1)
+            if (platform_mixer_play(sample_ptr, sampSize, channel_index, repeat) == -1)
                 printf("Error while playing VOC: Sample %d \n", index);
         }
 
-        free(sampPtr);
+        free(sample_ptr);
     }
 }
 
@@ -187,15 +187,15 @@ void sample_play_fla(int32 index, int32 frequency, int32 repeat, int32 x, int32 
         int32 sampSize = 0;
         int32 channel_index = -1;
         int8 sampfile[256];
-        uint8* sampPtr;
+        uint8* sample_ptr;
 
         sprintf(sampfile, FLA_DIR "%s",HQR_FLASAMP_FILE);
 
-        sampSize = hqr_get_entry_alloc(&sampPtr, sampfile, index);
+        sampSize = hqr_get_entry_alloc(&sample_ptr, sampfile, index);
 
         // Fix incorrect sample files first byte
-        if (*sampPtr != 'C')
-            *sampPtr = 'C';
+        if (*sample_ptr != 'C')
+            *sample_ptr = 'C';
 
         channel_index = sample_free_channel_index();
         if (channel_index != -1) {
@@ -204,10 +204,10 @@ void sample_play_fla(int32 index, int32 frequency, int32 repeat, int32 x, int32 
 
         sample_volume(channel_index, config_file.wave_volume);
 
-        if (platform_mixer_play(sampPtr, sampSize, channel_index, repeat) == -1)
+        if (platform_mixer_play(sample_ptr, sampSize, channel_index, repeat) == -1)
             printf("Error while playing VOC: Sample %d \n", index);
 
-        free(sampPtr);
+        free(sample_ptr);
     }
 }
 
@@ -215,15 +215,15 @@ void sample_play_vox(int32 index) {
     if (config_file.sound) {
         int32 sampSize = 0;
         int32 channel_index = -1;
-        uint8* sampPtr = 0;
+        uint8* sample_ptr = 0;
 
-        sampSize = hqr_get_entry_alloc_vox(&sampPtr, currentVoxBankFile, index, voxHiddenIndex);
+        sampSize = hqr_get_entry_alloc_vox(&sample_ptr, currentVoxBankFile, index, voxHiddenIndex);
         
         // Fix incorrect sample files first byte
-        if (*sampPtr != 'C') {
-            hasHiddenVox = *sampPtr;
+        if (*sample_ptr != 'C') {
+            hasHiddenVox = *sample_ptr;
             voxHiddenIndex++;
-            *sampPtr = 'C';
+            *sample_ptr = 'C';
         }
 
         channel_index = sample_free_channel_index();
@@ -234,10 +234,10 @@ void sample_play_vox(int32 index) {
         
             sample_volume(channel_index, config_file.voice_volume - 1);
 
-            if (platform_mixer_play(sampPtr, sampSize, channel_index, 1) == -1)
+            if (platform_mixer_play(sample_ptr, sampSize, channel_index, 1) == -1)
                 printf("Error while playing VOC: Sample %d \n", index);
         }
 
-        free(sampPtr);
+        free(sample_ptr);
     }
 }

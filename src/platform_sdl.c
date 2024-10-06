@@ -60,8 +60,8 @@ TTF_Font *font;
 
 
 void platform_close() {
-    stopTrackMusic();
-    stopMidiMusic();
+    music_stop_track();
+    music_stop_midi();
     platform_mixer_close();
     TTF_Quit();
     SDL_Quit();

@@ -468,7 +468,7 @@ void changeScene() {
     setLightVector(alphaLight, betaLight, 0);
 
     if (sceneMusic != -1) {
-        playMidiMusic(sceneMusic, 0); // TODO this should play midi or cd tracks
+        music_play_midi(sceneMusic, 0); // TODO this should play midi or cd tracks
     }
 }
 

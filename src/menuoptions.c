@@ -54,7 +54,7 @@ int32 enterPlayerNameVar2;
 void newGame() {
     int32 tmpFlagDisplayText;
 
-    stopMusic();
+    music_stop();
 
     tmpFlagDisplayText = config_file.flag_display_text;
     config_file.flag_display_text = 1;
@@ -92,7 +92,7 @@ void newGame() {
     clearScreen();
     platform_flip();
     
-    playMidiMusic(1, 0);
+    music_play_midi(1, 0);
     playFlaMovie(FLA_INTROD);
 
     clearScreen();

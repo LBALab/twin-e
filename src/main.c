@@ -54,7 +54,6 @@ const int8* ENGINE_VERSION = (int8*) "0.3.0";
 const int8* CONFIG_FILENAME = (int8*) "lba.cfg";
 const int8* SETUP_FILENAME = (int8*) "setup.lst";
 
-int8 * cd_directory;
 
 int8 CFGList[][22] = {
     "Language:",
@@ -325,7 +324,7 @@ void init_engine() {
     platform_toggle_fullscreen();
 
     // Check if LBA CD-Rom is on drive
-    initCdrom();
+    music_init_cdrom();
     if (config_file.movie > 0) {
         // Display company logo
         adelineLogo();
