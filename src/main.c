@@ -177,7 +177,7 @@ int get_language_type_index(int8* language) {
 }
 
 void init_configurations() {
-    FILE *fd, *fd_test;
+    FILE *fd;
     int8 buffer[256], tmp[16];
     int32 cfgtype = -1;
 
@@ -212,19 +212,6 @@ void init_configurations() {
                 break;
             case 8:
                 sscanf(buffer, "MidiType: %s", tmp);
-                if (strcmp(tmp, "auto") == 0) {
-                    fd_test = fcaseopen(HQR_MIDI_MI_WIN_FILE, "rb");
-                    if (fd_test) {
-                        fclose(fd_test);
-                        config_file.midi_type = 1;
-                    }
-                    else
-                        config_file.midi_type = 0;
-                }
-                else if (strcmp(tmp, "midi") == 0)
-                    config_file.midi_type = 1;
-                else 
-                    config_file.midi_type = 0;
                 break;
             case 19:
                 sscanf(buffer, "WaveVolume: %d", &config_file.wave_volume);

@@ -58,6 +58,11 @@ void platform_mixer_init(int32 sound_config) {
         printf("Mix_OpenAudio: %s\n", Mix_GetError());
         exit(1);
     }
+    
+    if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == -1) {
+        printf("Mix_Init: %s\n", Mix_GetError());
+        exit(1);
+    }
 
     Mix_AllocateChannels(32);
 }
@@ -139,6 +144,26 @@ int32 platform_mixer_free_music() {
 int32 platform_mixer_play_music(uint8 *music_ptr, int32 music_size, int32 loop) {
     platform_mixer_load_music(music_ptr, music_size);
     return Mix_PlayMusic(current_track, loop);
+}
+
+
+int32 platform_mixer_play_music_mp3(int8 *music_file) {
+    int error_code = 0;
+    current_track = Mix_LoadMUS(music_file);
+    if (current_track == NULL)
+        printf("Mix_LoadMUS: %s\n", Mix_GetError());
+    error_code = Mix_PlayMusic(current_track, -1);
+    if (error_code == -1) {
+        printf("Mix_PlayMusic: %s\n", Mix_GetError());
+    }
+    return error_code;
+}
+
+void platform_mixer_stop_music_mp3() {
+    if (current_track != NULL) {
+        Mix_FreeMusic(current_track);
+        current_track = NULL;
+    }
 }
 
 void platform_mixer_play_cd_track(int32 track) {

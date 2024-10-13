@@ -34,9 +34,6 @@ void music_volume(int32 volume);
 void music_play_cd_track(int32 track);
 void music_stop_cd_track();
 
-void playTrackMusicMp3(int32 track);
-void stopTrackMusicMp3();
-
 void music_play_midi(int32 midiIdx, int32 loop);
 void music_stop_midi();
 void music_stop();
@@ -44,5 +41,9 @@ void music_stop();
 void music_play_track(int32 track);
 void music_stop_track();
 int32 music_init_cdrom();
+
+void music_play_track_mp3(int32 track);
+void music_stop_track_mp3();
+void music_play_midi_mp3(int32 midi_index);
 
 #endif

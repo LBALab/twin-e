@@ -77,8 +77,6 @@ typedef struct config_file_s {
     int8 flag_keep_voice_str[3];
     /** save voice files on hard disk */
     int32 flag_keep_voice;
-    /** type of music file to be used */
-    int8 midi_type;
     /** wave volume */
     int32 wave_volume;
     /** chacters voices volume */

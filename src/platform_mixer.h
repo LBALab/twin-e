@@ -50,6 +50,8 @@ void platform_mixer_music_fade_out(int32 ms);
 void platform_mixer_load_music(uint8 *music_ptr, int32 music_size);
 int32 platform_mixer_free_music();
 int32 platform_mixer_play_music(uint8 *music_ptr, int32 music_size, int32 loop);
+int32 platform_mixer_play_music_mp3(int8 *music_file);
+void platform_mixer_stop_music_mp3();
 
 void platform_mixer_play_cd_track(int32 track);
 void platform_mixer_stop_cd_track();

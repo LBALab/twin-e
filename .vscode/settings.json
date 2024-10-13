@@ -6,6 +6,7 @@
         "algorithm": "c",
         "bit": "c",
         "vector": "c",
-        "mutex": "c"
+        "mutex": "c",
+        "sdl.h": "c"
     }
 }
