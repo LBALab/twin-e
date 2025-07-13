@@ -237,7 +237,7 @@ void processFrame() {
             // fade out tricky
             if (_fadeOut != 1) {
                 convertPalToRGBA(palette, paletteRGBACustom);
-                fadeToBlack(paletteRGBACustom);
+                screen_fade_to_black(paletteRGBACustom);
                 _fadeOut = 1;
             }
             break;
@@ -363,7 +363,7 @@ void playFlaMovie(int8 *flaName) {
                     if (fadeOutFrames >= 2) {
                         platform_flip();
                         convertPalToRGBA(palette, paletteRGBACustom);
-                        fadeToPal(paletteRGBACustom);
+                        screen_fade_to_pal(paletteRGBACustom);
                         _fadeOut = -1;
                         fadeOutFrames = 0;
                     }
@@ -384,7 +384,7 @@ void playFlaMovie(int8 *flaName) {
     if (config_file.cross_fade) {
         platform_cross_fade(frontVideoBuffer, paletteRGBACustom);
     } else {
-        fadeToBlack(paletteRGBACustom);
+        screen_fade_to_black(paletteRGBACustom);
     }
 
     sample_stop_all();

@@ -110,11 +110,11 @@ void adjustCrossPalette(uint8 * pal1, uint8 * pal2);
 
 /** Fade image to black
     @param palette current palette to fade */
-void fadeToBlack(uint8 *palette);
+void screen_fade_to_black(uint8 *palette);
 
 /** Fade image with another palette source
     @param palette current palette to fade */
-void fadeToPal(uint8 *palette);
+void screen_fade_to_pal(uint8 *palette);
 
 /** Fade black palette to white palette */
 void blackToWhite();

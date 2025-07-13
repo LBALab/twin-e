@@ -208,7 +208,7 @@ int32 runGameEngine() { // mainLoopInteration
             case kiBookOfBu: {
                 int32 tmpFlagDisplayText;
 
-                fadeToBlack(paletteRGBA);
+                screen_fade_to_black(paletteRGBA);
                 loadImage(RESSHQR_INTROSCREEN1IMG, 1);
                 initTextBank(2);
                 newGameVar4 = 0;
@@ -221,7 +221,7 @@ int32 runGameEngine() { // mainLoopInteration
                 textClipSmall();
                 newGameVar4 = 1;
                 initTextBank(currentTextBank + 3);
-                fadeToBlack(paletteRGBACustom);
+                screen_fade_to_black(paletteRGBACustom);
                 clearScreen();
                 platform_flip();
                 platform_set_palette(paletteRGBA);

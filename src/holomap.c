@@ -318,7 +318,7 @@ void holomap_run()
     alphaLightTmp = alphaLight;
     betaLightTmp = betaLight;
 
-    fadeToBlack(paletteRGBA);
+    screen_fade_to_black(paletteRGBA);
     sample_stop_all();
 
     resetClip();
@@ -337,7 +337,7 @@ void holomap_run()
     text_index = holomap_position_ptr[currentSceneIdx].text_index;
 
     newGameVar4 = 1;
-    fadeToBlack(paletteRGBA);
+    screen_fade_to_black(paletteRGBA);
 
     dalpha = holomap_position_ptr[currentSceneIdx].alpha;
     dbeta = holomap_position_ptr[currentSceneIdx].beta;

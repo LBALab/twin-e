@@ -814,9 +814,9 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
 
     if (lockPalette) {
         if (useAlternatePalette) {
-            fadeToPal(paletteRGBA);
+            screen_fade_to_pal(paletteRGBA);
         } else {
-            fadeToPal(mainPaletteRGBA);
+            screen_fade_to_pal(mainPaletteRGBA);
         }
         lockPalette = 0;
     }

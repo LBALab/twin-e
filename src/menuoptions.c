@@ -88,7 +88,7 @@ void newGame() {
     textClipSmall();
     newGameVar4 = 1;
 
-    fadeToBlack(paletteRGBACustom);
+    screen_fade_to_black(paletteRGBACustom);
     clearScreen();
     platform_flip();
     

@@ -76,7 +76,7 @@ void loadMenuImage(int16 fade_in) {
     hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
     copyScreen(workVideoBuffer, frontVideoBuffer);
     if (fade_in) {
-        fadeToPal(paletteRGBA);
+        screen_fade_to_pal(paletteRGBA);
     } else {
         platform_set_palette(paletteRGBA);
     }
@@ -97,7 +97,7 @@ void loadImage(int32 index, int16 fade_in) {
     copyScreen(workVideoBuffer, frontVideoBuffer);
     loadCustomPalette(index + 1);
     if (fade_in) {
-        fadeToPal(paletteRGBACustom);
+        screen_fade_to_pal(paletteRGBACustom);
     } else {
         platform_set_palette(paletteRGBACustom);
     }
@@ -135,7 +135,7 @@ void fadeIn(uint8 * palette) {
     if (config_file.cross_fade)
         platform_cross_fade(frontVideoBuffer, palette);
     else
-        fadeToPal(palette);
+        screen_fade_to_pal(palette);
 
     platform_set_palette(palette);
 }
@@ -146,9 +146,9 @@ void fadeOut(uint8 * palette) {
     /*if(config_file.cross_fade)
         platform_cross_fade(frontVideoBuffer, palette);
     else
-        fadeToBlack(palette);*/
+        screen_fade_to_black(palette);*/
     if (!config_file.cross_fade)
-        fadeToBlack(palette);
+        screen_fade_to_black(palette);
 }
 
 /** Calculate a new color component according with an intensity
@@ -251,7 +251,7 @@ void adjustCrossPalette(uint8 * pal1, uint8 * pal2) {
 
 /** Fade image to black
     @param palette current palette to fade */
-void fadeToBlack(uint8 *palette) {
+void screen_fade_to_black(uint8 *palette) {
     int32 i = 0;
 
     if (palReseted == 0) {
@@ -266,7 +266,7 @@ void fadeToBlack(uint8 *palette) {
 
 /** Fade image with another palette source
     @param palette current palette to fade */
-void fadeToPal(uint8 *palette) {
+void screen_fade_to_pal(uint8 *palette) {
     int32 i = 100;
 
     for (i = 0; i <= 100; i += 3) {
