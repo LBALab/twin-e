@@ -94,7 +94,7 @@ void loadCustomPalette(int32 index) {
     @param index \a RESS.HQR entry index (starting from 0) */
 void loadImage(int32 index, int16 fade_in) {
     hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, index);
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenColour(workVideoBuffer, frontVideoBuffer, index == RESSHQR_ADELINEIMG ? 0xFF : 0);
     loadCustomPalette(index + 1);
     if (fade_in) {
         screen_fade_to_pal(paletteRGBACustom);
@@ -325,14 +325,32 @@ void fadeRedPal(uint8 *palette) {
     }
 }
 
+inline void copyScreen(uint8 * source, uint8 * destination) {
+    copyScreenColour(source, destination, 0);
+}
+
+void copyScreenFull(uint8 * source, uint8 * destination) {
+    memcpy(destination, source, SCREEN_WIDTH*SCREEN_HEIGHT);
+}
+
 /** Copy a determinate screen buffer to another
     @param source screen buffer
     @param destination screen buffer */
-void copyScreen(uint8 * source, uint8 * destination) {
+void copyScreenColour(uint8 * source, uint8 * destination, uint8 colour) {
     int32 w, h;
 
-    if (SCALE == 1)
-        memcpy(destination, source, SCREEN_WIDTH*SCREEN_HEIGHT);
+    // convert 640x480 to 854x480 without changing aspect ratio
+    int32 skip = (SCREEN_WIDTH - 640) / 2;
+    if (SCALE == 1) {
+        for (h = 0; h < SCREEN_HEIGHT; h++) {
+            for (w = 0; w < SCREEN_WIDTH; w++) {
+                if (w < skip || w >= (SCREEN_WIDTH - skip))
+                    *destination++ = colour;
+                else
+                    *destination++ = *source++;
+            }
+        }
+    }
     else if (SCALE == 2)
         for (h = 0; h < SCREEN_HEIGHT / SCALE; h++) {
             for (w = 0; w < SCREEN_WIDTH / SCALE; w++) {

@@ -135,6 +135,20 @@ void fadeRedPal(uint8 *palette);
     @param destination screen buffer */
 void copyScreen(uint8 * source, uint8 * destination);
 
+/** Copy a determinate screen buffer to another
+    @param source screen buffer
+    @param destination screen buffer
+    @param colour colour to use for the borders when the aspect ratio is different */
+void copyScreenColour(uint8 * source, uint8 * destination, uint8 colour);
+
+/**
+ * Copy a determinate screen buffer to another
+ * without changing the aspect ratio
+ * @param source screen buffer
+ * @param destination screen buffer
+ */
+void copyScreenFull(uint8 * source, uint8 * destination);
+
 /** Clear front buffer screen */
 void clearScreen();
 

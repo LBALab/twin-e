@@ -1,3 +1,5 @@
+.PHONY: all clean run
+
 CC=gcc
 SDL_CFLAGS = `sdl-config --cflags`
 SDL_LIBS = `sdl-config --libs`
@@ -40,7 +42,8 @@ OBJS=src/actor.o \
 
 LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
 VERSION=v0.3.0
-TARGET=bin/twin-e_$(VERSION)
+APPNAME=twin-e_$(VERSION)
+TARGET=bin/$(APPNAME)
 
 all: $(TARGET)
 
@@ -49,6 +52,9 @@ $(TARGET): $(OBJS)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	cd bin && ./$(APPNAME)
 
 clean:
 	@rm $(OBJS)
