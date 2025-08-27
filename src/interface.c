@@ -114,7 +114,7 @@ void drawLine(int32 startWidth, int32 startHeight, int32 endWidth, int32 endHeig
         }
     }
 
-    flag2 = 640;//SCREEN_WIDTH;
+    flag2 = 768; //SCREEN_WIDTH; // 640
     endWidth -= startWidth;
     endHeight -= startHeight;
     if (endHeight < 0) {
@@ -241,7 +241,7 @@ void drawTransparentBox(int32 left, int32 top, int32 right, int32 bottom, int32 
 
     width = right - left + 1;
 
-    temp = 640 - width; // SCREEN_WIDTH
+    temp = 768 - width; // SCREEN_WIDTH // 640
     localMode = colorAdj;
 
     do {

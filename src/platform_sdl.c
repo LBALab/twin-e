@@ -268,11 +268,11 @@ void platform_toggle_fullscreen() {
 
     if (config_file.full_screen) {
         screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE);
-        copyScreen(workVideoBuffer, frontVideoBuffer);
+        copyScreenFull(workVideoBuffer, frontVideoBuffer);
         SDL_ShowCursor(1);
     } else {
         screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
-        copyScreen(workVideoBuffer, frontVideoBuffer);
+        copyScreenFull(workVideoBuffer, frontVideoBuffer);
 
 #ifdef _DEBUG
         SDL_ShowCursor(1);

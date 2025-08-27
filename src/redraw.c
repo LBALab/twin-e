@@ -301,7 +301,7 @@ void redrawEngineActions(int32 bgRedraw) { // fullRedraw
         clearScreen();
         redrawGrid();
         updateOverlayTypePosition(tmpProjPosX, tmpProjPosY, projPosXScreen, projPosYScreen);
-        copyScreen(frontVideoBuffer, workVideoBuffer);
+        copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
         if (needChangeScene != -1 && needChangeScene != -2) {
             fadeIn(paletteRGBA);
@@ -878,6 +878,6 @@ void zoomScreenScale() {
         //memcpy(dest, dest - SCREEN_WIDTH, SCREEN_WIDTH);
         //dest += SCREEN_WIDTH;
     }
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
     //free(zoomWorkVideoBuffer);
 }

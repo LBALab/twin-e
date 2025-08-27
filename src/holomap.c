@@ -324,7 +324,7 @@ void holomap_run()
     resetClip();
     clearScreen();
     platform_flip();
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     holomap_init();
     holomap_draw_title(320, 25);

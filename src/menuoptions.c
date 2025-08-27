@@ -222,7 +222,7 @@ int32 enterPlayerName(int32 textIdx) {
     int8 buffer[256];
 
     while(1) {
-        copyScreen(workVideoBuffer, frontVideoBuffer);
+        copyScreenFull(workVideoBuffer, frontVideoBuffer);
         platform_flip(); //frontVideoBuffer
         initTextBank(0);
         getMenuText(textIdx, buffer);
@@ -258,7 +258,7 @@ int32 enterPlayerName(int32 textIdx) {
     }
 
     enterPlayerNameVar2 = 0;
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
     platform_flip(); // frontVideoBuffer
 
     return 1;
@@ -276,7 +276,7 @@ void newGameMenu() {
             showCredits();
         }
         
-        copyScreen(frontVideoBuffer, workVideoBuffer);
+        copyScreenFull(frontVideoBuffer, workVideoBuffer);
         // TODO: recheck this
         do {
             platform_handle_input();
@@ -305,7 +305,7 @@ void continueGameMenu() {
             showCredits();
         }
 
-        copyScreen(frontVideoBuffer, workVideoBuffer);
+        copyScreenFull(frontVideoBuffer, workVideoBuffer);
         // TODO: recheck this
         do {
             platform_handle_input();

@@ -324,7 +324,7 @@ void processFoundItem(int32 item) {
     redrawEngineActions(1);
     sceneHero->staticFlags.bIsHidden = 0;
 
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     itemCameraX = newCameraX << 9;
     itemCameraY = newCameraY << 8;
@@ -468,7 +468,7 @@ void processFoundItem(int32 item) {
 
 void processGameChoices(int32 choiceIdx) {
     int32 i;
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     gameChoicesSettings[0] = 0;	// Current loaded button (button number)
     gameChoicesSettings[1] = numChoices; // Num of buttons
@@ -511,7 +511,7 @@ void processGameoverAnimation() { // makeGameOver
 
     // TODO: drawInGameTransBox
     platform_set_palette(paletteRGBA);
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
     gameOverPtr = malloc(hqr_get_entry_size(HQR_RESS_FILE, RESSHQR_GAMEOVERMDL));
     hqr_get_entry(gameOverPtr, HQR_RESS_FILE, RESSHQR_GAMEOVERMDL);
 
@@ -549,7 +549,7 @@ void processGameoverAnimation() { // makeGameOver
 
         resetClip();
         free(gameOverPtr);
-        copyScreen(workVideoBuffer, frontVideoBuffer);
+        copyScreenFull(workVideoBuffer, frontVideoBuffer);
         platform_flip();
         initEngineProjections();
 

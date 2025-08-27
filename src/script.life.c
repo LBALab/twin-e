@@ -1453,7 +1453,7 @@ int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
 
 /*0x66*/
 int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
     platform_flip();
     changeRoomVar10 = 0;
 

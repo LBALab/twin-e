@@ -850,41 +850,41 @@ void drawInfoMenu(int16 left, int16 top)
     int32 newBoxLeft, newBoxLeft2, i;
 
     resetClip();
-    drawBox(left, top, left + 450, top + 80);
-    drawSplittedBox(left + 1, top + 1, left + 449, top + 79, 0);
+    drawBox(left + 64, top, left + 450 + 64, top + 80);
+    drawSplittedBox(left + 1 + 64, top + 1, left + 449 + 64, top + 79, 0);
 
-    newBoxLeft2 = left + 9;
+    newBoxLeft2 = left + 9 + 64;
 
     drawSprite(0, newBoxLeft2, top + 13, spriteTable[SPRITEHQR_LIFEPOINTS]);
 
-    boxRight = left + 325;
-    newBoxLeft = left + 25;
+    boxRight = left + 325 + 64;
+    newBoxLeft = left + 25 + 64;
     boxLeft = crossDot(newBoxLeft, boxRight, 50, sceneHero->life);
 
     boxTop = top + 10;
     boxBottom = top + 25;
     drawSplittedBox(newBoxLeft, boxTop, boxLeft, boxBottom, 91);
-    drawBox(left + 25, top + 10, left + 324, top + 10 + 14);
+    drawBox(left + 25 + 64, top + 10, left + 324 + 64, top + 10 + 14);
 
     if (!gameFlags[GAMEFLAG_INVENTORY_DISABLED] && gameFlags[GAMEFLAG_TUNIC]) {
         drawSprite(0, newBoxLeft2, top + 36, spriteTable[SPRITEHQR_MAGICPOINTS]);
         if(magicLevelIdx > 0) {
             drawSplittedBox(newBoxLeft, top + 35, crossDot(newBoxLeft, boxRight, 80, inventoryMagicPoints),top + 50, 75);
         }
-        drawBox(left + 25, top + 35, left + magicLevelIdx * 80 + 20, top + 35 + 15);
+        drawBox(left + 25 + 64, top + 35, left + magicLevelIdx * 80 + 20 + 64, top + 35 + 15);
     }
 
-    boxLeft = left + 340;
+    boxLeft = left + 340 + 64;
 
     /** draw coin sprite */
     drawSprite(0, boxLeft, top + 15, spriteTable[SPRITEHQR_KASHES]);
     setFontColor(155);
-    drawText(left + 370, top + 5, ITOA(inventoryNumKashes));
+    drawText(left + 370 + 64, top + 5, ITOA(inventoryNumKashes));
 
     /** draw key sprite */
     drawSprite(0, boxLeft, top + 55, spriteTable[SPRITEHQR_KEY]);
     setFontColor(155);
-    drawText(left + 370, top + 40, ITOA(inventoryNumKeys));
+    drawText(left + 370 + 64, top + 40, ITOA(inventoryNumKeys));
 
     // prevent 
     if (inventoryNumLeafs > inventoryNumLeafsBox) {
@@ -894,16 +894,16 @@ void drawInfoMenu(int16 left, int16 top)
     // Clover leaf boxes
     for (i = 0; i < inventoryNumLeafsBox; i++)
     {
-        drawSprite(0, crossDot(left + 25, left + 325, 10, i), top + 58, spriteTable[SPRITEHQR_CLOVERLEAFBOX]);
+        drawSprite(0, crossDot(left + 25 + 64, left + 325 + 64, 10, i), top + 58, spriteTable[SPRITEHQR_CLOVERLEAFBOX]);
     }
 
     // Clover leafs
     for (i = 0; i < inventoryNumLeafs; i++)
     {
-        drawSprite(0, crossDot(left + 25, left + 325, 10, i) + 2, top + 60, spriteTable[SPRITEHQR_CLOVERLEAF]);
+        drawSprite(0, crossDot(left + 25 + 64, left + 325 + 64, 10, i) + 2, top + 60, spriteTable[SPRITEHQR_CLOVERLEAF]);
     }
 
-    platform_copy_block_phys(left, top, left + 450, top + 135);
+    platform_copy_block_phys(left, top, left + 450 + 64, top + 135);
 }
 
 void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
@@ -911,7 +911,7 @@ void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
     int32 boxLeft, boxTop, boxRight, boxBottom, currentAnimState;
     int8 dialText[256];
 
-    boxLeft   = behaviour * 110 + 110;
+    boxLeft   = behaviour * 110 + 110 + 64;
     boxRight  = boxLeft + 99;
     boxTop    = 110;
     boxBottom = 229;
@@ -940,8 +940,8 @@ void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
         drawSplittedBox(boxLeft, boxTop, boxRight, boxBottom, 69);
 
         // behaviour menu title
-        drawSplittedBox(110, 239, 540, 279, 0);
-        drawBox(110, 239, 540, 279);
+        drawSplittedBox(110 + 64, 239, 540 + 64, 279, 0);
+        drawBox(110 + 64, 239, 540 + 64, 279);
 
         setFontColor(15);
 
@@ -951,20 +951,20 @@ void drawBehaviour(int16 behaviour, int32 angle, int16 cantDrawBox) {
             getMenuText(heroBehaviour, dialText);
         }
 
-        drawText((650 - getTextSize(dialText)) / 2, 240, dialText);
+        drawText((650 - getTextSize(dialText)) / 2 + 64, 240, dialText);
     }
 
     renderBehaviourModel(boxLeft, boxTop, boxRight, boxBottom, -600, angle, behaviourEntity);
 
     platform_copy_block_phys(boxLeft, boxTop, boxRight, boxBottom);
-    platform_copy_block_phys(110, 239, 540, 279);
+    platform_copy_block_phys(110 + 64, 239, 540 + 64, 279);
 
     loadClip();
 }
 
 void drawBehaviourMenu(int32 angle) {
-    drawBox(100, 100, 550, 290);
-    drawTransparentBox(101, 101, 549, 289, 2);
+    drawBox(100 + 64, 100, 550 + 64, 290);
+    drawTransparentBox(101 + 64, 101, 549 + 64, 289, 2);
 
     setAnimAtKeyframe(behaviourAnimState[kNormal], animTable[heroAnimIdx[kNormal]], behaviourEntity, &behaviourAnimData[kNormal]);
     drawBehaviour(kNormal, angle, 0);
@@ -980,7 +980,7 @@ void drawBehaviourMenu(int32 angle) {
 
     drawInfoMenu(100, 300);
 
-    platform_copy_block_phys(100, 100, 550, 290);
+    platform_copy_block_phys(100 + 64, 100, 550 + 64, 290);
 }
 
 /** Process hero behaviour menu */
@@ -1086,7 +1086,7 @@ void drawMagicItemsBox(int32 left, int32 top, int32 right, int32 bottom, int32 c
 }
 
 void drawItem(int32 item) {
-    int32 itemX = (item / 4) * 85 + 64;
+    int32 itemX = (item / 4) * 85 + 64 + 64;
     int32 itemY = (item & 3) * 75 + 52;
 
     int32 left   = itemX - 37;
@@ -1115,10 +1115,10 @@ void drawItem(int32 item) {
 void drawInventoryItems() {
     int32 item;
 
-    drawTransparentBox(17, 10, 622, 320, 4);
-    drawBox(17, 10, 622, 320);
-    drawMagicItemsBox(110, 18, 188, 311, 75);
-    platform_copy_block_phys(17, 10, 622, 320);
+    drawTransparentBox(17 + 64, 10, 622, 320, 4);
+    drawBox(17 + 64, 10, 622 + 64, 320);
+    drawMagicItemsBox(110 + 64, 18, 188 + 64, 311, 75);
+    platform_copy_block_phys(17 + 64, 10, 622 + 64, 320);
 
     for (item = 0; item < NUM_INVENTORY_ITEMS; item++) {
         drawItem(item);

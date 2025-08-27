@@ -782,7 +782,7 @@ void renderPolygons(int32 renderType, int32 color) {
 
     int16 start, stop;
 
-    out = frontVideoBuffer + 640 * vtop;
+    out = frontVideoBuffer + 768 * vtop; // 640
 
     ptr1 = &polyTab[vtop];
     ptr2 = &polyTab2[vtop];
@@ -806,12 +806,12 @@ void renderPolygons(int32 renderType, int32 color) {
                     out2 = start + out;
 
                     for (j = start; j < hsize + start; j++) {
-                        if (j >= 0 && j < 640)
+                        if (j >= 0 && j < 768) // 640
                             out[j] = color;
                     }
                 }
             }
-            out += 640;
+            out += 768; // 640
             currentLine++;
         } while (--vsize);
         break;
@@ -843,7 +843,7 @@ void renderPolygons(int32 renderType, int32 color) {
                         start += mask;
                         start = (start & 0xFF00) | ((start & 0xFF) & (uint8)(dx >> 8)) ;
                         start = (start & 0xFF00) | ((start & 0xFF) + (dx & 0xFF));
-                        if (j >= 0 && j < 640) {
+                        if (j >= 0 && j < 768) { // 640
                             out[j] = start & 0xFF;
                         }
                         mask = (mask << 2) | (mask >> 14);
@@ -852,7 +852,7 @@ void renderPolygons(int32 renderType, int32 color) {
                 }
 
             }
-            out += 640;
+            out += 768; // 640
             currentLine++;
         } while (--vsize);
         break;
@@ -871,7 +871,7 @@ void renderPolygons(int32 renderType, int32 color) {
                     out2 = start + out;
                     for (j = start; j < hsize + start; j++) {
                         if ((start + (vtop % 1))&1) {
-                            if (j >= 0 && j < 640) {
+                            if (j >= 0 && j < 768) { // 640
                                 out[j] = color;
                             }
                         }
@@ -880,7 +880,7 @@ void renderPolygons(int32 renderType, int32 color) {
                 }
 
             }
-            out += 640;
+            out += 768; // 640
             currentLine++;
         } while (--vsize);
         break;
@@ -910,7 +910,7 @@ void renderPolygons(int32 renderType, int32 color) {
 
                 color = *(out2 + 1);
 
-                out += 640;
+                out += 768; // 640
 
                 --renderLoop;
                 if (!renderLoop)
@@ -959,8 +959,8 @@ void renderPolygons(int32 renderType, int32 color) {
                     ax += dx;
                 }
              }
-        
-            out += 640;
+
+            out += 768; // 640
             --renderLoop;
 
         }while(renderLoop);
@@ -996,7 +996,7 @@ void renderPolygons(int32 renderType, int32 color) {
                 out2++;
               }
             }
-            out += 640;
+            out += 768; // 640
         }while(--vsize);
       break;
     }
@@ -1033,7 +1033,7 @@ void renderPolygons(int32 renderType, int32 color) {
                 }
 
             }
-            out += 640;
+            out += 768; // 640
             currentLine++;
         } while (--vsize);
         break;
@@ -1063,23 +1063,23 @@ void renderPolygons(int32 renderType, int32 color) {
                 //varf4 = (int64)((int32)varf2 - (int32)varf3);
 
                 if (hsize == 0) {
-                    if (start >= 0 && start < 640)
+                    if (start >= 0 && start < 768) // 640
                         *out2 = ((startColor + stopColor) / 2) >> 8; // moyenne des 2 couleurs
                 } else if (hsize > 0) {
                     if (hsize == 1) {
-                        if (start >= -1 && start < 640 - 1)
+                        if (start >= -1 && start < 768 - 1) // 640
                             *(out2 + 1) = stopColor >> 8;
 
-                        if (start >= 0 && start < 640)
+                        if (start >= 0 && start < 768) // 640
                             *(out2) = startColor >> 8;
                     } else if (hsize == 2) {
-                        if (start >= -2 && start < 640 - 2)
+                        if (start >= -2 && start < 768 - 2) // 640
                             *(out2 + 2) = stopColor >> 8;
 
-                        if (start >= -1 && start < 640 - 1)
+                        if (start >= -1 && start < 768 - 1) // 640
                             *(out2 + 1) = ((startColor + stopColor) / 2) >> 8;
 
-                        if (start >= 0 && start < 640)
+                        if (start >= 0 && start < 768) // 640
                             *(out2) = startColor >> 8;
                     } else {
                         int32 currentXPos = start;
@@ -1088,7 +1088,7 @@ void renderPolygons(int32 renderType, int32 color) {
 
                         if (hsize % 2) {
                             hsize /= 2;
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2) = startColor >> 8;
                             out2++;
                             currentXPos++;
@@ -1098,13 +1098,13 @@ void renderPolygons(int32 renderType, int32 color) {
                         }
 
                         do {
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2) = startColor >> 8;
 
                             currentXPos++;
                             startColor += colorSize;
 
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2 + 1) = startColor >> 8;
 
                             currentXPos++;
@@ -1114,7 +1114,7 @@ void renderPolygons(int32 renderType, int32 color) {
                     }
                 }
             }
-            out += 640;
+            out += 768; // 640
             currentLine++;
         } while (--renderLoop);
         break;
@@ -1139,7 +1139,7 @@ void renderPolygons(int32 renderType, int32 color) {
                     ptr2++;
 
                     if (hsize == 0) {
-                        if (currentXPos >= 0 && currentXPos < 640)
+                        if (currentXPos >= 0 && currentXPos < 768) // 640
                             *(out2) = (uint8)(((startColor + stopColor) / 2) >> 8);
                     } else {
                         int16 colorSize = stopColor - startColor;
@@ -1150,7 +1150,7 @@ void renderPolygons(int32 renderType, int32 color) {
 
                             currentColor &= 0xFF;
                             currentColor += startColor;
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2) = currentColor >> 8;
 
                             currentColor &= 0xFF;
@@ -1159,7 +1159,7 @@ void renderPolygons(int32 renderType, int32 color) {
                             currentColor += startColor;
 
                             currentXPos++;
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2 + 1) = currentColor >> 8;
                         } else if (hsize == 2) {
                             uint16 currentColor = startColor;
@@ -1170,7 +1170,7 @@ void renderPolygons(int32 renderType, int32 color) {
                             colorSize /= 2;
                             currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
                             currentColor += startColor;
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2) = currentColor >> 8;
 
                             out2++;
@@ -1180,7 +1180,7 @@ void renderPolygons(int32 renderType, int32 color) {
                             currentColor &= 0xFF;
                             currentColor += startColor;
 
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2) = currentColor >> 8;
 
                             currentColor &= 0xFF;
@@ -1189,7 +1189,7 @@ void renderPolygons(int32 renderType, int32 color) {
                             currentColor += startColor;
 
                             currentXPos++;
-                            if (currentXPos >= 0 && currentXPos < 640)
+                            if (currentXPos >= 0 && currentXPos < 768) // 640
                                 *(out2 + 1) = currentColor >> 8;
                         } else {
                             uint16 currentColor = startColor;
@@ -1202,7 +1202,7 @@ void renderPolygons(int32 renderType, int32 color) {
                                 currentColor &= 0xFF;
                                 currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
                                 currentColor += startColor;
-                                if (currentXPos >= 0 && currentXPos < 640)
+                                if (currentXPos >= 0 && currentXPos < 768) // 640
                                     *(out2) = currentColor >> 8;
                                 out2++;
                                 currentXPos++;
@@ -1213,14 +1213,14 @@ void renderPolygons(int32 renderType, int32 color) {
                             do {
                                 currentColor &= 0xFF;
                                 currentColor += startColor;
-                                if (currentXPos >= 0 && currentXPos < 640)
+                                if (currentXPos >= 0 && currentXPos < 768) // 640
                                     *(out2) = currentColor >> 8;
                                 currentXPos++;
                                 currentColor &= 0xFF;
                                 startColor += colorSize;
                                 currentColor = ((currentColor & (0xFF00)) | ((((currentColor & 0xFF) << (hsize & 0xFF))) & 0xFF));
                                 currentColor += startColor;
-                                if (currentXPos >= 0 && currentXPos < 640)
+                                if (currentXPos >= 0 && currentXPos < 768) // 640
                                     *(out2 + 1) = currentColor >> 8;
                                 currentXPos++;
                                 out2 += 2;
@@ -1230,7 +1230,7 @@ void renderPolygons(int32 renderType, int32 color) {
                     }
                 }
             }
-            out += 640;
+            out += 768; // 640
             currentLine++;
         } while (--renderLoop);
         break;
