@@ -120,9 +120,9 @@ typedef struct BrickEntry {
 } BrickEntry;
 
 /** Brick data buffer */
-BrickEntry bricksDataBuffer[28][150];
+BrickEntry bricksDataBuffer[256][256]; // 28 150
 /** Brick info buffer */
-int16 brickInfoBuffer[28];
+int16 brickInfoBuffer[256]; // 28
 
 /** Current brick pixel X position */
 int32 brickPixelPosX;
@@ -771,7 +771,7 @@ void drawColumnGrid(int32 blockIdx, int32 brickBlockIdx, int32 x, int32 y, int32
 
     brickBuffIdx = (brickPixelPosX + 24) / 24;
 
-    if (brickInfoBuffer[brickBuffIdx] >= 150) {
+    if (brickInfoBuffer[brickBuffIdx] > 256) { // 150
         printf("\nGRID WARNING: brick buffer exceeded! \n");
         return;
     }
