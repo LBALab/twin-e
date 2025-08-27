@@ -50,7 +50,7 @@
 uint32 kPlasmaEffectFilesize = 262176;
 
 /** Menu buttons width */
-uint16 kMainMenuButtonWidth = 320;
+uint16 kMainMenuButtonWidth = 383; // 320
 /** Used to calculate the spanning between button and screen */
 uint16 kMainMenuButtonSpan = 550;
 
@@ -239,7 +239,7 @@ int32 inventorySelectedItem; // currentSelectedObjectInInventory
 
 #define PLASMA_WIDTH 320
 #define PLASMA_HEIGHT 50
-#define SCREEN_W 640
+#define SCREEN_W 768 // 640
 
 void plasmaEffectRenderFrame() {
     int16  c;
@@ -297,7 +297,7 @@ void processPlasmaEffect(int32 top, int32 color) {
     plasmaEffectRenderFrame();
 
     in = plasmaEffectPtr + 5 * PLASMA_WIDTH;
-    out = frontVideoBuffer + screenLookupTable[top];
+    out = frontVideoBuffer + screenLookupTable[top] + (SCREEN_W - PLASMA_WIDTH) / 2;
 
     for (i = 0; i < 25; i++) {
         for (j = 0; j < kMainMenuButtonWidth; j++) {
@@ -305,7 +305,7 @@ void processPlasmaEffect(int32 top, int32 color) {
             if (c > max_value)
                 c = max_value;
 
-        /* 2x2 squares sharing the same pixel color: */
+            /* 2x2 squares sharing the same pixel color: */
             target = 2*(i*SCREEN_W + j);
             out[target] = c;
             out[target + 1] = c;
@@ -632,7 +632,7 @@ int32 processMenu(int16 * menuSettings) {
             drawButton(localData, 1);
             platform_handle_input();
             // WARNING: this is here to prevent a fade bug while quit the menu
-            copyScreen(workVideoBuffer, frontVideoBuffer);
+            copyScreenFull(workVideoBuffer, frontVideoBuffer);
         }
     } while (!(skippedKey & 2) && !(skippedKey & 1));
 
@@ -647,7 +647,7 @@ int32 processMenu(int16 * menuSettings) {
 int32 advoptionsMenu() {
     int32 ret = 0;
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
 
     do {
         switch (processMenu(AdvOptionsMenuSettings)) {
@@ -661,7 +661,7 @@ int32 advoptionsMenu() {
         }
     } while (ret != 1);
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
     platform_flip();
 
     return 0;
@@ -671,7 +671,7 @@ int32 advoptionsMenu() {
 int32 savemanageMenu() {
     int32 ret = 0;
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
 
     do {
         switch (processMenu(SaveManageMenuSettings)) {
@@ -685,7 +685,7 @@ int32 savemanageMenu() {
         }
     } while (ret != 1);
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
     platform_flip();
 
     return 0;
@@ -695,7 +695,7 @@ int32 savemanageMenu() {
 int32 volumeMenu() {
     int32 ret = 0;
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
 
     do {
         switch (processMenu(VolumeMenuSettings)) {
@@ -709,7 +709,7 @@ int32 volumeMenu() {
         }
     } while (ret != 1);
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
     platform_flip();
 
     return 0;
@@ -719,7 +719,7 @@ int32 volumeMenu() {
 int32 optionsMenu() {
     int32 ret = 0;
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
 
     sample_stop_all();
     //playCDtrack(9);
@@ -732,19 +732,19 @@ int32 optionsMenu() {
             break;
         }
         case kVolume: {
-            copyScreen(workVideoBuffer, frontVideoBuffer);
+            copyScreenFull(workVideoBuffer, frontVideoBuffer);
             platform_flip();
             volumeMenu();
             break;
         }
         case kSaveManage: {
-            copyScreen(workVideoBuffer, frontVideoBuffer);
+            copyScreenFull(workVideoBuffer, frontVideoBuffer);
             platform_flip();
             savemanageMenu();
             break;
         }
         case kAdvanced: {
-            copyScreen(workVideoBuffer, frontVideoBuffer);
+            copyScreenFull(workVideoBuffer, frontVideoBuffer);
             platform_flip();
             advoptionsMenu();
             break;
@@ -754,7 +754,7 @@ int32 optionsMenu() {
         }
     } while (ret != 1);
 
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenFull(workVideoBuffer, frontVideoBuffer);
     platform_flip();
 
     return 0;
@@ -765,7 +765,7 @@ int32 optionsMenu() {
 void mainMenu() {
     sample_stop_all();
 
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     // load menu effect file only once
     plasmaEffectPtr = (uint8 *)malloc(kPlasmaEffectFilesize);
@@ -788,7 +788,7 @@ void mainMenu() {
             break;
         }
         case kOptions: {
-            copyScreen(workVideoBuffer, frontVideoBuffer);
+            copyScreenFull(workVideoBuffer, frontVideoBuffer);
             platform_flip();
             OptionsMenuSettings[5] = kReturnMenu;
             optionsMenu();
@@ -812,7 +812,7 @@ int32 giveupMenu() {
     int32 menuId;
     int16 * localMenu;
 
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
     sample_pause();
 
     if (config_file.use_auto_saving == 1)
@@ -1004,7 +1004,7 @@ void processBehaviourMenu() {
 
     setActorAngleSafe(sceneHero->angle, sceneHero->angle - 256, 50, &moveMenu);
 
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     tmpLanguageCD = config_file.language_cd_id;
     config_file.language_cd_id = 0;
@@ -1133,7 +1133,7 @@ void processInventoryMenu() {
     tmpAlphaLight = alphaLight;
     tmpBetaLight  = betaLight;
 
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     setLightVector(896, 950, 0);
 
