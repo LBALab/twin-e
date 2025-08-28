@@ -50,7 +50,7 @@
 uint32 kPlasmaEffectFilesize = 262176;
 
 /** Menu buttons width */
-uint16 kMainMenuButtonWidth = 383; // 320
+uint16 kMainMenuButtonWidth = 320;
 /** Used to calculate the spanning between button and screen */
 uint16 kMainMenuButtonSpan = 550;
 
@@ -296,12 +296,12 @@ void processPlasmaEffect(int32 top, int32 color) {
 
     plasmaEffectRenderFrame();
 
-    in = plasmaEffectPtr + 5 * PLASMA_WIDTH;
-    out = frontVideoBuffer + screenLookupTable[top] + (SCREEN_W - PLASMA_WIDTH) / 2;
+    in = plasmaEffectPtr + (5 * (PLASMA_WIDTH / 2));
+    out = frontVideoBuffer + screenLookupTable[top];
 
     for (i = 0; i < 25; i++) {
-        for (j = 0; j < kMainMenuButtonWidth; j++) {
-            c = in[i*kMainMenuButtonWidth + j] / 2 + color;
+        for (j = 0; j < 340; j++) {
+            c = in[i*320 + j] / 2 + color;
             if (c > max_value)
                 c = max_value;
 
@@ -348,8 +348,8 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
 
     memset(dialText, 0, sizeof(dialText));	
 
-    left = width - kMainMenuButtonSpan / 2;
-    right = width + kMainMenuButtonSpan / 2;
+    left = width - (kMainMenuButtonSpan / 2);
+    right = width + (kMainMenuButtonSpan / 2);
 
     // topheigh is the center Y pos of the button
     top = topheight - 25;		// this makes the button be 50 height
@@ -418,21 +418,21 @@ void drawButtonGfx(int32 width, int32 topheight, int32 id, int32 value, int32 mo
             // implement this
         }
     } else {
-        blitBox(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *) frontVideoBuffer);
-        drawTransparentBox(left, top, right, bottom2, 4);
+        blitBox(left + 64, top, right + 64, bottom, (int8 *) workVideoBuffer, left + 64, top, (int8 *) frontVideoBuffer);
+        drawTransparentBox(left + 64, top, right + 64, bottom2, 4);
     }
 
-    drawBox(left, top, right, bottom);
+    drawBox(left + 64, top, right + 64, bottom);
 
     setFontColor(15);
     setFontParameters(2, 8);
     getMenuText(value, dialText);
     textSize = getTextSize(dialText);
-    drawText(width - (textSize / 2), topheight - 18, dialText);
+    drawText(width - (textSize / 2) + 64, topheight - 18, dialText);
 
     // TODO: make volume buttons
 
-    platform_copy_block_phys(left, top, right, bottom);
+    platform_copy_block_phys(left + 64, top, right + 64, bottom);
 }
 
 /** Process the menu button draw
