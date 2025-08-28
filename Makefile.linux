@@ -38,7 +38,7 @@ OBJS=src/actor.o \
 	src/platform_sdl.o \
 	src/platform_sdl_mixer.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lm
+LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
 VERSION=v0.3.0
 TARGET=bin/twin-e_$(VERSION)
 
@@ -49,6 +49,9 @@ $(TARGET): $(OBJS)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	cd bin && ./$(APPNAME)
 
 clean:
 	@rm $(OBJS)
