@@ -156,7 +156,7 @@ void music_stop_midi() {
 }
 
 int32 music_init_cdrom() {
-    if (!config_file.sound) {
+    if (!config_file.sound || !config_file.use_cd) {
         return 0;
     }
     config_file.use_cd = platform_mixer_init_cdrom(config_file.debug);
@@ -171,9 +171,9 @@ void music_stop() {
 void music_play_track_mp3(int32 track) {
     int8 musfile[256];
     if (config_file.sound == 2) {
-        sprintf(musfile, MUSIC_FOLDER "//Track_%0d.mp3", track);
+        sprintf(musfile, MUSIC_FOLDER "/Track_%02d.mp3", track);
     } else {
-        sprintf(musfile, MUSIC_FOLDER "//Track_%0d.ogg", track);
+        sprintf(musfile, MUSIC_FOLDER "/Track_%02d.ogg", track);
     }
     platform_mixer_stop_music_mp3();
     platform_mixer_music_fade_in(1, FADE_MS);
@@ -192,9 +192,9 @@ void music_play_track_mp3(int32 track) {
 void music_play_midi_mp3(int32 midi_index) {
     int8 musfile[256];
     if (config_file.sound == 2) {
-        sprintf(musfile, MIDI_FOLDER "//LBA1-%0d.mp3", midi_index);
+        sprintf(musfile, MIDI_FOLDER "/LBA1-%02d.mp3", midi_index);
     } else {
-        sprintf(musfile, MIDI_FOLDER "//LBA1-%0d.ogg", midi_index);
+        sprintf(musfile, MIDI_FOLDER "/LBA1-%02d.ogg", midi_index);
     }
     platform_mixer_stop_music_mp3();
     platform_mixer_music_fade_in(1, FADE_MS);
