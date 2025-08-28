@@ -554,19 +554,21 @@ int32 runGameEngine() { // mainLoopInteration
 /** Game engine main loop
     @return true if we want to show credit sequence */
 int32 gameEngineLoop() { // mainLoop
-    uint32 start;
+    uint32 start, end;
 
     reqBgRedraw = 1;
     lockPalette = 1;
     setActorAngle(0, -256, 5, &loopMovePtr);
 
+    float fps = 1000/50;
     while (quitGame == -1) {
         start = platform_tick();
         if (runGameEngine())
             return 1;
         lbaTime++;
-        if (platform_tick() - start < config_file.fps)
-            platform_delay(platform_tick() - start + config_file.fps);
+        end = platform_tick();
+        if (end - start < fps)
+            platform_delay(fps - (end - start));
     }
     return 0;
 }
