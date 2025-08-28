@@ -33,7 +33,7 @@
 #include "redraw.h"
 
 int32 useFreeCamera = 0;
-int32 canChangeScenes = 1;
+int32 canChangeScenes = 0;
 
 /** Change scenario camera positions */
 void changeGridCamera(int16 pKey) {

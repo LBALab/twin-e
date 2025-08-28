@@ -8,6 +8,7 @@ OBJS=src/actor.o \
 	src/animations.o \
 	src/collision.o \
 	src/debug.o \
+	src/debug.font.o \
 	src/debug.grid.o \
 	src/debug.scene.o \
 	src/extra.o \
@@ -40,7 +41,7 @@ OBJS=src/actor.o \
 	src/platform_sdl.o \
 	src/platform_sdl_mixer.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
+LIBS=$(SDL_LIBS) -lSDL_mixer -lm
 VERSION=v0.3.0
 APPNAME=twin-e_$(VERSION)
 TARGET=bin/$(APPNAME)

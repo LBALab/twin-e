@@ -49,12 +49,11 @@ to LBA1 game directory to play it. You will need the original game to play with 
 # - Compiling -
 
 You need libSDL, libSDL_Mixer in order to properly compile twin-e.
-As addicional for in-game debug you'll need libSDL_ttf.
 
 
 # on GNU/Linux:
 
-After installing the libsdl, libsdl_mixer and libsdl_ttf development packages,
+After installing the libsdl and libsdl_mixer development packages,
 go to the trunk/src directory and type "make" (without the quotes, off course).
 This will compile the source code and create an executable file called
 "twin-e". Copy this file to the same place in your system where you have
@@ -63,7 +62,7 @@ file to that location. Go to that dir and type "./twin-e"
 
 If you are a Ubuntu user, the procedure should look like this:
 
-sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev
 cd trunk/src
 make
 cp ./lba.cfg ~/Desktop/lba/

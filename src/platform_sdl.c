@@ -28,12 +28,6 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 
-#ifndef MACOSX
-#include <SDL/SDL_ttf.h>
-#else
-#include <SDL_ttf/SDL_ttf.h>
-#endif
-
 #include "platform.h"
 #include "platform_mixer.h"
 #include "main.h"
@@ -56,14 +50,11 @@ SDL_Color screenColors[256];
 /** Auxiliar surface table  */
 SDL_Surface *surfaceTable[16];
 
-TTF_Font *font;
-
 
 void platform_close() {
     music_stop_track();
     music_stop_midi();
     platform_mixer_close();
-    TTF_Quit();
     SDL_Quit();
     exit(0);
 }
@@ -94,20 +85,6 @@ int platform_initialize() {
         fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(1);
     }
-    
-    if (TTF_Init() < 0) {
-        fprintf(stderr, "Couldn't initialize TTF: %s\n", SDL_GetError());
-        exit(1);
-    }
-
-    font = TTF_OpenFont("FreeMono.ttf", 12);
-
-    if (font == NULL) {
-        fprintf(stderr, "Couldn't load %d pt font from %s: %s\n", 12, "FreeMono.ttf", SDL_GetError());
-        exit(2);
-    }
-
-    TTF_SetFontStyle(font, 0);
 
     /*icon = SDL_LoadBMP("icon.bmp");
     SDL_WM_SetIcon(icon, NULL);*/
@@ -497,27 +474,6 @@ void platform_handle_input() {
             skipIntro = localKey;
         //}
     }
-}
-
-void platform_draw_text(int32 X, int32 Y, int8 *string, int32 center) {
-    SDL_Color white = { 0xFF, 0xFF, 0xFF, 0 };
-    SDL_Color *forecol = &white;
-    SDL_Rect rectangle;
-
-    SDL_Surface *text;
-
-    text = TTF_RenderText_Solid(font, string, *forecol);
-
-    if (center)
-        rectangle.x = X - (text->w / 2);
-    else
-        rectangle.x = X;
-    rectangle.y = Y - 2;
-    rectangle.w = text->w;
-    rectangle.h = text->h;
-
-    SDL_BlitSurface(text, NULL, screenBuffer, &rectangle);
-    SDL_FreeSurface(text);
 }
 
 void platform_get_mouse_positions(MouseStatusStruct *mouseData) {

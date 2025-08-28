@@ -50,6 +50,5 @@ void platform_toggle_fullscreen();
 void platform_handle_input();
 
 void platform_get_mouse_positions(MouseStatusStruct *mouseData);
-void platform_draw_text(int32 X, int32 Y, int8 *string, int32 center);
 
 #endif
