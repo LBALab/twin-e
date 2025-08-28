@@ -52,6 +52,8 @@
 
 #define ERROR_OUT_OF_SCREEN		2
 
+#define ROL8(x,b) (byte)(((x) << (b)) | ((x) >> (8 - (b))))
+#define ROL16(x, b) (((x) << (b)) | ((x) >> (16 - (b))))
 
 
 int32 isUsingOrhoProjection;
@@ -777,268 +779,221 @@ void renderPolygons(int32 renderType, int32 color) {
     int16 *ptr1;
     int16 *ptr2;
     int32 vsize, hsize;
-    int32 j;
     int32 currentLine;
 
-    int16 start, stop;
+    int16 start, stop, y;
 
     out = frontVideoBuffer + 768 * vtop; // 640
 
     ptr1 = &polyTab[vtop];
     ptr2 = &polyTab2[vtop];
 
+    y = vtop;
+
     vsize = vbottom - vtop;
     vsize++;
 
     switch (renderType) {
     case POLYGONTYPE_FLAT: {
-        currentLine = vtop;
-        do {
-            if (currentLine >= 0 && currentLine < 480) {
-                stop = ptr1[480];
-                start = ptr1[0];
-
-                ptr1++;
-                hsize = stop - start;
-
-                if (hsize >= 0) {
-                    hsize++;
-                    out2 = start + out;
-
-                    for (j = start; j < hsize + start; j++) {
-                        if (j >= 0 && j < 768) // 640
-                            out[j] = color;
-                    }
-                }
-            }
-            out += 768; // 640
-            currentLine++;
-        } while (--vsize);
-        break;
-
-    }
-    case POLYGONTYPE_COPPER: {
-        currentLine = vtop;
-        do {
-            if (currentLine >= 0 && currentLine < 480) {
-                start = ptr1[0];
-                stop = ptr1[480];
-
-                ptr1++;
-                hsize = stop - start;
-
-                if (hsize >= 0) {
-                    uint16 mask = 0x43DB;
-                    uint16 dx;
-                    int32 startCopy;
-
-                    dx = (uint8)color;
-                    dx |= 0x300;
-
-                    hsize++;
-                    out2 = start + out;
-                    startCopy = start;
-
-                    for (j = startCopy; j < hsize + startCopy; j++) {
-                        start += mask;
-                        start = (start & 0xFF00) | ((start & 0xFF) & (uint8)(dx >> 8)) ;
-                        start = (start & 0xFF00) | ((start & 0xFF) + (dx & 0xFF));
-                        if (j >= 0 && j < 768) { // 640
-                            out[j] = start & 0xFF;
-                        }
-                        mask = (mask << 2) | (mask >> 14);
-                        mask++;
-                    }
-                }
-
-            }
-            out += 768; // 640
-            currentLine++;
-        } while (--vsize);
-        break;
-    }
-    case POLYGONTYPE_BOPPER: { // FIXME: buggy
-        currentLine = vtop;
-        do {
-            if (currentLine >= 0 && currentLine < 480) {
-                start = ptr1[0];
-                stop = ptr1[480];
-                ptr1++;
-                hsize = stop - start;
-
-                if (hsize >= 0) {
-                    hsize++;
-                    out2 = start + out;
-                    for (j = start; j < hsize + start; j++) {
-                        if ((start + (vtop % 1))&1) {
-                            if (j >= 0 && j < 768) { // 640
-                                out[j] = color;
-                            }
-                        }
-                        out2++;
-                    }
-                }
-
-            }
-            out += 768; // 640
-            currentLine++;
-        } while (--vsize);
-        break;
-    }
-    case POLYGONTYPE_MARBLE: { // TODO: implement this
-        break;
-    }
-    case POLYGONTYPE_TELE: { // FIXME: buggy
-        int ax;
-        int bx;
-           unsigned short int dx;
-        unsigned short int temp;
-        bx = (unsigned short)color << 0x10;
-        renderLoop = vsize;
-        do {	
-            while (1) {
-                start = ptr1[0];
-                stop = ptr1[480];
-                ptr1++;
-                hsize = stop - start;
-        
-                if(hsize)
-                    break;
-
-                out2 = start + out;
-                *(out2) = ((unsigned short)(bx >> 0x18)) & 0x0F;
-
-                color = *(out2 + 1);
-
-                out += 768; // 640
-
-                --renderLoop;
-                if (!renderLoop)
-                    return;
-            }
-
-            if(stop >= start)
-            {
-                hsize++;
-                bx = (unsigned short)(color >> 0x10);
-                out2 = start + out; 
-            
-                ax = (bx & 0xF0) << 8;
-                bx = bx << 8;
-                ax += (bx & 0x0F);
-                ax -= bx;
-                ax++;
-                ax = ax >> 16;
-            
-                ax = ax / hsize;
-                temp = (ax & 0xF0);
-                temp = temp >> 8;
-                temp += (ax & 0x0F);
-                ax = temp;
-
-                dx = ax;
-
-                ax = (ax & 0x0F) + (bx & 0xF0);
-                hsize++;
-
-                if (hsize & 1) {
-                    ax = 0; // not sure about this
-                }
-
-                j = hsize >> 1;
-
-                while (1) {
-                    *(out2++) = ax & 0x0F;
-                    ax += dx;
-
-                    --j;
-                    if (!j)
-                        break;
-
-                    *(out2++) = ax & 0x0F;
-                    ax += dx;
-                }
-             }
-
-            out += 768; // 640
-            --renderLoop;
-
-        }while(renderLoop);
-        break;
-    }
-    case POLYGONTYPE_TRAS: { // FIXME: buggy
-        do {
-            unsigned short int bx;
-
+        for (; y <= vbottom; y++) {
             start = ptr1[0];
             stop = ptr1[480];
-
             ptr1++;
-            hsize = stop - start;
+            out2 = out + start;
 
-            if(hsize >= 0)
-            {
-              hsize++;
-              out2 = start + out;
-          
-              if((hsize >> 1)<0)
-              {
-                bx = color &0x0FF;
-                bx = bx << 8;
-                bx += color &0x0FF;
-                   for(j = 0; j< hsize; j++)
-                {
-                  *(out2) = (*(out2)&0x0F0F) | bx;
-                }
-              }
-              else{
-                *(out2) = (*(out2) & 0x0F) | color;
-                out2++;
-              }
+            for (; start <= stop; start++) {
+                *out2++ = (uint8)color;
             }
-            out += 768; // 640
-        }while(--vsize);
-      break;
+
+            out += DEFAULT_SCREEN_WIDTH;
+        }
+        break;
     }
-    case POLYGONTYPE_TRAME: { // FIXME: buggy
-        unsigned char bh = 0;
+    case POLYGONTYPE_COPPER: {
+        int32 shading = 1;
+        for (; y <= vbottom; y++) {
+            start = ptr1[0];
+            stop = ptr1[480];
+            ptr1++;
+            out2 = out + start;
 
-        currentLine = vtop;
-        do {
-            if (currentLine >= 0 && currentLine < 480) {
-                start = ptr1[0];
-                stop = ptr1[480];
-                ptr1++;
-                hsize = stop - start;
+            for (; start <= stop; start++) {
+                *out2++ = (uint8)color;
+            }
 
-                if (hsize >= 0) {
-                    hsize++;
-                    out2 = start + out;
+            color += shading;
+            if (!(color & 0xF)) {
+                shading = -shading;
+                if (shading < 0) {
+                    color += shading;
+                }
+            }
 
-                    hsize /= 2;
-                    if (hsize > 1) {
-                        uint16 ax;
-                        bh ^= 1;
-                        ax = (uint16)(*out2);
-                        ax &= 1;
-                        if (ax ^ bh) {
-                            out2++;
-                        }
+            out += DEFAULT_SCREEN_WIDTH;
+        }
+        break;
+    }
+    case POLYGONTYPE_BOPPER: {
+        int32 shading = 1;
+        int32 line = 2;
+        for (; y <= vbottom; y++) {
+            start = ptr1[0];
+            stop = ptr1[480];
+            ptr1++;
+            out2 = out + start;
 
-                        for (j = 0; j < hsize; j++) {
-                            *(out2) = (uint8)color;
-                            out2 += 2;
-                        }
+            for (; start <= stop; start++) {
+                *out2++ = (uint8)color;
+            }
+
+            line--;
+            if (!line) {
+                line = 2;
+                color += shading;
+                if (!(color & 0xF)) {
+                    shading = -shading;
+                    if (shading < 0) {
+                        color += shading;
                     }
                 }
-
             }
-            out += 768; // 640
-            currentLine++;
-        } while (--vsize);
+
+            out += DEFAULT_SCREEN_WIDTH;
+        }
+        break;
+    }
+    case POLYGONTYPE_MARBLE: {
+        uint16 colour_start = (color & 0xFF) << 8;
+        uint16 colour_end = color & 0xFF00;
+        uint16 colour_delta = colour_end - colour_start + 1;
+        int32 step, dc;
+
+        for (; y <= vbottom; y++) {
+            start = ptr1[0];
+            stop = ptr1[480];
+            ptr1++;
+            out2 = out + start;
+
+            dc = stop - start;
+            if (dc == 0) {
+                *out2++ = (uint8)(colour_end >> 8);
+            } else if (dc > 0) {
+                step = colour_delta / (dc + 1);
+                color = start;
+
+                for (; start <= stop; start++) {
+                    *out2++ = (uint8)(color >> 8);
+                    color += step;
+                }
+            }
+
+            out += DEFAULT_SCREEN_WIDTH;
+        }
+        break;
+    }
+    case POLYGONTYPE_TELE: {
+        uint16 col;
+        int16 acc = 17371;
+
+        color &= 0xFF;
+
+        for (; y <= vbottom; y++) {
+            start = ptr1[0];
+            stop = ptr1[480];
+            ptr1++;
+            out2 = out + start;
+            col = start;
+
+            for (; start <= stop; start++) {
+                col = ((col + acc) & 0xFF03) + (uint16)color;
+                acc = ROL16(acc, 2) + 1;
+
+                *out2++ = (uint8)col;
+            }
+
+            out += DEFAULT_SCREEN_WIDTH;
+        }
+        break;
+    }
+    case POLYGONTYPE_TRAS: {
+        color &= 0xF0;
+
+        for (; y <= vbottom; y++) {
+            start = ptr1[0];
+            stop = ptr1[480];
+            ptr1++;
+            out2 = out + start;
+
+            for (; start <= stop; start++) {
+                *out2 = (uint8)color | (*out2 & 0x0F);
+                out2++;
+            }
+
+            out += DEFAULT_SCREEN_WIDTH;
+        }
+
+      break;
+    }
+    case POLYGONTYPE_TRAME: {
+        int32 pair = 0;
+
+        for (; y <= vbottom; y++) {
+            start = ptr1[0];
+            stop = ptr1[480];
+            ptr1++;
+            out2 = out + start;
+
+            stop = ((stop - start) + 1) / 2;
+            if (stop > 0) {
+                pair ^= 1;
+                if ((start & 1) ^ pair) {
+                    out2++;
+                }
+
+                for (; stop > 0; stop--) {
+                    *out2 = (uint8)color;
+                    out2 += 2;
+                }
+            }
+
+            out += DEFAULT_SCREEN_WIDTH;
+        }
         break;
     }
     case POLYGONTYPE_GOURAUD: {
+        // int32 step = 0;
+        // for (; y <= vbottom; y++) {
+        //     int16 start_colour = ptr2[0];
+        //     int16 stop_colour = ptr2[480];
+
+        //     start = ptr1[0];
+        //     stop = ptr1[480];
+        //     ptr1++;
+        //     ptr2++;
+        //     out2 = out + start;
+
+        //     stop -= start;
+
+        //     if (stop == 0) {
+        //         *out2 = (uint8)((stop_colour + start_colour) >> 9);
+        //     } else if (stop <= 2) {
+        //         out2[stop--] = (uint8)(stop_colour >> 8);
+        //         if (stop) {
+        //             out2[stop--] = (uint8)((stop_colour + start_colour) >> 9);
+        //         }
+        //         *out2 = (uint8)(start_colour >> 8);
+        //     } else {
+        //         step = (stop_colour - start_colour) / stop;
+
+        //         for (; stop >= 0; stop--) {
+        //             *out2++ = (uint8)(start_colour >> 8);
+        //             start_colour += step;
+        //         }
+        //     }
+
+        //     out += DEFAULT_SCREEN_WIDTH;
+        // }
+
         renderLoop = vsize;
         currentLine = vtop;
         do {
