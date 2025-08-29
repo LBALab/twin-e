@@ -147,20 +147,18 @@ void drawSelectableCharacter(int32 x, int32 y, int32 arg) {
     bottom = x * 56 + 200 + 25;
 
     if (arg != 0) {
-        drawSplittedBox(left, top, right, bottom, 91);
+        drawSplittedBox(left + 64, top, right + 64, bottom, 91);
     } else {
-        blitBox(left, top, right, bottom, (int8 *) workVideoBuffer, left, top, (int8 *)frontVideoBuffer);
-        right2 = right;
-        drawTransparentBox(left, top, right2, bottom, 4);
+        blitBox(left + 64, top, right + 64, bottom, (int8 *) workVideoBuffer, left + 64, top, (int8 *)frontVideoBuffer);
+        drawTransparentBox(left + 64, top, right + 64, bottom, 4);
     }
 
-    drawBox(left, top, right, bottom);
-    right2 = right;
+    drawBox(left + 64, top, right + 64, bottom);
 
     setFontColor(15);
-    drawText(centerX - getTextSize(buffer) / 2, centerY - 18, buffer);
+    drawText(centerX - getTextSize(buffer) / 2 + 64, centerY - 18, buffer);
 
-    platform_copy_block_phys(left, top, right2, bottom);
+    platform_copy_block_phys(left + 64, top, right + 64, bottom);
 }
 
 void drawSelectableCharacters(void) {
@@ -227,10 +225,10 @@ int32 enterPlayerName(int32 textIdx) {
         initTextBank(0);
         getMenuText(textIdx, buffer);
         setFontColor(15);
-        drawText(320 - (getTextSize(buffer) / 2), 20, buffer);
+        drawText(320 - (getTextSize(buffer) / 2) + 64, 20, buffer);
         platform_copy_block_phys(0, 0, 639, 99);
         playerName[0] = enterPlayerNameVar1;
-        drawPlayerName(320, 100, playerName, 1);
+        drawPlayerName(320 + 64, 100, playerName, 1);
         drawSelectableCharacters();
 
         do {
@@ -249,7 +247,7 @@ int32 enterPlayerName(int32 textIdx) {
         while (!skipIntro) {
             platform_handle_input();
             // TODO
-            drawPlayerName(320, 100, playerName, 1);
+            drawPlayerName(320 + 64, 100, playerName, 1);
         }
 
         // FIXME: remove this lines after implementing everything
