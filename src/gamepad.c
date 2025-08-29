@@ -56,8 +56,6 @@ enum GAMEPAD_BUTTONS {
 SDL_Joystick* joystick = NULL;
 
 void gamepad_init() {
-    int32 i, j;
-
     if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0) {
         printf("Failed to initialize SDL joystick subsystem: %s\n", SDL_GetError());
         return;
@@ -70,15 +68,15 @@ void gamepad_init() {
 
     joystick = SDL_JoystickOpen(0);
     if (joystick) {
-        const char* name = SDL_JoystickName(i);
+        const char* name = SDL_JoystickName(0);
         int num_axes = SDL_JoystickNumAxes(joystick);
         int num_buttons = SDL_JoystickNumButtons(joystick);
         int num_hats = SDL_JoystickNumHats(joystick);
         
-        printf("Gamepad %d: %s\n", i, name ? name : "Unknown");
+        printf("Gamepad: %s\n", name ? name : "Unknown");
         printf("  - Axes: %d, Buttons: %d, Hats: %d\n", num_axes, num_buttons, num_hats);
     } else {
-        printf("Failed to open joystick %d: %s\n", i, SDL_GetError());
+        printf("Failed to open joystick: %s\n", SDL_GetError());
     }
 }
 

@@ -12,6 +12,7 @@ OBJS=src/actor.o \
 	src/extra.o \
 	src/filereader.o \
 	src/flamovies.o \
+	src/gamepad.o \
 	src/gamestate.o \
 	src/grid.o \
 	src/holomap.o \
