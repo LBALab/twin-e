@@ -19,7 +19,6 @@ This is the place to list every TODO we need to make for this project.
 ## In-Game
 
 * Holomap: create holomap routines;
-* Renderer: implement missing rendering types and fix rendering issues;
 
 ## Scripting
 
@@ -38,3 +37,4 @@ This is the place to list every TODO we need to make for this project.
 * Do a proper sound system with cached resources.
 * Improve Keyboard routines. Its now based in original but can be tricky to port it;
 * Do endian for reading content from pointers for proper portability;
+* Implement right stick camera control for gamepad users;

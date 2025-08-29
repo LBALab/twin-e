@@ -121,6 +121,10 @@ typedef struct config_file_s {
     int32 interface_style;
     /** flag to toggle wall collision */
     int32 wall_collision;
+    /** gamepad support enabled */
+    int32 gamepad_enabled;
+    /** gamepad deadzone sensitivity */
+    int32 gamepad_deadzone;
 } config_file_t;
 
 /** Configuration file structure

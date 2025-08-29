@@ -11,6 +11,7 @@
         "__locale": "c",
         "platform.h": "c",
         "lbaengine.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "ios": "c"
     }
 }

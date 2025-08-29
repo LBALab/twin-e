@@ -37,6 +37,7 @@
 #include "debug.h"
 #include "keyboard.h"
 #include "redraw.h"
+#include "gamepad.h"
 
 /** SDL exit callback */
 //static void atexit_callback(void);
@@ -55,6 +56,9 @@ void platform_close() {
     music_stop_track();
     music_stop_midi();
     platform_mixer_close();
+    if (config_file.gamepad_enabled) {
+        gamepad_close();
+    }
     SDL_Quit();
     exit(0);
 }
@@ -101,6 +105,12 @@ int platform_initialize() {
     printf("Initialising Sound device. Please wait...\n\n");
 
     platform_mixer_init(config_file.sound);
+
+    // Initialize gamepad support
+    if (config_file.gamepad_enabled) {
+        printf("Initialising Gamepad support. Please wait...\n\n");
+        gamepad_init();
+    }
 
     SDL_WM_SetCaption("Little Big Adventure: TwinEngine", "twin-e");
     SDL_PumpEvents();
@@ -468,11 +478,15 @@ void platform_handle_input() {
             else {
                 skippedKey |= (temp & 0xFF00) >> 8;
             }
+
+            printf("keyboard pressedKey: 0x%X, skippedKey: 0x%X\n", pressedKey, skippedKey);
         }
 
-        //if (found==0) {
-            skipIntro = localKey;
-        //}
+        skipIntro = localKey;
+    }
+
+    if (config_file.gamepad_enabled) {
+        gamepad_handle_input();
     }
 }
 
