@@ -164,40 +164,30 @@ void drawDeltaFrame(uint8 * ptr, int32 width) {
     to fullscreen or preserve it and use top and button black bars */
 void scaleFla2x() {
     int32 i, j;
-    uint8* source = (uint8*)flaBuffer;
-    uint8* dest = (uint8*)workVideoBuffer;
+    uint8* source = (uint8*)flaBuffer; // 320x200
+    uint8* dest = (uint8*)workVideoBuffer; // 768x480
 
-    if (config_file.movie == CONF_MOVIE_FLAWIDE) {
-        for (i = 0; i < SCREEN_WIDTH / SCALE*40; i++) {
-            *(dest++) = 0x00;
-        }
-    }
-
-    for (i = 0; i < FLASCREEN_HEIGHT; i++) {
-        for (j = 0; j < FLASCREEN_WIDTH; j++) {
-            *(dest++) = *(source);
-            *(dest++) = *(source++);
-        }
-        if (config_file.movie == CONF_MOVIE_FLAWIDE) { // include wide bars
-            memcpy(dest, dest - SCREEN_WIDTH / SCALE, FLASCREEN_WIDTH*2);
-            dest += FLASCREEN_WIDTH * 2;
-        } else { // stretch the movie like original game.
-            if (i % (2)) {
-                memcpy(dest, dest - SCREEN_WIDTH / SCALE, FLASCREEN_WIDTH*2);
-                dest += FLASCREEN_WIDTH * 2;
+    memset(dest, 0, SCREEN_WIDTH*SCREEN_HEIGHT);
+    for (j = 0; j < FLASCREEN_HEIGHT; j++) {
+        int offset = 0;
+        for (i = 0; i < FLASCREEN_WIDTH; i++) {
+            *dest++ = *source;
+            if (i % 2) { // 2.5 times
+                *dest++ = *source;
+                offset++;
             }
-            if (i % 10) {
-                memcpy(dest, dest - SCREEN_WIDTH / SCALE, FLASCREEN_WIDTH*2);
-                dest += FLASCREEN_WIDTH * 2;
-            }
+            *dest++ = *source++;
+        }
+        dest += SCREEN_WIDTH - (FLASCREEN_WIDTH * 2) - offset;
+
+        memcpy(dest, dest - SCREEN_WIDTH, SCREEN_WIDTH);
+        dest += SCREEN_WIDTH;
+        if (j % 2) { // 2.5 times
+            memcpy(dest, dest - SCREEN_WIDTH, SCREEN_WIDTH);
+            dest += SCREEN_WIDTH;
         }
     }
 
-    if (config_file.movie == CONF_MOVIE_FLAWIDE) {
-        for (i = 0; i < SCREEN_WIDTH / SCALE*40; i++) {
-            *(dest++) = 0x00;
-        }
-    }
 }
 
 /** FLA movie process frame */
@@ -237,7 +227,7 @@ void processFrame() {
             // fade out tricky
             if (_fadeOut != 1) {
                 convertPalToRGBA(palette, paletteRGBACustom);
-                fadeToBlack(paletteRGBACustom);
+                screen_fade_to_black(paletteRGBACustom);
                 _fadeOut = 1;
             }
             break;
@@ -348,7 +338,8 @@ void playFlaMovie(int8 *flaName) {
                 else {
                     processFrame();
                     scaleFla2x();
-                    copyScreen(workVideoBuffer, frontVideoBuffer);
+                    // copyScreen(workVideoBuffer, frontVideoBuffer);
+                    copyScreenFull(workVideoBuffer, frontVideoBuffer);
 
                     // Only blit to screen if isn't a fade
                     if (_fadeOut == -1) {
@@ -363,7 +354,7 @@ void playFlaMovie(int8 *flaName) {
                     if (fadeOutFrames >= 2) {
                         platform_flip();
                         convertPalToRGBA(palette, paletteRGBACustom);
-                        fadeToPal(paletteRGBACustom);
+                        screen_fade_to_pal(paletteRGBACustom);
                         _fadeOut = -1;
                         fadeOutFrames = 0;
                     }
@@ -384,7 +375,7 @@ void playFlaMovie(int8 *flaName) {
     if (config_file.cross_fade) {
         platform_cross_fade(frontVideoBuffer, paletteRGBACustom);
     } else {
-        fadeToBlack(paletteRGBACustom);
+        screen_fade_to_black(paletteRGBACustom);
     }
 
     sample_stop_all();

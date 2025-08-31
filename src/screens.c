@@ -76,7 +76,7 @@ void loadMenuImage(int16 fade_in) {
     hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, RESSHQR_MENUIMG);
     copyScreen(workVideoBuffer, frontVideoBuffer);
     if (fade_in) {
-        fadeToPal(paletteRGBA);
+        screen_fade_to_pal(paletteRGBA);
     } else {
         platform_set_palette(paletteRGBA);
     }
@@ -94,10 +94,10 @@ void loadCustomPalette(int32 index) {
     @param index \a RESS.HQR entry index (starting from 0) */
 void loadImage(int32 index, int16 fade_in) {
     hqr_get_entry(workVideoBuffer, HQR_RESS_FILE, index);
-    copyScreen(workVideoBuffer, frontVideoBuffer);
+    copyScreenColour(workVideoBuffer, frontVideoBuffer, index == RESSHQR_ADELINEIMG ? 0xFF : 0);
     loadCustomPalette(index + 1);
     if (fade_in) {
-        fadeToPal(paletteRGBACustom);
+        screen_fade_to_pal(paletteRGBACustom);
     } else {
         platform_set_palette(paletteRGBACustom);
     }
@@ -135,7 +135,7 @@ void fadeIn(uint8 * palette) {
     if (config_file.cross_fade)
         platform_cross_fade(frontVideoBuffer, palette);
     else
-        fadeToPal(palette);
+        screen_fade_to_pal(palette);
 
     platform_set_palette(palette);
 }
@@ -146,9 +146,9 @@ void fadeOut(uint8 * palette) {
     /*if(config_file.cross_fade)
         platform_cross_fade(frontVideoBuffer, palette);
     else
-        fadeToBlack(palette);*/
+        screen_fade_to_black(palette);*/
     if (!config_file.cross_fade)
-        fadeToBlack(palette);
+        screen_fade_to_black(palette);
 }
 
 /** Calculate a new color component according with an intensity
@@ -251,7 +251,7 @@ void adjustCrossPalette(uint8 * pal1, uint8 * pal2) {
 
 /** Fade image to black
     @param palette current palette to fade */
-void fadeToBlack(uint8 *palette) {
+void screen_fade_to_black(uint8 *palette) {
     int32 i = 0;
 
     if (palReseted == 0) {
@@ -266,7 +266,7 @@ void fadeToBlack(uint8 *palette) {
 
 /** Fade image with another palette source
     @param palette current palette to fade */
-void fadeToPal(uint8 *palette) {
+void screen_fade_to_pal(uint8 *palette) {
     int32 i = 100;
 
     for (i = 0; i <= 100; i += 3) {
@@ -325,14 +325,32 @@ void fadeRedPal(uint8 *palette) {
     }
 }
 
+inline void copyScreen(uint8 * source, uint8 * destination) {
+    copyScreenColour(source, destination, 0);
+}
+
+void copyScreenFull(uint8 * source, uint8 * destination) {
+    memcpy(destination, source, SCREEN_WIDTH*SCREEN_HEIGHT);
+}
+
 /** Copy a determinate screen buffer to another
     @param source screen buffer
     @param destination screen buffer */
-void copyScreen(uint8 * source, uint8 * destination) {
+void copyScreenColour(uint8 * source, uint8 * destination, uint8 colour) {
     int32 w, h;
 
-    if (SCALE == 1)
-        memcpy(destination, source, SCREEN_WIDTH*SCREEN_HEIGHT);
+    // convert 640x480 to 854x480 without changing aspect ratio
+    int32 skip = (SCREEN_WIDTH - 640) / 2;
+    if (SCALE == 1) {
+        for (h = 0; h < SCREEN_HEIGHT; h++) {
+            for (w = 0; w < SCREEN_WIDTH; w++) {
+                if (w < skip || w >= (SCREEN_WIDTH - skip))
+                    *destination++ = colour;
+                else
+                    *destination++ = *source++;
+            }
+        }
+    }
     else if (SCALE == 2)
         for (h = 0; h < SCREEN_HEIGHT / SCALE; h++) {
             for (w = 0; w < SCREEN_WIDTH / SCALE; w++) {

@@ -1,3 +1,5 @@
+.PHONY: all clean run
+
 CC=gcc
 SDL_CFLAGS = `sdl-config --cflags`
 SDL_LIBS = `sdl-config --libs`
@@ -6,11 +8,13 @@ OBJS=src/actor.o \
 	src/animations.o \
 	src/collision.o \
 	src/debug.o \
+	src/debug.font.o \
 	src/debug.grid.o \
 	src/debug.scene.o \
 	src/extra.o \
 	src/filereader.o \
 	src/flamovies.o \
+	src/gamepad.o \
 	src/gamestate.o \
 	src/grid.o \
 	src/holomap.o \
@@ -38,9 +42,10 @@ OBJS=src/actor.o \
 	src/platform_sdl.o \
 	src/platform_sdl_mixer.o
 
-LIBS=$(SDL_LIBS) -lSDL_mixer -lSDL_ttf -lm
+LIBS=$(SDL_LIBS) -lSDL_mixer -lm
 VERSION=v0.3.0
-TARGET=bin/twin-e_$(VERSION)
+APPNAME=twin-e_$(VERSION)
+TARGET=bin/$(APPNAME)
 
 all: $(TARGET)
 
@@ -49,6 +54,9 @@ $(TARGET): $(OBJS)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	cd bin && ./$(APPNAME)
 
 clean:
 	@rm $(OBJS)

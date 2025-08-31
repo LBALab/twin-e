@@ -23,6 +23,7 @@
 
 #include "debug.h"
 
+#include "debug.font.h"
 #include "debug.scene.h"
 #include "debug.grid.h"
 #include "scene.h"
@@ -94,7 +95,7 @@ void debugFillButton(int32 X, int32 Y, int32 width, int32 height, int8 color) {
     int32 offset;
 
     ptr = frontVideoBuffer + screenLookupTable[Y] + X;
-    offset = 640 - (width);
+    offset = 768 - (width); // 640
 
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
@@ -107,7 +108,7 @@ void debugFillButton(int32 X, int32 Y, int32 width, int32 height, int8 color) {
 void debugDrawButton(int32 left, int32 top, int32 right, int32 bottom, int8 *text, int32 textLeft, int32 textRight, int32 isActive, int8 color) {
     debugFillButton(left + 1, top + 1, right - left - 1, bottom - top - 1, color);
     drawBox(left, top, right, bottom);
-    platform_draw_text(textLeft, textRight, text, 0);
+    debug_draw_text(textLeft, textRight, text, 0);
     platform_copy_block_phys(left, top, right, bottom);
 }
 
@@ -150,7 +151,7 @@ void debugDrawWindow(int32 w) {
         int32 l;
 
         for (l = 0; l < debugWindows[w].numLines; l++) {
-            platform_draw_text(left + 10, top + l*20 + 5, debugWindows[w].text[l], 0);
+            debug_draw_text(left + 10, top + l*20 + 5, debugWindows[w].text[l], 0);
         }
     }
 
@@ -251,7 +252,7 @@ void debugResetButton(int32 type) {
 
 void debugRedrawScreen() {
     redrawEngineActions(1);
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
     debugDrawWindows();
 }
 
@@ -491,7 +492,7 @@ void debugProcessWindow() {
         rightMouse = 0;
         leftMouse = 0;
 
-        copyScreen(frontVideoBuffer, workVideoBuffer);
+        copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
         debugResetButtonsState();
         if (numDebugWindows == 0)
@@ -506,7 +507,7 @@ void debugProcessWindow() {
                 int type = 0;
                 if ((type = debugProcessButton(mouseData.X, mouseData.Y)) != NO_ACTION) { // process menu item
                     if (debugTypeUseMenu(type)) {
-                        copyScreen(workVideoBuffer, frontVideoBuffer);
+                        copyScreenFull(workVideoBuffer, frontVideoBuffer);
                         platform_copy_block_phys(205, 55, 634, 474);
                     }
 

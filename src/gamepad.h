@@ -1,6 +1,6 @@
-/** @file platform.h
+/** @file gamepad.h
     @brief
-    This file contains SDL engine routines
+    This file contains gamepad input routines
 
     TwinEngine: a Little Big Adventure engine
     
@@ -21,34 +21,21 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
-
-#include <SDL/SDL.h>
+#ifndef GAMEPAD_H
+#define GAMEPAD_H
 
 #include "sys.h"
-#include "debug.h"
 
+/** Maximum number of supported gamepads */
+#define MAX_GAMEPADS 1
 
-int platform_initialize();
-void platform_close();
+/** Initialize gamepad system */
+void gamepad_init();
 
-uint32 platform_tick();
-void platform_fps_cycles(int32 fps);
-void platform_delay(uint32 time);
-void platform_delay_skip(uint32 time);
+/** Close gamepad system */
+void gamepad_close();
 
-void platform_set_palette(uint8 * palette);
-void platform_fade_black_to_white();
-
-void platform_flip();
-void platform_copy_block_phys(int32 left, int32 top, int32 right, int32 bottom);
-void platform_init_screen_buffer(uint8 *buffer, int32 width, int32 height);
-void platform_cross_fade(uint8 *buffer, uint8 *palette);
-void platform_toggle_fullscreen();
-
-void platform_handle_input();
-
-void platform_get_mouse_positions(MouseStatusStruct *mouseData);
+/** Handle gamepad input and translate to keyboard events */
+void gamepad_handle_input();
 
 #endif

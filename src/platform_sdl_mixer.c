@@ -146,7 +146,6 @@ int32 platform_mixer_play_music(uint8 *music_ptr, int32 music_size, int32 loop) 
     return Mix_PlayMusic(current_track, loop);
 }
 
-
 int32 platform_mixer_play_music_mp3(int8 *music_file) {
     int error_code = 0;
     current_track = Mix_LoadMUS(music_file);

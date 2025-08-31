@@ -7,6 +7,11 @@
         "bit": "c",
         "vector": "c",
         "mutex": "c",
-        "sdl.h": "c"
+        "sdl.h": "c",
+        "__locale": "c",
+        "platform.h": "c",
+        "lbaengine.h": "c",
+        "main.h": "c",
+        "ios": "c"
     }
 }

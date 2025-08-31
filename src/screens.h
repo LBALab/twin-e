@@ -110,11 +110,11 @@ void adjustCrossPalette(uint8 * pal1, uint8 * pal2);
 
 /** Fade image to black
     @param palette current palette to fade */
-void fadeToBlack(uint8 *palette);
+void screen_fade_to_black(uint8 *palette);
 
 /** Fade image with another palette source
     @param palette current palette to fade */
-void fadeToPal(uint8 *palette);
+void screen_fade_to_pal(uint8 *palette);
 
 /** Fade black palette to white palette */
 void blackToWhite();
@@ -134,6 +134,20 @@ void fadeRedPal(uint8 *palette);
     @param source screen buffer
     @param destination screen buffer */
 void copyScreen(uint8 * source, uint8 * destination);
+
+/** Copy a determinate screen buffer to another
+    @param source screen buffer
+    @param destination screen buffer
+    @param colour colour to use for the borders when the aspect ratio is different */
+void copyScreenColour(uint8 * source, uint8 * destination, uint8 colour);
+
+/**
+ * Copy a determinate screen buffer to another
+ * without changing the aspect ratio
+ * @param source screen buffer
+ * @param destination screen buffer
+ */
+void copyScreenFull(uint8 * source, uint8 * destination);
 
 /** Clear front buffer screen */
 void clearScreen();

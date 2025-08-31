@@ -963,12 +963,12 @@ int32 lZOOM(int32 actorIdx, ActorStruct *actor) {
     zoomScreen = *(scriptPtr++);
     
     if (zoomScreen && !drawInGameTransBox && config_file.sce_zoom) {
-        fadeToBlack(mainPaletteRGBA);
+        screen_fade_to_black(mainPaletteRGBA);
         init_mcga();
         setBackPal();
         lockPalette = 1;
     } else if (!zoomScreen && drawInGameTransBox) {
-        fadeToBlack(mainPaletteRGBA);
+        screen_fade_to_black(mainPaletteRGBA);
         init_svga();
         setBackPal();
         lockPalette = 1;
@@ -1366,7 +1366,7 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
     int32 tmpFlagDisplayText;
 
     freezeTime();
-    fadeToBlack(paletteRGBA);
+    screen_fade_to_black(paletteRGBA);
     loadImage(25, 1);
     textClipFull();
     setFontCrossColor(15);
@@ -1376,7 +1376,7 @@ int32 lMESSAGE_SENDELL(int32 actorIdx, ActorStruct *actor) {
     drawTextFullscreen(6);
     newGameVar4 = 1;
     textClipSmall();
-    fadeToBlack(paletteRGBACustom);
+    screen_fade_to_black(paletteRGBACustom);
     clearScreen();
     platform_set_palette(paletteRGBA);
     config_file.flag_display_text = tmpFlagDisplayText;
@@ -1453,7 +1453,7 @@ int32 lPROJ_ISO(int32 actorIdx, ActorStruct *actor) {
 
 /*0x66*/
 int32 lPROJ_3D(int32 actorIdx, ActorStruct *actor) {
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
     platform_flip();
     changeRoomVar10 = 0;
 

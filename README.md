@@ -33,12 +33,12 @@ The game requires the file midi_mi_win.hqr which is not bundled with the public 
 
 # Compiling
 
-You need SDL, SDL_Mixer and SDL_ttf in order to compile twin-e.
+You need SDL, SDL_Mixerf in order to compile twin-e.
 We are still targetting the legacy SDL 1.2, but we should update to SDL3 at some stage.
 
 ## Mac OS X:
 
-> brew install sdl sdl_mixer sdl_ttf
+> brew install sdl sdl_mixer
 
 Note: as these libraries are old, you may need to modify the Homebrew formula and install them manually.
 
@@ -57,7 +57,7 @@ Additionally, you can run the script ./makeinstall.sh that creates a clean buld 
 
 ## Linux:
 
-> sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+> sudo apt-get install libsdl1.2-dev libsdl-mixer1.2-dev
 
 > cd src
 

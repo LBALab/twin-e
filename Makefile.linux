@@ -6,11 +6,13 @@ OBJS=src/actor.o \
 	src/animations.o \
 	src/collision.o \
 	src/debug.o \
+	src/debug.font.o \
 	src/debug.grid.o \
 	src/debug.scene.o \
 	src/extra.o \
 	src/filereader.o \
 	src/flamovies.o \
+	src/gamepad.o \
 	src/gamestate.o \
 	src/grid.o \
 	src/holomap.o \
@@ -49,6 +51,9 @@ $(TARGET): $(OBJS)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	cd bin && ./$(APPNAME)
 
 clean:
 	@rm $(OBJS)

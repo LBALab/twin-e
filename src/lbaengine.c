@@ -208,7 +208,7 @@ int32 runGameEngine() { // mainLoopInteration
             case kiBookOfBu: {
                 int32 tmpFlagDisplayText;
 
-                fadeToBlack(paletteRGBA);
+                screen_fade_to_black(paletteRGBA);
                 loadImage(RESSHQR_INTROSCREEN1IMG, 1);
                 initTextBank(2);
                 newGameVar4 = 0;
@@ -221,7 +221,7 @@ int32 runGameEngine() { // mainLoopInteration
                 textClipSmall();
                 newGameVar4 = 1;
                 initTextBank(currentTextBank + 3);
-                fadeToBlack(paletteRGBACustom);
+                screen_fade_to_black(paletteRGBACustom);
                 clearScreen();
                 platform_flip();
                 platform_set_palette(paletteRGBA);
@@ -554,19 +554,21 @@ int32 runGameEngine() { // mainLoopInteration
 /** Game engine main loop
     @return true if we want to show credit sequence */
 int32 gameEngineLoop() { // mainLoop
-    uint32 start;
+    uint32 start, end;
 
     reqBgRedraw = 1;
     lockPalette = 1;
     setActorAngle(0, -256, 5, &loopMovePtr);
 
+    float fps = 1000/50;
     while (quitGame == -1) {
         start = platform_tick();
         if (runGameEngine())
             return 1;
         lbaTime++;
-        if (platform_tick() - start < config_file.fps)
-            platform_delay(platform_tick() - start + config_file.fps);
+        end = platform_tick();
+        if (end - start < fps)
+            platform_delay(fps - (end - start));
     }
     return 0;
 }

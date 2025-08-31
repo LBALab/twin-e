@@ -35,7 +35,7 @@
 #define MODIFICATION_VERSION 2
 
 /** Original screen width */
-#define DEFAULT_SCREEN_WIDTH			640
+#define DEFAULT_SCREEN_WIDTH			768
 /** Original screen height */
 #define DEFAULT_SCREEN_HEIGHT			480
 /** Scale screen to double size */
@@ -121,6 +121,10 @@ typedef struct config_file_s {
     int32 interface_style;
     /** flag to toggle wall collision */
     int32 wall_collision;
+    /** gamepad support enabled */
+    int32 gamepad_enabled;
+    /** gamepad deadzone sensitivity */
+    int32 gamepad_deadzone;
 } config_file_t;
 
 /** Configuration file structure

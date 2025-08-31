@@ -95,7 +95,9 @@ int8 CFGList[][22] = {
     "SceZoom:",
     "FillDetails:",
     "InterfaceStyle", 
-    "WallCollision" // 39
+    "WallCollision:", // 39
+    "GamepadEnabled:",
+    "GamepadDeadzone:" // 41
 };
 
 int8 LanguageTypes[][10] = {
@@ -276,6 +278,12 @@ void init_configurations() {
                 break;
             case 39:
                 sscanf(buffer, "WallCollision: %d", &config_file.wall_collision);
+                break;
+            case 40:
+                sscanf(buffer, "GamepadEnabled: %d", &config_file.gamepad_enabled);
+                break;
+            case 41:
+                sscanf(buffer, "GamepadDeadzone: %d", &config_file.gamepad_deadzone);
                 break;
             }
         }

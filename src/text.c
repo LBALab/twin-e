@@ -709,9 +709,13 @@ void drawTextFullscreen(int32 index) { // printTextFullScreen
     int32 printedText;
     int32 skipText = 0;
 
+    skippedKey = 0;
+    pressedKey = 0;
+    skipIntro = 0;
+
     saveClip();
     resetClip();
-    copyScreen(frontVideoBuffer, workVideoBuffer);
+    copyScreenFull(frontVideoBuffer, workVideoBuffer);
 
     // get right VOX entry index
     if (config_file.language_cd_id) {
@@ -904,9 +908,9 @@ void getMenuText(int32 index, int8 *text) { // GetMultiText
 }
 
 void textClipFull() { // newGame2
-    dialTextBoxLeft = 8;
+    dialTextBoxLeft = 8 + 64;
     dialTextBoxTop = 8;
-    dialTextBoxRight = 631;
+    dialTextBoxRight = 768 - 64 - 8; //631;
 
     dialTextBoxBottom = 471;
     dialTextBoxParam1 = 11;
@@ -914,9 +918,9 @@ void textClipFull() { // newGame2
 }
 
 void textClipSmall() { // newGame4
-    dialTextBoxLeft = 16;
+    dialTextBoxLeft = 16 + 64;
     dialTextBoxTop = 334;
-    dialTextBoxRight = 623;
+    dialTextBoxRight = 768 - 64 - 16; // 623;
     dialTextBoxBottom = 463;
     dialTextBoxParam1 = 3;
     dialTextBoxParam2 = 591;
